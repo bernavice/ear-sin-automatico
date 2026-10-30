@@ -10,7 +10,7 @@ from __future__ import annotations
 import argparse
 import re
 import unicodedata
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -91,6 +91,10 @@ def carregar_historico() -> pd.DataFrame:
     return df.sort_values("data").reset_index(drop=True)
 
 
+class ArquivoONSNaoPublicado(FileNotFoundError):
+    """O CSV do novo ano ainda não foi publicado pelo ONS (HTTP 404)."""
+
+
 def carregar_ons(ano: int, arquivo: Path | None = None) -> pd.DataFrame:
     if arquivo:
         print(f"Teste local: lendo arquivo ONS de {arquivo}")
@@ -100,6 +104,8 @@ def carregar_ons(ano: int, arquivo: Path | None = None) -> pd.DataFrame:
         print(f"Baixando ONS: {url}")
         try:
             resposta = requests.get(url, timeout=90)
+            if resposta.status_code == 404:
+                raise ArquivoONSNaoPublicado(f"Arquivo de {ano} ainda não encontrado no ONS: {url}")
             resposta.raise_for_status()
         except requests.RequestException as exc:
             raise RuntimeError(f"Falha ao baixar o arquivo anual do ONS: {exc}") from exc
@@ -162,8 +168,13 @@ def carregar_ons(ano: int, arquivo: Path | None = None) -> pd.DataFrame:
     return saida
 
 
-def atualizar_historico(hist: pd.DataFrame, ons: pd.DataFrame, dias_revisao: int) -> pd.DataFrame:
-    hoje = datetime.now(ZoneInfo("America/Sao_Paulo")).date()
+def atualizar_historico(
+    hist: pd.DataFrame,
+    ons: pd.DataFrame,
+    dias_revisao: int,
+    data_execucao: date | None = None,
+) -> pd.DataFrame:
+    hoje = data_execucao or datetime.now(ZoneInfo("America/Sao_Paulo")).date()
     ons = ons.loc[ons["data"].dt.date <= hoje].copy()
     if ons.empty:
         raise ValueError("ONS não trouxe datas válidas até hoje.")
@@ -181,6 +192,45 @@ def atualizar_historico(hist: pd.DataFrame, ons: pd.DataFrame, dias_revisao: int
     unificado = unificado.drop_duplicates(subset="data", keep="last")
     unificado = unificado.sort_values("data").reset_index(drop=True)
     return unificado
+
+
+def coletar_ons_recente(
+    data_execucao: date,
+    dias_revisao: int,
+    arquivo_teste: Path | None = None,
+) -> pd.DataFrame:
+    """Consulta 2 arquivos na virada do ano e apenas o atual no restante.
+
+    Na virada, dezembro pode ser revisado e o CSV do novo ano pode
+    demorar a surgir. Se estiver ausente (404), mantém o último histórico
+    consistente, sem deixar o site fora do ar. Erros diferentes de 404
+    continuam sendo reportados normalmente.
+    """
+    dias_desde_virada = (data_execucao - date(data_execucao.year, 1, 1)).days
+    na_transicao = dias_desde_virada <= max(45, dias_revisao)
+    anos = ([data_execucao.year - 1] if na_transicao and arquivo_teste is None else []) + [data_execucao.year]
+
+    conjuntos = []
+    for ano in anos:
+        try:
+            ons_ano = carregar_ons(
+                ano,
+                arquivo=arquivo_teste if ano == data_execucao.year else None,
+            )
+            conjuntos.append(ons_ano)
+        except ArquivoONSNaoPublicado:
+            if ano == data_execucao.year and na_transicao and conjuntos:
+                print(f"ONS ainda não publicou {ano}; mantido histórico até a última data válida.")
+                continue
+            raise
+
+    if not conjuntos:
+        raise RuntimeError("Nenhum arquivo anual do ONS disponível na atualização.")
+
+    ons = pd.concat(conjuntos, ignore_index=True)
+    ons = ons.drop_duplicates(subset=["data"], keep="last")
+    ons = ons.sort_values("data").reset_index(drop=True)
+    return ons
 
 
 def montar_mensal(diario: pd.DataFrame) -> pd.DataFrame:
@@ -442,9 +492,9 @@ def main() -> None:
         parser.error("--dias-revisao não pode ser negativo")
     historico = carregar_historico()
     if not args.somente_local:
-        ano = datetime.now(ZoneInfo("America/Sao_Paulo")).year
-        ons = carregar_ons(ano, arquivo=args.ons_arquivo)
-        historico = atualizar_historico(historico, ons, args.dias_revisao)
+        data_execucao = datetime.now(ZoneInfo("America/Sao_Paulo")).date()
+        ons = coletar_ons_recente(data_execucao, args.dias_revisao, args.ons_arquivo)
+        historico = atualizar_historico(historico, ons, args.dias_revisao, data_execucao)
     salvar(historico)
 
 
