@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Painel Hidrológico | EAR e ENA mensal</title>
+<style>
+  :root {font-family:Century Gothic, CenturyGothic, Arial, sans-serif;color:#253345;background:#f7f9fc}
+  * {box-sizing:border-box}
+  body {margin:0}
+  .topo {max-width:1450px;margin:auto;padding:24px 24px 14px}
+  .topo h1 {font-size:26px;letter-spacing:-.6px;margin:0 0 5px;font-weight:650}
+  .topo p {margin:0;color:#697586;font-size:13px;line-height:1.65}
+  .topo .fonte-atualizacao {color:#526071;margin-top:3px;font-size:12px}
+  .abas {display:flex;gap:10px;padding-top:18px;flex-wrap:wrap}
+  button {font:inherit;border:1px solid #d9e1eb;background:white;color:#526071;
+      padding:11px 26px;border-radius:9px;font-weight:600;cursor:pointer}
+  button[aria-selected="true"] {color:white;background:#1b477b;border-color:#1b477b}
+  button:focus-visible {outline:3px solid #73b7fa;outline-offset:2px}
+  .conteudo {max-width:1450px;margin:auto;padding:0 16px 28px}
+  .aba {display:none}
+  .aba.ativa {display:block}
+  iframe {display:block;border:0;background:white;width:100%;height:700px}
+  .molde {background:white;border:1px solid #e7edf5;border-radius:13px;overflow:hidden}
+  @media(max-width:700px) {.topo {padding:17px 16px 12px}
+     .topo h1 {font-size:21px} .conteudo {padding:0 6px 24px}}
+</style></head><body>
+<header class="topo"><h1>Painel Hidrológico do SIN</h1>
+<p>EAR: último dia disponível · ENA: média dos dias disponíveis do mês</p>
+<p class="fonte-atualizacao">Fonte: ONS &nbsp;|&nbsp; Dados atualizados até: EAR 28/10/2026 · ENA 28/10/2026</p>
+<nav class="abas" role="tablist" aria-label="Escolher grandeza">
+<button role="tab" id="botao-ear" aria-selected="true" aria-controls="aba-ear" onclick="selecionar('ear')">EAR · Armazenamento</button>
+<button role="tab" id="botao-ena" aria-selected="false" aria-controls="aba-ena" onclick="selecionar('ena')">ENA · Afluências</button>
+</nav></header>
+<main class="conteudo">
+<section class="aba ativa" id="aba-ear" role="tabpanel" aria-labelledby="botao-ear">
+  <div class="molde"><iframe id="quadro-ear" title="Energia armazenada SIN" src="ear_sin.html" loading="eager"></iframe></div>
+</section>
+<section class="aba" id="aba-ena" role="tabpanel" aria-labelledby="botao-ena">
+  <div class="molde"><iframe id="quadro-ena" title="Energia natural afluente SIN e subsistemas" src="ena.html" loading="eager" style="height:1900px"></iframe></div>
+</section>
+</main>
+<script>
+  function selecionar(tipo) {
+    for (const t of ['ear','ena']) {
+      document.getElementById('aba-'+t).classList.toggle('ativa',tipo===t);
+      document.getElementById('botao-'+t).setAttribute('aria-selected',tipo===t?'true':'false');
+    }
+    history.replaceState(null,'',location.pathname+(tipo==='ena'?'?visao=ena':''));
+    requestAnimationFrame(()=> {
+      const quadro=document.getElementById('quadro-'+tipo);
+      if(quadro.contentWindow && quadro.contentWindow.Plotly) {
+        quadro.contentWindow.document.querySelectorAll('.js-plotly-plot').forEach(g=> {
+          quadro.contentWindow.Plotly.Plots.resize(g);
+        });
+      }
+      ajustarAltura(quadro);
+    });
+  }
+  function ajustarAltura(quadro) {
+    try {
+      const doc=quadro.contentDocument;
+      if(doc && doc.documentElement) {
+        const main=doc.querySelector('main');
+        const altura=main?main.offsetHeight+12:doc.documentElement.scrollHeight+6;
+        quadro.style.height=Math.max(640,altura)+'px';
+      }
+    } catch(e) { /* Sem acesso cross-origin: manter altura padrão */ }
+  }
+  for(const nome of ['ear','ena']) {
+    const quadro=document.getElementById('quadro-'+nome);
+    quadro.addEventListener('load',()=>ajustarAltura(quadro));
+  }
+  window.addEventListener('message',(event)=> {
+    if(event.origin!==location.origin) return;
+    if(event.data?.tipo==='altura-painel-ons' && ['ena','ear'].includes(event.data.id)) {
+      const alturaMinima=event.data.id==='ena'?700:640;
+      document.getElementById('quadro-'+event.data.id).style.height=
+        Math.max(alturaMinima,event.data.altura+8)+'px';
+    }
+  });
+  window.addEventListener('resize',()=> {
+    const ativo=document.querySelector('.aba.ativa iframe');
+    if(ativo) ajustarAltura(ativo);
+  });
+  if(new URLSearchParams(location.search).get('visao')==='ena') selecionar('ena');
+</script></body></html>
