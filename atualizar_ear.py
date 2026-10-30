@@ -439,11 +439,11 @@ def montar_grafico(mensal: pd.DataFrame) -> str:
         font-family:Century Gothic,CenturyGothic,Arial,sans-serif}}
   .area {{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
           gap:15px;padding:0 12px 20px}}
-  .painel {{min-width:0;background:#fff;border:1px solid #eaedf2;
-            border-radius:12px;overflow:hidden;display:flex;flex-direction:column}}
+  .painel {{min-width:0;background:#fff;border:1px solid #e1e7ef;
+            border-radius:14px;overflow:hidden;display:flex;flex-direction:column}}
   .painel.sin {{grid-column:1/-1}}
-  .barra-titulo {{background:{COR_VALE};color:#fff;font-weight:700;
-                 text-align:center;padding:12px 16px;font-size:18px;line-height:1.2;}}
+  .barra-titulo {{display:block;width:100%;margin:0;background:{COR_VALE};color:#fff;font-weight:700;
+                 text-align:center;padding:12px 16px;font-size:18px;line-height:1.2;border-radius:14px 14px 0 0;}}
   .painel.sub .barra-titulo {{font-size:16px;padding:10px 14px;}}
   .js-plotly-plot {{width:100%!important}}
   .fonte-dados {{padding:2px 18px 18px;color:#667085;

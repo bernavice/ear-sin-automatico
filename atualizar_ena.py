@@ -291,8 +291,10 @@ def grafico_ena(mensal: pd.DataFrame, titulo: str, coluna: str,
         # Sem título embutido na legenda: ele ocupava a mesma linha dos anos
         # e causava sobreposição nas visualizações com duas colunas.
         legend=dict(orientation='h',
-                    x=.5, xanchor='center', y=-.27, yanchor='top',
-                    font=dict(size=11), traceorder='normal'),
+                    x=.5, xanchor='center', y=-.31, yanchor='top',
+                    font=dict(size=10), traceorder='normal',
+                    itemwidth=72, entrywidth=72, entrywidthmode='pixels',
+                    itemsizing='constant'),
         shapes=marcadores_cruz,
         # A fonte é exibida abaixo do gráfico em HTML, nunca na área da legenda.
     )
@@ -350,9 +352,9 @@ def pagina_ena(mensal: pd.DataFrame) -> str:
   * {{box-sizing:border-box}}
   body {{margin:0;background:#fff;color:#263142;font-family:{FONTE}}}
   .area {{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;padding:0 12px 20px}}
-  .painel {{min-width:0;background:#fff;border:1px solid #eaedf2;border-radius:12px;overflow:hidden;display:flex;flex-direction:column}}
+  .painel {{min-width:0;background:#fff;border:1px solid #e1e7ef;border-radius:14px;overflow:hidden;display:flex;flex-direction:column}}
   .painel.sin {{grid-column:1/-1}}
-  .barra-titulo {{background:{COR_VALE};color:#fff;font-weight:700;text-align:center;padding:12px 16px;font-size:18px;line-height:1.2;}}
+  .barra-titulo {{display:block;width:100%;margin:0;background:{COR_VALE};color:#fff;font-weight:700;text-align:center;padding:12px 16px;font-size:18px;line-height:1.2;border-radius:14px 14px 0 0;}}
   .painel.sub .barra-titulo {{font-size:16px;padding:10px 14px;}}
   .js-plotly-plot {{width:100%!important}}
   .fonte-dados {{padding:2px 18px 18px;color:#667085;font-size:11px;line-height:1.5;margin-top:auto;}}
@@ -381,7 +383,7 @@ def pagina_abertura(data_ear: str, data_ena: str) -> str:
   * {{box-sizing:border-box}}
   body {{margin:0}}
   .topo {{max-width:1450px;margin:auto;padding:6px 24px 14px}}
-  .topo .banner {{width:100%;display:block;border:1px solid #d8e0ea}}
+  .topo .banner {{width:100%;display:block;border:0;border-radius:16px}}
   .topo p {{margin:0;color:#697586;font-size:13px;line-height:1.65}}
   .topo .subtexto {{margin-top:10px}}
   .topo .fonte-atualizacao {{color:#526071;margin-top:3px;font-size:12px}}
@@ -394,7 +396,7 @@ def pagina_abertura(data_ear: str, data_ena: str) -> str:
   .aba {{display:none}}
   .aba.ativa {{display:block}}
   iframe {{display:block;border:0;background:white;width:100%;height:700px}}
-  .molde {{background:white;border:1px solid #e7edf5;border-radius:13px;overflow:hidden}}
+  .molde {{background:white;border:1px solid #e7edf5;border-radius:16px;overflow:hidden}}
   @media(max-width:700px) {{.topo {{padding:8px 16px 12px}}
      .conteudo {{padding:0 6px 24px}} button {{width:100%;}}}}
 </style></head><body>
