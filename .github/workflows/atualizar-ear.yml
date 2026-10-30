@@ -10,6 +10,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: atualizacao-ear
@@ -49,3 +51,29 @@ jobs:
             git commit -m "Atualizacao automatica EAR SIN"
             git push
           fi
+
+      - name: Preparar pagina HTML
+        run: |
+          mkdir -p site
+          cp graficos/ear_sin.html site/index.html
+
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Enviar pagina para publicacao
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+
+  publicar:
+    needs: atualizar-ear
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Publicar grafico no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
