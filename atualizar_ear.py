@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 import requests
@@ -24,6 +25,16 @@ MENSAL = RAIZ / "dados" / "ear_mensal.csv"
 GRAFICO = RAIZ / "graficos" / "ear_sin.html"
 SUBS = ["earse", "earsu", "earne", "earn"]
 COLUNAS = ["data", *SUBS, "earsin"]
+# Referências mensais informadas pelo usuário, em % da EAR máxima.
+FAIXA_MIN = [21, 23, 30, 35, 36, 35, 33, 28, 23, 18, 19, 22]
+FAIXA_MAX = [78, 84, 89, 90, 88, 87, 84, 79, 73, 69, 67, 72]
+
+# Vmimop: informe o percentual oficial desejado para uma linha horizontal.
+# Não é possível estabelecer o Vmimop do SIN com segurança sem esse valor.
+# Exemplo de uso APÓS validação: VMIMOP_PCT = 18.0
+# Enquanto None, a linha não é desenhada (para não divulgar limiar inventado).
+VMIMOP_PCT = None
+
 BASE_ONS = (
     "https://ons-aws-prod-opendata.s3.amazonaws.com/"
     "dataset/ear_subsistema_di/EAR_DIARIO_SUBSISTEMA_{ano}.csv"
@@ -181,45 +192,222 @@ def montar_mensal(diario: pd.DataFrame) -> pd.DataFrame:
     return mensal[["data", "ano", "mes", *SUBS, "earsin"]].reset_index(drop=True)
 
 
+
+def suavizar_curva_mensal(valores: list[int] | list[float], pontos_por_mes: int = 25):
+    """Interpola os 12 valores com cúbicas monotônicas (PCHIP), sem SciPy.
+
+    Evita oscilações artificiais e mantém os limites em seus valores mensais.
+    A interpolação é feita apenas para o desenho; os dados de referência
+    permanecem inalterados.
+    """
+    y = np.asarray(valores, dtype=float)
+    x = np.arange(1, len(y) + 1, dtype=float)
+    if len(y) < 3:
+        return x, y
+
+    delta = np.diff(y)
+    derivadas = np.zeros_like(y)
+    # Derivada harmônica nos pontos internos (malha mensal uniforme).
+    for i in range(1, len(y) - 1):
+        anterior, proxima = delta[i - 1], delta[i]
+        if anterior * proxima > 0:
+            derivadas[i] = 2 * anterior * proxima / (anterior + proxima)
+
+    def derivada_extremo(a: float, b: float) -> float:
+        valor = (3 * a - b) / 2
+        if valor * a <= 0:
+            return 0.0
+        if a * b < 0 and abs(valor) > 3 * abs(a):
+            return 3 * a
+        return valor
+
+    derivadas[0] = derivada_extremo(delta[0], delta[1])
+    derivadas[-1] = derivada_extremo(delta[-1], delta[-2])
+
+    xs = np.linspace(x[0], x[-1], (len(y) - 1) * pontos_por_mes + 1)
+    indices = np.clip(np.floor(xs).astype(int) - 1, 0, len(y) - 2)
+    t = xs - x[indices]
+    t2, t3 = t * t, t * t * t
+    ys = ((2 * t3 - 3 * t2 + 1) * y[indices]
+          + (t3 - 2 * t2 + t) * derivadas[indices]
+          + (-2 * t3 + 3 * t2) * y[indices + 1]
+          + (t3 - t2) * derivadas[indices + 1])
+    return xs, ys
+
 def montar_grafico(mensal: pd.DataFrame) -> str:
-    nomes = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
-    ano_max = int(mensal["ano"].max())
-    mostrar = mensal["ano"] >= ano_max - 9
-    grafico = mensal.loc[mostrar].sort_values(["ano", "mes"])
-    cores = ["#7E57C2", "#00897B", "#D97929", "#DB4C66", "#607D8B", "#8D6E63", "#43A047", "#9C27B0", "#00ACC1", "#2563EB"]
+    """HTML Plotly com faixa histórica sombreada e anos selecionados."""
+    meses = list(range(1, 13))
+    nomes = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+             "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
+    ano_atual = datetime.now(ZoneInfo("America/Sao_Paulo")).year
+    ultimo_ano_na_base = int(mensal["ano"].max())
+    primeiro_ano = ultimo_ano_na_base - 9
+    plotagem = mensal.loc[mensal["ano"] >= primeiro_ano].sort_values(["ano", "mes"])
+    anos_visiveis = {ano_atual, ano_atual - 1, 2021, 2023}
+
+    cores_destaque = {
+        2021: "#D62828",   # vermelho solicitado
+        2023: "#8ED1FC",   # azul bem claro solicitado
+        ano_atual - 1: "#D97706",
+        ano_atual: "#2563EB",
+    }
+    outras_cores = ["#64748B", "#C05C62", "#7C8C43", "#6D77AE",
+                    "#A56B43", "#778899", "#9C78AB", "#249A9A"]
+
     fig = go.Figure()
-    for i, (ano, grupo) in enumerate(grafico.groupby("ano", sort=True)):
-        atual = ano == ano_max
+
+    # Faixa histórica como UM ÚNICO traço Plotly:
+    # área inteira entre as curvas, com contorno suavizado nos limites.
+    # Um clique na legenda oculta/reexibe SIMULTANEAMENTE o preenchimento
+    # e os dois contornos, pois tudo pertence ao mesmo traço.
+    x_suave, minimo_suave = suavizar_curva_mensal(FAIXA_MIN)
+    _, maximo_suave = suavizar_curva_mensal(FAIXA_MAX)
+
+    # Polígono fechado: limite superior Jan→Dez e inferior Dez→Jan.
+    # O preenchimento é um fundo cinza-claro semiopaco (sem hachuras).
+    fig.add_trace(go.Scatter(
+        x=np.concatenate([x_suave, x_suave[::-1]]),
+        y=np.concatenate([maximo_suave, minimo_suave[::-1]]),
+        mode="lines",
+        fill="toself",
+        fillcolor="rgba(187, 194, 202, 0.50)",
+        line=dict(width=1.3, color="rgba(155, 164, 175, 0.70)"),
+        name="Faixa histórica mín.–máx.",
+        showlegend=True,
+        hoverinfo="skip",
+    ))
+
+    if VMIMOP_PCT is not None:
+        valor_vmimop = float(VMIMOP_PCT)
+        if not 0 <= valor_vmimop <= 100:
+            raise ValueError("VMIMOP_PCT deve estar entre 0 e 100 (%)")
         fig.add_trace(go.Scatter(
-            x=grupo["mes"], y=grupo["earsin"],
+            x=meses,
+            y=[valor_vmimop] * 12,
+            name="Vmimop",
+            mode="lines",
+            line=dict(color="#676B73", width=2.5, dash="dash"),
+            hovertemplate="Vmimop: %{y:.2f}%<extra></extra>",
+        ))
+    else:
+        print("Vmimop não desenhado: defina VMIMOP_PCT após validar o valor oficial.")
+
+    for i, (ano, grupo) in enumerate(plotagem.groupby("ano", sort=True)):
+        ano = int(ano)
+        atual = ano == ano_atual
+        exibir = ano in anos_visiveis
+        cor = cores_destaque.get(ano, outras_cores[i % len(outras_cores)])
+        fig.add_trace(go.Scatter(
+            x=grupo["mes"],
+            y=grupo["earsin"],
             customdata=grupo["data"].dt.strftime("%d/%m/%Y"),
-            name=str(ano), mode="lines+markers",
-            line=dict(shape="spline", smoothing=0.8, width=3.8 if atual else 2.2,
-                      color="#1D4ED8" if atual else cores[i % len(cores)]),
-            marker=dict(size=7 if atual else 5),
-            opacity=1 if atual else 0.75,
+            name=str(ano),
+            visible=True if exibir else "legendonly",
+            mode="lines+markers",
+            line=dict(shape="spline", smoothing=0.82,
+                      width=3.7 if atual else 2.5, color=cor),
+            marker=dict(size=7 if atual else 5, symbol="circle", color=cor),
+            opacity=1 if exibir else 0.8,
             hovertemplate=("<b>%{fullData.name}</b><br>Referência: %{customdata}"
                            "<br>EAR SIN: %{y:.2f}%<extra></extra>"),
         ))
 
-    ultimo = mensal.iloc[-1]
+    fonte = "Century Gothic, CenturyGothic, Arial, sans-serif"
+
+    # Marcadores primários em cruz no eixo X.
+    shapes = []
+    for mes in meses:
+        shapes.append(dict(
+            type="line",
+            xref="x",
+            yref="paper",
+            x0=mes,
+            x1=mes,
+            y0=-0.018,
+            y1=0.018,
+            line=dict(color="#475467", width=1.2),
+            layer="above",
+        ))
+
     fig.update_layout(
-        title=dict(text="EAR do SIN | último dia disponível de cada mês", x=0.04),
-        template="plotly_white", height=610,
-        xaxis=dict(title="Mês", tickmode="array", tickvals=list(range(1, 13)),
-                   ticktext=nomes, range=[0.8, 12.2], dtick=1),
-        yaxis=dict(title="Energia armazenada (% da EAR máxima)", range=[0, 100], ticksuffix="%"),
-        legend=dict(title="Ano", orientation="h", y=-0.22, x=0.5, xanchor="center"),
-        hovermode="closest", margin=dict(l=65, r=30, t=85, b=130),
+        title=dict(text="Energia Armazenada do SIN", x=0.5, xanchor="center",
+                   font=dict(size=22, color="#263142")),
+        font=dict(family=fonte, size=13, color="#344054"),
+        template="plotly_white",
+        height=635,
+        autosize=True,
+        paper_bgcolor="white",
+        plot_bgcolor="white",
+        hovermode="closest",
+        shapes=shapes,
+        legend=dict(
+            title=dict(text="Ano / referências", font=dict(size=12)),
+            orientation="h", x=0.5, xanchor="center", y=-0.24,
+            yanchor="top", font=dict(size=12),
+            traceorder="normal",
+        ),
+        margin=dict(l=80, r=40, t=90, b=155),
         annotations=[dict(
-            text=(f"Último dado: {ultimo['data'].strftime('%d/%m/%Y')} "
-                  f"— EAR SIN {ultimo['earsin']:.2f}% · Fonte: ONS / histórico fornecido"),
-            x=0.01, y=-0.29, xref="paper", yref="paper", showarrow=False,
-            xanchor="left", font=dict(size=12, color="#64748B"),
+            text="Fonte: ONS", x=0, y=-0.34,
+            xref="paper", yref="paper", xanchor="left", yanchor="top",
+            showarrow=False, font=dict(family=fonte, size=11, color="#667085"),
         )],
     )
-    return fig.to_html(full_html=True, include_plotlyjs="cdn", div_id="grafico-ear-sin",
-                       config={"responsive": True, "displaylogo": False})
+    fig.update_xaxes(
+        title_text="Mês",
+        range=[0.75, 12.25],
+        tickmode="array",
+        tickvals=meses,
+        ticktext=nomes,
+        showline=True,
+        linewidth=1.5,
+        linecolor="#475467",
+        ticks="",
+        showgrid=False,  # sem linhas de grade verticais
+        zeroline=False,
+        minor=dict(
+            tickmode="array",
+            tickvals=[i + 0.5 for i in range(1, 12)],
+            ticks="outside",
+            ticklen=3,
+            tickwidth=1,
+            tickcolor="#98A2B3",
+            showgrid=False,
+        ),
+    )
+    fig.update_yaxes(
+        title_text="EAR SIN (%)",
+        range=[0, 100],
+        tickmode="linear",
+        tick0=0,
+        dtick=10,
+        ticksuffix="%",
+        showline=True,
+        linewidth=1.5,
+        linecolor="#475467",
+        ticks="outside",
+        ticklen=6,
+        tickwidth=1.2,
+        tickcolor="#475467",
+        showgrid=False,  # sem linhas de grade horizontais
+        zeroline=False,
+        minor=dict(
+            tickmode="linear",
+            tick0=0,
+            dtick=5,
+            ticks="outside",
+            ticklen=3,
+            tickwidth=1,
+            tickcolor="#98A2B3",
+            showgrid=False,
+        ),
+    )
+    return fig.to_html(
+        full_html=True,
+        include_plotlyjs="cdn",
+        div_id="grafico-ear-sin",
+        config={"responsive": True, "displaylogo": False},
+    )
 
 
 def salvar(diario: pd.DataFrame) -> None:
