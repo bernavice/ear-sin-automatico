@@ -384,7 +384,7 @@ def montar_grafico(mensal: pd.DataFrame) -> str:
                    font=dict(size=22, color="#263142")),
         font=dict(family=fonte, size=13, color="#344054"),
         template="plotly_white",
-        height=635,
+        height=660,
         autosize=True,
         paper_bgcolor="white",
         plot_bgcolor="white",
@@ -392,16 +392,13 @@ def montar_grafico(mensal: pd.DataFrame) -> str:
         shapes=shapes,
         legend=dict(
             title=dict(text="Ano / referências", font=dict(size=12)),
-            orientation="h", x=0.5, xanchor="center", y=-0.24,
+            orientation="h", x=0.5, xanchor="center", y=-0.23,
             yanchor="top", font=dict(size=12),
             traceorder="normal",
         ),
-        margin=dict(l=80, r=40, t=90, b=155),
-        annotations=[dict(
-            text="Fonte: ONS", x=0, y=-0.34,
-            xref="paper", yref="paper", xanchor="left", yanchor="top",
-            showarrow=False, font=dict(family=fonte, size=11, color="#667085"),
-        )],
+        # A nota de fonte fica fora do Plotly, num rodapé HTML separado.
+        # Isso impede que se sobreponha à legenda mesmo em telas estreitas.
+        margin=dict(l=80, r=40, t=90, b=180),
     )
     fig.update_xaxes(
         title_text="Mês",
@@ -452,12 +449,37 @@ def montar_grafico(mensal: pd.DataFrame) -> str:
             showgrid=False,
         ),
     )
-    return fig.to_html(
-        full_html=True,
+    # Informação de atualização = data do dado mais recente na base,
+    # não a hora de execução do GitHub Actions (que pode não ter dado novo).
+    ultima_data = pd.Timestamp(mensal["data"].max()).strftime("%d/%m/%Y")
+    grafico = fig.to_html(
+        full_html=False,
         include_plotlyjs="cdn",
         div_id="grafico-ear-sin",
         config={"responsive": True, "displaylogo": False},
     )
+    return f'''<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Energia Armazenada do SIN</title>
+<style>
+  * {{box-sizing:border-box}}
+  body {{margin:0;background:white;font-family:Century Gothic,CenturyGothic,Arial,sans-serif}}
+  main {{width:100%;}}
+  #grafico-ear-sin {{width:100%;}}
+  .fonte-dados {{padding:2px 20px 22px;color:#667085;font-size:12px;line-height:1.5;}}
+</style></head><body>
+<main>{grafico}
+<footer class="fonte-dados">Fonte: ONS &nbsp;|&nbsp; Dados atualizados até: {ultima_data}</footer>
+</main>
+<script>
+  function comunicarAlturaEAR() {{
+    if (window.parent !== window) window.parent.postMessage(
+      {{tipo:'altura-painel-ons',id:'ear',altura:document.querySelector('main').offsetHeight+6}},'*');
+  }}
+  window.addEventListener('load',comunicarAlturaEAR);
+  window.addEventListener('resize',comunicarAlturaEAR);
+</script></body></html>''' 
 
 
 def salvar(diario: pd.DataFrame) -> None:
