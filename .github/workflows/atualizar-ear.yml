@@ -1,11 +1,10 @@
 
-name: Atualizar EAR do SIN
+name: Atualizar painel EAR e ENA do SIN
 
 on:
   schedule:
     - cron: '15 20 * * *'
       timezone: 'America/Sao_Paulo'
-
   workflow_dispatch:
 
 permissions:
@@ -14,13 +13,12 @@ permissions:
   id-token: write
 
 concurrency:
-  group: atualizacao-ear
+  group: painel-hidrologico-ons
   cancel-in-progress: false
 
 jobs:
-  atualizar-ear:
+  atualizar-dados:
     runs-on: ubuntu-latest
-
     steps:
       - name: Baixar repositorio
         uses: actions/checkout@v4
@@ -32,48 +30,66 @@ jobs:
           cache: pip
           cache-dependency-path: requirements-ear.txt
 
-      - name: Instalar dependencias
+      - name: Instalar bibliotecas
         run: pip install -r requirements-ear.txt
 
-      - name: Atualizar dados e grafico
+      - name: Atualizar dados e grafico EAR
         run: python atualizar_ear.py
 
-      - name: Salvar atualizacoes
+      - name: Atualizar dados e graficos ENA e painel
+        run: python atualizar_ena.py
+
+      - name: Conferir ENA mensal e botoes do painel
+        run: |
+          python - <<'PYVALID'
+          from pathlib import Path
+          import pandas as pd
+          m = pd.read_csv('dados/ena_mensal.csv', sep=';', decimal=',')
+          assert {'data', 'ano', 'mes', 'dias_observados', 'enasinpp'}.issubset(m.columns)
+          assert len(m) > 0 and (m['dias_observados'] >= 1).all()
+          pagina = Path('graficos/index.html').read_text(encoding='utf-8')
+          assert all(x in pagina for x in ['botao-ear', 'botao-ena', 'ear_sin.html', 'ena.html'])
+          print('ENA mensal e botoes EAR/ENA presentes.')
+          PYVALID
+
+      - name: Registrar dados e graficos no GitHub
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add dados/ear_diaria.csv dados/ear_mensal.csv graficos/ear_sin.html
+          git add dados/ear_diaria.csv dados/ear_mensal.csv dados/ena_diaria.csv dados/ena_mensal.csv
+          git add graficos/ear_sin.html graficos/ena.html graficos/index.html
 
-          if git diff --staged --quiet; then
-            echo "Nenhuma alteracao encontrada."
+          if git diff --cached --quiet; then
+            echo "Nenhuma mudança nos dados ou gráficos."
           else
-            git commit -m "Atualizacao automatica EAR SIN"
+            git commit -m "Atualizar painel hidrologico EAR e ENA"
             git push
           fi
 
-      - name: Preparar pagina HTML
+      - name: Preparar site GitHub Pages
         run: |
           mkdir -p site
-          cp graficos/ear_sin.html site/index.html
+          cp graficos/index.html site/index.html
+          cp graficos/ear_sin.html site/ear_sin.html
+          cp graficos/ena.html site/ena.html
 
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Enviar pagina para publicacao
+      - name: Enviar site
         uses: actions/upload-pages-artifact@v4
         with:
           path: site
 
   publicar:
-    needs: atualizar-ear
+    needs: atualizar-dados
     runs-on: ubuntu-latest
-
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Publicar grafico no GitHub Pages
+      - name: Publicar painel
         id: deployment
         uses: actions/deploy-pages@v4
