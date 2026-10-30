@@ -322,7 +322,7 @@ def montar_grafico(mensal: pd.DataFrame) -> str:
         fill="toself",
         fillcolor="rgba(187, 194, 202, 0.50)",
         line=dict(width=1.3, color="rgba(155, 164, 175, 0.70)"),
-        name="Faixa histórica mín.–máx.",
+        name="Faixa hist.",
         showlegend=True,
         hoverinfo="skip",
     ))
@@ -391,14 +391,19 @@ def montar_grafico(mensal: pd.DataFrame) -> str:
         hovermode="closest",
         shapes=shapes,
         legend=dict(
-            title=dict(text="Ano / referências", font=dict(size=12)),
-            orientation="h", x=0.5, xanchor="center", y=-0.23,
-            yanchor="top", font=dict(size=12),
+            orientation="h",
+            x=0.5, xanchor="center", y=-0.28,
+            yanchor="top",
+            font=dict(size=11),
             traceorder="normal",
+            itemwidth=76,
+            entrywidth=76,
+            entrywidthmode="pixels",
+            itemsizing="constant",
         ),
         # A nota de fonte fica fora do Plotly, num rodapé HTML separado.
         # Isso impede que se sobreponha à legenda mesmo em telas estreitas.
-        margin=dict(l=80, r=40, t=90, b=180),
+        margin=dict(l=80, r=40, t=90, b=200),
     )
     fig.update_xaxes(
         title_text="Mês",
