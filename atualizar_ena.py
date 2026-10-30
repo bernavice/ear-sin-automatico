@@ -30,6 +30,8 @@ DIARIO = RAIZ / 'dados' / 'ena_diaria.csv'
 MENSAL = RAIZ / 'dados' / 'ena_mensal.csv'
 PAGINA_ENA = RAIZ / 'graficos' / 'ena.html'
 PAGINA_INICIAL = RAIZ / 'graficos' / 'index.html'
+PAGINA_PLD = RAIZ / 'graficos' / 'pld.html'
+PLD_LONG = RAIZ / 'dados' / 'pld_historico_long.csv'
 PAGINA_EAR = RAIZ / 'graficos' / 'ear_sin.html'
 URL_ONS = ('https://ons-aws-prod-opendata.s3.amazonaws.com/'
            'dataset/ena_subsistema_di/ENA_DIARIO_SUBSISTEMA_{ano}.csv')
@@ -373,11 +375,12 @@ def pagina_ena(mensal: pd.DataFrame) -> str:
 </script></body></html>'''
 
 
-def pagina_abertura(data_ear: str, data_ena: str) -> str:
+def pagina_abertura(data_ear: str, data_ena: str, data_pld: str | None = None) -> str:
+    pld_txt = f' · PLD {data_pld}' if data_pld else ''
     return f'''<!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Painel Hidrológico | EAR e ENA mensal</title>
+<title>Painel Hidrológico | EAR, ENA e PLD</title>
 <style>
   :root {{font-family:{FONTE};color:#253345;background:#f7f9fc}}
   * {{box-sizing:border-box}}
@@ -388,8 +391,7 @@ def pagina_abertura(data_ear: str, data_ena: str) -> str:
   .topo .subtexto {{margin-top:10px}}
   .topo .fonte-atualizacao {{color:#526071;margin-top:3px;font-size:12px}}
   .abas {{display:flex;gap:10px;padding-top:18px;flex-wrap:wrap}}
-  button {{font:inherit;border:1px solid #d9e1eb;background:white;color:#526071;
-      padding:11px 26px;border-radius:9px;font-weight:600;cursor:pointer}}
+  button {{font:inherit;border:1px solid #d9e1eb;background:white;color:#526071; padding:11px 26px;border-radius:9px;font-weight:600;cursor:pointer}}
   button[aria-selected="true"] {{color:white;background:{COR_VALE};border-color:{COR_VALE}}}
   button:focus-visible {{outline:3px solid #73b7fa;outline-offset:2px}}
   .conteudo {{max-width:1450px;margin:auto;padding:0 16px 28px}}
@@ -397,38 +399,33 @@ def pagina_abertura(data_ear: str, data_ena: str) -> str:
   .aba.ativa {{display:block}}
   iframe {{display:block;border:0;background:white;width:100%;height:700px}}
   .molde {{background:white;border:1px solid #e7edf5;border-radius:16px;overflow:hidden}}
-  @media(max-width:700px) {{.topo {{padding:8px 16px 12px}}
-     .conteudo {{padding:0 6px 24px}} button {{width:100%;}}}}
+  @media(max-width:700px) {{.topo {{padding:8px 16px 12px}} .conteudo {{padding:0 6px 24px}} button {{width:100%;}}}}
 </style></head><body>
 <header class="topo">
   <img class="banner" alt="Vale - Acompanhamento de mercado" src="{BANNER_BASE64}">
-  <p class="subtexto">EAR: último dia disponível · ENA: média dos dias disponíveis do mês</p>
-  <p class="fonte-atualizacao">Fonte: ONS &nbsp;|&nbsp; Dados atualizados até: EAR {data_ear} · ENA {data_ena}</p>
+  <p class="subtexto">EAR: último dia disponível · ENA: média dos dias disponíveis do mês · PLD: atualização até o último dado disponível</p>
+  <p class="fonte-atualizacao">Fonte: ONS / CCEE &nbsp;|&nbsp; Dados atualizados até: EAR {data_ear} · ENA {data_ena}{pld_txt}</p>
 <nav class="abas" role="tablist" aria-label="Escolher grandeza">
 <button role="tab" id="botao-ear" aria-selected="true" aria-controls="aba-ear" onclick="selecionar('ear')">EAR · Armazenamento</button>
 <button role="tab" id="botao-ena" aria-selected="false" aria-controls="aba-ena" onclick="selecionar('ena')">ENA · Afluências</button>
+<button role="tab" id="botao-pld" aria-selected="false" aria-controls="aba-pld" onclick="selecionar('pld')">PLD · Preços</button>
 </nav></header>
 <main class="conteudo">
-<section class="aba ativa" id="aba-ear" role="tabpanel" aria-labelledby="botao-ear">
-  <div class="molde"><iframe id="quadro-ear" title="Energia armazenada SIN" src="ear_sin.html" loading="eager" style="height:1900px"></iframe></div>
-</section>
-<section class="aba" id="aba-ena" role="tabpanel" aria-labelledby="botao-ena">
-  <div class="molde"><iframe id="quadro-ena" title="Energia natural afluente SIN e subsistemas" src="ena.html" loading="eager" style="height:1900px"></iframe></div>
-</section>
+<section class="aba ativa" id="aba-ear" role="tabpanel" aria-labelledby="botao-ear"><div class="molde"><iframe id="quadro-ear" title="Energia armazenada" src="ear_sin.html" loading="eager" style="height:1900px"></iframe></div></section>
+<section class="aba" id="aba-ena" role="tabpanel" aria-labelledby="botao-ena"><div class="molde"><iframe id="quadro-ena" title="Energia natural afluente" src="ena.html" loading="eager" style="height:1900px"></iframe></div></section>
+<section class="aba" id="aba-pld" role="tabpanel" aria-labelledby="botao-pld"><div class="molde"><iframe id="quadro-pld" title="PLD" src="pld.html" loading="eager" style="height:2600px"></iframe></div></section>
 </main>
 <script>
   function selecionar(tipo) {{
-    for (const t of ['ear','ena']) {{
+    for (const t of ['ear','ena','pld']) {{
       document.getElementById('aba-'+t).classList.toggle('ativa',tipo===t);
       document.getElementById('botao-'+t).setAttribute('aria-selected',tipo===t?'true':'false');
     }}
-    history.replaceState(null,'',location.pathname+(tipo==='ena'?'?visao=ena':''));
+    history.replaceState(null,'',location.pathname+(tipo==='ear'?'':'?visao='+tipo));
     requestAnimationFrame(()=> {{
       const quadro=document.getElementById('quadro-'+tipo);
       if(quadro.contentWindow && quadro.contentWindow.Plotly) {{
-        quadro.contentWindow.document.querySelectorAll('.js-plotly-plot').forEach(g=> {{
-          quadro.contentWindow.Plotly.Plots.resize(g);
-        }});
+        quadro.contentWindow.document.querySelectorAll('.js-plotly-plot').forEach(g=> {{quadro.contentWindow.Plotly.Plots.resize(g);}});
       }}
       ajustarAltura(quadro);
     }});
@@ -439,27 +436,22 @@ def pagina_abertura(data_ear: str, data_ena: str) -> str:
       if(doc && doc.documentElement) {{
         const main=doc.querySelector('main');
         const altura=main?main.offsetHeight+12:doc.documentElement.scrollHeight+6;
-        quadro.style.height=Math.max(quadro.id==='quadro-ear'?1600:700,altura)+'px';
+        const min = quadro.id==='quadro-pld'?2400:(quadro.id==='quadro-ear'?1600:700);
+        quadro.style.height=Math.max(min,altura)+'px';
       }}
-    }} catch(e) {{ /* Sem acesso cross-origin: manter altura padrão */ }}
+    }} catch(e) {{ }}
   }}
-  for(const nome of ['ear','ena']) {{
-    const quadro=document.getElementById('quadro-'+nome);
-    quadro.addEventListener('load',()=>ajustarAltura(quadro));
-  }}
+  for(const nome of ['ear','ena','pld']) {{ const quadro=document.getElementById('quadro-'+nome); quadro.addEventListener('load',()=>ajustarAltura(quadro)); }}
   window.addEventListener('message',(event)=> {{
     if(event.origin!==location.origin) return;
-    if(event.data?.tipo==='altura-painel-ons' && ['ena','ear'].includes(event.data.id)) {{
-      const alturaMinima=event.data.id==='ena'?700:1600;
-      document.getElementById('quadro-'+event.data.id).style.height=
-        Math.max(alturaMinima,event.data.altura+8)+'px';
+    if(event.data?.tipo==='altura-painel-ons' && ['ena','ear','pld'].includes(event.data.id)) {{
+      const alturaMinima=event.data.id==='pld'?2400:(event.data.id==='ena'?700:1600);
+      document.getElementById('quadro-'+event.data.id).style.height=Math.max(alturaMinima,event.data.altura+8)+'px';
     }}
   }});
-  window.addEventListener('resize',()=> {{
-    const ativo=document.querySelector('.aba.ativa iframe');
-    if(ativo) ajustarAltura(ativo);
-  }});
-  if(new URLSearchParams(location.search).get('visao')==='ena') selecionar('ena');
+  window.addEventListener('resize',()=> {{ const ativo=document.querySelector('.aba.ativa iframe'); if(ativo) ajustarAltura(ativo); }});
+  const visao = new URLSearchParams(location.search).get('visao');
+  if(['ena','pld'].includes(visao)) selecionar(visao);
 </script></body></html>'''
 
 
@@ -476,9 +468,16 @@ def salvar(diario: pd.DataFrame) -> None:
     datas_ear = pd.read_csv(caminho_ear_mensal, sep=';', usecols=['data'])
     data_ear = pd.to_datetime(datas_ear['data'], errors='raise').max().strftime('%d/%m/%Y')
     data_ena = pd.Timestamp(m['data'].max()).strftime('%d/%m/%Y')
+    data_pld = None
+    if PLD_LONG.exists():
+        try:
+            datas_pld = pd.read_csv(PLD_LONG, sep=';', usecols=['data'])
+            data_pld = pd.to_datetime(datas_pld['data'], errors='coerce').max().strftime('%d/%m/%Y')
+        except Exception:
+            data_pld = None
     temporarios = []
     for destino, conteudo in [(PAGINA_ENA, pagina_ena(m)),
-                              (PAGINA_INICIAL, pagina_abertura(data_ear, data_ena))]:
+                              (PAGINA_INICIAL, pagina_abertura(data_ear, data_ena, data_pld))]:
         temp = destino.with_suffix(destino.suffix+'.tmp')
         temp.write_text(conteudo, encoding='utf-8')
         temporarios.append((temp,destino))
