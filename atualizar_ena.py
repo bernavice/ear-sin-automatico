@@ -254,7 +254,7 @@ def grafico_ena(mensal: pd.DataFrame, titulo: str, coluna: str,
     f = go.Figure()
     # Linha de referência tracejada: ENA igual à Média de Longo Termo.
     f.add_trace(go.Scatter(
-        x=MESES, y=[100.0] * 12, mode='lines', name='MLT (100%)',
+        x=MESES, y=[100.0] * 12, mode='lines', name='MLT 100%',
         line=dict(color='#717985', width=2, dash='dash'),
         hovertemplate='Referência: 100% da MLT<extra></extra>',
     ))
@@ -286,12 +286,14 @@ def grafico_ena(mensal: pd.DataFrame, titulo: str, coluna: str,
         font=dict(family=FONTE, size=12, color='#344054'),
         template='plotly_white', height=650 if grande else 460,
         autosize=True, paper_bgcolor='white', plot_bgcolor='white',
-        hovermode='closest', margin=dict(l=68, r=32, t=77 if grande else 65, b=170),
+        hovermode='closest', margin=dict(l=68, r=32, t=77 if grande else 65, b=190),
         # Sem título embutido na legenda: ele ocupava a mesma linha dos anos
         # e causava sobreposição nas visualizações com duas colunas.
         legend=dict(orientation='h',
-                    x=.5, xanchor='center', y=-.27, yanchor='top',
-                    font=dict(size=11), traceorder='normal'),
+                    x=.5, xanchor='center', y=-.30, yanchor='top',
+                    font=dict(size=11), traceorder='normal',
+                    itemwidth=70, entrywidth=70, entrywidthmode='pixels',
+                    itemsizing='constant'),
         shapes=marcadores_cruz,
         # A fonte é exibida abaixo do gráfico em HTML, nunca na área da legenda.
     )
