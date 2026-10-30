@@ -1,0 +1,51 @@
+
+name: Atualizar EAR do SIN
+
+on:
+  schedule:
+    - cron: '15 20 * * *'
+      timezone: 'America/Sao_Paulo'
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: atualizacao-ear
+  cancel-in-progress: false
+
+jobs:
+  atualizar-ear:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements-ear.txt
+
+      - name: Instalar dependencias
+        run: pip install -r requirements-ear.txt
+
+      - name: Atualizar dados e grafico
+        run: python atualizar_ear.py
+
+      - name: Salvar atualizacoes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add dados/ear_diaria.csv dados/ear_mensal.csv graficos/ear_sin.html
+
+          if git diff --staged --quiet; then
+            echo "Nenhuma alteracao encontrada."
+          else
+            git commit -m "Atualizacao automatica EAR SIN"
+            git push
+          fi
