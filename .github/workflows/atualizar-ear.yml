@@ -1,5 +1,4 @@
-
-name: Atualizar painel EAR e ENA do SIN
+name: Atualizar painel EAR, ENA e PLD
 
 on:
   schedule:
@@ -22,61 +21,55 @@ jobs:
     steps:
       - name: Baixar repositorio
         uses: actions/checkout@v4
-
       - name: Preparar Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: pip
           cache-dependency-path: requirements-ear.txt
-
       - name: Instalar bibliotecas
         run: pip install -r requirements-ear.txt
-
-      - name: Atualizar dados e grafico EAR
+      - name: Atualizar EAR
         run: python atualizar_ear.py
-
-      - name: Atualizar dados e graficos ENA e painel
+      - name: Atualizar PLD CCEE e graficos
+        run: python atualizar_pld.py
+      - name: Atualizar ENA e pagina inicial
         run: python atualizar_ena.py
-
-      - name: Conferir ENA mensal e botoes do painel
+      - name: Conferir painel completo
         run: |
           python - <<'PYVALID'
           from pathlib import Path
           import pandas as pd
-          m = pd.read_csv('dados/ena_mensal.csv', sep=';', decimal=',')
-          assert {'data', 'ano', 'mes', 'dias_observados', 'enasinpp'}.issubset(m.columns)
-          assert len(m) > 0 and (m['dias_observados'] >= 1).all()
-          pagina = Path('graficos/index.html').read_text(encoding='utf-8')
-          assert all(x in pagina for x in ['botao-ear', 'botao-ena', 'ear_sin.html', 'ena.html'])
-          print('ENA mensal e botoes EAR/ENA presentes.')
+          page = Path('graficos/index.html').read_text(encoding='utf-8')
+          assert all(s in page for s in ['botao-ear', 'botao-ena', 'botao-pld', 'ear_sin.html', 'ena.html', 'pld.html'])
+          pld = pd.read_csv('dados/pld_historico_long.csv', sep=';', decimal=',')
+          assert {'data','hora','submercado','pld'}.issubset(pld.columns)
+          assert set(pld['submercado'].unique()) == {'SE/CO', 'SUL', 'NE', 'N'}
+          assert len(pld) > 0
+          assert Path('graficos/pld.html').exists()
+          print('Painel EAR + ENA + PLD gerado. PLD ate', pld['data'].max())
           PYVALID
-
-      - name: Registrar dados e graficos no GitHub
+      - name: Registrar dados e graficos
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add dados/ear_diaria.csv dados/ear_mensal.csv dados/ena_diaria.csv dados/ena_mensal.csv
-          git add graficos/ear_sin.html graficos/ena.html graficos/index.html
-
+          git add dados/ear_diaria.csv dados/ear_mensal.csv dados/ena_diaria.csv dados/ena_mensal.csv dados/pld_historico_long.csv
+          git add graficos/ear_sin.html graficos/ena.html graficos/pld.html graficos/index.html
           if git diff --cached --quiet; then
-            echo "Nenhuma mudança nos dados ou gráficos."
+            echo "Nenhuma alteracao encontrada."
           else
-            git commit -m "Atualizar painel hidrologico EAR e ENA"
+            git commit -m "Atualizar painel EAR ENA e PLD"
             git push
           fi
-
       - name: Preparar site GitHub Pages
         run: |
           mkdir -p site
           cp graficos/index.html site/index.html
           cp graficos/ear_sin.html site/ear_sin.html
           cp graficos/ena.html site/ena.html
-
+          cp graficos/pld.html site/pld.html
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
-
       - name: Enviar site
         uses: actions/upload-pages-artifact@v4
         with:
@@ -88,7 +81,6 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - name: Publicar painel
         id: deployment
