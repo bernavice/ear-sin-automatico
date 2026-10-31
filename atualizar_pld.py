@@ -1041,26 +1041,32 @@ def tabela_resumo_html(tabela: pd.DataFrame, notas: dict) -> str:
             '</div>'
         )
 
-    # A nota de referências acompanha o card PLD Semana, em vez de ocupar
-    # toda a largura sob os quatro cards.
+    # As referências agora ocupam uma faixa mais larga, abaixo do card
+    # PLD Semana e se estendem até a largura dos dois blocos centrais.
     notas_periodos = (
-        '<aside class="nota-resumo nota-semana" '
-        'style="padding:10px 12px;border:1px solid #e1e8ed;border-radius:10px;'
-        'background:#f5f8fa;color:#596978;font-size:11px;line-height:1.45;'
-        'overflow-wrap:anywhere">'
-        '<div style="font-weight:700;color:#344054;margin-bottom:5px">'
+        '<aside class="nota-resumo nota-semana-larga" '
+        'style="min-width:0;padding:8px 4px 2px;margin-top:0;'
+        'background:transparent;border:none;border-radius:0;'
+        'color:#596978;font-size:11px;line-height:1.45;overflow-wrap:anywhere;'
+        'box-sizing:border-box">'
+        '<div style="font-weight:700;color:#344054;margin-bottom:6px">'
         'Períodos de referência</div>'
+        '<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 18px">'
+        '<div style="min-width:0">'
         f'<div><strong>PLD Horário:</strong> {escape(notas["hoje"])}</div>'
-        f'<div><strong>Semana:</strong> {escape(notas["semana"])}</div>'
+        f'<div style="margin-top:4px"><strong>Semana:</strong> {escape(notas["semana"])}</div>'
+        '</div>'
+        '<div style="min-width:0">'
         f'<div><strong>Mês:</strong> {escape(notas["mes"])}</div>'
-        f'<div><strong>Ano:</strong> {escape(notas["ano"])}</div>'
+        f'<div style="margin-top:4px"><strong>Ano:</strong> {escape(notas["ano"])}</div>'
+        '</div>'
+        '</div>'
         '</aside>'
     )
 
     cards = []
     for indice, (_, linha) in enumerate(tabela.iterrows()):
         eh_hoje = linha['Indicador'] == 'PLD Horário'
-        eh_semana = linha['Indicador'] == 'PLD Semana'
         itens = []
         for sm in ORDEM:
             detalhe = detalhe_extremos(sm) if eh_hoje else ''
@@ -1087,21 +1093,24 @@ def tabela_resumo_html(tabela: pd.DataFrame, notas: dict) -> str:
             'style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px">'
             + ''.join(itens) + '</div></article>'
         )
-        nota_da_coluna = notas_periodos if eh_semana else ''
-        cards.append(
-            '<div class="coluna-resumo" style="min-width:0;display:flex;'
-            'flex-direction:column;gap:9px">'
-            + artigo + nota_da_coluna + '</div>'
-        )
+        cards.append(artigo)
 
+    # O grid externo possui quatro colunas iguais. O grupo à direita
+    # (Semana/Mês/Ano + nota) é um grid aninhado de três colunas iguais.
+    # Assim a nota começa imediatamente abaixo de Semana/Mês, sem ser
+    # empurrada pela maior altura do card PLD Horário.
     return (
         '<section class="painel">'
         '<div class="barra-titulo">PLD — Resumo</div>'
         '<div class="quadro-resumo" style="padding:20px 22px 18px;box-sizing:border-box">'
         '<div class="cards-resumo" '
-        'style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr));'
-        'gap:14px;align-items:start;width:100%;box-sizing:border-box">'
-        + ''.join(cards) + '</div></div></section>'
+        'style="display:grid;gap:14px;align-items:start;width:100%;box-sizing:border-box">'
+        + cards[0]
+        + '<div class="grupo-cards-direita" '
+        'style="min-width:0;display:grid;gap:14px;align-items:start">'
+        + ''.join(cards[1:]) + notas_periodos
+        + '</div>'
+        + '</div></div></section>'
     )
 
 
@@ -1179,6 +1188,8 @@ def pagina_pld(hist: pd.DataFrame) -> str:
   .subtitulo {{padding:12px 18px 0;text-align:center;color:#667085;font-size:12px;line-height:1.6}}
   .quadro-resumo {{padding:22px 22px 18px}}
   .cards-resumo {{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}}
+  .grupo-cards-direita {{grid-column:2 / -1;min-width:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}}
+  .grupo-cards-direita > .nota-semana-larga {{grid-column:1 / 3;grid-row:2;align-self:start}}
   .card-resumo {{min-width:0;background:#f9fbfd;border:1px solid #dde6ee;border-radius:13px;padding:15px;box-shadow:0 1px 2px rgba(16,24,40,.035)}}
   .titulo-card-resumo {{font-size:15px;font-weight:700;color:#163f49;margin-bottom:12px}}
   .grade-resumo {{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}}
@@ -1186,26 +1197,16 @@ def pagina_pld(hist: pd.DataFrame) -> str:
   .rotulo-resumo {{font-size:11px;font-weight:700;color:#667085}}
   .valor-resumo {{font-size:18px;font-weight:700;color:#123044;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}}
   .nota-resumo {{font-size:12px;color:#667085;line-height:1.7;margin-top:16px;text-align:left}}
-  @media(max-width:1150px) {{.cards-resumo {{grid-template-columns:repeat(2,minmax(0,1fr))}}}}
-  @media(max-width:640px) {{.quadro-resumo {{padding:14px}} .cards-resumo {{grid-template-columns:1fr}}}}
-  .filtro-mensal {{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:9px;padding:18px 18px 7px}}
-  .nome-filtro {{font-size:12px;font-weight:700;color:#344054;margin-right:7px}}
-  .filtro-sub {{font-family:inherit;display:inline-flex;align-items:center;gap:9px;background:#fff;
-     border:1px solid #cdd6e1;border-radius:9px;padding:9px 14px;font-weight:600;font-size:13px;
-     color:#475467;cursor:pointer;white-space:nowrap}}
-  .filtro-sub.selecionado {{background:#e4f4f1;border-color:{COR_VALE};color:#056865}}
-  .marcador-sub {{display:block;width:25px;border-top:3px solid #65758a}}
-  .marcador-sub.estilo-dash {{border-top-style:dashed}}
-  .marcador-sub.estilo-dot {{border-top-style:dotted}}
-  .marcador-sub.estilo-dashdot {{border-top-style:dashed}}
-  .aviso-mensal {{text-align:center;font-size:11px;color:#667085;padding:0 14px 4px}}
-  .legenda-anos {{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
-     gap:9px;padding:0 20px 18px}}
-  .filtro-ano {{font-family:inherit;display:inline-flex;gap:8px;align-items:center;justify-content:center;
-     background:#fff;border:1px solid #d9e1ea;border-radius:8px;color:#344054;font-weight:600;
-     padding:8px 12px;min-width:76px;font-size:12px;cursor:pointer}}
-  .filtro-ano[aria-pressed="false"] {{opacity:.35}}
-  .indicador-ano {{width:22px;height:4px;border-radius:4px}}
+  @media(max-width:1150px) {{
+    .cards-resumo {{grid-template-columns:1fr}}
+    .grupo-cards-direita {{grid-column:1 / -1;grid-template-columns:repeat(2,minmax(0,1fr))}}
+    .grupo-cards-direita > .nota-semana-larga {{grid-column:1 / -1;grid-row:auto}}
+  }}
+  @media(max-width:640px) {{
+    .quadro-resumo {{padding:14px}}
+    .grupo-cards-direita {{grid-template-columns:1fr}}
+    .grupo-cards-direita > .nota-semana-larga > div:last-child {{grid-template-columns:1fr !important}}
+  }}
   .js-plotly-plot {{width:100%!important}}
   .legenda-externa {{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px 18px;padding:4px 16px 15px;min-height:40px}}
   .legenda-item {{border:1px solid #e0e6ee;border-radius:8px;background:#fff;color:#263142;font:inherit;font-size:12px;display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:7px 12px;min-width:92px;cursor:pointer;white-space:nowrap}}
