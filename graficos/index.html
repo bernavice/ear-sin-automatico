@@ -34,7 +34,7 @@
 <main class="conteudo">
 <section class="aba ativa" id="aba-ear" role="tabpanel" aria-labelledby="botao-ear"><div class="molde"><iframe id="quadro-ear" title="Energia armazenada" src="ear_sin.html" loading="eager" style="height:1900px"></iframe></div></section>
 <section class="aba" id="aba-ena" role="tabpanel" aria-labelledby="botao-ena"><div class="molde"><iframe id="quadro-ena" title="Energia natural afluente" src="ena.html" loading="eager" style="height:1900px"></iframe></div></section>
-<section class="aba" id="aba-pld" role="tabpanel" aria-labelledby="botao-pld"><div class="molde"><iframe id="quadro-pld" title="PLD" src="pld.html" loading="eager" style="height:2600px"></iframe></div></section>
+<section class="aba" id="aba-pld" role="tabpanel" aria-labelledby="botao-pld"><div class="molde"><iframe id="quadro-pld" title="PLD" src="pld.html" loading="eager" style="height:3300px"></iframe></div></section>
 </main>
 <script>
   function selecionar(tipo) {
@@ -57,7 +57,7 @@
       if(doc && doc.documentElement) {
         const main=doc.querySelector('main');
         const altura=main?main.offsetHeight+12:doc.documentElement.scrollHeight+6;
-        const min = quadro.id==='quadro-pld'?2400:(quadro.id==='quadro-ear'?1600:700);
+        const min = quadro.id==='quadro-pld'?3200:(quadro.id==='quadro-ear'?1600:700);
         quadro.style.height=Math.max(min,altura)+'px';
       }
     } catch(e) { }
@@ -66,7 +66,7 @@
   window.addEventListener('message',(event)=> {
     if(event.origin!==location.origin) return;
     if(event.data?.tipo==='altura-painel-ons' && ['ena','ear','pld'].includes(event.data.id)) {
-      const alturaMinima=event.data.id==='pld'?2400:(event.data.id==='ena'?700:1600);
+      const alturaMinima=event.data.id==='pld'?3200:(event.data.id==='ena'?700:1600);
       document.getElementById('quadro-'+event.data.id).style.height=Math.max(alturaMinima,event.data.altura+8)+'px';
     }
   });
