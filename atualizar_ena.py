@@ -287,9 +287,9 @@ def grafico_ena(mensal: pd.DataFrame, titulo: str, coluna: str,
     f.update_layout(
         title=dict(text='', x=0.5, xanchor='center'),
         font=dict(family=FONTE, size=12, color='#344054'),
-        template='plotly_white', height=650 if grande else 460,
+        template='plotly_white', height=580 if grande else 450,
         autosize=True, paper_bgcolor='white', plot_bgcolor='white',
-        hovermode='closest', margin=dict(l=68, r=32, t=77 if grande else 65, b=170),
+        hovermode='closest', showlegend=False, margin=dict(l=68, r=32, t=18, b=82),
         # Sem título embutido na legenda: ele ocupava a mesma linha dos anos
         # e causava sobreposição nas visualizações com duas colunas.
         legend=dict(orientation='h',
@@ -321,6 +321,26 @@ def grafico_ena(mensal: pd.DataFrame, titulo: str, coluna: str,
     return f
 
 
+
+
+def legenda_interativa(fig: go.Figure, plot_id: str) -> str:
+    """Legenda HTML independente do Plotly: quebra linhas sem sobreposição."""
+    from html import escape
+    conteudo = [f'<div class="legenda-externa" role="group" aria-label="Legenda {escape(plot_id)}">']
+    for i, traco in enumerate(fig.data):
+        nome = escape(traco.name or f'Série {i + 1}')
+        visivel = traco.visible not in ('legendonly', False)
+        cor = traco.line.color or '#8b96a7'
+        if traco.fill == 'toself':
+            cor = '#b7bfc8'
+        conteudo.append(
+            f'<button type="button" class="legenda-item" data-plot="{plot_id}" data-indice="{i}" '
+            f'aria-pressed="{str(visivel).lower()}">'
+            f'<span class="legenda-linha" style="--cor-serie:{cor}"></span>{nome}</button>'
+        )
+    conteudo.append('</div>')
+    return ''.join(conteudo)
+
 def pagina_ena(mensal: pd.DataFrame) -> str:
     configs = [
         ('SIN', 'enasinpp', True),
@@ -341,7 +361,7 @@ def pagina_ena(mensal: pd.DataFrame) -> str:
         blocos.append(
             f'<section class="painel {tipo}">'
             f'<div class="barra-titulo">{titulo_barra}</div>'
-            f'{fragmento}'
+            f'{fragmento}{legenda_interativa(fig, f"plot-ena-{i}")}'
             f'<footer class="fonte-dados">Fonte: ONS &nbsp;|&nbsp; '
             f'Dados atualizados até: {ultima_data_ena}</footer></section>'
         )
@@ -359,12 +379,30 @@ def pagina_ena(mensal: pd.DataFrame) -> str:
   .barra-titulo {{display:block;width:100%;margin:0;background:{COR_VALE};color:#fff;font-weight:700;text-align:center;padding:12px 16px;font-size:18px;line-height:1.2;border-radius:14px 14px 0 0;}}
   .painel.sub .barra-titulo {{font-size:16px;padding:10px 14px;}}
   .js-plotly-plot {{width:100%!important}}
+  .legenda-externa {{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 12px;
+                      align-items:center;padding:2px 10px 13px;min-height:38px}}
+  .legenda-item {{display:inline-flex;align-items:center;justify-content:center;gap:7px;
+                 border:1px solid #e0e6ee;border-radius:7px;background:white;color:#344054;
+                 padding:6px 9px;white-space:nowrap;cursor:pointer;min-width:68px;
+                 font-family:inherit;font-size:11px}}
+  .legenda-item[aria-pressed="false"] {{opacity:.34}}
+  .legenda-linha {{width:25px;height:0;border-top:3px solid var(--cor-serie);display:inline-block}}
+
   .fonte-dados {{padding:2px 18px 18px;color:#667085;font-size:11px;line-height:1.5;margin-top:auto;}}
   @media(max-width:850px) {{.area {{grid-template-columns:minmax(0,1fr);padding:0;gap:10px}}
     .painel {{border-radius:7px}} .painel.sin {{grid-column:auto}} }}
 </style></head>
 <body><main class="area">{''.join(blocos)}</main>
 <script>
+  document.querySelectorAll('.legenda-item').forEach(function(botao) {{
+    botao.addEventListener('click', function() {{
+      const grafico=document.getElementById(botao.dataset.plot);
+      const indice=Number(botao.dataset.indice);
+      const ligado=botao.getAttribute('aria-pressed')==='true';
+      botao.setAttribute('aria-pressed', ligado ? 'false' : 'true');
+      Plotly.restyle(grafico, {{visible: ligado ? 'legendonly' : true}}, [indice]);
+    }});
+  }});
   function comunicarAltura() {{
     window.parent.postMessage({{tipo:'altura-painel-ons', id:'ena',
       altura:document.querySelector('main').offsetHeight+12}},'*');

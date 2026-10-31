@@ -274,145 +274,263 @@ def atualizar_com_online(historico: pd.DataFrame, usar_online: bool) -> pd.DataF
     return historico
 
 
-def preparar_diarios(hist: pd.DataFrame) -> pd.DataFrame:
-    d = hist.groupby(['data', 'submercado'], as_index=False)['pld'].mean()
-    d['ano'] = d['data'].dt.year
-    d['mes'] = d['data'].dt.month
-    d['dia'] = d['data'].dt.day
-    d['weekday'] = d['data'].dt.weekday
-    return d
+def inicio_semana_operativa(datas: pd.Series) -> pd.Series:
+    """Início no sábado, término na sexta, incluindo semanas parciais."""
+    data = pd.to_datetime(datas).dt.normalize()
+    return data - pd.to_timedelta((data.dt.weekday - 5) % 7, unit='D')
 
 
-def semana_operativa(dt: pd.Timestamp) -> tuple[pd.Timestamp, pd.Timestamp]:
-    delta = (dt.weekday() - 5) % 7  # sábado=5
-    inicio = (dt - pd.Timedelta(days=delta)).normalize()
-    fim = inicio + pd.Timedelta(days=6)
-    return inicio, fim
+def codigo_semana(ini: pd.Timestamp) -> str:
+    """SNNAAAA: semanas numeradas pelos sábados dentro do ano de início."""
+    ini = pd.Timestamp(ini)
+    primeiro_dia = pd.Timestamp(ini.year, 1, 1)
+    primeiro_sabado = primeiro_dia + pd.Timedelta(days=(5 - primeiro_dia.weekday()) % 7)
+    numero = (ini - primeiro_sabado).days // 7 + 1
+    if numero <= 0:
+        raise ValueError('Início da semana não corresponde ao ano')
+    return f'S{numero:02d}{ini.year}'
 
 
-def pivotar(df: pd.DataFrame, x: str, y: str) -> pd.DataFrame:
-    p = df.pivot(index=x, columns='submercado', values=y).reset_index()
-    for sm in ORDEM:
-        if sm not in p.columns:
-            p[sm] = pd.NA
-    return p[[x] + ORDEM]
+def agregar_anual(hist: pd.DataFrame) -> pd.DataFrame:
+    df = hist.assign(ano=hist['data'].dt.year)
+    df = df.groupby(['ano', 'submercado'], as_index=False)['pld'].mean()
+    return df.pivot(index='ano', columns='submercado', values='pld').reindex(columns=ORDEM).reset_index()
 
 
-def serie_anual(diarios: pd.DataFrame) -> tuple[pd.DataFrame, str]:
-    data_max = diarios['data'].max()
-    ano = data_max.year
-    base = diarios[diarios['ano'] == ano].copy()
-    mensal = base.groupby(['mes', 'submercado'], as_index=False)['pld'].mean()
-    pivot = pivotar(mensal, 'mes', 'pld')
-    pivot['label'] = pivot['mes'].map({1:'Jan',2:'Fev',3:'Mar',4:'Abr',5:'Mai',6:'Jun',7:'Jul',8:'Ago',9:'Set',10:'Out',11:'Nov',12:'Dez'})
-    return pivot, f'PLD anual de {ano} (média mensal; mês corrente acumulado até {data_max.strftime("%d/%m/%Y")})'
+def agregar_mensal(hist: pd.DataFrame) -> pd.DataFrame:
+    df = hist.copy()
+    df['mes'] = df['data'].dt.to_period('M')
+    df = df.groupby(['mes', 'submercado'], as_index=False)['pld'].mean()
+    df = df.pivot(index='mes', columns='submercado', values='pld').reindex(columns=ORDEM).reset_index()
+    df['label'] = df['mes'].dt.to_timestamp().dt.strftime('%b/%Y')
+    mapa_meses = {1:'jan',2:'fev',3:'mar',4:'abr',5:'mai',6:'jun',7:'jul',8:'ago',9:'set',10:'out',11:'nov',12:'dez'}
+    df['label'] = df['mes'].apply(lambda m: f'{mapa_meses[m.month]}/{m.year}')
+    return df
 
 
-def serie_mensal(diarios: pd.DataFrame) -> tuple[pd.DataFrame, str]:
-    data_max = diarios['data'].max()
-    base = diarios[(diarios['ano'] == data_max.year) & (diarios['mes'] == data_max.month)].copy()
-    base = base.groupby(['dia', 'submercado'], as_index=False)['pld'].mean()
-    pivot = pivotar(base, 'dia', 'pld')
-    return pivot, f'PLD mensal de {data_max.strftime("%m/%Y")} (média diária até {data_max.strftime("%d/%m/%Y")})'
+def agregar_semanal(hist: pd.DataFrame) -> pd.DataFrame:
+    df = hist.copy()
+    df['inicio_semana'] = inicio_semana_operativa(df['data'])
+    df = df.groupby(['inicio_semana', 'submercado'], as_index=False)['pld'].mean()
+    df = df.pivot(index='inicio_semana', columns='submercado', values='pld').reindex(columns=ORDEM).reset_index()
+    df['label'] = df['inicio_semana'].map(codigo_semana)
+    df['fim_semana'] = df['inicio_semana'] + pd.Timedelta(days=6)
+    return df
 
 
-def serie_semanal(diarios: pd.DataFrame) -> tuple[pd.DataFrame, str]:
-    data_max = diarios['data'].max()
-    ini, fim = semana_operativa(pd.Timestamp(data_max))
-    base = diarios[(diarios['data'] >= ini) & (diarios['data'] <= min(fim, pd.Timestamp(data_max)))].copy()
-    base = base.groupby(['data', 'submercado'], as_index=False)['pld'].mean()
-    base['label'] = base['data'].dt.strftime('%d/%m') + ' · ' + base['data'].dt.weekday.map(PT_DIAS)
-    pivot = pivotar(base, 'label', 'pld')
-    return pivot, f'PLD semanal (semana operativa {ini.strftime("%d/%m")} a {fim.strftime("%d/%m")}; acumulado até {data_max.strftime("%d/%m/%Y")})'
+def agregar_horario(hist: pd.DataFrame, dia: pd.Timestamp) -> pd.DataFrame:
+    df = hist.loc[hist['data'] == dia]
+    tabela = df.pivot_table(index='hora', columns='submercado', values='pld', aggfunc='mean')
+    return tabela.reindex(index=range(24), columns=ORDEM).reset_index()
 
 
-def serie_horaria(hist: pd.DataFrame) -> tuple[pd.DataFrame, str]:
-    data_max = hist['data'].max()
-    base = hist[hist['data'] == data_max].copy()
-    base = base.groupby(['hora', 'submercado'], as_index=False)['pld'].mean()
-    pivot = pivotar(base, 'hora', 'pld')
-    return pivot, f'PLD horário de {pd.Timestamp(data_max).strftime("%d/%m/%Y")}'
-
-
-def configurar_layout(fig: go.Figure, titulo: str, x_title: str, y_title: str, tipo_x: str='categoria') -> go.Figure:
+def configurar_layout(fig: go.Figure, eixo_x: str, horizontal: bool = False) -> go.Figure:
     fig.update_layout(
-        title=dict(text='', x=.5),
-        height=540,
+        height=490 if horizontal else 510,
         paper_bgcolor='white', plot_bgcolor='white',
-        font=dict(family=FONTE, color='#263142', size=14),
-        hovermode='x unified', margin=dict(l=68, r=28, t=18, b=110),
-        legend=dict(orientation='h', x=.5, xanchor='center', y=-.22, yanchor='top', font=dict(size=12)),
-        xaxis=dict(title=x_title, type='category' if tipo_x == 'categoria' else 'linear',
-                   showgrid=False, showline=True, linecolor='#50627a', tickcolor='#50627a',
-                   ticks='outside', ticklen=8, tickwidth=1.3, mirror=False, showticklabels=True,
-                   minor=dict(ticklen=4, tickcolor='#50627a', showgrid=False), automargin=True),
-        yaxis=dict(title=y_title, showgrid=False, showline=True, linecolor='#50627a', tickcolor='#50627a',
-                   ticks='outside', ticklen=8, tickwidth=1.3, mirror=False, zeroline=False, automargin=True),
+        font=dict(family=FONTE, size=13, color='#263142'),
+        showlegend=False,  # Legenda interativa é HTML, com espaço próprio fora do Plotly.
+        hovermode='x unified',
+        margin=dict(l=90, r=30, t=24, b=80),
+        xaxis=dict(
+            title=eixo_x, showgrid=False, showline=True,
+            linecolor='#50627a', tickcolor='#50627a', ticks='outside',
+            ticklen=7, tickwidth=1.2, zeroline=False,
+            minor=dict(ticks='outside', ticklen=3, tickcolor='#98a2b3', showgrid=False),
+            automargin=True,
+        ),
+        yaxis=dict(
+            title='Preço (R$/MWh)', showgrid=False, showline=True,
+            linecolor='#50627a', tickcolor='#50627a', ticks='outside',
+            ticklen=7, tickwidth=1.2, zeroline=False, rangemode='tozero',
+            minor=dict(ticks='outside', ticklen=3, tickcolor='#98a2b3', showgrid=False),
+            automargin=True,
+        ),
     )
     return fig
 
 
-def montar_figura(df: pd.DataFrame, x: str, titulo: str, x_title: str, y_title: str) -> go.Figure:
+def criar_figura(df: pd.DataFrame, eixo_x: str, coluna_x: str, granularidade: str) -> go.Figure:
     fig = go.Figure()
-    for sm in ORDEM:
+    numero_pontos = len(df)
+    for sub in ORDEM:
+        valores = pd.to_numeric(df[sub], errors='coerce')
         fig.add_trace(go.Scatter(
-            x=df[x], y=df[sm], mode='lines+markers', name=sm,
-            line=dict(width=2.5, color=CORES[sm], shape='spline', smoothing=.65),
-            marker=dict(size=5, color=CORES[sm])
+            x=df[coluna_x], y=valores,
+            name=sub, mode='lines+markers',
+            line=dict(color=CORES[sub], width=2.8, shape='spline', smoothing=0.4),
+            marker=dict(color=CORES[sub], size=6 if numero_pontos <= 24 else 3),
+            hovertemplate='%{y:,.2f} R$/MWh<extra>' + sub + '</extra>',
         ))
-    return configurar_layout(fig, titulo, x_title, y_title)
+    configurar_layout(fig, eixo_x, horizontal=granularidade == 'hora')
+    if granularidade == 'ano':
+        fig.update_xaxes(type='category')
+    elif granularidade == 'mes':
+        marcas = list(range(0, len(df), max(1, len(df)//12)))
+        fig.update_xaxes(type='category', tickmode='array',
+                         tickvals=[str(df.iloc[i]['label']) for i in marcas],
+                         ticktext=[str(df.iloc[i]['label']) for i in marcas], tickangle=-40)
+    elif granularidade == 'semana':
+        marcas = list(range(0, len(df), max(1, len(df)//14)))
+        fig.update_xaxes(type='category', tickmode='array',
+                         tickvals=[str(df.iloc[i]['label']) for i in marcas],
+                         ticktext=[str(df.iloc[i]['label']) for i in marcas], tickangle=-45)
+    else:
+        fig.update_xaxes(type='linear', tickmode='linear', tick0=0, dtick=1, range=[-0.5,23.5])
+    return fig
+
+
+def legenda_html(plot_id: str) -> str:
+    """Legenda externa com clique para alternar cada submercado sem sobreposição."""
+    from html import escape
+    partes = [f'<div class="legenda-externa" role="group" aria-label="Séries do gráfico {escape(plot_id)}">']
+    for i, sub in enumerate(ORDEM):
+        partes.append(
+            f'<button type="button" class="legenda-item" data-plot="{plot_id}" '
+            f'data-indice="{i}" aria-pressed="true">'
+            f'<span class="legenda-linha" style="--cor-serie:{CORES[sub]}"></span>{escape(sub)}</button>'
+        )
+    partes.append('</div>')
+    return ''.join(partes)
+
+
+def _horarios_por_dia(hist: pd.DataFrame) -> dict[str, list[list[float | None]]]:
+    """Conteúdo compacto de cada dia para trocar a data diretamente no navegador."""
+    mapa = {}
+    for dia, bloco in hist.groupby('data', sort=True):
+        tabela = bloco.pivot(index='hora', columns='submercado', values='pld')
+        tabela = tabela.reindex(index=range(24), columns=ORDEM)
+        por_sub = []
+        for sub in ORDEM:
+            serie = pd.to_numeric(tabela[sub], errors='coerce')
+            por_sub.append([None if pd.isna(v) else round(float(v), 2) for v in serie])
+        mapa[pd.Timestamp(dia).strftime('%Y-%m-%d')] = por_sub
+    return mapa
 
 
 def pagina_pld(hist: pd.DataFrame) -> str:
-    diarios = preparar_diarios(hist)
-    anual, subtitulo_anual = serie_anual(diarios)
-    mensal, subtitulo_mensal = serie_mensal(diarios)
-    semanal, subtitulo_semanal = serie_semanal(diarios)
-    horario, subtitulo_horario = serie_horaria(hist)
-    ult_data = pd.Timestamp(hist['data'].max()).strftime('%d/%m/%Y')
+    from html import escape
+    import json
+    hist = hist[hist['submercado'].isin(ORDEM)].copy()
+    if hist.empty:
+        raise ValueError('PLD: nenhum registro de submercados válido')
+    hist['data'] = pd.to_datetime(hist['data'])
+    hist = hist.sort_values(['data','hora','submercado']).drop_duplicates(
+        ['data','hora','submercado'], keep='last')
+    ultima = pd.Timestamp(hist['data'].max())
+    ultima_br = ultima.strftime('%d/%m/%Y')
+
+    anual = agregar_anual(hist)
+    mensal = agregar_mensal(hist)
+    semanal = agregar_semanal(hist)
+    horario = agregar_horario(hist, ultima)
+    primeiro = pd.Timestamp(hist['data'].min()).strftime('%d/%m/%Y')
 
     configs = [
-        ('PLD — Anual', subtitulo_anual, montar_figura(anual, 'label', 'PLD — Anual', 'Mês', 'R$/MWh')),
-        ('PLD — Mensal', subtitulo_mensal, montar_figura(mensal, 'dia', 'PLD — Mensal', 'Dia do mês', 'R$/MWh')),
-        ('PLD — Semanal', subtitulo_semanal, montar_figura(semanal, 'label', 'PLD — Semanal', 'Dia da semana operativa', 'R$/MWh')),
-        ('PLD — Horário', subtitulo_horario, montar_figura(horario, 'hora', 'PLD — Horário', 'Hora', 'R$/MWh')),
+        ('PLD — Anual', f'Média dos preços horários por ano — último ano parcial até {ultima_br}',
+         criar_figura(anual, 'Ano', 'ano', 'ano')),
+        ('PLD — Mensal', f'Média dos preços horários por mês — mês corrente parcial até {ultima_br}',
+         criar_figura(mensal, 'Mês', 'label', 'mes')),
+        ('PLD — Semanal', f'Média dos preços horários por semana operativa (sábado a sexta) — semana atual parcial até {ultima_br}',
+         criar_figura(semanal, 'Semana', 'label', 'semana')),
+        ('PLD — Horário', f'Curva horária de 0 a 23h — escolha a data desejada',
+         criar_figura(horario, 'Hora', 'hora', 'hora')),
     ]
     blocos = []
-    for i, (titulo, subtitulo, fig) in enumerate(configs):
-        fragmento = fig.to_html(full_html=False, include_plotlyjs=False,
-                                div_id=f'plot-pld-{i}', config={'responsive': True, 'displaylogo': False})
+    for i, (titulo, subtitulo, figura) in enumerate(configs):
+        pid = f'plot-pld-{i}'
+        grafico = figura.to_html(
+            full_html=False, include_plotlyjs=False, div_id=pid,
+            config={'responsive': True, 'displaylogo': False},
+        )
+        controle_data = ''
+        if i == 3:
+            controle_data = (
+                '<div class="controle-data">'
+                '<label for="data-pld">Data do PLD horário:</label>'
+                f'<input type="date" id="data-pld" value="{ultima.strftime("%Y-%m-%d")}" '
+                f'min="{hist["data"].min().strftime("%Y-%m-%d")}" max="{ultima.strftime("%Y-%m-%d")}" />'
+                f'<span id="status-data-pld" role="status">{ultima_br}</span>'
+                '</div>'
+            )
         blocos.append(
             f'<section class="painel">'
-            f'<div class="barra-titulo">{titulo}</div>'
-            f'<div class="subtitulo">{subtitulo}</div>'
-            f'{fragmento}'
-            f'<footer class="fonte-dados">Fonte: CCEE &nbsp;|&nbsp; Dados atualizados até: {ult_data}</footer></section>'
+            f'<div class="barra-titulo">{escape(titulo)}</div>'
+            f'<div class="subtitulo">{escape(subtitulo)}</div>'
+            f'{controle_data}{grafico}{legenda_html(pid)}'
+            f'<footer class="fonte-dados">Fonte: CCEE &nbsp;|&nbsp; Dados disponíveis até: {ultima_br}</footer>'
+            f'</section>'
         )
+
+    dados_horarios_js = json.dumps(_horarios_por_dia(hist), ensure_ascii=False, separators=(',', ':'))
     return f'''<!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PLD | Painel</title>
+<title>PLD — Acompanhamento de mercado</title>
 <script src="https://cdn.plot.ly/plotly-{get_plotlyjs_version()}.min.js"></script>
 <style>
   * {{box-sizing:border-box}}
   body {{margin:0;background:#fff;color:#263142;font-family:{FONTE}}}
-  .area {{display:grid;grid-template-columns:minmax(0,1fr);gap:15px;padding:0 12px 20px}}
-  .painel {{min-width:0;background:#fff;border:1px solid #e1e7ef;border-radius:14px;overflow:hidden;display:flex;flex-direction:column}}
-  .barra-titulo {{display:block;width:100%;margin:0;background:{COR_VALE};color:#fff;font-weight:700;text-align:center;padding:12px 16px;font-size:18px;line-height:1.2;border-radius:14px 14px 0 0;}}
-  .subtitulo {{padding:10px 16px 0;color:#667085;font-size:12px;line-height:1.45;text-align:center}}
+  .area {{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;padding:0 12px 20px}}
+  .painel {{min-width:0;background:#fff;border:1px solid #e1e7ef;border-radius:14px;
+            overflow:hidden;display:flex;flex-direction:column}}
+  .barra-titulo {{width:100%;background:{COR_VALE};color:#fff;font-weight:700;text-align:center;
+                 padding:12px 16px;font-size:18px;border-radius:14px 14px 0 0}}
+  .subtitulo {{padding:12px 18px 0;text-align:center;color:#667085;font-size:12px;line-height:1.6}}
   .js-plotly-plot {{width:100%!important}}
-  .fonte-dados {{padding:2px 18px 18px;color:#667085;font-size:11px;line-height:1.5;margin-top:auto}}
-  @media(max-width:850px) {{ .area {{padding:0;gap:10px}} .painel {{border-radius:8px}} }}
+  .legenda-externa {{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;
+                     gap:10px 18px;padding:4px 16px 15px;min-height:40px}}
+  .legenda-item {{border:1px solid #e0e6ee;border-radius:8px;background:#fff;color:#263142;
+                  font:inherit;font-size:12px;display:inline-flex;align-items:center;justify-content:center;
+                  gap:9px;padding:7px 12px;min-width:92px;cursor:pointer;white-space:nowrap}}
+  .legenda-item[aria-pressed="false"] {{opacity:.38}}
+  .legenda-linha {{height:0;width:28px;border-top:3px solid var(--cor-serie);display:inline-block;
+                  position:relative}}
+  .legenda-linha:after {{content:"";position:absolute;left:10px;top:-5px;width:7px;height:7px;
+                         background:var(--cor-serie);border-radius:50%}}
+  .controle-data {{display:flex;gap:12px;flex-wrap:wrap;align-items:center;
+                   justify-content:center;padding:16px 12px 0;font-size:13px}}
+  #data-pld {{font:inherit;color:#263142;padding:8px 10px;border:1px solid #c6d0dc;border-radius:8px}}
+  #status-data-pld {{color:#667085}}
+  .fonte-dados {{padding:7px 18px 18px;color:#667085;font-size:11px;line-height:1.5;margin-top:auto}}
+  @media(max-width:750px) {{ .area {{padding:0;gap:10px}} .painel {{border-radius:8px}}
+    .legenda-externa {{gap:7px}} .legenda-item {{min-width:76px;padding:7px 8px}} }}
 </style></head><body>
 <main class="area">{''.join(blocos)}</main>
 <script>
+(function() {{
+  document.querySelectorAll('.legenda-item').forEach(function(b) {{
+    b.addEventListener('click', function() {{
+      const plot = document.getElementById(b.dataset.plot);
+      const idx = Number(b.dataset.indice);
+      const ativo = b.getAttribute('aria-pressed') === 'true';
+      b.setAttribute('aria-pressed', ativo ? 'false' : 'true');
+      Plotly.restyle(plot, {{visible: ativo ? 'legendonly' : true}}, [idx]);
+    }});
+  }});
+  const historicoHorarios = {dados_horarios_js};
+  const inputData = document.getElementById('data-pld');
+  const status = document.getElementById('status-data-pld');
+  const plotHorario = document.getElementById('plot-pld-3');
+  function atualizarDia() {{
+    const data = historicoHorarios[inputData.value];
+    if(!data) {{
+      status.textContent = 'Sem valores horários disponíveis nessa data';
+      Plotly.restyle(plotHorario, {{y: [Array(24).fill(null), Array(24).fill(null), Array(24).fill(null), Array(24).fill(null)]}}, [0,1,2,3]);
+      return;
+    }}
+    status.textContent = inputData.value.split('-').reverse().join('/');
+    Plotly.restyle(plotHorario, {{y: data}}, [0,1,2,3]);
+  }}
+  inputData.addEventListener('change', atualizarDia);
   function comunicarAlturaPLD() {{
-    if (window.parent !== window) window.parent.postMessage(
+    if(window.parent !== window) window.parent.postMessage(
       {{tipo:'altura-painel-ons', id:'pld', altura:document.querySelector('main').offsetHeight+12}}, '*');
   }}
   window.addEventListener('load', comunicarAlturaPLD);
   window.addEventListener('resize', comunicarAlturaPLD);
-  if (window.ResizeObserver) new ResizeObserver(comunicarAlturaPLD).observe(document.querySelector('main'));
+  if(window.ResizeObserver) new ResizeObserver(comunicarAlturaPLD).observe(document.querySelector('main'));
+}})();
 </script></body></html>'''
 
 
