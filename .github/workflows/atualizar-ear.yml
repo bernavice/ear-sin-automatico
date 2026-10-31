@@ -28,11 +28,23 @@ jobs:
           cache: pip
           cache-dependency-path: requirements-ear.txt
       - name: Instalar bibliotecas
-        run: pip install -r requirements-ear.txt
+        run: |
+          pip install -r requirements-ear.txt
+          pip install 'playwright>=1.55,<2'
+      - name: Instalar Chromium para consulta ao formulario CCEE
+        run: python -m playwright install --with-deps chromium
       - name: Atualizar EAR
         run: python atualizar_ear.py
       - name: Atualizar PLD CCEE e graficos
         run: python atualizar_pld.py
+      - name: Diagnostico da coleta pelo formulario da CCEE
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostico-pld-ccee
+          path: dados/diagnostico_formulario_ccee.png
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Atualizar ENA e pagina inicial
         run: python atualizar_ena.py
       - name: Conferir painel completo
