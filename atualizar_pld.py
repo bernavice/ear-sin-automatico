@@ -1051,12 +1051,12 @@ def tabela_resumo_html(tabela: pd.DataFrame, notas: dict) -> str:
         'box-sizing:border-box">'
         '<div style="font-weight:700;color:#344054;margin-bottom:6px">'
         'Períodos de referência</div>'
-        '<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 18px">'
+        '<div class="grade-nota-referencias" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:14px;row-gap:8px">'
         '<div style="min-width:0">'
         f'<div><strong>PLD Horário:</strong> {escape(notas["hoje"])}</div>'
-        f'<div style="margin-top:4px"><strong>Semana:</strong> {escape(notas["semana"])}</div>'
+        f'<div class="nota-semana-texto" style="margin-top:4px"><strong>Semana:</strong> {escape(notas["semana"])}</div>'
         '</div>'
-        '<div style="min-width:0">'
+        '<div class="referencias-mes-ano" style="min-width:0;grid-column:2;padding-left:28px">'
         f'<div><strong>Mês:</strong> {escape(notas["mes"])}</div>'
         f'<div style="margin-top:4px"><strong>Ano:</strong> {escape(notas["ano"])}</div>'
         '</div>'
@@ -1189,7 +1189,8 @@ def pagina_pld(hist: pd.DataFrame) -> str:
   .quadro-resumo {{padding:22px 22px 18px}}
   .cards-resumo {{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}}
   .grupo-cards-direita {{grid-column:2 / -1;min-width:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}}
-  .grupo-cards-direita > .nota-semana-larga {{grid-column:1 / 3;grid-row:2;align-self:start}}
+  .grupo-cards-direita > .nota-semana-larga {{grid-column:1 / 4;grid-row:2;align-self:start}}
+  .nota-semana-texto {{white-space:nowrap;font-size:10px}}
   .card-resumo {{min-width:0;background:#f9fbfd;border:1px solid #dde6ee;border-radius:13px;padding:15px;box-shadow:0 1px 2px rgba(16,24,40,.035)}}
   .titulo-card-resumo {{font-size:15px;font-weight:700;color:#163f49;margin-bottom:12px}}
   .grade-resumo {{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}}
@@ -1201,11 +1202,15 @@ def pagina_pld(hist: pd.DataFrame) -> str:
     .cards-resumo {{grid-template-columns:1fr}}
     .grupo-cards-direita {{grid-column:1 / -1;grid-template-columns:repeat(2,minmax(0,1fr))}}
     .grupo-cards-direita > .nota-semana-larga {{grid-column:1 / -1;grid-row:auto}}
+    .nota-semana-texto {{white-space:normal}}
+    .grade-nota-referencias {{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}
+    .referencias-mes-ano {{grid-column:2 !important;padding-left:10px !important}}
   }}
   @media(max-width:640px) {{
     .quadro-resumo {{padding:14px}}
     .grupo-cards-direita {{grid-template-columns:1fr}}
     .grupo-cards-direita > .nota-semana-larga > div:last-child {{grid-template-columns:1fr !important}}
+    .referencias-mes-ano {{grid-column:1 !important;padding-left:0 !important}}
   }}
   .js-plotly-plot {{width:100%!important}}
   .legenda-externa {{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px 18px;padding:4px 16px 15px;min-height:40px}}
