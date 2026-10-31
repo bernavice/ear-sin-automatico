@@ -625,12 +625,14 @@ def painel_mensal_html(hist: pd.DataFrame, ultima_br: str) -> str:
     for sm in ORDEM:
         selecionado = (sm == 'SE/CO')
         estilo = ESTILOS_SUB[sm]
+        classe = 'filtro-sub selecionado' if selecionado else 'filtro-sub'
+        pressionado = 'true' if selecionado else 'false'
+        nome = {'N': 'Norte', 'NE': 'Nordeste'}.get(sm, sm)
         filtro.append(
-            f'<button type="button" class="filtro-sub{' selecionado' if selecionado else ''}" '
-            f'data-sub="{sm}" aria-pressed="{'true' if selecionado else 'false'}">'
+            f'<button type="button" class="{classe}" '
+            f'data-sub="{sm}" aria-pressed="{pressionado}">'
             f'<span class="marcador-sub estilo-{estilo}"></span>'
-            f'{"Norte" if sm == "N" else ("Nordeste" if sm == "NE" else sm)}'
-            '</button>'
+            f'{nome}</button>'
         )
     legendas = []
     for a, cor in zip(anos, cores):
