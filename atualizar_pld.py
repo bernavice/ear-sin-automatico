@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import argparse
-import io
+import json
 import re
 import unicodedata
 import warnings
-from datetime import datetime, timedelta
+from datetime import datetime
+from io import BytesIO
 from pathlib import Path
 from zoneinfo import ZoneInfo
 from xml.etree import ElementTree as ET
@@ -27,12 +28,11 @@ CANDIDATOS_BRUTO = [
     Path('/mnt/data/csv_historico_pld.csv'),
     Path('/mnt/data/csv_historico_pld(1).csv'),
 ]
-URL_CCEE = 'https://www.ccee.org.br/web/guest/precos/painel-precos'
 FONTE = 'Century Gothic, CenturyGothic, Arial, sans-serif'
 COR_VALE = '#007E80'
 CORES = {'SE/CO': '#2F66E0', 'SUL': '#D97706', 'NE': '#DC2626', 'N': '#7EC0EE'}
 ORDEM = ['SE/CO', 'SUL', 'NE', 'N']
-PT_DIAS = {0:'Seg',1:'Ter',2:'Qua',3:'Qui',4:'Sex',5:'Sáb',6:'Dom'}
+MESES_PT = {1:'jan',2:'fev',3:'mar',4:'abr',5:'mai',6:'jun',7:'jul',8:'ago',9:'set',10:'out',11:'nov',12:'dez'}
 
 
 def _sem_acento(s: str) -> str:
@@ -44,7 +44,8 @@ def _padronizar_submercado(s: str) -> str:
     x = _sem_acento(s)
     mapa = {
         'sudeste': 'SE/CO', 'sudeste/centro-oeste': 'SE/CO', 'sudeste-centro-oeste': 'SE/CO',
-        'se/co': 'SE/CO', 'se': 'SE/CO', 'centro-oeste': 'SE/CO', 'sudeste-centrooeste': 'SE/CO',
+        'sudeste centro-oeste': 'SE/CO', 'sudeste/centrooeste': 'SE/CO', 'sudestecentrooeste': 'SE/CO',
+        'se/co': 'SE/CO', 'se': 'SE/CO', 'centro-oeste': 'SE/CO', 'centrooeste': 'SE/CO',
         'sul': 'SUL', 'nordeste': 'NE', 'ne': 'NE', 'norte': 'N', 'n': 'N'
     }
     return mapa.get(x, str(s).upper())
@@ -63,7 +64,8 @@ def _to_num(x):
     s = str(x).strip()
     if s == '':
         return pd.NA
-    s = s.replace('.', '').replace(',', '.') if ',' in s else s
+    if ',' in s:
+        s = s.replace('.', '').replace(',', '.')
     try:
         return float(s)
     except Exception:
@@ -108,10 +110,7 @@ def ler_bruto(caminho: Path) -> pd.DataFrame:
 
 
 def normalizar_bruto(df: pd.DataFrame) -> pd.DataFrame:
-    colunas_orig = list(df.columns)
     cols_norm = {_sem_acento(c): c for c in df.columns}
-
-    # Caso 1: formato largo do histórico fornecido (Hora, Submercado, datas...)
     if 'hora' in cols_norm and 'submercado' in cols_norm:
         col_hora = cols_norm['hora']
         col_sub = cols_norm['submercado']
@@ -129,10 +128,8 @@ def normalizar_bruto(df: pd.DataFrame) -> pd.DataFrame:
             longo['hora'] = longo['hora'].astype(int)
             return longo[['data', 'hora', 'submercado', 'pld']].sort_values(['data', 'hora', 'submercado'])
 
-    # Caso 2: formato tabular já longo
-    mapa = {k: _sem_acento(k) for k in colunas_orig}
-    rev = {v: k for k, v in mapa.items()}
-    poss_data = next((rev[k] for k in rev if k in {'data', 'dt', 'date'}), None)
+    rev = {_sem_acento(k): k for k in df.columns}
+    poss_data = next((rev[k] for k in rev if k in {'data', 'dt', 'date', 'dia'}), None)
     poss_hora = next((rev[k] for k in rev if k in {'hora', 'hour'}), None)
     poss_sub = next((rev[k] for k in rev if k in {'submercado', 'submercado de preco', 'subsistema'}), None)
     poss_valor = next((rev[k] for k in rev if k in {'pld', 'valor', 'preco', 'preco medio', 'preco horario'}), None)
@@ -146,8 +143,7 @@ def normalizar_bruto(df: pd.DataFrame) -> pd.DataFrame:
         out = out.dropna(subset=['data', 'hora', 'submercado', 'pld']).copy()
         out['hora'] = out['hora'].astype(int)
         return out[['data', 'hora', 'submercado', 'pld']].sort_values(['data', 'hora', 'submercado'])
-
-    raise ValueError(f'Formato de PLD não reconhecido. Colunas: {list(df.columns)[:12]}...')
+    raise ValueError('Formato do histórico PLD não reconhecido')
 
 
 def carregar_historico_base(caminho: Path | None = None) -> pd.DataFrame:
@@ -155,167 +151,168 @@ def carregar_historico_base(caminho: Path | None = None) -> pd.DataFrame:
     candidatos += CANDIDATOS_BRUTO
     for cand in candidatos:
         if cand and Path(cand).exists():
-            bruto = ler_bruto(Path(cand))
-            hist = normalizar_bruto(bruto)
+            hist = normalizar_bruto(ler_bruto(Path(cand)))
             if not hist.empty:
                 return hist
-    raise FileNotFoundError('Não encontrei o arquivo histórico do PLD. Coloque-o em dados/pld_historico_bruto.csv')
+    raise FileNotFoundError('Não encontrei o histórico-base do PLD')
 
 
 def carregar_base_consolidada(caminho: Path = LONGO) -> pd.DataFrame:
-    """Prioriza base histórica persistente, preservando atualizações anteriores."""
     if caminho.exists():
         df = pd.read_csv(caminho, sep=';', decimal=',', encoding='utf-8-sig')
-        cols = ['data', 'hora', 'submercado', 'pld']
-        if not set(cols).issubset(df.columns):
-            raise ValueError('Base consolidada PLD tem colunas inesperadas')
-        df = df[cols].copy()
-        df['data'] = pd.to_datetime(df['data'], errors='raise')
-        df['hora'] = pd.to_numeric(df['hora'], errors='raise').astype(int)
-        df['pld'] = pd.to_numeric(df['pld'], errors='raise')
+        df['data'] = pd.to_datetime(df['data'], errors='coerce')
+        df['hora'] = pd.to_numeric(df['hora'], errors='coerce').astype('Int64')
+        df['pld'] = pd.to_numeric(df['pld'], errors='coerce')
         df['submercado'] = df['submercado'].map(_padronizar_submercado)
-        df = df.sort_values(['data','hora','submercado']).drop_duplicates(
-            ['data','hora','submercado'], keep='last')
-        return df
+        df = df.dropna(subset=['data', 'hora', 'pld', 'submercado']).copy()
+        df['hora'] = df['hora'].astype(int)
+        return df.sort_values(['data', 'hora', 'submercado']).drop_duplicates(['data', 'hora', 'submercado'], keep='last')
     return carregar_historico_base()
 
 
 def normalizar_csv_ccee(df: pd.DataFrame, ano: int) -> pd.DataFrame:
-    """Converte CSV anual PLD_HORARIO do catálogo público CCEE em data/hora/sub/PLD."""
-    nomes = {str(c).strip().upper(): c for c in df.columns}
-    campos = {'DIA', 'HORA', 'SUBMERCADO', 'PLD_HORA'}
-    if not campos.issubset(nomes):
-        raise ValueError('Layout CCEE alterado: faltam ' + str(sorted(campos - set(nomes))))
-    out = df[[nomes[c] for c in ['DIA','HORA','SUBMERCADO','PLD_HORA']]].copy()
-    out.columns = ['data','hora','submercado','pld']
+    norm = {_sem_acento(c).replace(' ', '_'): c for c in df.columns}
+    def pick(opcoes):
+        for op in opcoes:
+            if op in norm:
+                return norm[op]
+        return None
+    c_data = pick(['dia', 'data', 'dt_referencia', 'data_referencia'])
+    c_hora = pick(['hora', 'hora_do_dia', 'hora_referencia'])
+    c_sub = pick(['submercado', 'sub_mercado', 'subsistema'])
+    c_val = pick(['pld_hora', 'pld', 'preco', 'valor', 'preco_hora'])
+    if not all([c_data, c_hora, c_sub, c_val]):
+        raise ValueError(f'Layout do CSV CCEE não reconhecido: {list(df.columns)}')
+    out = df[[c_data, c_hora, c_sub, c_val]].copy()
+    out.columns = ['data', 'hora', 'submercado', 'pld']
     out['data'] = pd.to_datetime(out['data'], dayfirst=True, errors='coerce')
     out['hora'] = pd.to_numeric(out['hora'], errors='coerce')
-    out['pld'] = out['pld'].map(_to_num)
     out['submercado'] = out['submercado'].map(_padronizar_submercado)
-    out = out.dropna(subset=['data','hora','pld']).copy()
-    out = out[(out['data'].dt.year == ano) & out['submercado'].isin(ORDEM)].copy()
+    out['pld'] = out['pld'].map(_to_num)
+    out = out.dropna(subset=['data', 'hora', 'submercado', 'pld']).copy()
+    out = out[out['submercado'].isin(ORDEM)]
     if out.empty:
-        raise ValueError(f'Arquivo anual CCEE {ano} sem dados horários reconhecidos')
+        raise ValueError('CSV CCEE sem registros válidos')
     out['hora'] = out['hora'].astype(int)
-    # Em algumas bases comerciais a hora é 1-24; padronizamos para 0-23.
     if out['hora'].min() == 1 and out['hora'].max() == 24:
         out['hora'] = out['hora'] - 1
-    if not out['hora'].between(0,23).all():
-        raise ValueError('Horas fora da faixa 0-23 no CSV CCEE')
-    out['pld'] = out['pld'].astype(float)
-    if out.duplicated(['data','hora','submercado']).any():
-        raise ValueError('CSV CCEE: datas/horas/submercados duplicados')
-    return out[['data','hora','submercado','pld']]
+    out = out[out['data'].dt.year == ano].copy()
+    return out[['data', 'hora', 'submercado', 'pld']].drop_duplicates(['data', 'hora', 'submercado'], keep='last')
 
 
-def buscar_ons_ccee(ano: int) -> pd.DataFrame | None:
-    """Baixa recurso anual da API CKAN de Dados Abertos da CCEE.
-
-    Descobre a URL pela API, sem URL rígida e sem interação com o navegador.
-    Não faz requisições de dados de anos históricos já preservados.
-    """
+def recursos_ccee() -> dict[int, dict]:
     import requests
     api = 'https://dadosabertos.ccee.org.br/api/3/action/package_show'
-    session = requests.Session()
-    session.headers.update({'User-Agent': 'Painel-Hidrologico-PLD/1.0'})
-    resposta = session.get(api, params={'id': 'pld_horario'}, timeout=60)
-    resposta.raise_for_status()
-    meta = resposta.json()
-    if not meta.get('success'):
-        raise RuntimeError('CCEE CKAN API retornou sucesso=false')
-    nome = f'pld_horario_{ano}'
-    recursos = meta['result'].get('resources', [])
-    recurso = next((r for r in recursos if r.get('name','').strip().lower() == nome), None)
-    if not recurso:
-        print(f'CCEE: recurso anual {nome} ainda indisponível; preservando histórico.')
-        return None
-    url = recurso.get('url')
-    if not url or not url.startswith('https://'):
-        raise ValueError('CCEE retornou endereço inválido para CSV')
-    print(f'CCEE: baixando {nome} (id={recurso.get("id")})')
-    r = session.get(url, timeout=120)
+    s = requests.Session()
+    s.headers.update({'User-Agent': 'Painel-Vale-PLD/1.0'})
+    r = s.get(api, params={'id': 'pld_horario'}, timeout=60)
     r.raise_for_status()
-    if not r.content or len(r.content) < 100:
-        raise ValueError('CSV anual CCEE vazio ou truncado')
-    from io import BytesIO
-    import csv
-    amostra = r.content[:10000].decode('utf-8-sig', errors='replace')
-    sep = ';' if amostra.splitlines()[0].count(';') >= amostra.splitlines()[0].count(',') else ','
+    meta = r.json()
+    if not meta.get('success'):
+        raise RuntimeError('API da CCEE retornou success=false')
+    out = {}
+    for rec in meta['result'].get('resources', []):
+        nome = rec.get('name', '')
+        m = re.fullmatch(r'pld_horario_(\d{4})', nome.strip().lower())
+        if m:
+            out[int(m.group(1))] = rec
+    return out
+
+
+def baixar_csv_ano(recurso: dict, ano: int) -> pd.DataFrame:
+    import requests
+    s = requests.Session()
+    s.headers.update({'User-Agent': 'Painel-Vale-PLD/1.0'})
+    url = recurso.get('download_url') or recurso.get('url')
+    if not url:
+        raise ValueError('Recurso CCEE sem URL de download')
+    r = s.get(url, timeout=120)
+    r.raise_for_status()
+    raw = r.content
+    head = raw[:12000].decode('utf-8-sig', errors='replace')
+    sep = ';' if head.splitlines()[0].count(';') >= head.splitlines()[0].count(',') else ','
     try:
-        df = pd.read_csv(BytesIO(r.content), sep=sep, dtype=str, encoding='utf-8-sig', low_memory=False)
+        df = pd.read_csv(BytesIO(raw), sep=sep, dtype=str, encoding='utf-8-sig', low_memory=False)
     except UnicodeDecodeError:
-        df = pd.read_csv(BytesIO(r.content), sep=sep, dtype=str, encoding='latin1', low_memory=False)
-    result = normalizar_csv_ccee(df, ano)
-    print(f'CCEE {ano}: {len(result):,} preços horários; até {result.data.max().date()}.')
-    return result
+        df = pd.read_csv(BytesIO(raw), sep=sep, dtype=str, encoding='latin1', low_memory=False)
+    return normalizar_csv_ccee(df, ano)
 
 
 def atualizar_com_online(historico: pd.DataFrame, usar_online: bool) -> pd.DataFrame:
     if not usar_online:
-        print('PLD: execução offline, usando histórico consolidado.')
+        print('PLD: execução offline, usando base consolidada/local.')
         return historico
+    try:
+        recursos = recursos_ccee()
+    except Exception as exc:
+        warnings.warn(f'PLD: não foi possível consultar a API da CCEE ({exc}). Histórico preservado.')
+        return historico
+
     hoje = datetime.now(ZoneInfo('America/Sao_Paulo')).date()
-    # Durante janeiro e fevereiro, revisa também o arquivo do ano anterior.
-    anos = [hoje.year - 1, hoje.year] if hoje.month <= 2 else [hoje.year]
+    ano_atual = hoje.year
+    ultimo_hist = pd.Timestamp(historico['data'].max()).year if not historico.empty else ano_atual
+    anos_a_tentar = sorted({ultimo_hist, ano_atual, ano_atual - 1 if hoje.month <= 2 else ano_atual})
+    anos_a_tentar = [a for a in anos_a_tentar if a in recursos]
     partes = []
-    for ano in anos:
+    for ano in anos_a_tentar:
         try:
-            extra = buscar_ons_ccee(ano)
-            if extra is not None:
-                partes.append(extra)
+            bloco = baixar_csv_ano(recursos[ano], ano)
+            print(f'CCEE {ano}: {len(bloco):,} registros horários até {pd.Timestamp(bloco.data.max()).strftime("%d/%m/%Y")}.')
+            partes.append(bloco)
         except Exception as exc:
-            warnings.warn(f'CCEE: consulta ao PLD de {ano} falhou ({exc}). Histórico existente preservado.')
-    if partes:
-        hist = pd.concat([historico, *partes], ignore_index=True)
-        hist = hist.sort_values(['data', 'hora', 'submercado']).drop_duplicates(
-            subset=['data', 'hora', 'submercado'], keep='last')
-        return hist
-    print('AVISO: PLD sem novos arquivos confirmados na CCEE nesta execução; dados anteriores preservados.')
-    return historico
+            warnings.warn(f'PLD: falha ao baixar/tratar {ano} da CCEE ({exc}).')
+    if not partes:
+        warnings.warn('PLD: nenhum arquivo anual foi incorporado nesta execução. Histórico existente preservado.')
+        return historico
+    combinado = pd.concat([historico, *partes], ignore_index=True)
+    combinado = combinado.sort_values(['data', 'hora', 'submercado']).drop_duplicates(['data', 'hora', 'submercado'], keep='last')
+    return combinado
 
 
 def inicio_semana_operativa(datas: pd.Series) -> pd.Series:
-    """Início no sábado, término na sexta, incluindo semanas parciais."""
     data = pd.to_datetime(datas).dt.normalize()
     return data - pd.to_timedelta((data.dt.weekday - 5) % 7, unit='D')
 
 
 def codigo_semana(ini: pd.Timestamp) -> str:
-    """SNNAAAA: semanas numeradas pelos sábados dentro do ano de início."""
     ini = pd.Timestamp(ini)
     primeiro_dia = pd.Timestamp(ini.year, 1, 1)
     primeiro_sabado = primeiro_dia + pd.Timedelta(days=(5 - primeiro_dia.weekday()) % 7)
     numero = (ini - primeiro_sabado).days // 7 + 1
     if numero <= 0:
-        raise ValueError('Início da semana não corresponde ao ano')
-    return f'S{numero:02d}{ini.year}'
+        numero = 1
+    return f'S{numero}{ini.year}'
 
 
 def agregar_anual(hist: pd.DataFrame) -> pd.DataFrame:
-    df = hist.assign(ano=hist['data'].dt.year)
-    df = df.groupby(['ano', 'submercado'], as_index=False)['pld'].mean()
+    df = hist.assign(ano=hist['data'].dt.year).groupby(['ano', 'submercado'], as_index=False)['pld'].mean()
     return df.pivot(index='ano', columns='submercado', values='pld').reindex(columns=ORDEM).reset_index()
 
 
 def agregar_mensal(hist: pd.DataFrame) -> pd.DataFrame:
     df = hist.copy()
-    df['mes'] = df['data'].dt.to_period('M')
-    df = df.groupby(['mes', 'submercado'], as_index=False)['pld'].mean()
-    df = df.pivot(index='mes', columns='submercado', values='pld').reindex(columns=ORDEM).reset_index()
-    df['label'] = df['mes'].dt.to_timestamp().dt.strftime('%b/%Y')
-    mapa_meses = {1:'jan',2:'fev',3:'mar',4:'abr',5:'mai',6:'jun',7:'jul',8:'ago',9:'set',10:'out',11:'nov',12:'dez'}
-    df['label'] = df['mes'].apply(lambda m: f'{mapa_meses[m.month]}/{m.year}')
-    return df
+    df['mes_dt'] = df['data'].values.astype('datetime64[M]')
+    agg = df.groupby(['mes_dt', 'submercado'], as_index=False)['pld'].mean()
+    piv = agg.pivot(index='mes_dt', columns='submercado', values='pld').reindex(columns=ORDEM).reset_index()
+    piv['label'] = piv['mes_dt'].apply(lambda x: f"{MESES_PT[pd.Timestamp(x).month]}/{pd.Timestamp(x).year}")
+    return piv
 
 
 def agregar_semanal(hist: pd.DataFrame) -> pd.DataFrame:
     df = hist.copy()
     df['inicio_semana'] = inicio_semana_operativa(df['data'])
-    df = df.groupby(['inicio_semana', 'submercado'], as_index=False)['pld'].mean()
-    df = df.pivot(index='inicio_semana', columns='submercado', values='pld').reindex(columns=ORDEM).reset_index()
-    df['label'] = df['inicio_semana'].map(codigo_semana)
-    df['fim_semana'] = df['inicio_semana'] + pd.Timedelta(days=6)
-    return df
+    agg = df.groupby(['inicio_semana', 'submercado'], as_index=False)['pld'].mean()
+    piv = agg.pivot(index='inicio_semana', columns='submercado', values='pld').reindex(columns=ORDEM).reset_index()
+    piv['label'] = piv['inicio_semana'].map(codigo_semana)
+    piv['fim_semana'] = piv['inicio_semana'] + pd.Timedelta(days=6)
+    return piv
+
+
+def agregar_diario(hist: pd.DataFrame) -> pd.DataFrame:
+    agg = hist.groupby(['data', 'submercado'], as_index=False)['pld'].mean()
+    piv = agg.pivot(index='data', columns='submercado', values='pld').reindex(columns=ORDEM).reset_index()
+    piv['label'] = piv['data'].dt.strftime('%d/%m/%Y')
+    return piv
 
 
 def agregar_horario(hist: pd.DataFrame, dia: pd.Timestamp) -> pd.DataFrame:
@@ -324,14 +321,41 @@ def agregar_horario(hist: pd.DataFrame, dia: pd.Timestamp) -> pd.DataFrame:
     return tabela.reindex(index=range(24), columns=ORDEM).reset_index()
 
 
-def configurar_layout(fig: go.Figure, eixo_x: str, horizontal: bool = False) -> go.Figure:
+def resumo_pld(hist: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
+    ultima = pd.Timestamp(hist['data'].max()).normalize()
+    ini_sem = inicio_semana_operativa(pd.Series([ultima])).iloc[0]
+    fim_sem = ini_sem + pd.Timedelta(days=6)
+    ini_mes = ultima.replace(day=1)
+    ini_ano = ultima.replace(month=1, day=1)
+
+    def media_periodo(mask):
+        grp = hist.loc[mask].groupby('submercado')['pld'].mean()
+        return [round(float(grp.get(sm, float('nan'))), 2) if pd.notna(grp.get(sm, pd.NA)) else None for sm in ORDEM]
+
+    dados = [
+        ['PLD Hoje', *media_periodo(hist['data'] == ultima)],
+        ['PLD Semana', *media_periodo((hist['data'] >= ini_sem) & (hist['data'] <= ultima))],
+        ['PLD Mês', *media_periodo((hist['data'] >= ini_mes) & (hist['data'] <= ultima))],
+        ['PLD Ano', *media_periodo((hist['data'] >= ini_ano) & (hist['data'] <= ultima))],
+    ]
+    tabela = pd.DataFrame(dados, columns=['Indicador'] + ORDEM)
+    notas = {
+        'hoje': ultima.strftime('%d/%m/%Y'),
+        'semana': f'{ini_sem.strftime("%d/%m/%Y")} a {fim_sem.strftime("%d/%m/%Y")} (acumulado até {ultima.strftime("%d/%m/%Y")})',
+        'mes': f'{MESES_PT[ultima.month]}/{ultima.year}',
+        'ano': str(ultima.year),
+    }
+    return tabela, notas
+
+
+def configurar_layout(fig: go.Figure, eixo_x: str, y_title: str = 'Preço (R$/MWh)') -> go.Figure:
     fig.update_layout(
-        height=490 if horizontal else 510,
+        height=500,
         paper_bgcolor='white', plot_bgcolor='white',
         font=dict(family=FONTE, size=13, color='#263142'),
-        showlegend=False,  # Legenda interativa é HTML, com espaço próprio fora do Plotly.
+        showlegend=False,
         hovermode='x unified',
-        margin=dict(l=90, r=30, t=24, b=80),
+        margin=dict(l=96, r=30, t=24, b=86),
         xaxis=dict(
             title=eixo_x, showgrid=False, showline=True,
             linecolor='#50627a', tickcolor='#50627a', ticks='outside',
@@ -340,7 +364,7 @@ def configurar_layout(fig: go.Figure, eixo_x: str, horizontal: bool = False) -> 
             automargin=True,
         ),
         yaxis=dict(
-            title='Preço (R$/MWh)', showgrid=False, showline=True,
+            title=y_title, showgrid=False, showline=True,
             linecolor='#50627a', tickcolor='#50627a', ticks='outside',
             ticklen=7, tickwidth=1.2, zeroline=False, rangemode='tozero',
             minor=dict(ticks='outside', ticklen=3, tickcolor='#98a2b3', showgrid=False),
@@ -350,44 +374,46 @@ def configurar_layout(fig: go.Figure, eixo_x: str, horizontal: bool = False) -> 
     return fig
 
 
-def criar_figura(df: pd.DataFrame, eixo_x: str, coluna_x: str, granularidade: str) -> go.Figure:
+def criar_figura(df: pd.DataFrame, coluna_x: str, eixo_x: str, granularidade: str, y_title: str = 'Preço (R$/MWh)') -> go.Figure:
     fig = go.Figure()
-    numero_pontos = len(df)
-    for sub in ORDEM:
-        valores = pd.to_numeric(df[sub], errors='coerce')
+    n = len(df)
+    for sm in ORDEM:
+        serie = pd.to_numeric(df[sm], errors='coerce')
         fig.add_trace(go.Scatter(
-            x=df[coluna_x], y=valores,
-            name=sub, mode='lines+markers',
-            line=dict(color=CORES[sub], width=2.8, shape='spline', smoothing=0.4),
-            marker=dict(color=CORES[sub], size=6 if numero_pontos <= 24 else 3),
-            hovertemplate='%{y:,.2f} R$/MWh<extra>' + sub + '</extra>',
+            x=df[coluna_x], y=serie, name=sm, mode='lines+markers',
+            line=dict(color=CORES[sm], width=2.6, shape='spline', smoothing=0.4),
+            marker=dict(color=CORES[sm], size=6 if n <= 30 else 4),
+            hovertemplate='%{y:,.2f} R$/MWh<extra>' + sm + '</extra>',
         ))
-    configurar_layout(fig, eixo_x, horizontal=granularidade == 'hora')
+    configurar_layout(fig, eixo_x, y_title=y_title)
     if granularidade == 'ano':
         fig.update_xaxes(type='category')
     elif granularidade == 'mes':
-        marcas = list(range(0, len(df), max(1, len(df)//12)))
-        fig.update_xaxes(type='category', tickmode='array',
-                         tickvals=[str(df.iloc[i]['label']) for i in marcas],
-                         ticktext=[str(df.iloc[i]['label']) for i in marcas], tickangle=-40)
+        passo = max(1, len(df) // 12)
+        vals = [str(df.iloc[i][coluna_x]) for i in range(0, len(df), passo)]
+        txt = [str(df.iloc[i][coluna_x]) for i in range(0, len(df), passo)]
+        fig.update_xaxes(type='category', tickmode='array', tickvals=vals, ticktext=txt, tickangle=-35)
     elif granularidade == 'semana':
-        marcas = list(range(0, len(df), max(1, len(df)//14)))
-        fig.update_xaxes(type='category', tickmode='array',
-                         tickvals=[str(df.iloc[i]['label']) for i in marcas],
-                         ticktext=[str(df.iloc[i]['label']) for i in marcas], tickangle=-45)
+        passo = max(1, len(df) // 14)
+        vals = [str(df.iloc[i][coluna_x]) for i in range(0, len(df), passo)]
+        txt = [str(df.iloc[i][coluna_x]) for i in range(0, len(df), passo)]
+        fig.update_xaxes(type='category', tickmode='array', tickvals=vals, ticktext=txt, tickangle=-40)
+    elif granularidade == 'dia':
+        passo = max(1, len(df) // 14)
+        vals = [str(df.iloc[i][coluna_x]) for i in range(0, len(df), passo)]
+        txt = [str(df.iloc[i][coluna_x]) for i in range(0, len(df), passo)]
+        fig.update_xaxes(type='category', tickmode='array', tickvals=vals, ticktext=txt, tickangle=-40)
     else:
-        fig.update_xaxes(type='linear', tickmode='linear', tick0=0, dtick=1, range=[-0.5,23.5])
+        fig.update_xaxes(type='linear', tickmode='linear', tick0=0, dtick=1, range=[-0.5, 23.5])
     return fig
 
 
 def legenda_html(plot_id: str) -> str:
-    """Legenda externa com clique para alternar cada submercado sem sobreposição."""
     from html import escape
     partes = [f'<div class="legenda-externa" role="group" aria-label="Séries do gráfico {escape(plot_id)}">']
     for i, sub in enumerate(ORDEM):
         partes.append(
-            f'<button type="button" class="legenda-item" data-plot="{plot_id}" '
-            f'data-indice="{i}" aria-pressed="true">'
+            f'<button type="button" class="legenda-item" data-plot="{plot_id}" data-indice="{i}" aria-pressed="true">'
             f'<span class="legenda-linha" style="--cor-serie:{CORES[sub]}"></span>{escape(sub)}</button>'
         )
     partes.append('</div>')
@@ -395,61 +421,73 @@ def legenda_html(plot_id: str) -> str:
 
 
 def _horarios_por_dia(hist: pd.DataFrame) -> dict[str, list[list[float | None]]]:
-    """Conteúdo compacto de cada dia para trocar a data diretamente no navegador."""
     mapa = {}
     for dia, bloco in hist.groupby('data', sort=True):
-        tabela = bloco.pivot(index='hora', columns='submercado', values='pld')
-        tabela = tabela.reindex(index=range(24), columns=ORDEM)
+        tabela = bloco.pivot(index='hora', columns='submercado', values='pld').reindex(index=range(24), columns=ORDEM)
         por_sub = []
-        for sub in ORDEM:
-            serie = pd.to_numeric(tabela[sub], errors='coerce')
+        for sm in ORDEM:
+            serie = pd.to_numeric(tabela[sm], errors='coerce')
             por_sub.append([None if pd.isna(v) else round(float(v), 2) for v in serie])
         mapa[pd.Timestamp(dia).strftime('%Y-%m-%d')] = por_sub
     return mapa
 
 
+def tabela_resumo_html(tabela: pd.DataFrame, notas: dict) -> str:
+    def fmt(v):
+        if pd.isna(v):
+            return '—'
+        return f'{float(v):,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.')
+    head = '<tr><th></th>' + ''.join(f'<th>{c}</th>' for c in ORDEM) + '</tr>'
+    linhas = []
+    for _, row in tabela.iterrows():
+        linhas.append('<tr>' + f'<th scope="row">{row["Indicador"]}</th>' + ''.join(f'<td>{fmt(row[c])}</td>' for c in ORDEM) + '</tr>')
+    nota = (
+        f'<div class="nota-resumo">'
+        f'Hoje: {notas["hoje"]} &nbsp;|&nbsp; '
+        f'Semana: {notas["semana"]} &nbsp;|&nbsp; '
+        f'Mês: {notas["mes"]} &nbsp;|&nbsp; '
+        f'Ano: {notas["ano"]}'
+        f'</div>'
+    )
+    return f'<section class="painel"><div class="barra-titulo">PLD — Resumo</div><div class="quadro-tabela"><table class="resumo-pld"><thead>{head}</thead><tbody>{"".join(linhas)}</tbody></table>{nota}</div></section>'
+
+
 def pagina_pld(hist: pd.DataFrame) -> str:
     from html import escape
-    import json
     hist = hist[hist['submercado'].isin(ORDEM)].copy()
     if hist.empty:
-        raise ValueError('PLD: nenhum registro de submercados válido')
+        raise ValueError('PLD: nenhum registro válido')
     hist['data'] = pd.to_datetime(hist['data'])
-    hist = hist.sort_values(['data','hora','submercado']).drop_duplicates(
-        ['data','hora','submercado'], keep='last')
-    ultima = pd.Timestamp(hist['data'].max())
+    hist = hist.sort_values(['data', 'hora', 'submercado']).drop_duplicates(['data', 'hora', 'submercado'], keep='last')
+    ultima = pd.Timestamp(hist['data'].max()).normalize()
     ultima_br = ultima.strftime('%d/%m/%Y')
+    primeira = pd.Timestamp(hist['data'].min()).normalize()
 
     anual = agregar_anual(hist)
     mensal = agregar_mensal(hist)
     semanal = agregar_semanal(hist)
+    diario = agregar_diario(hist)
     horario = agregar_horario(hist, ultima)
-    primeiro = pd.Timestamp(hist['data'].min()).strftime('%d/%m/%Y')
+    resumo, notas = resumo_pld(hist)
 
     configs = [
-        ('PLD — Anual', f'Média dos preços horários por ano — último ano parcial até {ultima_br}',
-         criar_figura(anual, 'Ano', 'ano', 'ano')),
-        ('PLD — Mensal', f'Média dos preços horários por mês — mês corrente parcial até {ultima_br}',
-         criar_figura(mensal, 'Mês', 'label', 'mes')),
-        ('PLD — Semanal', f'Média dos preços horários por semana operativa (sábado a sexta) — semana atual parcial até {ultima_br}',
-         criar_figura(semanal, 'Semana', 'label', 'semana')),
-        ('PLD — Horário', f'Curva horária de 0 a 23h — escolha a data desejada',
-         criar_figura(horario, 'Hora', 'hora', 'hora')),
+        ('PLD — Anual', f'Média anual dos preços horários por submercado — último ano parcial até {ultima_br}', criar_figura(anual, 'ano', 'Ano', 'ano', y_title='Preço (R$/MWh)')),
+        ('PLD — Mensal', f'Média mensal dos preços horários por submercado — último mês parcial até {ultima_br}', criar_figura(mensal, 'label', 'Mês', 'mes', y_title='Preço (R$/MWh)')),
+        ('PLD — Semanal', f'Média semanal por semana operativa (sábado a sexta) — última semana parcial até {ultima_br}', criar_figura(semanal, 'label', 'Semana', 'semana', y_title='Preço (R$/MWh)')),
+        ('PLD — Diário', f'Média diária dos preços horários por submercado — histórico acumulado até {ultima_br}', criar_figura(diario, 'label', 'Dia', 'dia', y_title='Preço (R$/MWh)')),
+        ('PLD — Horário', 'Curva horária por data selecionada', criar_figura(horario, 'hora', 'Hora', 'hora', y_title='Preço (R$/MWh)')),
     ]
-    blocos = []
+
+    blocos = [tabela_resumo_html(resumo, notas)]
     for i, (titulo, subtitulo, figura) in enumerate(configs):
         pid = f'plot-pld-{i}'
-        grafico = figura.to_html(
-            full_html=False, include_plotlyjs=False, div_id=pid,
-            config={'responsive': True, 'displaylogo': False},
-        )
+        grafico = figura.to_html(full_html=False, include_plotlyjs=False, div_id=pid, config={'responsive': True, 'displaylogo': False})
         controle_data = ''
-        if i == 3:
+        if titulo == 'PLD — Horário':
             controle_data = (
                 '<div class="controle-data">'
                 '<label for="data-pld">Data do PLD horário:</label>'
-                f'<input type="date" id="data-pld" value="{ultima.strftime("%Y-%m-%d")}" '
-                f'min="{hist["data"].min().strftime("%Y-%m-%d")}" max="{ultima.strftime("%Y-%m-%d")}" />'
+                f'<input type="date" id="data-pld" value="{ultima.strftime("%Y-%m-%d")}" min="{primeira.strftime("%Y-%m-%d")}" max="{ultima.strftime("%Y-%m-%d")}" />'
                 f'<span id="status-data-pld" role="status">{ultima_br}</span>'
                 '</div>'
             )
@@ -472,29 +510,26 @@ def pagina_pld(hist: pd.DataFrame) -> str:
   * {{box-sizing:border-box}}
   body {{margin:0;background:#fff;color:#263142;font-family:{FONTE}}}
   .area {{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;padding:0 12px 20px}}
-  .painel {{min-width:0;background:#fff;border:1px solid #e1e7ef;border-radius:14px;
-            overflow:hidden;display:flex;flex-direction:column}}
-  .barra-titulo {{width:100%;background:{COR_VALE};color:#fff;font-weight:700;text-align:center;
-                 padding:12px 16px;font-size:18px;border-radius:14px 14px 0 0}}
+  .painel {{min-width:0;background:#fff;border:1px solid #e1e7ef;border-radius:14px;overflow:hidden;display:flex;flex-direction:column}}
+  .barra-titulo {{width:100%;background:{COR_VALE};color:#fff;font-weight:700;text-align:center;padding:12px 16px;font-size:18px;border-radius:14px 14px 0 0}}
   .subtitulo {{padding:12px 18px 0;text-align:center;color:#667085;font-size:12px;line-height:1.6}}
+  .quadro-tabela {{padding:18px 16px 18px}}
+  table.resumo-pld {{width:auto;min-width:360px;border-collapse:collapse;margin:0 auto;font-size:14px;color:#101828}}
+  .resumo-pld th,.resumo-pld td {{padding:6px 14px;border:1px solid #101828;text-align:center;white-space:nowrap}}
+  .resumo-pld thead th:first-child {{background:#fff;border-top-color:transparent;border-left-color:transparent}}
+  .resumo-pld tbody th {{text-align:left;font-weight:700}}
+  .nota-resumo {{margin-top:10px;text-align:center;color:#667085;font-size:12px;line-height:1.6}}
   .js-plotly-plot {{width:100%!important}}
-  .legenda-externa {{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;
-                     gap:10px 18px;padding:4px 16px 15px;min-height:40px}}
-  .legenda-item {{border:1px solid #e0e6ee;border-radius:8px;background:#fff;color:#263142;
-                  font:inherit;font-size:12px;display:inline-flex;align-items:center;justify-content:center;
-                  gap:9px;padding:7px 12px;min-width:92px;cursor:pointer;white-space:nowrap}}
+  .legenda-externa {{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px 18px;padding:4px 16px 15px;min-height:40px}}
+  .legenda-item {{border:1px solid #e0e6ee;border-radius:8px;background:#fff;color:#263142;font:inherit;font-size:12px;display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:7px 12px;min-width:92px;cursor:pointer;white-space:nowrap}}
   .legenda-item[aria-pressed="false"] {{opacity:.38}}
-  .legenda-linha {{height:0;width:28px;border-top:3px solid var(--cor-serie);display:inline-block;
-                  position:relative}}
-  .legenda-linha:after {{content:"";position:absolute;left:10px;top:-5px;width:7px;height:7px;
-                         background:var(--cor-serie);border-radius:50%}}
-  .controle-data {{display:flex;gap:12px;flex-wrap:wrap;align-items:center;
-                   justify-content:center;padding:16px 12px 0;font-size:13px}}
+  .legenda-linha {{height:0;width:28px;border-top:3px solid var(--cor-serie);display:inline-block;position:relative}}
+  .legenda-linha:after {{content:"";position:absolute;left:10px;top:-5px;width:7px;height:7px;background:var(--cor-serie);border-radius:50%}}
+  .controle-data {{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:center;padding:16px 12px 0;font-size:13px}}
   #data-pld {{font:inherit;color:#263142;padding:8px 10px;border:1px solid #c6d0dc;border-radius:8px}}
   #status-data-pld {{color:#667085}}
   .fonte-dados {{padding:7px 18px 18px;color:#667085;font-size:11px;line-height:1.5;margin-top:auto}}
-  @media(max-width:750px) {{ .area {{padding:0;gap:10px}} .painel {{border-radius:8px}}
-    .legenda-externa {{gap:7px}} .legenda-item {{min-width:76px;padding:7px 8px}} }}
+  @media(max-width:750px) {{.area {{padding:0;gap:10px}} .painel {{border-radius:8px}} .quadro-tabela {{padding:12px 8px 14px;overflow:auto}} .legenda-externa {{gap:7px}} .legenda-item {{min-width:76px;padding:7px 8px}} }}
 </style></head><body>
 <main class="area">{''.join(blocos)}</main>
 <script>
@@ -511,7 +546,7 @@ def pagina_pld(hist: pd.DataFrame) -> str:
   const historicoHorarios = {dados_horarios_js};
   const inputData = document.getElementById('data-pld');
   const status = document.getElementById('status-data-pld');
-  const plotHorario = document.getElementById('plot-pld-3');
+  const plotHorario = document.getElementById('plot-pld-4');
   function atualizarDia() {{
     const data = historicoHorarios[inputData.value];
     if(!data) {{
@@ -522,10 +557,9 @@ def pagina_pld(hist: pd.DataFrame) -> str:
     status.textContent = inputData.value.split('-').reverse().join('/');
     Plotly.restyle(plotHorario, {{y: data}}, [0,1,2,3]);
   }}
-  inputData.addEventListener('change', atualizarDia);
+  if (inputData) inputData.addEventListener('change', atualizarDia);
   function comunicarAlturaPLD() {{
-    if(window.parent !== window) window.parent.postMessage(
-      {{tipo:'altura-painel-ons', id:'pld', altura:document.querySelector('main').offsetHeight+12}}, '*');
+    if(window.parent !== window) window.parent.postMessage({{tipo:'altura-painel-ons', id:'pld', altura:document.querySelector('main').offsetHeight+12}}, '*');
   }}
   window.addEventListener('load', comunicarAlturaPLD);
   window.addEventListener('resize', comunicarAlturaPLD);
@@ -543,15 +577,14 @@ def salvar(hist: pd.DataFrame) -> None:
     data_max = pd.Timestamp(hist['data'].max()).strftime('%d/%m/%Y')
     print(f'Histórico PLD: {len(hist):,} registros horários.')
     print(f'Última data do PLD: {data_max}')
-    print('Página:', PAGINA_PLD)
+    print(f'Página: {PAGINA_PLD}')
 
 
 def main() -> None:
     p = argparse.ArgumentParser()
-    p.add_argument('--somente-local', action='store_true', help='Usa apenas o histórico local')
-    p.add_argument('--historico-base', type=Path, help='Arquivo base do histórico do PLD')
+    p.add_argument('--somente-local', action='store_true')
+    p.add_argument('--historico-base', type=Path)
     args = p.parse_args()
-
     hist = carregar_historico_base(args.historico_base) if args.historico_base else carregar_base_consolidada()
     hist = atualizar_com_online(hist, usar_online=not args.somente_local)
     salvar(hist)
