@@ -7,6 +7,8 @@ import unicodedata
 import warnings
 from datetime import datetime
 from io import BytesIO
+from html.parser import HTMLParser
+from urllib.parse import urljoin
 from pathlib import Path
 from zoneinfo import ZoneInfo
 from xml.etree import ElementTree as ET
@@ -34,6 +36,9 @@ CORES = {'SE/CO': '#2F66E0', 'SUL': '#D97706', 'NE': '#DC2626', 'N': '#7EC0EE'}
 ORDEM = ['SE/CO', 'SUL', 'NE', 'N']
 URL_DATASET = 'https://dadosabertos.ccee.org.br/dataset/pld_horario'
 URL_API = 'https://dadosabertos.ccee.org.br/api/3/action/package_show'
+# URL do recurso 2026 verificada na página pública da CCEE em 31/10/2026.
+# Pode expirar; é apenas a terceira alternativa, depois de API e HTML.
+URLS_DIRETAS_CONHECIDAS = {2026: 'https://pda-download.ccee.org.br/6A5wq97KTCWv_bvs3CqsQQ/content'}
 MESES_PT = {1:'jan',2:'fev',3:'mar',4:'abr',5:'mai',6:'jun',7:'jul',8:'ago',9:'set',10:'out',11:'nov',12:'dez'}
 
 
@@ -173,33 +178,50 @@ def carregar_base_consolidada(caminho: Path = LONGO) -> pd.DataFrame:
 
 
 def normalizar_csv_ccee(df: pd.DataFrame, ano: int) -> pd.DataFrame:
+    """Reconhece a data completa ou DIA numérico com MES_REFERENCIA (AAAAMM)."""
     norm = {_sem_acento(c).replace(' ', '_'): c for c in df.columns}
     def pick(opcoes):
-        for op in opcoes:
-            if op in norm:
-                return norm[op]
-        return None
+        return next((norm[k] for k in opcoes if k in norm), None)
+
     c_data = pick(['dia', 'data', 'dt_referencia', 'data_referencia'])
+    c_mes = pick(['mes_referencia', 'mes_ref'])
     c_hora = pick(['hora', 'hora_do_dia', 'hora_referencia'])
     c_sub = pick(['submercado', 'sub_mercado', 'subsistema'])
     c_val = pick(['pld_hora', 'pld', 'preco', 'valor', 'preco_hora'])
     if not all([c_data, c_hora, c_sub, c_val]):
-        raise ValueError(f'Layout do CSV CCEE não reconhecido: {list(df.columns)}')
+        raise ValueError(f'Colunas do CSV CCEE não reconhecidas: {list(df.columns)}')
+
     out = df[[c_data, c_hora, c_sub, c_val]].copy()
-    out.columns = ['data', 'hora', 'submercado', 'pld']
-    out['data'] = pd.to_datetime(out['data'], dayfirst=True, errors='coerce')
+    out.columns = ['dia_original', 'hora', 'submercado', 'pld']
+    raw_dia = out['dia_original'].astype('string').str.strip()
+    # Formato com dia do mês ("30") ou dia/mês/ano ("30/10/2026").
+    data = pd.to_datetime(raw_dia, format='%d/%m/%Y', errors='coerce')
+    sem_data = data.isna()
+    if sem_data.any():
+        data.loc[sem_data] = pd.to_datetime(raw_dia.loc[sem_data], format='%Y-%m-%d', errors='coerce')
+    sem_data = data.isna()
+    if sem_data.any() and c_mes:
+        mes = df.loc[sem_data, c_mes].astype('string').str.replace(r'\D', '', regex=True).str.zfill(6)
+        dia = pd.to_numeric(raw_dia.loc[sem_data], errors='coerce').astype('Int64').astype('string').str.zfill(2)
+        data.loc[sem_data] = pd.to_datetime(mes + dia, format='%Y%m%d', errors='coerce')
+    out['data'] = data
     out['hora'] = pd.to_numeric(out['hora'], errors='coerce')
     out['submercado'] = out['submercado'].map(_padronizar_submercado)
     out['pld'] = out['pld'].map(_to_num)
     out = out.dropna(subset=['data', 'hora', 'submercado', 'pld']).copy()
-    out = out[out['submercado'].isin(ORDEM)]
+    out = out[out['submercado'].isin(ORDEM) & (out['data'].dt.year == ano)].copy()
     if out.empty:
-        raise ValueError('CSV CCEE sem registros válidos')
+        raise ValueError(f'CSV {ano} sem registros reconhecidos; verifique formato DIA/MES_REFERENCIA')
     out['hora'] = out['hora'].astype(int)
     if out['hora'].min() == 1 and out['hora'].max() == 24:
         out['hora'] = out['hora'] - 1
-    out = out[out['data'].dt.year == ano].copy()
-    return out[['data', 'hora', 'submercado', 'pld']].drop_duplicates(['data', 'hora', 'submercado'], keep='last')
+    if not out['hora'].between(0, 23).all():
+        raise ValueError('Horas fora do intervalo 0–23')
+    out['pld'] = out['pld'].astype(float)
+    out = out[['data', 'hora', 'submercado', 'pld']]
+    if out.duplicated(['data', 'hora', 'submercado']).any():
+        raise ValueError('CSV CCEE contém horários duplicados')
+    return out.sort_values(['data', 'hora', 'submercado']).reset_index(drop=True)
 
 
 def recursos_ccee() -> dict[int, dict]:
@@ -220,29 +242,57 @@ def recursos_ccee() -> dict[int, dict]:
     return out
 
 
+class ExtratorLinksCCEE(HTMLParser):
+    """Extrai links do download anual com a biblioteca padrão, sem lxml."""
+    def __init__(self):
+        super().__init__()
+        self.ano_atual = None
+        self.recursos = {}
+        self.links_sem_ano = []
+        self.anos_encontrados = []
+
+    def handle_data(self, data):
+        achou = re.search(r'pld_horario_(\d{4})', data.strip(), re.I)
+        if achou:
+            self.ano_atual = int(achou.group(1))
+            if self.ano_atual not in self.anos_encontrados:
+                self.anos_encontrados.append(self.ano_atual)
+
+    def handle_starttag(self, tag, attrs):
+        if tag != 'a':
+            return
+        attr = dict(attrs)
+        href = attr.get('href', '')
+        if 'pda-download.ccee.org.br/' not in href and '/download/' not in href:
+            return
+        href = urljoin(URL_DATASET, href)
+        if self.ano_atual:
+            self.recursos[self.ano_atual] = {'name': f'pld_horario_{self.ano_atual}', 'url': href}
+        else:
+            self.links_sem_ano.append(href)
+
+
+def extrair_recursos_html(html: str) -> dict[int, dict]:
+    parser = ExtratorLinksCCEE()
+    parser.feed(html)
+    # Em alguns temas CKAN, os títulos aparecem antes da seção de downloads.
+    if parser.links_sem_ano and len(parser.links_sem_ano) == len(parser.anos_encontrados):
+        for ano, url in zip(parser.anos_encontrados, parser.links_sem_ano):
+            parser.recursos.setdefault(ano, {'name': f'pld_horario_{ano}', 'url': url})
+    return parser.recursos
+
+
 def recursos_ccee_html() -> dict[int, dict]:
-    """Fallback: extrai links anuais diretamente da página pública do dataset."""
+    """Fallback independente de lxml. Não tenta disfarçar bloqueios 403."""
     import requests
-    from lxml import html
     s = requests.Session()
     s.headers.update({'User-Agent': 'Painel-Vale-PLD/1.0'})
     r = s.get(URL_DATASET, timeout=60)
     r.raise_for_status()
-    doc = html.fromstring(r.content)
-    links = doc.xpath('//a[contains(@href, "pda-download.ccee.org.br")]')
-    out = {}
-    for a in links:
-        txt = ' '.join(a.xpath('.//text()')).strip().lower()
-        href = a.get('href')
-        m = re.search(r'pld_horario_(\d{4})', txt)
-        if not m and href:
-            m = re.search(r'pld[_-]horario[_-](\d{4})', href.lower())
-        if m and href:
-            ano = int(m.group(1))
-            out[ano] = {'name': f'pld_horario_{ano}', 'url': href, 'download_url': href}
-    if not out:
-        raise RuntimeError('HTML do dataset não expôs links anuais do PLD')
-    return out
+    resposta = extrair_recursos_html(r.text)
+    if not resposta:
+        raise RuntimeError('Página não expôs links diretos para os recursos anuais')
+    return resposta
 
 
 def baixar_csv_ano(recurso: dict, ano: int) -> pd.DataFrame:
@@ -267,50 +317,84 @@ def baixar_csv_ano(recurso: dict, ano: int) -> pd.DataFrame:
     return normalizar_csv_ccee(df, ano)
 
 
-def atualizar_com_online(historico: pd.DataFrame, usar_online: bool) -> pd.DataFrame:
-    if not usar_online:
-        print('PLD: execução offline, usando base consolidada/local.')
-        return historico
-    try:
-        recursos = recursos_ccee()
-        origem = 'API CKAN'
-    except Exception as exc_api:
-        warnings.warn(f'PLD: API da CCEE indisponível ({exc_api}). Tentando fallback via HTML do dataset...')
+def carregar_importacoes_manuais() -> list[pd.DataFrame]:
+    """Permite alimentar a base pelo próprio GitHub quando a CCEE bloqueia o servidor."""
+    partes = []
+    for arquivo in sorted(DADOS.glob('pld_importacao_*.csv')):
+        ano_match = re.search(r'(20\d{2})', arquivo.stem)
+        if not ano_match:
+            print(f'PLD: importação {arquivo.name} ignorada (ano ausente do nome).')
+            continue
+        ano = int(ano_match.group(1))
         try:
-            recursos = recursos_ccee_html()
-            origem = 'HTML do dataset'
-        except Exception as exc_html:
-            warnings.warn(f'PLD: fallback HTML também falhou ({exc_html}). Histórico preservado.')
-            return historico
-
-    hoje = datetime.now(ZoneInfo('America/Sao_Paulo')).date()
-    ano_atual = hoje.year
-    ultimo_hist = pd.Timestamp(historico['data'].max()).year if not historico.empty else ano_atual
-    anos_a_tentar = [ano_atual]
-    if hoje.month <= 2:
-        anos_a_tentar.append(ano_atual - 1)
-    if ultimo_hist not in anos_a_tentar:
-        anos_a_tentar.append(ultimo_hist)
-    anos_a_tentar = [a for a in sorted(set(anos_a_tentar)) if a in recursos]
-
-    combinado = historico.copy()
-    atualizou = False
-    for ano in anos_a_tentar:
-        try:
-            bloco = baixar_csv_ano(recursos[ano], ano)
-            max_data = pd.Timestamp(bloco['data'].max()).strftime('%d/%m/%Y')
-            print(f'CCEE {ano} via {origem}: {len(bloco):,} registros horários até {max_data}.')
-            combinado = combinado[combinado['data'].dt.year != ano].copy()
-            combinado = pd.concat([combinado, bloco], ignore_index=True)
-            atualizou = True
+            raw = arquivo.read_bytes()
+            primeiro = raw[:4096].decode('latin1', errors='replace').splitlines()[0]
+            sep = ';' if primeiro.count(';') >= primeiro.count(',') else ','
+            df = pd.read_csv(BytesIO(raw), sep=sep, encoding='latin1', dtype=str)
+            df = normalizar_csv_ccee(df, ano)
+            partes.append(df)
+            print(f'PLD: importação manual {ano}: até {df.data.max().date()} ({len(df)} preços).')
         except Exception as exc:
-            warnings.warn(f'PLD: falha ao baixar/tratar {ano} da CCEE ({exc}).')
+            print(f'::warning title=PLD arquivo manual inválido::{arquivo.name} ({exc})')
+    return partes
 
-    combinado = combinado.sort_values(['data', 'hora', 'submercado']).drop_duplicates(['data', 'hora', 'submercado'], keep='last')
-    if atualizou:
-        print('PLD: atualização online concluída. Última data consolidada:', pd.Timestamp(combinado['data'].max()).strftime('%d/%m/%Y'))
-        return combinado
-    warnings.warn('PLD: nenhum arquivo anual pôde ser incorporado nesta execução. Histórico existente preservado.')
+
+def atualizar_com_online(historico: pd.DataFrame, usar_online: bool) -> pd.DataFrame:
+    import requests
+    historico = historico.copy()
+    partes = carregar_importacoes_manuais()
+    if not usar_online:
+        print('PLD: modo offline; apenas histórico e arquivos manuais.')
+    else:
+        recursos = {}
+        try:
+            recursos.update(recursos_ccee())
+            print('PLD: API oficial da CCEE respondeu.')
+        except Exception as exc:
+            print(f'::warning title=CCEE API bloqueada::Falha no endpoint CKAN: {exc}')
+
+        if not recursos:
+            try:
+                recursos.update(recursos_ccee_html())
+                print('PLD: links anuais obtidos diretamente da página CCEE.')
+            except Exception as exc:
+                print(f'::warning title=CCEE página indisponível::Falha no HTML público: {exc}')
+
+        hoje = datetime.now(ZoneInfo('America/Sao_Paulo')).date()
+        ano_atual = hoje.year
+        # Somente ano corrente e ano anterior no começo do novo ano.
+        anos = [ano_atual - 1, ano_atual] if hoje.month <= 2 else [ano_atual]
+        for ano in anos:
+            urls = []
+            if ano in recursos:
+                url = recursos[ano].get('download_url') or recursos[ano].get('url')
+                if url:
+                    urls.append(url)
+            if ano in URLS_DIRETAS_CONHECIDAS and URLS_DIRETAS_CONHECIDAS[ano] not in urls:
+                urls.append(URLS_DIRETAS_CONHECIDAS[ano])
+
+            for url in urls:
+                try:
+                    df = baixar_csv_ano({'url': url}, ano)
+                    partes.append(df)
+                    print(f'CCEE {ano}: arquivo direto lido, {len(df):,} registros até {df.data.max().date()}.')
+                    break
+                except requests.HTTPError as exc:
+                    print(f'::warning title=PLD download bloqueado::{ano}: {exc}')
+                except Exception as exc:
+                    print(f'::warning title=PLD download falhou::{ano}: {exc}')
+            if not urls:
+                print(f'::warning title=CCEE {ano}::Nenhum link anual recuperado para {ano}.')
+
+    if partes:
+        antigo = historico['data'].max() if len(historico) else pd.NaT
+        # Mescla por chave, preservando dados já existentes e possíveis correções novas.
+        historico = pd.concat([historico, *partes], ignore_index=True)
+        historico = historico.sort_values(['data', 'hora', 'submercado']).drop_duplicates(
+            ['data', 'hora', 'submercado'], keep='last')
+        print('PLD: último dado antes:', antigo, '| depois:', historico['data'].max())
+    elif usar_online:
+        print('::warning title=PLD sem nova coleta::Todos os meios de consulta foram bloqueados ou indisponíveis. Histórico antigo preservado.')
     return historico
 
 
@@ -518,6 +602,14 @@ def pagina_pld(hist: pd.DataFrame) -> str:
     ultima = pd.Timestamp(hist['data'].max()).normalize()
     ultima_br = ultima.strftime('%d/%m/%Y')
     primeira = pd.Timestamp(hist['data'].min()).normalize()
+    hoje = pd.Timestamp(datetime.now(ZoneInfo('America/Sao_Paulo')).date())
+    dias_atraso = int((hoje - ultima).days)
+    aviso_defasagem = ''
+    if dias_atraso > 2:
+        aviso_defasagem = (
+            f'<div class="aviso-atraso">Atenção: PLD com última referência em {ultima_br}. '
+            f'Última atualização com novos preços ainda não foi confirmada.</div>'
+        )
 
     anual = agregar_anual(hist)
     mensal = agregar_mensal(hist)
@@ -566,6 +658,7 @@ def pagina_pld(hist: pd.DataFrame) -> str:
   * {{box-sizing:border-box}}
   body {{margin:0;background:#fff;color:#263142;font-family:{FONTE}}}
   .area {{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;padding:0 12px 20px}}
+  .aviso-atraso {{padding:11px 16px;border:1px solid #e9cf95;border-radius:10px;background:#fffaf0;color:#855200;font-size:13px}}
   .painel {{min-width:0;background:#fff;border:1px solid #e1e7ef;border-radius:14px;overflow:hidden;display:flex;flex-direction:column}}
   .barra-titulo {{width:100%;background:{COR_VALE};color:#fff;font-weight:700;text-align:center;padding:12px 16px;font-size:18px;border-radius:14px 14px 0 0}}
   .subtitulo {{padding:12px 18px 0;text-align:center;color:#667085;font-size:12px;line-height:1.6}}
@@ -587,7 +680,7 @@ def pagina_pld(hist: pd.DataFrame) -> str:
   .fonte-dados {{padding:7px 18px 18px;color:#667085;font-size:11px;line-height:1.5;margin-top:auto}}
   @media(max-width:750px) {{.area {{padding:0;gap:10px}} .painel {{border-radius:8px}} .quadro-tabela {{padding:12px 8px 14px;overflow:auto}} .legenda-externa {{gap:7px}} .legenda-item {{min-width:76px;padding:7px 8px}} }}
 </style></head><body>
-<main class="area">{''.join(blocos)}</main>
+<main class="area">{aviso_defasagem}{''.join(blocos)}</main>
 <script>
 (function() {{
   document.querySelectorAll('.legenda-item').forEach(function(b) {{
@@ -630,7 +723,11 @@ def salvar(hist: pd.DataFrame) -> None:
     hist = hist.sort_values(['data', 'hora', 'submercado']).drop_duplicates(['data', 'hora', 'submercado'], keep='last')
     hist.to_csv(LONGO, sep=';', decimal=',', float_format='%.4f', date_format='%Y-%m-%d', index=False)
     PAGINA_PLD.write_text(pagina_pld(hist), encoding='utf-8')
-    data_max = pd.Timestamp(hist['data'].max()).strftime('%d/%m/%Y')
+    ultimo = pd.Timestamp(hist['data'].max())
+    data_max = ultimo.strftime('%d/%m/%Y')
+    atraso = (datetime.now(ZoneInfo('America/Sao_Paulo')).date() - ultimo.date()).days
+    if atraso > 2:
+        print(f'::warning title=PLD desatualizado::Último PLD: {data_max} ({atraso} dias atrás). Verifique o bloqueio da CCEE ou importe manualmente o CSV.')
     print(f'Histórico PLD: {len(hist):,} registros horários.')
     print(f'Última data do PLD: {data_max}')
     print(f'Página: {PAGINA_PLD}')
