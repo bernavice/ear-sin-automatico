@@ -9,7 +9,6 @@ from datetime import datetime
 from io import BytesIO
 from html.parser import HTMLParser
 from urllib.parse import urljoin
-import os
 from pathlib import Path
 from zoneinfo import ZoneInfo
 from xml.etree import ElementTree as ET
@@ -37,18 +36,9 @@ CORES = {'SE/CO': '#2F66E0', 'SUL': '#D97706', 'NE': '#DC2626', 'N': '#7EC0EE'}
 ORDEM = ['SE/CO', 'SUL', 'NE', 'N']
 URL_DATASET = 'https://dadosabertos.ccee.org.br/dataset/pld_horario'
 URL_API = 'https://dadosabertos.ccee.org.br/api/3/action/package_show'
-# Identificadores dos recursos anuais confirmados no catálogo público da CCEE.
-# Identificadores de anos futuros são descobertos quando publicados.
-IDS_ANUAIS_CONHECIDOS = {
-    2025: '2a180a6b-f092-43eb-9f82-a48798b803dc',
-    2026: '3f279d6b-1069-42f7-9b0a-217b084729c4',
-}
-URL_DUMP = 'https://dadosabertos.ccee.org.br/datastore/dump/{id}?bom=True'
-
-def url_dump(recurso_id: str) -> str:
-    if not re.fullmatch(r'[0-9a-fA-F-]{36}', recurso_id):
-        raise ValueError('Identificador anual CCEE inválido')
-    return URL_DUMP.format(id=recurso_id)
+# URL do recurso 2026 verificada na página pública da CCEE em 31/10/2026.
+# Pode expirar; é apenas a terceira alternativa, depois de API e HTML.
+URLS_DIRETAS_CONHECIDAS = {2026: 'https://pda-download.ccee.org.br/6A5wq97KTCWv_bvs3CqsQQ/content'}
 MESES_PT = {1:'jan',2:'fev',3:'mar',4:'abr',5:'mai',6:'jun',7:'jul',8:'ago',9:'set',10:'out',11:'nov',12:'dez'}
 
 
@@ -63,7 +53,7 @@ def _padronizar_submercado(s: str) -> str:
         'sudeste': 'SE/CO', 'sudeste/centro-oeste': 'SE/CO', 'sudeste-centro-oeste': 'SE/CO',
         'sudeste centro-oeste': 'SE/CO', 'sudeste/centrooeste': 'SE/CO', 'sudestecentrooeste': 'SE/CO',
         'se/co': 'SE/CO', 'se': 'SE/CO', 'centro-oeste': 'SE/CO', 'centrooeste': 'SE/CO',
-        'sul': 'SUL', 's': 'SUL', 'nordeste': 'NE', 'ne': 'NE', 'norte': 'N', 'n': 'N'
+        'sul': 'SUL', 'nordeste': 'NE', 'ne': 'NE', 'norte': 'N', 'n': 'N'
     }
     return mapa.get(x, str(s).upper())
 
@@ -253,66 +243,63 @@ def recursos_ccee() -> dict[int, dict]:
 
 
 class ExtratorLinksCCEE(HTMLParser):
-    """Localiza IDs CKAN em links de recursos anuais na página do catálogo."""
+    """Extrai links do download anual com a biblioteca padrão, sem lxml."""
     def __init__(self):
         super().__init__()
         self.ano_atual = None
         self.recursos = {}
-        self.links = []
-        self._href = None
-        self._texto = []
-
-    def handle_starttag(self, tag, attrs):
-        if tag == 'a':
-            self._href = dict(attrs).get('href', '')
-            self._texto = []
+        self.links_sem_ano = []
+        self.anos_encontrados = []
 
     def handle_data(self, data):
-        if self._href is not None:
-            self._texto.append(data)
-        m = re.search(r'pld_horario_(\d{4})', data.strip(), re.I)
-        if m:
-            self.ano_atual = int(m.group(1))
+        achou = re.search(r'pld_horario_(\d{4})', data.strip(), re.I)
+        if achou:
+            self.ano_atual = int(achou.group(1))
+            if self.ano_atual not in self.anos_encontrados:
+                self.anos_encontrados.append(self.ano_atual)
 
-    def handle_endtag(self, tag):
-        if tag != 'a' or self._href is None:
+    def handle_starttag(self, tag, attrs):
+        if tag != 'a':
             return
-        href = urljoin(URL_DATASET, self._href)
-        txt = ''.join(self._texto)
-        ano_m = re.search(r'pld_horario_(\d{4})', txt, re.I)
-        recurso_m = re.search(r'/resource/([a-fA-F0-9-]{36})', href)
-        if ano_m and recurso_m:
-            ano = int(ano_m.group(1))
-            self.recursos[ano] = {'name': f'pld_horario_{ano}', 'id': recurso_m.group(1)}
-        elif recurso_m:
-            self.links.append(recurso_m.group(1))
-        self._href = None
-        self._texto = []
+        attr = dict(attrs)
+        href = attr.get('href', '')
+        if 'pda-download.ccee.org.br/' not in href and '/download/' not in href:
+            return
+        href = urljoin(URL_DATASET, href)
+        if self.ano_atual:
+            self.recursos[self.ano_atual] = {'name': f'pld_horario_{self.ano_atual}', 'url': href}
+        else:
+            self.links_sem_ano.append(href)
 
 
 def extrair_recursos_html(html: str) -> dict[int, dict]:
     parser = ExtratorLinksCCEE()
     parser.feed(html)
+    # Em alguns temas CKAN, os títulos aparecem antes da seção de downloads.
+    if parser.links_sem_ano and len(parser.links_sem_ano) == len(parser.anos_encontrados):
+        for ano, url in zip(parser.anos_encontrados, parser.links_sem_ano):
+            parser.recursos.setdefault(ano, {'name': f'pld_horario_{ano}', 'url': url})
     return parser.recursos
 
 
 def recursos_ccee_html() -> dict[int, dict]:
+    """Fallback independente de lxml. Não tenta disfarçar bloqueios 403."""
     import requests
-    r = requests.get(URL_DATASET, timeout=60, headers={'User-Agent': 'Mozilla/5.0'})
+    s = requests.Session()
+    s.headers.update({'User-Agent': 'Painel-Vale-PLD/1.0'})
+    r = s.get(URL_DATASET, timeout=60)
     r.raise_for_status()
-    rec = extrair_recursos_html(r.text)
-    if not rec:
-        raise RuntimeError('Não foi possível identificar os IDs anuais no catálogo público')
-    return rec
+    resposta = extrair_recursos_html(r.text)
+    if not resposta:
+        raise RuntimeError('Página não expôs links diretos para os recursos anuais')
+    return resposta
 
 
 def baixar_csv_ano(recurso: dict, ano: int) -> pd.DataFrame:
     import requests
     s = requests.Session()
     s.headers.update({'User-Agent': 'Painel-Vale-PLD/1.0'})
-    url = recurso.get('url') or recurso.get('download_url')
-    if not url and recurso.get('id'):
-        url = url_dump(recurso['id'])
+    url = recurso.get('download_url') or recurso.get('url')
     if not url:
         raise ValueError('Recurso CCEE sem URL de download')
     r = s.get(url, timeout=120)
@@ -353,72 +340,61 @@ def carregar_importacoes_manuais() -> list[pd.DataFrame]:
 
 
 def atualizar_com_online(historico: pd.DataFrame, usar_online: bool) -> pd.DataFrame:
-    """Tenta datastore/dump primeiro. Em novos anos, descobre o ID pelo catálogo.
-
-    Se houver bloqueio HTTP, preserva os dados e sinaliza no log.
-    """
+    import requests
     historico = historico.copy()
     partes = carregar_importacoes_manuais()
     if not usar_online:
-        print('PLD: modo offline; histórico e eventuais importações manuais.')
+        print('PLD: modo offline; apenas histórico e arquivos manuais.')
     else:
-        hoje = datetime.now(ZoneInfo('America/Sao_Paulo')).date()
-        anos = [hoje.year]
-        if hoje.month <= 2:
-            anos.insert(0, hoje.year - 1)
+        recursos = {}
+        try:
+            recursos.update(recursos_ccee())
+            print('PLD: API oficial da CCEE respondeu.')
+        except Exception as exc:
+            print(f'::warning title=CCEE API bloqueada::Falha no endpoint CKAN: {exc}')
 
-        recursos = {ano: {'id': rid} for ano, rid in IDS_ANUAIS_CONHECIDOS.items()}
-        # Recurso anual de 2027, 2028... é descoberto, não inferido a partir do UUID de 2026.
-        if any(ano not in recursos for ano in anos):
+        if not recursos:
             try:
                 recursos.update(recursos_ccee_html())
-                print('PLD: IDs anuais descobertos na página pública da CCEE.')
-            except Exception as exc_html:
-                print(f'::warning title=PLD descoberta pelo catálogo falhou::{exc_html}')
-            if any(ano not in recursos for ano in anos):
-                try:
-                    recursos.update(recursos_ccee())
-                    print('PLD: IDs anuais descobertos na API da CCEE.')
-                except Exception as exc_api:
-                    print(f'::warning title=PLD descoberta pela API falhou::{exc_api}')
+                print('PLD: links anuais obtidos diretamente da página CCEE.')
+            except Exception as exc:
+                print(f'::warning title=CCEE página indisponível::Falha no HTML público: {exc}')
 
-        # Alternativa explícita para operação futura caso o catálogo seja bloqueado.
+        hoje = datetime.now(ZoneInfo('America/Sao_Paulo')).date()
+        ano_atual = hoje.year
+        # Somente ano corrente e ano anterior no começo do novo ano.
+        anos = [ano_atual - 1, ano_atual] if hoje.month <= 2 else [ano_atual]
         for ano in anos:
-            manual_id = os.environ.get(f'CCEE_PLD_RECURSO_{ano}', '').strip()
-            if manual_id:
-                recursos[ano] = {'id': manual_id}
-
-        for ano in anos:
-            recurso = recursos.get(ano)
-            if not recurso:
-                print(f'::warning title=PLD recurso não publicado::Identificador anual {ano} indisponível no catálogo.')
-                continue
             urls = []
-            if recurso.get('id'):
-                try:
-                    urls.append(url_dump(recurso['id']))
-                except ValueError as exc:
-                    print(f'::warning title=PLD recurso inválido::{ano}: {exc}')
-            url_outro = recurso.get('download_url') or recurso.get('url')
-            if url_outro and url_outro not in urls:
-                urls.append(url_outro)
+            if ano in recursos:
+                url = recursos[ano].get('download_url') or recursos[ano].get('url')
+                if url:
+                    urls.append(url)
+            if ano in URLS_DIRETAS_CONHECIDAS and URLS_DIRETAS_CONHECIDAS[ano] not in urls:
+                urls.append(URLS_DIRETAS_CONHECIDAS[ano])
+
             for url in urls:
                 try:
                     df = baixar_csv_ano({'url': url}, ano)
                     partes.append(df)
-                    print(f'CCEE {ano}: datastore/dump lido, {len(df):,} registros até {df.data.max().date()}.')
+                    print(f'CCEE {ano}: arquivo direto lido, {len(df):,} registros até {df.data.max().date()}.')
                     break
+                except requests.HTTPError as exc:
+                    print(f'::warning title=PLD download bloqueado::{ano}: {exc}')
                 except Exception as exc:
-                    print(f'::warning title=PLD download {ano} falhou::{url} — {exc}')
+                    print(f'::warning title=PLD download falhou::{ano}: {exc}')
+            if not urls:
+                print(f'::warning title=CCEE {ano}::Nenhum link anual recuperado para {ano}.')
 
     if partes:
-        antes = historico['data'].max() if len(historico) else pd.NaT
+        antigo = historico['data'].max() if len(historico) else pd.NaT
+        # Mescla por chave, preservando dados já existentes e possíveis correções novas.
         historico = pd.concat([historico, *partes], ignore_index=True)
-        historico = historico.sort_values(['data','hora','submercado']).drop_duplicates(
-            ['data','hora','submercado'], keep='last')
-        print(f'PLD: última data antes {antes} | após coleta {historico["data"].max()}')
+        historico = historico.sort_values(['data', 'hora', 'submercado']).drop_duplicates(
+            ['data', 'hora', 'submercado'], keep='last')
+        print('PLD: último dado antes:', antigo, '| depois:', historico['data'].max())
     elif usar_online:
-        print('::warning title=PLD coleta não realizada::Datastore/dump indisponível; base antiga preservada.')
+        print('::warning title=PLD sem nova coleta::Todos os meios de consulta foram bloqueados ou indisponíveis. Histórico antigo preservado.')
     return historico
 
 
