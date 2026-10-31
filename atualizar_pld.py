@@ -808,7 +808,7 @@ def resumo_pld(hist: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
         return [round(float(grp.get(sm, float('nan'))), 2) if pd.notna(grp.get(sm, pd.NA)) else None for sm in ORDEM]
 
     dados = [
-        ['PLD Hoje', *media_periodo(hist['data'] == ultima)],
+        ['PLD Horário', *media_periodo(hist['data'] == ultima)],
         ['PLD Semana', *media_periodo((hist['data'] >= ini_sem) & (hist['data'] <= ultima))],
         ['PLD Mês', *media_periodo((hist['data'] >= ini_mes) & (hist['data'] <= ultima))],
         ['PLD Ano', *media_periodo((hist['data'] >= ini_ano) & (hist['data'] <= ultima))],
@@ -819,6 +819,13 @@ def resumo_pld(hist: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
         'semana': f'{ini_sem.strftime("%d/%m/%Y")} a {fim_sem.strftime("%d/%m/%Y")} (acumulado até {ultima.strftime("%d/%m/%Y")})',
         'mes': f'{MESES_PT[ultima.month]}/{ultima.year}',
         'ano': str(ultima.year),
+    }
+    # Máximo e mínimo horários do último dia disponível, por submercado.
+    # A média principal do card continua sendo a média horária daquele dia.
+    extremos = hist.loc[hist['data'] == ultima].groupby('submercado')['pld'].agg(['min', 'max'])
+    notas['extremos_hoje'] = {
+        sub: {'min': float(extremos.loc[sub, 'min']), 'max': float(extremos.loc[sub, 'max'])}
+        for sub in ORDEM if sub in extremos.index
     }
     return tabela, notas
 
@@ -1006,10 +1013,57 @@ def tabela_resumo_html(tabela: pd.DataFrame, notas: dict) -> str:
 
     cabecalhos = {'SE/CO': 'SE/CO', 'SUL': 'SUL', 'NE': 'NE', 'N': 'Norte'}
     cores_periodos = ['#007E80', '#007E80', '#007E80', '#007E80']
+
+    def cor_extremo(valor: float) -> str:
+        # Cores solicitadas para os preços máximos e mínimos horários do dia.
+        # A fronteira superior extrema tem prioridade sobre a primeira faixa.
+        if valor >= 1611.04 - 1e-6:
+            return '#990D1B'  # vermelho intenso / mais escuro
+        if valor > 785.27 + 1e-6:
+            return '#E03131'  # vermelho
+        if abs(valor - 57.31) < 0.005:
+            return '#3AAE78'  # verde-claro (piso)
+        return '#1B2634'      # preto
+
+    def detalhe_extremos(sub: str) -> str:
+        dados = notas.get('extremos_hoje', {}).get(sub)
+        if not dados:
+            return ''
+        maior, menor = dados['max'], dados['min']
+        return (
+            '<div class="faixa-extremos" style="margin-top:8px;padding-top:7px;'
+            'border-top:1px solid #edf1f5;display:flex;flex-direction:column;gap:3px;'
+            'font-size:11px;line-height:1.35;font-variant-numeric:tabular-nums">'
+            f'<span style="color:{cor_extremo(maior)}">'
+            f'Máx.: <strong>{fmt(maior)}</strong></span>'
+            f'<span style="color:{cor_extremo(menor)}">'
+            f'Mín.: <strong>{fmt(menor)}</strong></span>'
+            '</div>'
+        )
+
+    # A nota de referências acompanha o card PLD Semana, em vez de ocupar
+    # toda a largura sob os quatro cards.
+    notas_periodos = (
+        '<aside class="nota-resumo nota-semana" '
+        'style="padding:10px 12px;border:1px solid #e1e8ed;border-radius:10px;'
+        'background:#f5f8fa;color:#596978;font-size:11px;line-height:1.45;'
+        'overflow-wrap:anywhere">'
+        '<div style="font-weight:700;color:#344054;margin-bottom:5px">'
+        'Períodos de referência</div>'
+        f'<div><strong>PLD Horário:</strong> {escape(notas["hoje"])}</div>'
+        f'<div><strong>Semana:</strong> {escape(notas["semana"])}</div>'
+        f'<div><strong>Mês:</strong> {escape(notas["mes"])}</div>'
+        f'<div><strong>Ano:</strong> {escape(notas["ano"])}</div>'
+        '</aside>'
+    )
+
     cards = []
     for indice, (_, linha) in enumerate(tabela.iterrows()):
+        eh_hoje = linha['Indicador'] == 'PLD Horário'
+        eh_semana = linha['Indicador'] == 'PLD Semana'
         itens = []
         for sm in ORDEM:
+            detalhe = detalhe_extremos(sm) if eh_hoje else ''
             itens.append(
                 '<div class="item-resumo" '
                 'style="min-width:0;display:flex;flex-direction:column;gap:5px;'
@@ -1019,9 +1073,9 @@ def tabela_resumo_html(tabela: pd.DataFrame, notas: dict) -> str:
                 f'font-weight:700;color:#667085;letter-spacing:.02em">{escape(cabecalhos[sm])}</span>'
                 f'<span class="valor-resumo" style="font-size:19px;line-height:1.3;'
                 f'font-weight:700;color:#17354a;font-variant-numeric:tabular-nums">{fmt(linha[sm])}</span>'
-                '</div>'
+                + detalhe + '</div>'
             )
-        cards.append(
+        artigo = (
             '<article class="card-resumo" '
             'style="min-width:0;box-sizing:border-box;background:#f8fafb;'
             'border:1px solid #dce6e9;border-radius:14px;padding:16px;'
@@ -1033,26 +1087,21 @@ def tabela_resumo_html(tabela: pd.DataFrame, notas: dict) -> str:
             'style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px">'
             + ''.join(itens) + '</div></article>'
         )
+        nota_da_coluna = notas_periodos if eh_semana else ''
+        cards.append(
+            '<div class="coluna-resumo" style="min-width:0;display:flex;'
+            'flex-direction:column;gap:9px">'
+            + artigo + nota_da_coluna + '</div>'
+        )
 
-    nota = (
-        '<div class="nota-resumo" '
-        'style="margin-top:16px;font-size:12px;line-height:1.7;color:#667085;'
-        'text-align:left;overflow-wrap:anywhere">'
-        '<strong>Períodos de referência:</strong> '
-        f'Hoje: {escape(notas["hoje"])} &nbsp;·&nbsp; '
-        f'Semana: {escape(notas["semana"])} &nbsp;·&nbsp; '
-        f'Mês: {escape(notas["mes"])} &nbsp;·&nbsp; '
-        f'Ano: {escape(notas["ano"])}'
-        '</div>'
-    )
     return (
         '<section class="painel">'
         '<div class="barra-titulo">PLD — Resumo</div>'
         '<div class="quadro-resumo" style="padding:20px 22px 18px;box-sizing:border-box">'
         '<div class="cards-resumo" '
         'style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr));'
-        'gap:14px;align-items:stretch;width:100%;box-sizing:border-box">'
-        + ''.join(cards) + '</div>' + nota + '</div></section>'
+        'gap:14px;align-items:start;width:100%;box-sizing:border-box">'
+        + ''.join(cards) + '</div></div></section>'
     )
 
 
