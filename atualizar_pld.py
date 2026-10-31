@@ -34,6 +34,7 @@ CANDIDATOS_BRUTO = [
 FONTE = 'Century Gothic, CenturyGothic, Arial, sans-serif'
 COR_VALE = '#007E80'
 CORES = {'SE/CO': '#2F66E0', 'SUL': '#D97706', 'NE': '#DC2626', 'N': '#7EC0EE'}
+CORES_ANOS = {2026: '#2F66E0', 2025: '#D97706', 2024: '#7EC0EE', 2023: '#DC2626'}
 ORDEM = ['SE/CO', 'SUL', 'NE', 'N']
 URL_DATASET = 'https://dadosabertos.ccee.org.br/dataset/pld_horario'
 URL_API = 'https://dadosabertos.ccee.org.br/api/3/action/package_show'
@@ -461,6 +462,29 @@ def agregar_mensal(hist: pd.DataFrame) -> pd.DataFrame:
     return piv
 
 
+def agregar_mensal_por_ano(hist: pd.DataFrame, anos: list[int]) -> dict[str, pd.DataFrame]:
+    df = hist.copy()
+    df['ano'] = df['data'].dt.year
+    df['mes'] = df['data'].dt.month
+    df = df[df['ano'].isin(anos)].copy()
+    agg = df.groupby(['submercado', 'ano', 'mes'], as_index=False)['pld'].mean()
+    meses_base = pd.DataFrame({'mes': list(range(1, 13))})
+    saida = {}
+    for sm in ORDEM:
+        base = meses_base.copy()
+        bloco = agg.loc[agg['submercado'] == sm, ['ano', 'mes', 'pld']].copy()
+        if not bloco.empty:
+            piv = bloco.pivot(index='mes', columns='ano', values='pld').reset_index()
+            base = base.merge(piv, on='mes', how='left')
+        for ano in anos:
+            if ano not in base.columns:
+                base[ano] = pd.NA
+        base = base[['mes'] + anos]
+        base['mes_nome'] = base['mes'].map(lambda m: MESES_PT[m].capitalize())
+        saida[sm] = base
+    return saida
+
+
 def agregar_semanal(hist: pd.DataFrame) -> pd.DataFrame:
     df = hist.copy()
     df['inicio_semana'] = inicio_semana_operativa(df['data'])
@@ -571,6 +595,39 @@ def criar_figura(df: pd.DataFrame, coluna_x: str, eixo_x: str, granularidade: st
     return fig
 
 
+
+
+def criar_figura_anos(df: pd.DataFrame, coluna_x: str, anos: list[int], eixo_x: str = 'Mês', y_title: str = 'Preço (R$/MWh)', titulo: str | None = None) -> go.Figure:
+    fig = go.Figure()
+    n = len(df)
+    for ano in anos:
+        serie = pd.to_numeric(df[ano], errors='coerce') if ano in df.columns else pd.Series([pd.NA] * len(df))
+        cor = CORES_ANOS.get(int(ano), '#2F66E0')
+        fig.add_trace(go.Scatter(
+            x=df[coluna_x], y=serie, name=str(ano), mode='lines+markers',
+            line=dict(color=cor, width=2.6, shape='spline', smoothing=0.4),
+            marker=dict(color=cor, size=6 if n <= 30 else 4),
+            hovertemplate='%{y:,.2f} R$/MWh<extra>' + str(ano) + '</extra>',
+        ))
+    configurar_layout(fig, eixo_x, y_title=y_title)
+    fig.update_xaxes(type='category', tickmode='array', tickvals=df[coluna_x].tolist(), ticktext=df[coluna_x].tolist(), tickangle=0)
+    if titulo:
+        fig.update_layout(title=dict(text=titulo, x=0.5, xanchor='center', font=dict(size=18, color='#263142')))
+    fig.update_layout(margin=dict(l=80, r=22, t=60 if titulo else 24, b=72))
+    return fig
+
+
+def legenda_html_series(plot_id: str, labels: list[str], cores: list[str]) -> str:
+    from html import escape
+    partes = [f'<div class="legenda-externa" role="group" aria-label="Séries do gráfico {escape(plot_id)}">']
+    for i, (lab, cor) in enumerate(zip(labels, cores)):
+        partes.append(
+            f'<button type="button" class="legenda-item" data-plot="{plot_id}" data-indice="{i}" aria-pressed="true">'
+            f'<span class="legenda-linha" style="--cor-serie:{cor}"></span>{escape(str(lab))}</button>'
+        )
+    partes.append('</div>')
+    return ''.join(partes)
+
 def legenda_html(plot_id: str) -> str:
     from html import escape
     partes = [f'<div class="legenda-externa" role="group" aria-label="Séries do gráfico {escape(plot_id)}">']
@@ -677,6 +734,8 @@ def pagina_pld(hist: pd.DataFrame) -> str:
 
     anual = agregar_anual(hist)
     mensal = agregar_mensal(hist)
+    anos_mensal = [ultima.year, ultima.year - 1]
+    mensal_por_sub = agregar_mensal_por_ano(hist, anos_mensal)
     semanal = agregar_semanal(hist)
     diario = agregar_diario(hist)
     horario = agregar_horario(hist, ultima)
@@ -684,13 +743,37 @@ def pagina_pld(hist: pd.DataFrame) -> str:
 
     configs = [
         ('PLD — Anual', f'Média anual dos preços horários por submercado — último ano parcial até {ultima_br}', criar_figura(anual, 'ano', 'Ano', 'ano', y_title='Preço (R$/MWh)')),
-        ('PLD — Mensal', f'Média mensal dos preços horários por submercado — último mês parcial até {ultima_br}', criar_figura(mensal, 'label', 'Mês', 'mes', y_title='Preço (R$/MWh)')),
         ('PLD — Semanal', f'Média semanal por semana operativa (sábado a sexta) — última semana parcial até {ultima_br}', criar_figura(semanal, 'label', 'Semana', 'semana', y_title='Preço (R$/MWh)')),
         ('PLD — Diário', f'Média diária dos preços horários por submercado — histórico acumulado até {ultima_br}', criar_figura(diario, 'label', 'Dia', 'dia', y_title='Preço (R$/MWh)')),
         ('PLD — Horário', 'Curva horária por data selecionada', criar_figura(horario, 'hora', 'Hora', 'hora', y_title='Preço (R$/MWh)')),
     ]
 
     blocos = [tabela_resumo_html(resumo, notas)]
+
+    # Painel mensal no formato EAR/ENA: eixo X = meses e séries = anos, um gráfico por submercado.
+    anos_labels = [str(a) for a in anos_mensal]
+    anos_cores = [CORES_ANOS.get(a, '#2F66E0') for a in anos_mensal]
+    cards_mensais = []
+    for idx, sm in enumerate(ORDEM):
+        pid = f'plot-pld-mensal-{idx}'
+        fig_sm = criar_figura_anos(
+            mensal_por_sub[sm], 'mes_nome', anos_mensal,
+            eixo_x='Mês', y_title='Preço (R$/MWh)', titulo=sm
+        )
+        grafico_sm = fig_sm.to_html(full_html=False, include_plotlyjs=False, div_id=pid, config={'responsive': True, 'displaylogo': False})
+        cards_mensais.append(
+            f'<div class="grid-item-mensal">{grafico_sm}{legenda_html_series(pid, anos_labels, anos_cores)}</div>'
+        )
+
+    blocos.append(
+        f'<section class="painel">'
+        f'<div class="barra-titulo">PLD — Mensal</div>'
+        f'<div class="subtitulo">Média mensal dos preços horários por submercado — séries do ano corrente ({anos_mensal[0]}) e do ano anterior ({anos_mensal[1]}) até {ultima_br}</div>'
+        f'<div class="grid-mensal-pld">{"".join(cards_mensais)}</div>'
+        f'<footer class="fonte-dados">Fonte: CCEE &nbsp;|&nbsp; Dados disponíveis até: {ultima_br}</footer>'
+        f'</section>'
+    )
+
     for i, (titulo, subtitulo, figura) in enumerate(configs):
         pid = f'plot-pld-{i}'
         grafico = figura.to_html(full_html=False, include_plotlyjs=False, div_id=pid, config={'responsive': True, 'displaylogo': False})
