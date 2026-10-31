@@ -34,8 +34,10 @@ CANDIDATOS_BRUTO = [
 FONTE = 'Century Gothic, CenturyGothic, Arial, sans-serif'
 COR_VALE = '#007E80'
 CORES = {'SE/CO': '#2F66E0', 'SUL': '#D97706', 'NE': '#DC2626', 'N': '#7EC0EE'}
-CORES_ANOS = {2026: '#2F66E0', 2025: '#D97706', 2024: '#7EC0EE', 2023: '#DC2626'}
 ORDEM = ['SE/CO', 'SUL', 'NE', 'N']
+CORES_ANOS = {2020: '#8B98A7', 2021: '#D62828', 2022: '#7D8B4E', 2023: '#77C9F5', 2024: '#9B88A3', 2025: '#D97706', 2026: '#2563EB'}
+ESTILOS_SUB = {'SE/CO': 'solid', 'SUL': 'dash', 'NE': 'dot', 'N': 'dashdot'}
+
 URL_DATASET = 'https://dadosabertos.ccee.org.br/dataset/pld_horario'
 URL_API = 'https://dadosabertos.ccee.org.br/api/3/action/package_show'
 # Identificadores dos recursos anuais confirmados no catálogo público da CCEE.
@@ -462,29 +464,6 @@ def agregar_mensal(hist: pd.DataFrame) -> pd.DataFrame:
     return piv
 
 
-def agregar_mensal_por_ano(hist: pd.DataFrame, anos: list[int]) -> dict[str, pd.DataFrame]:
-    df = hist.copy()
-    df['ano'] = df['data'].dt.year
-    df['mes'] = df['data'].dt.month
-    df = df[df['ano'].isin(anos)].copy()
-    agg = df.groupby(['submercado', 'ano', 'mes'], as_index=False)['pld'].mean()
-    meses_base = pd.DataFrame({'mes': list(range(1, 13))})
-    saida = {}
-    for sm in ORDEM:
-        base = meses_base.copy()
-        bloco = agg.loc[agg['submercado'] == sm, ['ano', 'mes', 'pld']].copy()
-        if not bloco.empty:
-            piv = bloco.pivot(index='mes', columns='ano', values='pld').reset_index()
-            base = base.merge(piv, on='mes', how='left')
-        for ano in anos:
-            if ano not in base.columns:
-                base[ano] = pd.NA
-        base = base[['mes'] + anos]
-        base['mes_nome'] = base['mes'].map(lambda m: MESES_PT[m].capitalize())
-        saida[sm] = base
-    return saida
-
-
 def agregar_semanal(hist: pd.DataFrame) -> pd.DataFrame:
     df = hist.copy()
     df['inicio_semana'] = inicio_semana_operativa(df['data'])
@@ -595,38 +574,87 @@ def criar_figura(df: pd.DataFrame, coluna_x: str, eixo_x: str, granularidade: st
     return fig
 
 
+def figura_mensal_anos(hist: pd.DataFrame) -> tuple[go.Figure, list[int], list[str]]:
+    """Um único gráfico com 12 meses, séries anuais e filtro de submercados.
 
-
-def criar_figura_anos(df: pd.DataFrame, coluna_x: str, anos: list[int], eixo_x: str = 'Mês', y_title: str = 'Preço (R$/MWh)', titulo: str | None = None) -> go.Figure:
+    Os 4 submercados compartilham os mesmos eixos. Ao escolher um ou mais,
+    cada ano mantém a mesma cor; o estilo do traço distingue submercados.
+    """
+    dados = hist.copy()
+    dados['ano'] = dados['data'].dt.year
+    dados['mes'] = dados['data'].dt.month
+    medias = (dados.groupby(['ano', 'mes', 'submercado'], as_index=False)['pld']
+              .mean())
+    anos = sorted(int(a) for a in medias['ano'].unique())
+    meses = list(range(1, 13))
+    nomes_meses = [MESES_PT[m].capitalize() for m in meses]
+    tabela = medias.set_index(['ano', 'mes', 'submercado'])['pld']
     fig = go.Figure()
-    n = len(df)
-    for ano in anos:
-        serie = pd.to_numeric(df[ano], errors='coerce') if ano in df.columns else pd.Series([pd.NA] * len(df))
-        cor = CORES_ANOS.get(int(ano), '#2F66E0')
-        fig.add_trace(go.Scatter(
-            x=df[coluna_x], y=serie, name=str(ano), mode='lines+markers',
-            line=dict(color=cor, width=2.6, shape='spline', smoothing=0.4),
-            marker=dict(color=cor, size=6 if n <= 30 else 4),
-            hovertemplate='%{y:,.2f} R$/MWh<extra>' + str(ano) + '</extra>',
-        ))
-    configurar_layout(fig, eixo_x, y_title=y_title)
-    fig.update_xaxes(type='category', tickmode='array', tickvals=df[coluna_x].tolist(), ticktext=df[coluna_x].tolist(), tickangle=0)
-    if titulo:
-        fig.update_layout(title=dict(text=titulo, x=0.5, xanchor='center', font=dict(size=18, color='#263142')))
-    fig.update_layout(margin=dict(l=80, r=22, t=60 if titulo else 24, b=72))
-    return fig
+    paleta_extra = ['#1B857B', '#6D5AB6', '#BD5384', '#8B6B35', '#5A8DA8']
+    cores_ano = {}
+    for i, ano in enumerate(anos):
+        cor = CORES_ANOS.get(ano, paleta_extra[i % len(paleta_extra)])
+        cores_ano[ano] = cor
+        for sub in ORDEM:
+            valores = [tabela.get((ano, mes, sub), float('nan')) for mes in meses]
+            fig.add_trace(go.Scatter(
+                x=meses, y=valores, name=str(ano),
+                mode='lines+markers', visible=(sub == 'SE/CO'),
+                meta={'ano': str(ano), 'sub': sub},
+                line={'color': cor, 'width': 3 if ano == anos[-1] else 2.25,
+                      'dash': ESTILOS_SUB[sub], 'shape': 'spline', 'smoothing': .65},
+                marker={'color': cor, 'size': 7 if ano == anos[-1] else 5},
+                hovertemplate=(f'<b>{ano} · {sub}</b><br>Mês: %{{x}}'
+                               '<br>PLD médio: %{y:.2f} R$/MWh<extra></extra>'),
+            ))
+    configurar_layout(fig, 'Mês', y_title='Preço (R$/MWh)')
+    fig.update_layout(height=525, hovermode='closest',
+                      margin={'l': 95, 'r': 34, 't': 18, 'b': 77}, showlegend=False)
+    fig.update_xaxes(type='linear', tickmode='array', tickvals=meses,
+                     ticktext=nomes_meses, range=[.7, 12.3], tickangle=0)
+    return fig, anos, [cores_ano[a] for a in anos]
 
 
-def legenda_html_series(plot_id: str, labels: list[str], cores: list[str]) -> str:
-    from html import escape
-    partes = [f'<div class="legenda-externa" role="group" aria-label="Séries do gráfico {escape(plot_id)}">']
-    for i, (lab, cor) in enumerate(zip(labels, cores)):
-        partes.append(
-            f'<button type="button" class="legenda-item" data-plot="{plot_id}" data-indice="{i}" aria-pressed="true">'
-            f'<span class="legenda-linha" style="--cor-serie:{cor}"></span>{escape(str(lab))}</button>'
+def painel_mensal_html(hist: pd.DataFrame, ultima_br: str) -> str:
+    """Filtros independentes: anos na legenda, submercados no seletor."""
+    fig, anos, cores = figura_mensal_anos(hist)
+    plot_id = 'plot-pld-mensal'
+    grafo = fig.to_html(full_html=False, include_plotlyjs=False, div_id=plot_id,
+                        config={'responsive': True, 'displaylogo': False})
+    filtro = []
+    for sm in ORDEM:
+        selecionado = (sm == 'SE/CO')
+        estilo = ESTILOS_SUB[sm]
+        filtro.append(
+            f'<button type="button" class="filtro-sub{' selecionado' if selecionado else ''}" '
+            f'data-sub="{sm}" aria-pressed="{'true' if selecionado else 'false'}">'
+            f'<span class="marcador-sub estilo-{estilo}"></span>'
+            f'{"Norte" if sm == "N" else ("Nordeste" if sm == "NE" else sm)}'
+            '</button>'
         )
-    partes.append('</div>')
-    return ''.join(partes)
+    legendas = []
+    for a, cor in zip(anos, cores):
+        legendas.append(
+            f'<button type="button" class="filtro-ano" data-ano="{a}" aria-pressed="true">'
+            f'<span class="indicador-ano" style="background:{cor}"></span>{a}</button>'
+        )
+    return (
+        '<section class="painel">'
+        '<div class="barra-titulo">PLD — Mensal</div>'
+        f'<div class="subtitulo">Média mensal dos preços horários, de janeiro a dezembro. '
+        f'Todos os anos do histórico, até {ultima_br}.</div>'
+        '<div class="filtro-mensal">'
+        '<span class="nome-filtro">Submercados:</span>'
+        + ''.join(filtro) + '</div>'
+        '<div class="aviso-mensal">Selecione um ou mais submercados. '
+        'As cores indicam os anos e os traçados distinguem os submercados.</div>'
+        + grafo +
+        '<div class="legenda-anos"><span class="nome-filtro">Anos:</span>'
+        + ''.join(legendas) + '</div>'
+        f'<footer class="fonte-dados">Fonte: CCEE &nbsp;|&nbsp; Dados disponíveis até: {ultima_br}</footer>'
+        '</section>'
+    )
+
 
 def legenda_html(plot_id: str) -> str:
     from html import escape
@@ -733,9 +761,6 @@ def pagina_pld(hist: pd.DataFrame) -> str:
         )
 
     anual = agregar_anual(hist)
-    mensal = agregar_mensal(hist)
-    anos_mensal = [ultima.year, ultima.year - 1]
-    mensal_por_sub = agregar_mensal_por_ano(hist, anos_mensal)
     semanal = agregar_semanal(hist)
     diario = agregar_diario(hist)
     horario = agregar_horario(hist, ultima)
@@ -743,38 +768,17 @@ def pagina_pld(hist: pd.DataFrame) -> str:
 
     configs = [
         ('PLD — Anual', f'Média anual dos preços horários por submercado — último ano parcial até {ultima_br}', criar_figura(anual, 'ano', 'Ano', 'ano', y_title='Preço (R$/MWh)')),
+        ('PLD — Mensal', '', None),
         ('PLD — Semanal', f'Média semanal por semana operativa (sábado a sexta) — última semana parcial até {ultima_br}', criar_figura(semanal, 'label', 'Semana', 'semana', y_title='Preço (R$/MWh)')),
         ('PLD — Diário', f'Média diária dos preços horários por submercado — histórico acumulado até {ultima_br}', criar_figura(diario, 'label', 'Dia', 'dia', y_title='Preço (R$/MWh)')),
         ('PLD — Horário', 'Curva horária por data selecionada', criar_figura(horario, 'hora', 'Hora', 'hora', y_title='Preço (R$/MWh)')),
     ]
 
     blocos = [tabela_resumo_html(resumo, notas)]
-
-    # Painel mensal no formato EAR/ENA: eixo X = meses e séries = anos, um gráfico por submercado.
-    anos_labels = [str(a) for a in anos_mensal]
-    anos_cores = [CORES_ANOS.get(a, '#2F66E0') for a in anos_mensal]
-    cards_mensais = []
-    for idx, sm in enumerate(ORDEM):
-        pid = f'plot-pld-mensal-{idx}'
-        fig_sm = criar_figura_anos(
-            mensal_por_sub[sm], 'mes_nome', anos_mensal,
-            eixo_x='Mês', y_title='Preço (R$/MWh)', titulo=sm
-        )
-        grafico_sm = fig_sm.to_html(full_html=False, include_plotlyjs=False, div_id=pid, config={'responsive': True, 'displaylogo': False})
-        cards_mensais.append(
-            f'<div class="grid-item-mensal">{grafico_sm}{legenda_html_series(pid, anos_labels, anos_cores)}</div>'
-        )
-
-    blocos.append(
-        f'<section class="painel">'
-        f'<div class="barra-titulo">PLD — Mensal</div>'
-        f'<div class="subtitulo">Média mensal dos preços horários por submercado — séries do ano corrente ({anos_mensal[0]}) e do ano anterior ({anos_mensal[1]}) até {ultima_br}</div>'
-        f'<div class="grid-mensal-pld">{"".join(cards_mensais)}</div>'
-        f'<footer class="fonte-dados">Fonte: CCEE &nbsp;|&nbsp; Dados disponíveis até: {ultima_br}</footer>'
-        f'</section>'
-    )
-
     for i, (titulo, subtitulo, figura) in enumerate(configs):
+        if titulo == 'PLD — Mensal':
+            blocos.append(painel_mensal_html(hist, ultima_br))
+            continue
         pid = f'plot-pld-{i}'
         grafico = figura.to_html(full_html=False, include_plotlyjs=False, div_id=pid, config={'responsive': True, 'displaylogo': False})
         controle_data = ''
@@ -820,6 +824,24 @@ def pagina_pld(hist: pd.DataFrame) -> str:
   .nota-resumo {{font-size:12px;color:#667085;line-height:1.7;margin-top:16px;text-align:left}}
   @media(max-width:1150px) {{.cards-resumo {{grid-template-columns:repeat(2,minmax(0,1fr))}}}}
   @media(max-width:640px) {{.quadro-resumo {{padding:14px}} .cards-resumo {{grid-template-columns:1fr}}}}
+  .filtro-mensal {{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:9px;padding:18px 18px 7px}}
+  .nome-filtro {{font-size:12px;font-weight:700;color:#344054;margin-right:7px}}
+  .filtro-sub {{font-family:inherit;display:inline-flex;align-items:center;gap:9px;background:#fff;
+     border:1px solid #cdd6e1;border-radius:9px;padding:9px 14px;font-weight:600;font-size:13px;
+     color:#475467;cursor:pointer;white-space:nowrap}}
+  .filtro-sub.selecionado {{background:#e4f4f1;border-color:{COR_VALE};color:#056865}}
+  .marcador-sub {{display:block;width:25px;border-top:3px solid #65758a}}
+  .marcador-sub.estilo-dash {{border-top-style:dashed}}
+  .marcador-sub.estilo-dot {{border-top-style:dotted}}
+  .marcador-sub.estilo-dashdot {{border-top-style:dashed}}
+  .aviso-mensal {{text-align:center;font-size:11px;color:#667085;padding:0 14px 4px}}
+  .legenda-anos {{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+     gap:9px;padding:0 20px 18px}}
+  .filtro-ano {{font-family:inherit;display:inline-flex;gap:8px;align-items:center;justify-content:center;
+     background:#fff;border:1px solid #d9e1ea;border-radius:8px;color:#344054;font-weight:600;
+     padding:8px 12px;min-width:76px;font-size:12px;cursor:pointer}}
+  .filtro-ano[aria-pressed="false"] {{opacity:.35}}
+  .indicador-ano {{width:22px;height:4px;border-radius:4px}}
   .js-plotly-plot {{width:100%!important}}
   .legenda-externa {{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px 18px;padding:4px 16px 15px;min-height:40px}}
   .legenda-item {{border:1px solid #e0e6ee;border-radius:8px;background:#fff;color:#263142;font:inherit;font-size:12px;display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:7px 12px;min-width:92px;cursor:pointer;white-space:nowrap}}
@@ -844,6 +866,36 @@ def pagina_pld(hist: pd.DataFrame) -> str:
       Plotly.restyle(plot, {{visible: ativo ? 'legendonly' : true}}, [idx]);
     }});
   }});
+  // Mensal: um gráfico; 4 submercados filtráveis e todas as séries anuais.
+  const mensal = document.getElementById('plot-pld-mensal');
+  if (mensal) {{
+    const subAtivos = {{'SE/CO': true, 'SUL': false, 'NE': false, 'N': false}};
+    const anosAtivos = {{}};
+    mensal.data.forEach(t => {{ anosAtivos[t.meta.ano] = true; }});
+    function atualizarFiltrosMensal() {{
+      const vis = mensal.data.map(t => Boolean(subAtivos[t.meta.sub] && anosAtivos[t.meta.ano]));
+      Plotly.restyle(mensal, {{visible: vis}}, mensal.data.map((_, i) => i));
+    }}
+    document.querySelectorAll('.filtro-sub').forEach(b => {{
+      b.addEventListener('click', () => {{
+        const nome = b.dataset.sub;
+        const ativo = !subAtivos[nome];
+        if (!ativo && Object.values(subAtivos).filter(Boolean).length === 1) return;
+        subAtivos[nome] = ativo;
+        b.setAttribute('aria-pressed', String(ativo));
+        b.classList.toggle('selecionado', ativo);
+        atualizarFiltrosMensal();
+      }});
+    }});
+    document.querySelectorAll('.filtro-ano').forEach(b => {{
+      b.addEventListener('click', () => {{
+        const ano = b.dataset.ano;
+        anosAtivos[ano] = !anosAtivos[ano];
+        b.setAttribute('aria-pressed', String(anosAtivos[ano]));
+        atualizarFiltrosMensal();
+      }});
+    }});
+  }}
   const historicoHorarios = {dados_horarios_js};
   const inputData = document.getElementById('data-pld');
   const status = document.getElementById('status-data-pld');
