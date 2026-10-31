@@ -5,8 +5,9 @@ import json
 import re
 import unicodedata
 import warnings
-from datetime import datetime
+from datetime import datetime, timedelta
 from io import BytesIO
+from tempfile import TemporaryDirectory
 from html.parser import HTMLParser
 from urllib.parse import urljoin
 import os
@@ -365,73 +366,381 @@ def carregar_importacoes_manuais() -> list[pd.DataFrame]:
     return partes
 
 
-def atualizar_com_online(historico: pd.DataFrame, usar_online: bool) -> pd.DataFrame:
-    """Tenta datastore/dump primeiro. Em novos anos, descobre o ID pelo catálogo.
+def _ler_download_formulario(arquivo: Path) -> pd.DataFrame:
+    """Converte XML SpreadsheetML, CSV, XLSX ou HTML baixado do painel CCEE.
 
-    Se houver bloqueio HTTP, preserva os dados e sinaliza no log.
+    Não aceita arquivos vazios nem preços agregados sem colunas dia/hora/submercado.
     """
-    historico = historico.copy()
-    partes = carregar_importacoes_manuais()
-    if not usar_online:
-        print('PLD: modo offline; histórico e eventuais importações manuais.')
+    extensao = arquivo.suffix.lower()
+    cabecalho = arquivo.read_bytes()[:160].lstrip()
+    if extensao in {'.xlsx', '.xls'} and cabecalho.startswith(b'<?xml'):
+        bruto = ler_xml_excel(arquivo)
+    elif extensao in {'.xlsx', '.xls'}:
+        bruto = pd.read_excel(arquivo, dtype=str)
+    elif extensao in {'.htm', '.html'}:
+        tabelas = pd.read_html(arquivo)
+        if not tabelas:
+            raise ValueError('HTML da CCEE sem tabela de preços')
+        bruto = tabelas[0]
     else:
-        hoje = datetime.now(ZoneInfo('America/Sao_Paulo')).date()
-        anos = [hoje.year]
-        if hoje.month <= 2:
-            anos.insert(0, hoje.year - 1)
+        bruto = ler_bruto(arquivo)
+    try:
+        dados = normalizar_bruto(bruto)
+    except ValueError:
+        # Aceita também layout longo anual com MES_REFERENCIA.
+        anos = set()
+        poss = {_sem_acento(c).replace(' ', '_') for c in bruto.columns}
+        if 'mes_referencia' in poss:
+            coluna = next(c for c in bruto.columns if _sem_acento(c).replace(' ', '_') == 'mes_referencia')
+            anos = set(pd.to_numeric(bruto[coluna].astype(str).str[:4], errors='coerce').dropna().astype(int))
+        if not anos:
+            raise
+        partes = []
+        for ano in sorted(anos):
+            partes.append(normalizar_csv_ccee(bruto, int(ano)))
+        dados = pd.concat(partes, ignore_index=True)
+    if dados.empty or not dados['submercado'].isin(ORDEM).any():
+        raise ValueError('Download gerado não contém valores horários de PLD válidos')
+    if dados['hora'].min() == 1 and dados['hora'].max() == 24:
+        dados['hora'] = dados['hora'] - 1
+    dados = dados[dados['hora'].between(0, 23) & dados['submercado'].isin(ORDEM)].copy()
+    return dados.sort_values(['data', 'hora', 'submercado']).drop_duplicates(['data', 'hora', 'submercado'], keep='last')
 
-        recursos = {ano: {'id': rid} for ano, rid in IDS_ANUAIS_CONHECIDOS.items()}
-        # Recurso anual de 2027, 2028... é descoberto, não inferido a partir do UUID de 2026.
-        if any(ano not in recursos for ano in anos):
+
+def _locate_form_frame(page):
+    """Busca formulário na página principal ou no iframe que o hospeda."""
+    for _ in range(8):
+        for frame in page.frames:
             try:
-                recursos.update(recursos_ccee_html())
-                print('PLD: IDs anuais descobertos na página pública da CCEE.')
-            except Exception as exc_html:
-                print(f'::warning title=PLD descoberta pelo catálogo falhou::{exc_html}')
-            if any(ano not in recursos for ano in anos):
-                try:
-                    recursos.update(recursos_ccee())
-                    print('PLD: IDs anuais descobertos na API da CCEE.')
-                except Exception as exc_api:
-                    print(f'::warning title=PLD descoberta pela API falhou::{exc_api}')
-
-        # Alternativa explícita para operação futura caso o catálogo seja bloqueado.
-        for ano in anos:
-            manual_id = os.environ.get(f'CCEE_PLD_RECURSO_{ano}', '').strip()
-            if manual_id:
-                recursos[ano] = {'id': manual_id}
-
-        for ano in anos:
-            recurso = recursos.get(ano)
-            if not recurso:
-                print(f'::warning title=PLD recurso não publicado::Identificador anual {ano} indisponível no catálogo.')
+                if frame.get_by_role('button', name=re.compile(r'Gerar\s+Arquivo', re.I)).count():
+                    return frame
+                if frame.get_by_text('Gerar Arquivo', exact=True).count():
+                    return frame
+            except Exception:
                 continue
+        page.wait_for_timeout(1200)
+    raise RuntimeError('Formulário "Gerar Arquivo" não localizado na página/iframes da CCEE')
+
+
+def _selecionar_preco_horario(frame):
+    """Usa select nativo ou combobox customizado conforme o portal."""
+    from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+    for select in frame.locator('select').all():
+        try:
+            textos = select.locator('option').all_text_contents()
+            for i, txt in enumerate(textos):
+                if 'hor' in _sem_acento(txt) and 'seman' not in _sem_acento(txt):
+                    options = select.locator('option')
+                    val = options.nth(i).get_attribute('value')
+                    if val:
+                        select.select_option(value=val)
+                    else:
+                        select.select_option(index=i)
+                    return
+        except Exception:
+            pass
+    candidatos = [
+        frame.get_by_role('combobox', name=re.compile('tipo', re.I)),
+        frame.get_by_text(re.compile('selecione o tipo de preço', re.I)),
+        frame.get_by_role('combobox'),
+    ]
+    for candidato in candidatos:
+        try:
+            if candidato.count() == 0:
+                continue
+            candidato.first.click(timeout=3000)
+            for opcao in [
+                frame.get_by_role('option', name=re.compile('horário', re.I)),
+                frame.get_by_text(re.compile('^(preço médio )?horário$', re.I)),
+                frame.get_by_text(re.compile('preço horário', re.I)),
+            ]:
+                if opcao.count():
+                    opcao.first.click(timeout=3000)
+                    return
+        except (PlaywrightTimeoutError, Exception):
+            continue
+    raise RuntimeError('Não foi possível selecionar Preço Horário; formulário pode ter mudado')
+
+
+def _preencher_data_ccee(frame, inicio, fim):
+    """Preenche os campos 'De' e 'Até' de preferência pelas labels.
+
+    Admite input type=date (ISO) ou texto dd/mm/aaaa.
+    """
+    candidates = []
+    for nome in ['De', 'Até']:
+        try:
+            loc = frame.get_by_label(nome, exact=True)
+            if loc.count() == 1:
+                candidates.append(loc.first)
+        except Exception:
+            pass
+    if len(candidates) != 2:
+        botao = frame.get_by_role('button', name=re.compile(r'Gerar\s+Arquivo', re.I))
+        escopo = None
+        if botao.count():
+            form = botao.first.locator('xpath=ancestor::form[1]')
+            if form.count():
+                escopo = form
+        if escopo is None:
+            escopo = frame
+        loc = escopo.locator('input[type="date"], input[placeholder*="dd/mm"], input[placeholder*="aaaa"], input[aria-label*="data"]')
+        inputs = [v for v in loc.all() if v.is_visible()]
+        if len(inputs) >= 2:
+            # O site possui outros filtros de período no cabeçalho: usar os dois
+            # últimos campos do bloco do formulário, próximos a "Gerar Arquivo".
+            candidates = inputs[-2:]
+    if len(candidates) != 2:
+        raise RuntimeError('Campos de datas De/Até não localizados no formulário CCEE')
+    for loc, data in zip(candidates, [inicio, fim]):
+        valor = data.strftime('%Y-%m-%d') if loc.get_attribute('type') == 'date' else data.strftime('%d/%m/%Y')
+        try:
+            loc.fill(valor, timeout=6000)
+            loc.press('Tab', timeout=2000)
+        except Exception:
+            # Em componentes controlados, disparar os eventos de input/change.
+            loc.evaluate('''(el, valor) => {
+                const prop = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
+                if (prop && prop.set) prop.set.call(el, valor); else el.value = valor;
+                el.dispatchEvent(new Event('input', {bubbles:true}));
+                el.dispatchEvent(new Event('change', {bubbles:true}));
+                el.blur();
+            }''', valor)
+
+
+def _download_por_formulario(page, frame, destino: Path) -> Path:
+    """Aciona Gerar Arquivo e, caso exista, o link de download resultante."""
+    arquivos = []
+    page.on('download', lambda download: arquivos.append(download))
+    botao = frame.get_by_role('button', name=re.compile(r'Gerar\s+Arquivo', re.I))
+    if not botao.count():
+        botao = frame.get_by_text('Gerar Arquivo', exact=True)
+    botao.first.click(timeout=15000)
+    for _ in range(15):
+        if arquivos:
+            break
+        page.wait_for_timeout(1000)
+    if not arquivos:
+        links = [
+            frame.get_by_role('link', name=re.compile('Preço Médio Horário', re.I)),
+            frame.get_by_role('link', name=re.compile('download|histórico', re.I)),
+            frame.locator('a[download]'),
+        ]
+        for link in links:
+            try:
+                if link.count():
+                    link.last.click(timeout=6000)
+                    break
+            except Exception:
+                continue
+        for _ in range(12):
+            if arquivos:
+                break
+            page.wait_for_timeout(1000)
+    if not arquivos:
+        raise RuntimeError('CCEE não disponibilizou download após Gerar Arquivo')
+    download = arquivos[-1]
+    if download.failure():
+        raise RuntimeError(f'Download CCEE não concluído: {download.failure()}')
+    nome = Path(download.suggested_filename or 'pld_horario.xml').suffix.lower()
+    if nome not in {'.xml', '.csv', '.xls', '.xlsx', '.html', '.htm'}:
+        nome = '.xml'
+    final = destino.with_suffix(nome)
+    download.save_as(str(final))
+    return final
+
+
+def buscar_pld_formulario(ultima_data, data_final) -> pd.DataFrame | None:
+    """3ª tentativa: consulta por data no formulário público da CCEE.
+
+    Busca dias posteriores à última data, em blocos inferiores a seis meses.
+    Requer Playwright/Chromium instalado no workflow.
+    """
+    from playwright.sync_api import sync_playwright
+    inicio = pd.Timestamp(ultima_data).normalize() + pd.Timedelta(days=1)
+    fim = pd.Timestamp(data_final).normalize()
+    if inicio > fim:
+        print('PLD formulário: histórico já cobre até a data atual, sem intervalo pendente.')
+        return None
+    partes = []
+    with TemporaryDirectory(prefix='ccee_pld_') as temp_dir:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True, args=['--disable-dev-shm-usage'])
+            try:
+                contexto = browser.new_context(accept_downloads=True, locale='pt-BR', timezone_id='America/Sao_Paulo')
+                while inicio <= fim:
+                    # Limite oficial 6 meses; consulta de no máximo ~5 meses, com margem.
+                    fim_bloco = min(inicio + pd.DateOffset(months=5) - pd.Timedelta(days=1), fim)
+                    page = contexto.new_page()
+                    try:
+                        page.goto('https://www.ccee.org.br/web/guest/precos/painel-precos',
+                                  wait_until='domcontentloaded', timeout=60000)
+                        frame = _locate_form_frame(page)
+                        _selecionar_preco_horario(frame)
+                        _preencher_data_ccee(frame, inicio, fim_bloco)
+                        destino = Path(temp_dir) / f'pld_{inicio:%Y%m%d}_{fim_bloco:%Y%m%d}.xml'
+                        arquivo = _download_por_formulario(page, frame, destino)
+                        df = _ler_download_formulario(arquivo)
+                        df = df[(df['data'] >= inicio) & (df['data'] <= fim_bloco)].copy()
+                        if df.empty:
+                            raise ValueError('Arquivo retornado não contém preços no intervalo solicitado')
+                        partes.append(df)
+                        print(f'PLD formulário: {inicio:%d/%m/%Y} a {fim_bloco:%d/%m/%Y}, '
+                              f'{len(df):,} preços horários (até {df.data.max():%d/%m/%Y})')
+                    except Exception:
+                        # Captura apenas da página pública para diagnosticar mudanças no formulário.
+                        try:
+                            DADOS.mkdir(parents=True, exist_ok=True)
+                            page.screenshot(path=str(DADOS / 'diagnostico_formulario_ccee.png'), full_page=True, timeout=10000)
+                            print('PLD formulário: diagnóstico salvo em dados/diagnostico_formulario_ccee.png')
+                        except Exception:
+                            pass
+                        raise
+                    finally:
+                        page.close()
+                    inicio = fim_bloco + pd.Timedelta(days=1)
+            finally:
+                browser.close()
+    if not partes:
+        return None
+    return pd.concat(partes, ignore_index=True)
+
+
+def _mesclar_pld(base: pd.DataFrame, bloco: pd.DataFrame, fonte: str) -> pd.DataFrame:
+    if bloco is None or bloco.empty:
+        return base
+    antes = pd.Timestamp(base['data'].max()) if not base.empty else pd.NaT
+    saida = pd.concat([base, bloco], ignore_index=True)
+    saida = saida.sort_values(['data', 'hora', 'submercado']).drop_duplicates(
+        ['data', 'hora', 'submercado'], keep='last').reset_index(drop=True)
+    depois = pd.Timestamp(saida['data'].max())
+    print(f'PLD {fonte}: última data antes={antes}, depois={depois}; {len(saida):,} registros.')
+    return saida
+
+
+def _anos_consulta(hoje, historico: pd.DataFrame) -> list[int]:
+    anos = {hoje.year}
+    if hoje.month <= 2:
+        anos.add(hoje.year - 1)
+    if not historico.empty:
+        ano_historico = pd.Timestamp(historico['data'].max()).year
+        if ano_historico >= hoje.year - 1:
+            anos.add(ano_historico)
+    return sorted(anos)
+
+
+def _buscar_pela_api(anos: list[int]) -> list[pd.DataFrame]:
+    """1º método: API CKAN descobre os recursos e baixa seus CSVs."""
+    recursos = recursos_ccee()
+    partes = []
+    for ano in anos:
+        rec = recursos.get(ano)
+        if not rec:
+            print(f'PLD API: arquivo anual {ano} ainda não consta do catálogo.')
+            continue
+        try:
             urls = []
-            if recurso.get('id'):
-                try:
-                    urls.append(url_dump(recurso['id']))
-                except ValueError as exc:
-                    print(f'::warning title=PLD recurso inválido::{ano}: {exc}')
-            url_outro = recurso.get('download_url') or recurso.get('url')
-            if url_outro and url_outro not in urls:
-                urls.append(url_outro)
-            for url in urls:
+            if rec.get('url') or rec.get('download_url'):
+                urls.append(rec.get('url') or rec.get('download_url'))
+            if rec.get('id'):
+                urls.append(url_dump(rec['id']))
+            for url in dict.fromkeys(urls):
                 try:
                     df = baixar_csv_ano({'url': url}, ano)
                     partes.append(df)
-                    print(f'CCEE {ano}: datastore/dump lido, {len(df):,} registros até {df.data.max().date()}.')
+                    print(f'PLD API {ano}: {len(df):,} registros até {df.data.max():%d/%m/%Y}.')
                     break
                 except Exception as exc:
-                    print(f'::warning title=PLD download {ano} falhou::{url} — {exc}')
+                    print(f'::warning title=PLD API {ano}::{type(exc).__name__}: {exc}')
+        except Exception as exc:
+            print(f'::warning title=PLD API {ano}::{exc}')
+    return partes
 
-    if partes:
-        antes = historico['data'].max() if len(historico) else pd.NaT
-        historico = pd.concat([historico, *partes], ignore_index=True)
-        historico = historico.sort_values(['data','hora','submercado']).drop_duplicates(
-            ['data','hora','submercado'], keep='last')
-        print(f'PLD: última data antes {antes} | após coleta {historico["data"].max()}')
-    elif usar_online:
-        print('::warning title=PLD coleta não realizada::Datastore/dump indisponível; base antiga preservada.')
+
+def _buscar_base_publica(anos: list[int]) -> list[pd.DataFrame]:
+    """2º método: download direto do Datastore ou do link publicado no site."""
+    recursos = {ano: {'id': rid} for ano, rid in IDS_ANUAIS_CONHECIDOS.items()}
+    for ano in anos:
+        manual = os.environ.get(f'CCEE_PLD_RECURSO_{ano}', '').strip()
+        if manual:
+            recursos[ano] = {'id': manual}
+    if any(ano not in recursos for ano in anos):
+        try:
+            recursos.update(recursos_ccee_html())
+        except Exception as exc:
+            print(f'::warning title=PLD catálogo público::{exc}')
+    partes = []
+    for ano in anos:
+        rec = recursos.get(ano)
+        if not rec:
+            print(f'PLD público: identificador para {ano} não encontrado; formulário será tentado.')
+            continue
+        urls = []
+        if rec.get('id'):
+            urls.append(url_dump(rec['id']))
+        if rec.get('download_url') or rec.get('url'):
+            urls.append(rec.get('download_url') or rec.get('url'))
+        for url in dict.fromkeys(urls):
+            try:
+                df = baixar_csv_ano({'url': url}, ano)
+                partes.append(df)
+                print(f'PLD público {ano}: {len(df):,} registros até {df.data.max():%d/%m/%Y}.')
+                break
+            except Exception as exc:
+                print(f'::warning title=PLD público {ano}::{type(exc).__name__}: {exc}')
+    return partes
+
+
+def atualizar_com_online(historico: pd.DataFrame, usar_online: bool) -> pd.DataFrame:
+    """Ordem de coleta: API → recurso público → formulário → importação manual.
+
+    Os métodos são tentados em cascata até alcançar a data atual, quando possível.
+    Falhas de acesso não eliminam preços históricos já persistidos no repositório.
+    """
+    historico = historico.copy()
+    if historico.empty:
+        raise ValueError('Histórico inicial de PLD vazio')
+    hoje = datetime.now(ZoneInfo('America/Sao_Paulo')).date()
+    data_meta = pd.Timestamp(hoje)
+    anos = _anos_consulta(hoje, historico)
+    if usar_online:
+        # Métodos 1 e 2: prioriza a API, depois a base pública oficial.
+        for ordem, nome, rotina in [
+            (1, 'API CCEE', _buscar_pela_api),
+            (2, 'base pública CCEE', _buscar_base_publica),
+        ]:
+            print(f'PLD: tentativa {ordem}/4 — {nome}.')
+            try:
+                partes = rotina(anos)
+                for parte in partes:
+                    historico = _mesclar_pld(historico, parte, nome)
+            except Exception as exc:
+                print(f'::warning title=PLD método {ordem} falhou::{nome}: {exc}')
+            if pd.Timestamp(historico['data'].max()).normalize() >= data_meta:
+                print(f'PLD: histórico alcançou {hoje:%d/%m/%Y} pelo método {ordem} ({nome}).')
+                break
+        # Método 3: automatizar o formulário apenas se ainda houver dias a buscar.
+        if pd.Timestamp(historico['data'].max()).normalize() < data_meta:
+            print('PLD: tentativa 3/4 — formulário com navegador automatizado.')
+            try:
+                bloco = buscar_pld_formulario(historico['data'].max(), data_meta)
+                if bloco is not None:
+                    historico = _mesclar_pld(historico, bloco, 'formulário CCEE')
+            except Exception as exc:
+                print(f'::warning title=PLD método 3 (formulário)::{type(exc).__name__}: {exc}')
+    else:
+        print('PLD: modo offline; fontes remotas não consultadas.')
+    # Método 4: usuário pode deixar CSV anual em dados/pld_importacao_AAAA.csv.
+    if pd.Timestamp(historico['data'].max()).normalize() < data_meta or not usar_online:
+        print('PLD: tentativa 4/4 — arquivos CSV importados no GitHub.')
+        partes = carregar_importacoes_manuais()
+        for parte in partes:
+            historico = _mesclar_pld(historico, parte, 'arquivo importado')
+    ultimo = pd.Timestamp(historico['data'].max()).strftime('%d/%m/%Y')
+    print(f'PLD: data final consolidada {ultimo}.')
+    if usar_online and pd.Timestamp(historico['data'].max()).normalize() < data_meta:
+        print('::warning title=PLD incompleto::Todas as fontes automáticas foram tentadas; '
+              f'última data presente no histórico: {ultimo}.')
     return historico
 
 
@@ -599,7 +908,7 @@ def figura_mensal_anos(hist: pd.DataFrame) -> tuple[go.Figure, list[int], list[s
             valores = [tabela.get((ano, mes, sub), float('nan')) for mes in meses]
             fig.add_trace(go.Scatter(
                 x=meses, y=valores, name=str(ano),
-                mode='lines+markers', visible=(sub == 'SE/CO'),
+                mode='lines+markers', visible=(sub == 'SE/CO' and ano in {datetime.now(ZoneInfo('America/Sao_Paulo')).year, datetime.now(ZoneInfo('America/Sao_Paulo')).year - 1}),
                 meta={'ano': str(ano), 'sub': sub},
                 line={'color': cor, 'width': 3 if ano == anos[-1] else 2.25,
                       'dash': ESTILOS_SUB[sub], 'shape': 'spline', 'smoothing': .65},
@@ -634,10 +943,14 @@ def painel_mensal_html(hist: pd.DataFrame, ultima_br: str) -> str:
             f'<span class="marcador-sub estilo-{estilo}"></span>'
             f'{nome}</button>'
         )
+    ano_corrente = datetime.now(ZoneInfo('America/Sao_Paulo')).year
+    anos_iniciais = {ano_corrente, ano_corrente - 1}
     legendas = []
     for a, cor in zip(anos, cores):
+        inicial_ativo = a in anos_iniciais
+        pressionado_ano = 'true' if inicial_ativo else 'false'
         legendas.append(
-            f'<button type="button" class="filtro-ano" data-ano="{a}" aria-pressed="true">'
+            f'<button type="button" class="filtro-ano" data-ano="{a}" aria-pressed="{pressionado_ano}">'
             f'<span class="indicador-ano" style="background:{cor}"></span>{a}</button>'
         )
     return (
@@ -873,7 +1186,8 @@ def pagina_pld(hist: pd.DataFrame) -> str:
   if (mensal) {{
     const subAtivos = {{'SE/CO': true, 'SUL': false, 'NE': false, 'N': false}};
     const anosAtivos = {{}};
-    mensal.data.forEach(t => {{ anosAtivos[t.meta.ano] = true; }});
+    const anoCorrente = {datetime.now(ZoneInfo('America/Sao_Paulo')).year};
+    mensal.data.forEach(t => {{ anosAtivos[t.meta.ano] = [anoCorrente, anoCorrente - 1].includes(Number(t.meta.ano)); }});
     function atualizarFiltrosMensal() {{
       const vis = mensal.data.map(t => Boolean(subAtivos[t.meta.sub] && anosAtivos[t.meta.ano]));
       Plotly.restyle(mensal, {{visible: vis}}, mensal.data.map((_, i) => i));
