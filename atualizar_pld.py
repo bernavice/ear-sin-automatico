@@ -32,6 +32,8 @@ FONTE = 'Century Gothic, CenturyGothic, Arial, sans-serif'
 COR_VALE = '#007E80'
 CORES = {'SE/CO': '#2F66E0', 'SUL': '#D97706', 'NE': '#DC2626', 'N': '#7EC0EE'}
 ORDEM = ['SE/CO', 'SUL', 'NE', 'N']
+URL_DATASET = 'https://dadosabertos.ccee.org.br/dataset/pld_horario'
+URL_API = 'https://dadosabertos.ccee.org.br/api/3/action/package_show'
 MESES_PT = {1:'jan',2:'fev',3:'mar',4:'abr',5:'mai',6:'jun',7:'jul',8:'ago',9:'set',10:'out',11:'nov',12:'dez'}
 
 
@@ -202,10 +204,9 @@ def normalizar_csv_ccee(df: pd.DataFrame, ano: int) -> pd.DataFrame:
 
 def recursos_ccee() -> dict[int, dict]:
     import requests
-    api = 'https://dadosabertos.ccee.org.br/api/3/action/package_show'
     s = requests.Session()
     s.headers.update({'User-Agent': 'Painel-Vale-PLD/1.0'})
-    r = s.get(api, params={'id': 'pld_horario'}, timeout=60)
+    r = s.get(URL_API, params={'id': 'pld_horario'}, timeout=60)
     r.raise_for_status()
     meta = r.json()
     if not meta.get('success'):
@@ -219,6 +220,31 @@ def recursos_ccee() -> dict[int, dict]:
     return out
 
 
+def recursos_ccee_html() -> dict[int, dict]:
+    """Fallback: extrai links anuais diretamente da página pública do dataset."""
+    import requests
+    from lxml import html
+    s = requests.Session()
+    s.headers.update({'User-Agent': 'Painel-Vale-PLD/1.0'})
+    r = s.get(URL_DATASET, timeout=60)
+    r.raise_for_status()
+    doc = html.fromstring(r.content)
+    links = doc.xpath('//a[contains(@href, "pda-download.ccee.org.br")]')
+    out = {}
+    for a in links:
+        txt = ' '.join(a.xpath('.//text()')).strip().lower()
+        href = a.get('href')
+        m = re.search(r'pld_horario_(\d{4})', txt)
+        if not m and href:
+            m = re.search(r'pld[_-]horario[_-](\d{4})', href.lower())
+        if m and href:
+            ano = int(m.group(1))
+            out[ano] = {'name': f'pld_horario_{ano}', 'url': href, 'download_url': href}
+    if not out:
+        raise RuntimeError('HTML do dataset não expôs links anuais do PLD')
+    return out
+
+
 def baixar_csv_ano(recurso: dict, ano: int) -> pd.DataFrame:
     import requests
     s = requests.Session()
@@ -229,8 +255,11 @@ def baixar_csv_ano(recurso: dict, ano: int) -> pd.DataFrame:
     r = s.get(url, timeout=120)
     r.raise_for_status()
     raw = r.content
+    if not raw or len(raw) < 1000:
+        raise ValueError('Download do CSV anual parece vazio ou truncado')
     head = raw[:12000].decode('utf-8-sig', errors='replace')
-    sep = ';' if head.splitlines()[0].count(';') >= head.splitlines()[0].count(',') else ','
+    primeira = head.splitlines()[0] if head.splitlines() else ''
+    sep = ';' if primeira.count(';') >= primeira.count(',') else ','
     try:
         df = pd.read_csv(BytesIO(raw), sep=sep, dtype=str, encoding='utf-8-sig', low_memory=False)
     except UnicodeDecodeError:
@@ -244,29 +273,45 @@ def atualizar_com_online(historico: pd.DataFrame, usar_online: bool) -> pd.DataF
         return historico
     try:
         recursos = recursos_ccee()
-    except Exception as exc:
-        warnings.warn(f'PLD: não foi possível consultar a API da CCEE ({exc}). Histórico preservado.')
-        return historico
+        origem = 'API CKAN'
+    except Exception as exc_api:
+        warnings.warn(f'PLD: API da CCEE indisponível ({exc_api}). Tentando fallback via HTML do dataset...')
+        try:
+            recursos = recursos_ccee_html()
+            origem = 'HTML do dataset'
+        except Exception as exc_html:
+            warnings.warn(f'PLD: fallback HTML também falhou ({exc_html}). Histórico preservado.')
+            return historico
 
     hoje = datetime.now(ZoneInfo('America/Sao_Paulo')).date()
     ano_atual = hoje.year
     ultimo_hist = pd.Timestamp(historico['data'].max()).year if not historico.empty else ano_atual
-    anos_a_tentar = sorted({ultimo_hist, ano_atual, ano_atual - 1 if hoje.month <= 2 else ano_atual})
-    anos_a_tentar = [a for a in anos_a_tentar if a in recursos]
-    partes = []
+    anos_a_tentar = [ano_atual]
+    if hoje.month <= 2:
+        anos_a_tentar.append(ano_atual - 1)
+    if ultimo_hist not in anos_a_tentar:
+        anos_a_tentar.append(ultimo_hist)
+    anos_a_tentar = [a for a in sorted(set(anos_a_tentar)) if a in recursos]
+
+    combinado = historico.copy()
+    atualizou = False
     for ano in anos_a_tentar:
         try:
             bloco = baixar_csv_ano(recursos[ano], ano)
-            print(f'CCEE {ano}: {len(bloco):,} registros horários até {pd.Timestamp(bloco.data.max()).strftime("%d/%m/%Y")}.')
-            partes.append(bloco)
+            max_data = pd.Timestamp(bloco['data'].max()).strftime('%d/%m/%Y')
+            print(f'CCEE {ano} via {origem}: {len(bloco):,} registros horários até {max_data}.')
+            combinado = combinado[combinado['data'].dt.year != ano].copy()
+            combinado = pd.concat([combinado, bloco], ignore_index=True)
+            atualizou = True
         except Exception as exc:
             warnings.warn(f'PLD: falha ao baixar/tratar {ano} da CCEE ({exc}).')
-    if not partes:
-        warnings.warn('PLD: nenhum arquivo anual foi incorporado nesta execução. Histórico existente preservado.')
-        return historico
-    combinado = pd.concat([historico, *partes], ignore_index=True)
+
     combinado = combinado.sort_values(['data', 'hora', 'submercado']).drop_duplicates(['data', 'hora', 'submercado'], keep='last')
-    return combinado
+    if atualizou:
+        print('PLD: atualização online concluída. Última data consolidada:', pd.Timestamp(combinado['data'].max()).strftime('%d/%m/%Y'))
+        return combinado
+    warnings.warn('PLD: nenhum arquivo anual pôde ser incorporado nesta execução. Histórico existente preservado.')
+    return historico
 
 
 def inicio_semana_operativa(datas: pd.Series) -> pd.Series:
@@ -437,19 +482,30 @@ def tabela_resumo_html(tabela: pd.DataFrame, notas: dict) -> str:
         if pd.isna(v):
             return '—'
         return f'{float(v):,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.')
-    head = '<tr><th></th>' + ''.join(f'<th>{c}</th>' for c in ORDEM) + '</tr>'
-    linhas = []
+
+    cards = []
+    cabecalhos = {'SE/CO': 'SE/CO', 'SUL': 'SUL', 'NE': 'NE', 'N': 'Norte'}
     for _, row in tabela.iterrows():
-        linhas.append('<tr>' + f'<th scope="row">{row["Indicador"]}</th>' + ''.join(f'<td>{fmt(row[c])}</td>' for c in ORDEM) + '</tr>')
+        indicadores = ''.join(
+            f'<div class="item-resumo"><span class="rotulo-resumo">{cabecalhos[c]}</span><span class="valor-resumo">{fmt(row[c])}</span></div>'
+            for c in ORDEM
+        )
+        cards.append(
+            f'<div class="card-resumo">'
+            f'<div class="titulo-card-resumo">{row["Indicador"]}</div>'
+            f'<div class="grade-resumo">{indicadores}</div>'
+            f'</div>'
+        )
+
     nota = (
         f'<div class="nota-resumo">'
-        f'Hoje: {notas["hoje"]} &nbsp;|&nbsp; '
+        f'<strong>Referências:</strong> Hoje: {notas["hoje"]} &nbsp;|&nbsp; '
         f'Semana: {notas["semana"]} &nbsp;|&nbsp; '
         f'Mês: {notas["mes"]} &nbsp;|&nbsp; '
         f'Ano: {notas["ano"]}'
         f'</div>'
     )
-    return f'<section class="painel"><div class="barra-titulo">PLD — Resumo</div><div class="quadro-tabela"><table class="resumo-pld"><thead>{head}</thead><tbody>{"".join(linhas)}</tbody></table>{nota}</div></section>'
+    return f'<section class="painel"><div class="barra-titulo">PLD — Resumo</div><div class="quadro-resumo"><div class="cards-resumo">{"".join(cards)}</div>{nota}</div></section>'
 
 
 def pagina_pld(hist: pd.DataFrame) -> str:
