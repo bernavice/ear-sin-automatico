@@ -891,48 +891,68 @@ def criar_figura(df: pd.DataFrame, coluna_x: str, eixo_x: str, granularidade: st
 
 
 def figura_mensal_anos(hist: pd.DataFrame) -> tuple[go.Figure, list[int], list[str]]:
-    """Um único gráfico com 12 meses, séries anuais e filtro de submercados.
+    """Gráfico mensal único: meses + marcador de consolidado anual (sem linha).
 
-    Os 4 submercados compartilham os mesmos eixos. Ao escolher um ou mais,
-    cada ano mantém a mesma cor; o estilo do traço distingue submercados.
+    Cada combinação ano/submercado gera duas traces Plotly:
+      1. linha de janeiro a dezembro;
+      2. apenas um marcador em x=13.3, representando a média anual dos
+         preços horários disponíveis (inclusive ano ainda em andamento).
+    Os metadados iguais permitem filtrar ambas pelas legendas de ano/sub.
     """
     dados = hist.copy()
     dados['ano'] = dados['data'].dt.year
     dados['mes'] = dados['data'].dt.month
-    medias = (dados.groupby(['ano', 'mes', 'submercado'], as_index=False)['pld']
-              .mean())
+    medias = dados.groupby(['ano', 'mes', 'submercado'], as_index=False)['pld'].mean()
+    anuais = dados.groupby(['ano', 'submercado'])['pld'].mean()
     anos = sorted(int(a) for a in medias['ano'].unique())
     meses = list(range(1, 13))
+    posicao_anual = 13.3
     nomes_meses = [MESES_PT[m].capitalize() for m in meses]
     tabela = medias.set_index(['ano', 'mes', 'submercado'])['pld']
     fig = go.Figure()
     paleta_extra = ['#1B857B', '#6D5AB6', '#BD5384', '#8B6B35', '#5A8DA8']
     cores_ano = {}
+    ano_recente = max(anos)
+    anos_iniciais = {ano_recente, ano_recente - 1}
+
     for i, ano in enumerate(anos):
         cor = CORES_ANOS.get(ano, paleta_extra[i % len(paleta_extra)])
         cores_ano[ano] = cor
         for sub in ORDEM:
             valores = [tabela.get((ano, mes, sub), float('nan')) for mes in meses]
+            visivel = sub == 'SE/CO' and ano in anos_iniciais
+            meta_base = {'ano': str(ano), 'sub': sub}
             fig.add_trace(go.Scatter(
                 x=meses, y=valores, name=str(ano),
-                mode='lines+markers', visible=(sub == 'SE/CO' and ano in {datetime.now(ZoneInfo('America/Sao_Paulo')).year, datetime.now(ZoneInfo('America/Sao_Paulo')).year - 1}),
-                meta={'ano': str(ano), 'sub': sub},
-                line={'color': cor, 'width': 3 if ano == anos[-1] else 2.25,
+                mode='lines+markers', visible=visivel,
+                meta={**meta_base, 'parte': 'mensal'}, showlegend=False,
+                line={'color': cor, 'width': 3 if ano == ano_recente else 2.25,
                       'dash': ESTILOS_SUB[sub], 'shape': 'spline', 'smoothing': .65},
-                marker={'color': cor, 'size': 7 if ano == anos[-1] else 5},
+                marker={'color': cor, 'size': 7 if ano == ano_recente else 5},
                 hovertemplate=(f'<b>{ano} · {sub}</b><br>Mês: %{{x}}'
+                               '<br>PLD médio mensal: %{y:.2f} R$/MWh<extra></extra>'),
+            ))
+            media_ano = anuais.get((ano, sub), float('nan'))
+            # Esta trace não contém linhas: Dez e Ano permanecem desconectados.
+            fig.add_trace(go.Scatter(
+                x=[posicao_anual], y=[media_ano], name=str(ano),
+                mode='markers', visible=visivel,
+                meta={**meta_base, 'parte': 'anual'}, showlegend=False,
+                marker={'color': cor, 'size': 12, 'symbol': 'diamond',
+                        'line': {'color': 'white', 'width': 1.3}},
+                hovertemplate=(f'<b>{ano} · {sub}</b><br>Consolidado anual'
                                '<br>PLD médio: %{y:.2f} R$/MWh<extra></extra>'),
             ))
-    configurar_layout(fig, 'Mês', y_title='Preço (R$/MWh)')
-    fig.update_layout(height=525, hovermode='closest',
-                      margin={'l': 95, 'r': 34, 't': 18, 'b': 77}, showlegend=False)
-    fig.update_xaxes(type='linear', tickmode='array', tickvals=meses,
-                     ticktext=nomes_meses, range=[.7, 12.3], tickangle=0)
+    configurar_layout(fig, 'Mês / Ano', y_title='Preço (R$/MWh)')
+    fig.update_layout(height=520, hovermode='closest',
+                      margin={'l': 95, 'r': 34, 't': 18, 'b': 78}, showlegend=False)
+    fig.update_xaxes(type='linear', tickmode='array', tickvals=meses + [posicao_anual],
+                     ticktext=nomes_meses + ['Ano'], range=[.7, 13.8], tickangle=0)
     return fig, anos, [cores_ano[a] for a in anos]
 
 
 def painel_mensal_html(hist: pd.DataFrame, ultima_br: str) -> str:
-    """Filtros independentes: anos na legenda, submercados no seletor."""
+    """Dois controles visuais: submercados por traçado, anos por cor."""
     fig, anos, cores = figura_mensal_anos(hist)
     plot_id = 'plot-pld-mensal'
     grafo = fig.to_html(full_html=False, include_plotlyjs=False, div_id=plot_id,
@@ -947,31 +967,30 @@ def painel_mensal_html(hist: pd.DataFrame, ultima_br: str) -> str:
         filtro.append(
             f'<button type="button" class="{classe}" '
             f'data-sub="{sm}" aria-pressed="{pressionado}">'
-            f'<span class="marcador-sub estilo-{estilo}"></span>'
+            f'<span class="marcador-sub estilo-{estilo}" aria-hidden="true"></span>'
             f'{nome}</button>'
         )
-    ano_corrente = datetime.now(ZoneInfo('America/Sao_Paulo')).year
-    anos_iniciais = {ano_corrente, ano_corrente - 1}
+    ano_mais_recente = max(anos)
+    anos_iniciais = {ano_mais_recente, ano_mais_recente - 1}
     legendas = []
     for a, cor in zip(anos, cores):
         inicial_ativo = a in anos_iniciais
         pressionado_ano = 'true' if inicial_ativo else 'false'
         legendas.append(
             f'<button type="button" class="filtro-ano" data-ano="{a}" aria-pressed="{pressionado_ano}">'
-            f'<span class="indicador-ano" style="background:{cor}"></span>{a}</button>'
+            f'<span class="indicador-ano" style="--cor-ano:{cor}" aria-hidden="true"></span>{a}</button>'
         )
     return (
         '<section class="painel">'
         '<div class="barra-titulo">PLD — Mensal</div>'
         f'<div class="subtitulo">Média mensal dos preços horários, de janeiro a dezembro. '
         f'Todos os anos do histórico, até {ultima_br}.</div>'
-        '<div class="filtro-mensal">'
+        '<div class="filtro-mensal" role="group" aria-label="Selecionar submercados">'
         '<span class="nome-filtro">Submercados:</span>'
         + ''.join(filtro) + '</div>'
-        '<div class="aviso-mensal">Selecione um ou mais submercados. '
-        'As cores indicam os anos e os traçados distinguem os submercados.</div>'
         + grafo +
-        '<div class="legenda-anos"><span class="nome-filtro">Anos:</span>'
+        '<div class="legenda-anos" role="group" aria-label="Selecionar anos">'
+        '<span class="nome-filtro">Anos:</span>'
         + ''.join(legendas) + '</div>'
         f'<footer class="fonte-dados">Fonte: CCEE &nbsp;|&nbsp; Dados disponíveis até: {ultima_br}</footer>'
         '</section>'
@@ -1218,6 +1237,23 @@ def pagina_pld(hist: pd.DataFrame) -> str:
   .legenda-item[aria-pressed="false"] {{opacity:.38}}
   .legenda-linha {{height:0;width:28px;border-top:3px solid var(--cor-serie);display:inline-block;position:relative}}
   .legenda-linha:after {{content:"";position:absolute;left:10px;top:-5px;width:7px;height:7px;background:var(--cor-serie);border-radius:50%}}
+  .filtro-mensal {{display:flex;align-items:center;justify-content:flex-start;flex-wrap:wrap;gap:9px;padding:17px 20px 0}}
+  .nome-filtro {{font-size:12px;font-weight:700;color:#344054;margin-right:4px}}
+  .filtro-sub {{display:inline-flex;align-items:center;gap:8px;border:1px solid #d5dde6;background:white;color:#344054;padding:7px 13px;border-radius:999px;cursor:pointer;font:inherit;font-size:12px;font-weight:600;white-space:nowrap;transition:all .18s ease}}
+  .filtro-sub:hover {{border-color:#95a9ba}}
+  .filtro-sub[aria-pressed="false"] {{opacity:.53;background:#f7f9fb}}
+  .filtro-sub[aria-pressed="true"] {{border-color:#92bebc;background:#edf8f7}}
+  .marcador-sub {{display:inline-block;width:28px;height:0;flex:0 0 28px;border-top:3px solid #526a80}}
+  .marcador-sub.estilo-dash {{border-top-style:dashed}}
+  .marcador-sub.estilo-dot {{border-top-style:dotted;border-top-width:4px}}
+  .marcador-sub.estilo-dashdot {{height:3px;border:0;background:repeating-linear-gradient(90deg,#526a80 0 11px,transparent 11px 15px,#526a80 15px 18px,transparent 18px 23px)}}
+  .legenda-anos {{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;padding:8px 18px 2px}}
+  .filtro-ano {{border:1px solid #d5dde6;border-radius:999px;background:#fff;color:#263142;font:inherit;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:8px;padding:5px 11px;cursor:pointer;white-space:nowrap;transition:all .18s ease}}
+  .filtro-ano:hover {{border-color:#aebfd1;box-shadow:0 1px 2px rgba(16,24,40,.06)}}
+  .filtro-ano[aria-pressed="false"] {{opacity:.48;background:#f7f9fb}}
+  .filtro-ano[aria-pressed="true"] {{border-color:#a9c1d6}}
+  .indicador-ano {{display:inline-block;width:25px;height:0;border-top:3px solid var(--cor-ano);border-radius:999px;position:relative;flex:0 0 25px}}
+  .indicador-ano:after {{content:"";position:absolute;left:9px;top:-6px;width:8px;height:8px;border-radius:50%;background:var(--cor-ano)}}
   .controle-data {{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:center;padding:16px 12px 0;font-size:13px}}
   #data-pld {{font:inherit;color:#263142;padding:8px 10px;border:1px solid #c6d0dc;border-radius:8px}}
   #status-data-pld {{color:#667085}}
@@ -1241,7 +1277,7 @@ def pagina_pld(hist: pd.DataFrame) -> str:
   if (mensal) {{
     const subAtivos = {{'SE/CO': true, 'SUL': false, 'NE': false, 'N': false}};
     const anosAtivos = {{}};
-    const anoCorrente = {datetime.now(ZoneInfo('America/Sao_Paulo')).year};
+    const anoCorrente = {pd.Timestamp(hist['data'].max()).year};
     mensal.data.forEach(t => {{ anosAtivos[t.meta.ano] = [anoCorrente, anoCorrente - 1].includes(Number(t.meta.ano)); }});
     function atualizarFiltrosMensal() {{
       const vis = mensal.data.map(t => Boolean(subAtivos[t.meta.sub] && anosAtivos[t.meta.ano]));
