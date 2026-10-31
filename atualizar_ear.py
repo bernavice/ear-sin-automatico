@@ -421,7 +421,54 @@ def legenda_interativa(fig: go.Figure, plot_id: str) -> str:
     conteudo.append('</div>')
     return ''.join(conteudo)
 
-def montar_grafico(mensal: pd.DataFrame) -> str:
+
+def montar_resumo_ear(diario: pd.DataFrame) -> str:
+    """Compara EAR verificada no último dia com mesma data no ano anterior."""
+    if diario.empty:
+        raise ValueError("EAR: histórico diário vazio para resumo")
+    atual_data = pd.Timestamp(diario['data'].max()).normalize()
+    atual = diario.loc[diario['data'] == atual_data].iloc[-1]
+    # Trata 29/02: o dia equivalente no ano anterior é 28/02.
+    ano_anterior = atual_data.year - 1
+    ultimo_dia_mes = pd.Period(f'{ano_anterior}-{atual_data.month:02d}').days_in_month
+    dia_anterior = min(atual_data.day, ultimo_dia_mes)
+    alvo = pd.Timestamp(ano_anterior, atual_data.month, dia_anterior)
+    comparaveis = diario.loc[
+        (diario['data'].dt.year == ano_anterior) &
+        (diario['data'].dt.month == atual_data.month) &
+        (diario['data'] <= alvo)
+    ].sort_values('data')
+    anterior = comparaveis.iloc[-1] if not comparaveis.empty else None
+    data_anterior = pd.Timestamp(anterior['data']).strftime('%d/%m/%Y') if anterior is not None else 'indisponível'
+
+    cols = [('SIN', 'earsin'), ('SE/CO', 'earse'), ('Sul', 'earsu'),
+            ('Norte', 'earn'), ('Nordeste', 'earne')]
+    cards=[]
+    for nome, col in cols:
+        agora = float(atual[col]) if pd.notna(atual[col]) else float('nan')
+        antes = float(anterior[col]) if anterior is not None and pd.notna(anterior[col]) else float('nan')
+        delta = agora - antes
+        fmt = lambda n: f'{n:.2f}%'.replace('.', ',') if pd.notna(n) else '—'
+        fmt_delta = lambda n: (f'{n:+.2f}'.replace('.', ',') + ' p.p.' if pd.notna(n) else '—')
+        classe = 'delta-positivo' if pd.notna(delta) and delta >= 0 else 'delta-negativo'
+        cards.append(
+            '<div class="resumo-card">'
+            f'<div class="resumo-nome">{nome}</div>'
+            '<div class="resumo-linha"><span class="resumo-rotulo">Atual</span>'
+            f'<strong class="resumo-numero">{fmt(agora)}</strong></div>'
+            '<div class="resumo-linha"><span class="resumo-rotulo">Ano anterior</span>'
+            f'<strong class="resumo-numero">{fmt(antes)}</strong></div>'
+            '<div class="resumo-linha"><span class="resumo-rotulo">Δ</span>'
+            f'<strong class="resumo-numero {classe}">{fmt_delta(delta)}</strong></div>'
+            '</div>'
+        )
+    nota = (f'Atual: {atual_data.strftime("%d/%m/%Y")} · '
+            f'Comparação anual: {data_anterior} · Δ = atual − ano anterior (pontos percentuais).')
+    return ('<section class="painel resumo"><div class="barra-titulo">EAR — Resumo</div>'
+            '<div class="resumo-conteudo"><div class="resumo-cards">' + ''.join(cards) + '</div>'
+            f'<div class="resumo-nota">Fonte: ONS · {nota}</div></div></section>')
+
+def montar_grafico(mensal: pd.DataFrame, diario: pd.DataFrame) -> str:
     """Página EAR com SIN em largura total e quatro subsistemas em grade 2×2."""
     configuracoes = [
         ("SIN", "earsin", True),
@@ -431,7 +478,7 @@ def montar_grafico(mensal: pd.DataFrame) -> str:
         ("Nordeste", "earne", False),
     ]
     ultima_data = pd.Timestamp(mensal["data"].max()).strftime("%d/%m/%Y")
-    blocos = []
+    blocos = [montar_resumo_ear(diario)]
     for i, (nome, coluna, grande) in enumerate(configuracoes):
         titulo_barra = f"EAR — {nome}"
         fig = grafico_ear(mensal, titulo_barra, coluna, grande=grande)
@@ -465,6 +512,22 @@ def montar_grafico(mensal: pd.DataFrame) -> str:
   .barra-titulo {{display:block;width:100%;margin:0;background:{COR_VALE};color:#fff;font-weight:700;
                  text-align:center;padding:12px 16px;font-size:18px;line-height:1.2;border-radius:14px 14px 0 0;}}
   .painel.sub .barra-titulo {{font-size:16px;padding:10px 14px;}}
+  /* Resumos EAR e ENA: cards independentes, sem sobreposição. */
+  .painel.resumo {{grid-column:1/-1;}}
+  .resumo-conteudo {{padding:18px 20px 16px;}}
+  .resumo-cards {{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;}}
+  .resumo-card {{min-width:0;border:1px solid #d9e5e7;background:#f9fbfb;border-radius:12px;padding:15px 12px;}}
+  .resumo-nome {{font-weight:700;font-size:16px;color:#007E80;margin-bottom:13px;}}
+  .resumo-linha {{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid #e8edef;}}
+  .resumo-linha:last-child {{border-bottom:0;}}
+  .resumo-rotulo {{font-size:11px;color:#59677b;white-space:nowrap;}}
+  .resumo-numero {{font-size:15px;font-weight:700;color:#203249;font-variant-numeric:tabular-nums;white-space:nowrap;}}
+  .resumo-numero.delta-positivo {{color:#007E80;}}
+  .resumo-numero.delta-negativo {{color:#b5474a;}}
+  .resumo-nota {{margin-top:13px;color:#667085;font-size:11px;line-height:1.6;}}
+  @media(max-width:1050px) {{.resumo-cards {{grid-template-columns:repeat(3,minmax(0,1fr));}}}}
+  @media(max-width:650px) {{.resumo-conteudo {{padding:12px;}} .resumo-cards {{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}} .resumo-card {{padding:12px 8px;}} .resumo-numero {{font-size:13px;}} .resumo-rotulo {{font-size:10px;}}}}
+  @media(max-width:380px) {{.resumo-cards {{grid-template-columns:1fr;}}}}
   .js-plotly-plot {{width:100%!important}}
   .legenda-externa {{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 12px;
                       align-items:center;padding:2px 10px 13px;min-height:38px}}
@@ -521,7 +584,7 @@ def salvar(diario: pd.DataFrame) -> None:
     grafico_temp = GRAFICO.with_suffix(".tmp")
     diario.to_csv(diaria_temp, index=False, sep=";", decimal=",", float_format="%.3f", date_format="%Y-%m-%d")
     mensal.to_csv(mensal_temp, index=False, sep=";", decimal=",", float_format="%.2f", date_format="%Y-%m-%d")
-    grafico_temp.write_text(montar_grafico(mensal), encoding="utf-8")
+    grafico_temp.write_text(montar_grafico(mensal, diario), encoding="utf-8")
     diaria_temp.replace(DIARIO)
     mensal_temp.replace(MENSAL)
     grafico_temp.replace(GRAFICO)
