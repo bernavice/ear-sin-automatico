@@ -9,6 +9,7 @@ from datetime import datetime
 from io import BytesIO
 from html.parser import HTMLParser
 from urllib.parse import urljoin
+import os
 from pathlib import Path
 from zoneinfo import ZoneInfo
 from xml.etree import ElementTree as ET
@@ -36,9 +37,18 @@ CORES = {'SE/CO': '#2F66E0', 'SUL': '#D97706', 'NE': '#DC2626', 'N': '#7EC0EE'}
 ORDEM = ['SE/CO', 'SUL', 'NE', 'N']
 URL_DATASET = 'https://dadosabertos.ccee.org.br/dataset/pld_horario'
 URL_API = 'https://dadosabertos.ccee.org.br/api/3/action/package_show'
-# URL do recurso 2026 verificada na página pública da CCEE em 31/10/2026.
-# Pode expirar; é apenas a terceira alternativa, depois de API e HTML.
-URLS_DIRETAS_CONHECIDAS = {2026: 'https://pda-download.ccee.org.br/6A5wq97KTCWv_bvs3CqsQQ/content'}
+# Identificadores dos recursos anuais confirmados no catálogo público da CCEE.
+# Identificadores de anos futuros são descobertos quando publicados.
+IDS_ANUAIS_CONHECIDOS = {
+    2025: '2a180a6b-f092-43eb-9f82-a48798b803dc',
+    2026: '3f279d6b-1069-42f7-9b0a-217b084729c4',
+}
+URL_DUMP = 'https://dadosabertos.ccee.org.br/datastore/dump/{id}?bom=True'
+
+def url_dump(recurso_id: str) -> str:
+    if not re.fullmatch(r'[0-9a-fA-F-]{36}', recurso_id):
+        raise ValueError('Identificador anual CCEE inválido')
+    return URL_DUMP.format(id=recurso_id)
 MESES_PT = {1:'jan',2:'fev',3:'mar',4:'abr',5:'mai',6:'jun',7:'jul',8:'ago',9:'set',10:'out',11:'nov',12:'dez'}
 
 
@@ -53,7 +63,7 @@ def _padronizar_submercado(s: str) -> str:
         'sudeste': 'SE/CO', 'sudeste/centro-oeste': 'SE/CO', 'sudeste-centro-oeste': 'SE/CO',
         'sudeste centro-oeste': 'SE/CO', 'sudeste/centrooeste': 'SE/CO', 'sudestecentrooeste': 'SE/CO',
         'se/co': 'SE/CO', 'se': 'SE/CO', 'centro-oeste': 'SE/CO', 'centrooeste': 'SE/CO',
-        'sul': 'SUL', 'nordeste': 'NE', 'ne': 'NE', 'norte': 'N', 'n': 'N'
+        'sul': 'SUL', 's': 'SUL', 'nordeste': 'NE', 'ne': 'NE', 'norte': 'N', 'n': 'N'
     }
     return mapa.get(x, str(s).upper())
 
@@ -243,63 +253,66 @@ def recursos_ccee() -> dict[int, dict]:
 
 
 class ExtratorLinksCCEE(HTMLParser):
-    """Extrai links do download anual com a biblioteca padrão, sem lxml."""
+    """Localiza IDs CKAN em links de recursos anuais na página do catálogo."""
     def __init__(self):
         super().__init__()
         self.ano_atual = None
         self.recursos = {}
-        self.links_sem_ano = []
-        self.anos_encontrados = []
-
-    def handle_data(self, data):
-        achou = re.search(r'pld_horario_(\d{4})', data.strip(), re.I)
-        if achou:
-            self.ano_atual = int(achou.group(1))
-            if self.ano_atual not in self.anos_encontrados:
-                self.anos_encontrados.append(self.ano_atual)
+        self.links = []
+        self._href = None
+        self._texto = []
 
     def handle_starttag(self, tag, attrs):
-        if tag != 'a':
+        if tag == 'a':
+            self._href = dict(attrs).get('href', '')
+            self._texto = []
+
+    def handle_data(self, data):
+        if self._href is not None:
+            self._texto.append(data)
+        m = re.search(r'pld_horario_(\d{4})', data.strip(), re.I)
+        if m:
+            self.ano_atual = int(m.group(1))
+
+    def handle_endtag(self, tag):
+        if tag != 'a' or self._href is None:
             return
-        attr = dict(attrs)
-        href = attr.get('href', '')
-        if 'pda-download.ccee.org.br/' not in href and '/download/' not in href:
-            return
-        href = urljoin(URL_DATASET, href)
-        if self.ano_atual:
-            self.recursos[self.ano_atual] = {'name': f'pld_horario_{self.ano_atual}', 'url': href}
-        else:
-            self.links_sem_ano.append(href)
+        href = urljoin(URL_DATASET, self._href)
+        txt = ''.join(self._texto)
+        ano_m = re.search(r'pld_horario_(\d{4})', txt, re.I)
+        recurso_m = re.search(r'/resource/([a-fA-F0-9-]{36})', href)
+        if ano_m and recurso_m:
+            ano = int(ano_m.group(1))
+            self.recursos[ano] = {'name': f'pld_horario_{ano}', 'id': recurso_m.group(1)}
+        elif recurso_m:
+            self.links.append(recurso_m.group(1))
+        self._href = None
+        self._texto = []
 
 
 def extrair_recursos_html(html: str) -> dict[int, dict]:
     parser = ExtratorLinksCCEE()
     parser.feed(html)
-    # Em alguns temas CKAN, os títulos aparecem antes da seção de downloads.
-    if parser.links_sem_ano and len(parser.links_sem_ano) == len(parser.anos_encontrados):
-        for ano, url in zip(parser.anos_encontrados, parser.links_sem_ano):
-            parser.recursos.setdefault(ano, {'name': f'pld_horario_{ano}', 'url': url})
     return parser.recursos
 
 
 def recursos_ccee_html() -> dict[int, dict]:
-    """Fallback independente de lxml. Não tenta disfarçar bloqueios 403."""
     import requests
-    s = requests.Session()
-    s.headers.update({'User-Agent': 'Painel-Vale-PLD/1.0'})
-    r = s.get(URL_DATASET, timeout=60)
+    r = requests.get(URL_DATASET, timeout=60, headers={'User-Agent': 'Mozilla/5.0'})
     r.raise_for_status()
-    resposta = extrair_recursos_html(r.text)
-    if not resposta:
-        raise RuntimeError('Página não expôs links diretos para os recursos anuais')
-    return resposta
+    rec = extrair_recursos_html(r.text)
+    if not rec:
+        raise RuntimeError('Não foi possível identificar os IDs anuais no catálogo público')
+    return rec
 
 
 def baixar_csv_ano(recurso: dict, ano: int) -> pd.DataFrame:
     import requests
     s = requests.Session()
     s.headers.update({'User-Agent': 'Painel-Vale-PLD/1.0'})
-    url = recurso.get('download_url') or recurso.get('url')
+    url = recurso.get('url') or recurso.get('download_url')
+    if not url and recurso.get('id'):
+        url = url_dump(recurso['id'])
     if not url:
         raise ValueError('Recurso CCEE sem URL de download')
     r = s.get(url, timeout=120)
@@ -328,9 +341,19 @@ def carregar_importacoes_manuais() -> list[pd.DataFrame]:
         ano = int(ano_match.group(1))
         try:
             raw = arquivo.read_bytes()
-            primeiro = raw[:4096].decode('latin1', errors='replace').splitlines()[0]
-            sep = ';' if primeiro.count(';') >= primeiro.count(',') else ','
-            df = pd.read_csv(BytesIO(raw), sep=sep, encoding='latin1', dtype=str)
+            if not raw:
+                raise ValueError('arquivo vazio')
+            # Download do Datastore costuma usar BOM UTF-8; nunca interpretar o BOM
+            # como caracteres latinos no primeiro nome de coluna.
+            try:
+                primeiro = raw[:4096].decode('utf-8-sig').splitlines()[0]
+                encoding = 'utf-8-sig'
+            except UnicodeDecodeError:
+                primeiro = raw[:4096].decode('latin1').splitlines()[0]
+                encoding = 'latin1'
+            sep = ';' if primeiro.count(';') > primeiro.count(',') else ','
+            df = pd.read_csv(BytesIO(raw), sep=sep, encoding=encoding, dtype=str)
+            df.columns = [str(c).lstrip('\ufeff').strip() for c in df.columns]
             df = normalizar_csv_ccee(df, ano)
             partes.append(df)
             print(f'PLD: importação manual {ano}: até {df.data.max().date()} ({len(df)} preços).')
@@ -340,61 +363,72 @@ def carregar_importacoes_manuais() -> list[pd.DataFrame]:
 
 
 def atualizar_com_online(historico: pd.DataFrame, usar_online: bool) -> pd.DataFrame:
-    import requests
+    """Tenta datastore/dump primeiro. Em novos anos, descobre o ID pelo catálogo.
+
+    Se houver bloqueio HTTP, preserva os dados e sinaliza no log.
+    """
     historico = historico.copy()
     partes = carregar_importacoes_manuais()
     if not usar_online:
-        print('PLD: modo offline; apenas histórico e arquivos manuais.')
+        print('PLD: modo offline; histórico e eventuais importações manuais.')
     else:
-        recursos = {}
-        try:
-            recursos.update(recursos_ccee())
-            print('PLD: API oficial da CCEE respondeu.')
-        except Exception as exc:
-            print(f'::warning title=CCEE API bloqueada::Falha no endpoint CKAN: {exc}')
+        hoje = datetime.now(ZoneInfo('America/Sao_Paulo')).date()
+        anos = [hoje.year]
+        if hoje.month <= 2:
+            anos.insert(0, hoje.year - 1)
 
-        if not recursos:
+        recursos = {ano: {'id': rid} for ano, rid in IDS_ANUAIS_CONHECIDOS.items()}
+        # Recurso anual de 2027, 2028... é descoberto, não inferido a partir do UUID de 2026.
+        if any(ano not in recursos for ano in anos):
             try:
                 recursos.update(recursos_ccee_html())
-                print('PLD: links anuais obtidos diretamente da página CCEE.')
-            except Exception as exc:
-                print(f'::warning title=CCEE página indisponível::Falha no HTML público: {exc}')
+                print('PLD: IDs anuais descobertos na página pública da CCEE.')
+            except Exception as exc_html:
+                print(f'::warning title=PLD descoberta pelo catálogo falhou::{exc_html}')
+            if any(ano not in recursos for ano in anos):
+                try:
+                    recursos.update(recursos_ccee())
+                    print('PLD: IDs anuais descobertos na API da CCEE.')
+                except Exception as exc_api:
+                    print(f'::warning title=PLD descoberta pela API falhou::{exc_api}')
 
-        hoje = datetime.now(ZoneInfo('America/Sao_Paulo')).date()
-        ano_atual = hoje.year
-        # Somente ano corrente e ano anterior no começo do novo ano.
-        anos = [ano_atual - 1, ano_atual] if hoje.month <= 2 else [ano_atual]
+        # Alternativa explícita para operação futura caso o catálogo seja bloqueado.
         for ano in anos:
-            urls = []
-            if ano in recursos:
-                url = recursos[ano].get('download_url') or recursos[ano].get('url')
-                if url:
-                    urls.append(url)
-            if ano in URLS_DIRETAS_CONHECIDAS and URLS_DIRETAS_CONHECIDAS[ano] not in urls:
-                urls.append(URLS_DIRETAS_CONHECIDAS[ano])
+            manual_id = os.environ.get(f'CCEE_PLD_RECURSO_{ano}', '').strip()
+            if manual_id:
+                recursos[ano] = {'id': manual_id}
 
+        for ano in anos:
+            recurso = recursos.get(ano)
+            if not recurso:
+                print(f'::warning title=PLD recurso não publicado::Identificador anual {ano} indisponível no catálogo.')
+                continue
+            urls = []
+            if recurso.get('id'):
+                try:
+                    urls.append(url_dump(recurso['id']))
+                except ValueError as exc:
+                    print(f'::warning title=PLD recurso inválido::{ano}: {exc}')
+            url_outro = recurso.get('download_url') or recurso.get('url')
+            if url_outro and url_outro not in urls:
+                urls.append(url_outro)
             for url in urls:
                 try:
                     df = baixar_csv_ano({'url': url}, ano)
                     partes.append(df)
-                    print(f'CCEE {ano}: arquivo direto lido, {len(df):,} registros até {df.data.max().date()}.')
+                    print(f'CCEE {ano}: datastore/dump lido, {len(df):,} registros até {df.data.max().date()}.')
                     break
-                except requests.HTTPError as exc:
-                    print(f'::warning title=PLD download bloqueado::{ano}: {exc}')
                 except Exception as exc:
-                    print(f'::warning title=PLD download falhou::{ano}: {exc}')
-            if not urls:
-                print(f'::warning title=CCEE {ano}::Nenhum link anual recuperado para {ano}.')
+                    print(f'::warning title=PLD download {ano} falhou::{url} — {exc}')
 
     if partes:
-        antigo = historico['data'].max() if len(historico) else pd.NaT
-        # Mescla por chave, preservando dados já existentes e possíveis correções novas.
+        antes = historico['data'].max() if len(historico) else pd.NaT
         historico = pd.concat([historico, *partes], ignore_index=True)
-        historico = historico.sort_values(['data', 'hora', 'submercado']).drop_duplicates(
-            ['data', 'hora', 'submercado'], keep='last')
-        print('PLD: último dado antes:', antigo, '| depois:', historico['data'].max())
+        historico = historico.sort_values(['data','hora','submercado']).drop_duplicates(
+            ['data','hora','submercado'], keep='last')
+        print(f'PLD: última data antes {antes} | após coleta {historico["data"].max()}')
     elif usar_online:
-        print('::warning title=PLD sem nova coleta::Todos os meios de consulta foram bloqueados ou indisponíveis. Histórico antigo preservado.')
+        print('::warning title=PLD coleta não realizada::Datastore/dump indisponível; base antiga preservada.')
     return historico
 
 
@@ -562,34 +596,64 @@ def _horarios_por_dia(hist: pd.DataFrame) -> dict[str, list[list[float | None]]]
 
 
 def tabela_resumo_html(tabela: pd.DataFrame, notas: dict) -> str:
+    """Cards com estilos inline para não depender da folha CSS do site/iframe."""
+    from html import escape
+
     def fmt(v):
         if pd.isna(v):
             return '—'
         return f'{float(v):,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.')
 
-    cards = []
     cabecalhos = {'SE/CO': 'SE/CO', 'SUL': 'SUL', 'NE': 'NE', 'N': 'Norte'}
-    for _, row in tabela.iterrows():
-        indicadores = ''.join(
-            f'<div class="item-resumo"><span class="rotulo-resumo">{cabecalhos[c]}</span><span class="valor-resumo">{fmt(row[c])}</span></div>'
-            for c in ORDEM
-        )
+    cores_periodos = ['#007E80', '#007E80', '#007E80', '#007E80']
+    cards = []
+    for indice, (_, linha) in enumerate(tabela.iterrows()):
+        itens = []
+        for sm in ORDEM:
+            itens.append(
+                '<div class="item-resumo" '
+                'style="min-width:0;display:flex;flex-direction:column;gap:5px;'
+                'padding:10px 12px;background:#ffffff;border:1px solid #e4eaf0;'
+                'border-radius:10px;box-sizing:border-box">'
+                f'<span class="rotulo-resumo" style="font-size:11px;line-height:1.4;'
+                f'font-weight:700;color:#667085;letter-spacing:.02em">{escape(cabecalhos[sm])}</span>'
+                f'<span class="valor-resumo" style="font-size:19px;line-height:1.3;'
+                f'font-weight:700;color:#17354a;font-variant-numeric:tabular-nums">{fmt(linha[sm])}</span>'
+                '</div>'
+            )
         cards.append(
-            f'<div class="card-resumo">'
-            f'<div class="titulo-card-resumo">{row["Indicador"]}</div>'
-            f'<div class="grade-resumo">{indicadores}</div>'
-            f'</div>'
+            '<article class="card-resumo" '
+            'style="min-width:0;box-sizing:border-box;background:#f8fafb;'
+            'border:1px solid #dce6e9;border-radius:14px;padding:16px;'
+            'box-shadow:0 2px 7px rgba(17,53,64,.04)">'
+            f'<div class="titulo-card-resumo" style="font-size:15px;'
+            f'font-weight:700;color:{cores_periodos[indice]};margin-bottom:14px">'
+            f'{escape(str(linha["Indicador"]))}</div>'
+            '<div class="grade-resumo" '
+            'style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px">'
+            + ''.join(itens) + '</div></article>'
         )
 
     nota = (
-        f'<div class="nota-resumo">'
-        f'<strong>Referências:</strong> Hoje: {notas["hoje"]} &nbsp;|&nbsp; '
-        f'Semana: {notas["semana"]} &nbsp;|&nbsp; '
-        f'Mês: {notas["mes"]} &nbsp;|&nbsp; '
-        f'Ano: {notas["ano"]}'
-        f'</div>'
+        '<div class="nota-resumo" '
+        'style="margin-top:16px;font-size:12px;line-height:1.7;color:#667085;'
+        'text-align:left;overflow-wrap:anywhere">'
+        '<strong>Períodos de referência:</strong> '
+        f'Hoje: {escape(notas["hoje"])} &nbsp;·&nbsp; '
+        f'Semana: {escape(notas["semana"])} &nbsp;·&nbsp; '
+        f'Mês: {escape(notas["mes"])} &nbsp;·&nbsp; '
+        f'Ano: {escape(notas["ano"])}'
+        '</div>'
     )
-    return f'<section class="painel"><div class="barra-titulo">PLD — Resumo</div><div class="quadro-resumo"><div class="cards-resumo">{"".join(cards)}</div>{nota}</div></section>'
+    return (
+        '<section class="painel">'
+        '<div class="barra-titulo">PLD — Resumo</div>'
+        '<div class="quadro-resumo" style="padding:20px 22px 18px;box-sizing:border-box">'
+        '<div class="cards-resumo" '
+        'style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr));'
+        'gap:14px;align-items:stretch;width:100%;box-sizing:border-box">'
+        + ''.join(cards) + '</div>' + nota + '</div></section>'
+    )
 
 
 def pagina_pld(hist: pd.DataFrame) -> str:
@@ -662,12 +726,17 @@ def pagina_pld(hist: pd.DataFrame) -> str:
   .painel {{min-width:0;background:#fff;border:1px solid #e1e7ef;border-radius:14px;overflow:hidden;display:flex;flex-direction:column}}
   .barra-titulo {{width:100%;background:{COR_VALE};color:#fff;font-weight:700;text-align:center;padding:12px 16px;font-size:18px;border-radius:14px 14px 0 0}}
   .subtitulo {{padding:12px 18px 0;text-align:center;color:#667085;font-size:12px;line-height:1.6}}
-  .quadro-tabela {{padding:18px 16px 18px}}
-  table.resumo-pld {{width:auto;min-width:360px;border-collapse:collapse;margin:0 auto;font-size:14px;color:#101828}}
-  .resumo-pld th,.resumo-pld td {{padding:6px 14px;border:1px solid #101828;text-align:center;white-space:nowrap}}
-  .resumo-pld thead th:first-child {{background:#fff;border-top-color:transparent;border-left-color:transparent}}
-  .resumo-pld tbody th {{text-align:left;font-weight:700}}
-  .nota-resumo {{margin-top:10px;text-align:center;color:#667085;font-size:12px;line-height:1.6}}
+  .quadro-resumo {{padding:22px 22px 18px}}
+  .cards-resumo {{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}}
+  .card-resumo {{min-width:0;background:#f9fbfd;border:1px solid #dde6ee;border-radius:13px;padding:15px;box-shadow:0 1px 2px rgba(16,24,40,.035)}}
+  .titulo-card-resumo {{font-size:15px;font-weight:700;color:#163f49;margin-bottom:12px}}
+  .grade-resumo {{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}}
+  .item-resumo {{min-width:0;display:flex;flex-direction:column;gap:5px;padding:10px 9px;background:#fff;border:1px solid #ebeff3;border-radius:9px}}
+  .rotulo-resumo {{font-size:11px;font-weight:700;color:#667085}}
+  .valor-resumo {{font-size:18px;font-weight:700;color:#123044;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}}
+  .nota-resumo {{font-size:12px;color:#667085;line-height:1.7;margin-top:16px;text-align:left}}
+  @media(max-width:1150px) {{.cards-resumo {{grid-template-columns:repeat(2,minmax(0,1fr))}}}}
+  @media(max-width:640px) {{.quadro-resumo {{padding:14px}} .cards-resumo {{grid-template-columns:1fr}}}}
   .js-plotly-plot {{width:100%!important}}
   .legenda-externa {{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px 18px;padding:4px 16px 15px;min-height:40px}}
   .legenda-item {{border:1px solid #e0e6ee;border-radius:8px;background:#fff;color:#263142;font:inherit;font-size:12px;display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:7px 12px;min-width:92px;cursor:pointer;white-space:nowrap}}
@@ -678,7 +747,7 @@ def pagina_pld(hist: pd.DataFrame) -> str:
   #data-pld {{font:inherit;color:#263142;padding:8px 10px;border:1px solid #c6d0dc;border-radius:8px}}
   #status-data-pld {{color:#667085}}
   .fonte-dados {{padding:7px 18px 18px;color:#667085;font-size:11px;line-height:1.5;margin-top:auto}}
-  @media(max-width:750px) {{.area {{padding:0;gap:10px}} .painel {{border-radius:8px}} .quadro-tabela {{padding:12px 8px 14px;overflow:auto}} .legenda-externa {{gap:7px}} .legenda-item {{min-width:76px;padding:7px 8px}} }}
+  @media(max-width:750px) {{.area {{padding:0;gap:10px}} .painel {{border-radius:8px}} .quadro-resumo {{padding:12px 8px 14px}} .legenda-externa {{gap:7px}} .legenda-item {{min-width:76px;padding:7px 8px}} }}
 </style></head><body>
 <main class="area">{aviso_defasagem}{''.join(blocos)}</main>
 <script>
