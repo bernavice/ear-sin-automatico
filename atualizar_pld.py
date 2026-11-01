@@ -415,7 +415,13 @@ SELETORES_GERAR_CCEE = (
     '#gerarArquivo',
     '#gerarHistoricoPreco',
 )
-URL_PAINEL_CCEE = 'https://www.ccee.org.br/web/guest/precos/painel-precos'
+# Rotas oficiais alternativas; a publicação do portal e os redirects Liferay variam.
+URLS_PAINEL_CCEE = (
+    'https://www.ccee.org.br/precos/painel-precos',
+    'https://www.ccee.org.br/web/guest/precos/painel-precos',
+    'https://www.ccee.org.br/pt/web/guest/precos/painel-precos',
+)
+URL_PAINEL_CCEE = URLS_PAINEL_CCEE[0]
 
 
 def _botao_formulario_ccee(frame):
@@ -443,29 +449,112 @@ def _botao_formulario_ccee(frame):
     return None
 
 
-def _locate_form_frame(page, timeout_ms=60000):
-    """Encontra o formulário mesmo se estiver em iframe carregado tardiamente.
+def _verificar_frames_formulario(page):
+    """Busca no documento principal e nos frames, inclusive carregados depois."""
+    for frame in list(page.frames):
+        try:
+            botao = _botao_formulario_ccee(frame)
+            if botao is not None:
+                print(f'PLD navegador: formulário encontrado no frame: {frame.url[:160]}')
+                return frame
+        except Exception:
+            continue
+    return None
 
-    Evita procurar somente o texto 'Gerar Arquivo': a CCEE pode exibir o
-    controle com ID filtrarHistoricoPreco e texto diferente.
+
+def _estimular_carregamento_formulario(page):
+    """Dispara lazy loading por rolagem, sem alterar controles de segurança.
+
+    O formulário pode não existir no DOM enquanto sua seção estiver fora da tela.
+    """
+    try:
+        page.evaluate('window.scrollTo(0, document.body.scrollHeight)')
+    except Exception:
+        pass
+    # Se a seção for um accordion recolhido, expande apenas o título da seção.
+    try:
+        secao = page.get_by_text(re.compile('Planilhas para download dos dados hist[oó]ricos', re.I)).first
+        if secao.count():
+            secao.scroll_into_view_if_needed(timeout=2000)
+            try:
+                botao = secao.locator('xpath=ancestor-or-self::*[@aria-expanded][1]')
+                if botao.count() and botao.first.get_attribute('aria-expanded') == 'false':
+                    botao.first.click(timeout=2000)
+            except Exception:
+                pass
+    except Exception:
+        pass
+    # Avisos de cookies podem esconder os controles ou impedir scripts da página.
+    # Só aceitamos um consentimento explicitamente rotulado; não removemos bloqueios.
+    for termo in [r'^(Aceitar todos|Aceito|Concordo|Accept all)$']:
+        try:
+            b = page.get_by_role('button', name=re.compile(termo, re.I)).first
+            if b.count() and b.is_visible():
+                b.click(timeout=2000)
+                print('PLD navegador: banner de cookies confirmado.')
+                break
+        except Exception:
+            pass
+
+
+def _locate_form_frame(page, timeout_ms=24000):
+    """Procura o controle de consulta em documento, iframe e DOM tardio.
+
+    O site pode renderizar o formulário via JavaScript e iframe lazy-loaded.
+    Uma só frame em todo o período indica que o formulário NÃO foi renderizado,
+    e não simplesmente que o XPath esteja incorreto.
     """
     from time import monotonic
     fim = monotonic() + timeout_ms / 1000
-    ultima_contagem = 0
+    proximo_estimulo = 0.0
     while monotonic() < fim:
-        ultima_contagem = len(page.frames)
-        for frame in page.frames:
-            try:
-                if _botao_formulario_ccee(frame) is not None:
-                    return frame
-            except Exception:
-                continue
-        page.wait_for_timeout(1200)
-    frames = ', '.join((f.url or '[sem URL]')[:120] for f in page.frames)
-    raise RuntimeError(
-        f'Controle #filtrarHistoricoPreco/Gerar Arquivo não localizado em '
-        f'{ultima_contagem} frame(s). URLs: {frames[:800]}'
-    )
+        encontrado = _verificar_frames_formulario(page)
+        if encontrado is not None:
+            return encontrado
+        agora = monotonic()
+        if agora >= proximo_estimulo:
+            _estimular_carregamento_formulario(page)
+            proximo_estimulo = agora + 5.0
+        page.wait_for_timeout(700)
+    frames = ', '.join((f.url or '[sem URL]')[:160] for f in page.frames)
+    raise RuntimeError(f'Formulário CCEE não renderizado após {timeout_ms//1000}s; '
+                       f'frames={len(page.frames)}; URLs={frames[:600]}')
+
+
+def _diagnosticar_pagina_ccee(page, respostas, erros, tentativa):
+    """Salva evidências de carregamento falho (não contém credenciais da sessão)."""
+    DADOS.mkdir(parents=True, exist_ok=True)
+    frames_info = []
+    for frame in list(page.frames):
+        item = {'url': frame.url[:400]}
+        try:
+            item['title'] = frame.evaluate('document.title')
+            item['body'] = frame.locator('body').inner_text(timeout=2500)[:1500]
+            item['buttons'] = frame.locator('button, input[type=submit], input[type=button]').count()
+            item['iframe_count'] = frame.locator('iframe').count()
+        except Exception as exc:
+            item['erro'] = str(exc)[:180]
+        frames_info.append(item)
+    info = {
+        'tentativa': tentativa, 'url_final': page.url, 'frames': frames_info,
+        'falhas_http': respostas[-25:], 'erros_navegador': erros[-20:],
+    }
+    destino = DADOS / 'diagnostico_formulario_ccee.json'
+    destino.write_text(json.dumps(info, ensure_ascii=False, indent=2), encoding='utf-8')
+    try:
+        page.screenshot(path=str(DADOS / 'diagnostico_formulario_ccee.png'),
+                        full_page=True, timeout=10000)
+    except Exception as exc:
+        print(f'PLD diagnóstico: screenshot indisponível: {str(exc)[:100]}')
+    # O log permite analisar mesmo se o usuário não baixar o artefato.
+    for item in frames_info:
+        print(f'PLD diagnóstico: frame URL={item.get("url", "")[:130]}; '
+              f'título={item.get("title", "")[:80]}; botões={item.get("buttons", "?")}; '
+              f'iframes internos={item.get("iframe_count", "?")}')
+        print(f'PLD diagnóstico: texto da página: {item.get("body", "")[:420]!r}')
+    print('PLD diagnóstico: respostas HTTP 4xx/5xx:', respostas[-12:])
+    print('PLD diagnóstico: erros de navegador:', erros[-8:])
+    print('PLD diagnóstico: arquivos em dados/diagnostico_formulario_ccee.*')
 
 
 def _selecionar_preco_horario(frame):
@@ -684,10 +773,11 @@ def _download_por_formulario(page, frame, destino: Path) -> Path:
 
 
 def buscar_pld_formulario(ultima_data, data_final) -> pd.DataFrame | None:
-    """3ª tentativa: consulta por data no formulário público da CCEE.
+    """Coleta prioritária CCEE pelo navegador, com rotas e diagnóstico.
 
-    Busca dias posteriores à última data, em blocos inferiores a seis meses.
-    Requer Playwright/Chromium instalado no workflow.
+    Usa a página pública oficial. Não ignora CAPTCHA, autenticação ou 403.
+    Enquanto o formulário não renderizar, testa rotas oficiais alternativas;
+    nunca tenta coletar preços via clique num botão inexistente.
     """
     from playwright.sync_api import sync_playwright
     inicio = pd.Timestamp(ultima_data).normalize() + pd.Timedelta(days=1)
@@ -700,15 +790,45 @@ def buscar_pld_formulario(ultima_data, data_final) -> pd.DataFrame | None:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True, args=['--disable-dev-shm-usage'])
             try:
-                contexto = browser.new_context(accept_downloads=True, locale='pt-BR', timezone_id='America/Sao_Paulo')
+                contexto = browser.new_context(
+                    accept_downloads=True, locale='pt-BR',
+                    timezone_id='America/Sao_Paulo', viewport={'width': 1440, 'height': 900},
+                )
                 while inicio <= fim:
-                    # Limite oficial 6 meses; consulta de no máximo ~5 meses, com margem.
                     fim_bloco = min(inicio + pd.DateOffset(months=5) - pd.Timedelta(days=1), fim)
+                    erros = []
+                    respostas = []
                     page = contexto.new_page()
+                    page.on('pageerror', lambda erro: erros.append(str(erro)[:250]))
+                    page.on('console', lambda msg: erros.append('console: '+msg.text[:250]) if msg.type == 'error' else None)
+                    page.on('requestfailed', lambda req: erros.append('req: '+req.url[:140]+' '+str(req.failure)[:140]))
+                    page.on('response', lambda resp: respostas.append(f'{resp.status} {resp.url[:180]}') if resp.status >= 400 else None)
                     try:
-                        page.goto('https://www.ccee.org.br/web/guest/precos/painel-precos',
-                                  wait_until='domcontentloaded', timeout=60000)
-                        frame = _locate_form_frame(page)
+                        frame = None
+                        falhas_rotas = []
+                        for tentativa, rota in enumerate(URLS_PAINEL_CCEE, 1):
+                            print(f'PLD navegador: rota {tentativa}/{len(URLS_PAINEL_CCEE)}: {rota}')
+                            try:
+                                resposta = page.goto(rota, wait_until='domcontentloaded', timeout=35000)
+                                status = resposta.status if resposta is not None else 'sem resposta'
+                                print(f'PLD navegador: HTTP={status}; URL final={page.url[:220]}')
+                                if isinstance(status, int) and status >= 400:
+                                    falhas_rotas.append(f'{rota}: HTTP {status}')
+                                    _diagnosticar_pagina_ccee(page, respostas, erros, tentativa)
+                                    continue
+                                try:
+                                    page.wait_for_load_state('load', timeout=8000)
+                                except Exception:
+                                    pass
+                                frame = _locate_form_frame(page, timeout_ms=22000)
+                                break
+                            except Exception as exc:
+                                falhas_rotas.append(f'{rota}: {type(exc).__name__}: {str(exc)[:200]}')
+                                _diagnosticar_pagina_ccee(page, respostas, erros, tentativa)
+                                continue
+                        if frame is None:
+                            raise RuntimeError('CCEE não disponibilizou o formulário no navegador. '
+                                               'Rotas: ' + ' | '.join(falhas_rotas))
                         _selecionar_preco_horario(frame)
                         _preencher_data_ccee(frame, inicio, fim_bloco)
                         destino = Path(temp_dir) / f'pld_{inicio:%Y%m%d}_{fim_bloco:%Y%m%d}.xml'
@@ -721,13 +841,7 @@ def buscar_pld_formulario(ultima_data, data_final) -> pd.DataFrame | None:
                         print(f'PLD formulário: {inicio:%d/%m/%Y} a {fim_bloco:%d/%m/%Y}, '
                               f'{len(df):,} preços horários (até {df.data.max():%d/%m/%Y})')
                     except Exception:
-                        # Captura apenas da página pública para diagnosticar mudanças no formulário.
-                        try:
-                            DADOS.mkdir(parents=True, exist_ok=True)
-                            page.screenshot(path=str(DADOS / 'diagnostico_formulario_ccee.png'), full_page=True, timeout=10000)
-                            print('PLD formulário: diagnóstico salvo em dados/diagnostico_formulario_ccee.png')
-                        except Exception:
-                            pass
+                        _diagnosticar_pagina_ccee(page, respostas, erros, 'falha-final')
                         raise
                     finally:
                         page.close()
