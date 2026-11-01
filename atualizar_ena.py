@@ -146,22 +146,45 @@ def carregar_ons(ano: int, csv_teste: Path | None = None) -> pd.DataFrame:
 
     raw['abs'] = raw['ena_bruta_regiao_mwmed'].map(numero)
     raw['pp'] = raw['ena_bruta_regiao_percentualmlt'].map(numero)
-    if (~np.isfinite(raw[['abs', 'pp']].to_numpy(dtype=float))).any():
-        raise ValueError('ONS ENA: valor numérico não finito')
-    if (raw['abs'] < 0).any():
-        raise ValueError('ONS ENA: ENA bruta negativa; verificar fonte')
-    # MLT implícita, usada para ponderar corretamente a ENA do SIN.
-    # Percentual nulo/negativo não permite inferir MLT desta fonte diária.
-    raw['mlt'] = np.where(raw['pp'] > 0,
-                          100 * raw['abs'] / raw['pp'], np.nan)
-    raw.loc[(raw['abs'] <= 0) | (raw['pp'] <= 0) | (raw['mlt'] <= 0), 'mlt'] = np.nan
+
+    # ONS pode publicar temporariamente uma ENA negativa (ou valor inválido)
+    # e corrigi-la em uma nova publicação. Não deixe um único subsistema
+    # interromper a Action nem contamine o cálculo ponderado do SIN.
+    # Como o histórico possui uma linha por dia com os CINCO percentuais,
+    # descarta-se o DIA INTEIRO se qualquer subsistema estiver inválido.
+    # Nenhuma linha inválida é gravada; o dia será reavaliado em toda
+    # consulta posterior enquanto estiver dentro da janela de revisão.
+    valores = raw[['abs', 'pp']].to_numpy(dtype=float)
+    invalidos = (~np.isfinite(valores).all(axis=1)) | (raw['abs'] <= 0) | (raw['pp'] <= 0)
+    if invalidos.any():
+        registros_invalidos = raw.loc[invalidos, ['data', 'subsistema', 'abs', 'pp']]
+        datas_descartadas = registros_invalidos['data'].unique()
+        for dia, grupo in list(registros_invalidos.groupby('data', sort=True))[:10]:
+            descricao = '; '.join(
+                f"{item[1]}: {item[2]:g} MWmed e {item[3]:g}% MLT"
+                for item in grupo.itertuples(index=False, name=None)
+            )
+            print(f'AVISO ONS ENA: ignorando {dia:%d/%m/%Y} (dia completo): {descricao}.')
+        if len(datas_descartadas) > 10:
+            print(f'AVISO ONS ENA: outros {len(datas_descartadas) - 10} dias inválidos omitidos do log.')
+        print('ENA: dias inválidos não serão gravados; correções do ONS poderão entrar na próxima coleta.')
+        raw = raw.loc[~raw['data'].isin(datas_descartadas)].copy()
+
+    # MLT implícita usada para ponderar corretamente a ENA do SIN.
+    # Depois do filtro, os componentes são positivos e finitos.
+    raw['mlt'] = 100 * raw['abs'] / raw['pp']
+    raw.loc[~np.isfinite(raw['mlt']) | (raw['mlt'] <= 0), 'mlt'] = np.nan
 
     valida = raw.groupby('data').agg(n=('subsistema', 'nunique'),
                                     validos=('mlt', 'count'))
     completas = valida.index[(valida['n'] == 4) & (valida['validos'] == 4)]
+    incompletas = valida.index.difference(completas)
+    if len(incompletas):
+        print(f'AVISO ONS ENA: ignorando {len(incompletas)} dia(s) com subsistemas ausentes ou MLT inválida.')
     raw = raw.loc[raw['data'].isin(completas)].copy()
     if raw.empty:
-        raise ValueError('ONS ENA: nenhuma data com os quatro subsistemas completos')
+        print(f'AVISO ONS ENA: sem dias completos válidos em {ano}; histórico anterior será preservado.')
+        return pd.DataFrame(columns=COLUNAS).astype({'data': 'datetime64[ns]'})
 
     linhas = []
     for dia, grupo in raw.groupby('data', sort=True):
