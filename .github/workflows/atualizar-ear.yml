@@ -1,6 +1,10 @@
-name: Atualizar painel EAR, ENA e PLD
+name: Atualizar painel EAR, ENA, PLD e Mercado
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'dados/todosnegocios.xlsx'
   schedule:
     - cron: '15 20 * * *'
       timezone: 'America/Sao_Paulo'
@@ -30,7 +34,7 @@ jobs:
       - name: Instalar bibliotecas
         run: |
           pip install -r requirements-ear.txt
-          pip install 'playwright>=1.55,<2'
+          pip install 'playwright>=1.55,<2' 'openpyxl>=3.1,<4'
       - name: Instalar Chromium para consulta ao formulario CCEE
         run: python -m playwright install --with-deps chromium
       - name: Atualizar EAR
@@ -47,18 +51,22 @@ jobs:
           retention-days: 7
       - name: Atualizar ENA e pagina inicial
         run: python atualizar_ena.py
+      - name: Atualizar Preco de Mercado e pagina principal
+        run: python atualizar_mercado.py
       - name: Conferir painel completo
         run: |
           python - <<'PYVALID'
           from pathlib import Path
           import pandas as pd
           page = Path('graficos/index.html').read_text(encoding='utf-8')
-          assert all(s in page for s in ['botao-ear', 'botao-ena', 'botao-pld', 'ear_sin.html', 'ena.html', 'pld.html'])
+          assert all(s in page for s in ['botao-ear', 'botao-ena', 'botao-pld', 'botao-mercado', 'ear_sin.html', 'ena.html', 'pld.html', 'mercado.html'])
           pld = pd.read_csv('dados/pld_historico_long.csv', sep=';', decimal=',')
           assert {'data','hora','submercado','pld'}.issubset(pld.columns)
           assert set(pld['submercado'].unique()) == {'SE/CO', 'SUL', 'NE', 'N'}
           assert len(pld) > 0
           assert Path('graficos/pld.html').exists()
+          assert Path('graficos/mercado.html').exists()
+          assert Path('dados/historico_precos_bbce.csv').exists()
           print('Painel EAR + ENA + PLD gerado. PLD ate', pld['data'].max())
           PYVALID
       - name: Registrar dados e graficos
@@ -66,7 +74,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add dados/ear_diaria.csv dados/ear_mensal.csv dados/ena_diaria.csv dados/ena_mensal.csv dados/pld_historico_long.csv
-          git add graficos/ear_sin.html graficos/ena.html graficos/pld.html graficos/index.html
+          git add dados/historico_precos_bbce.csv dados/precos_mercado_diario.csv dados/produtos_mercado.csv
+          git add graficos/ear_sin.html graficos/ena.html graficos/pld.html graficos/mercado.html graficos/index.html
           if git diff --cached --quiet; then
             echo "Nenhuma alteracao encontrada."
           else
@@ -80,6 +89,7 @@ jobs:
           cp graficos/ear_sin.html site/ear_sin.html
           cp graficos/ena.html site/ena.html
           cp graficos/pld.html site/pld.html
+          cp graficos/mercado.html site/mercado.html
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
       - name: Enviar site
