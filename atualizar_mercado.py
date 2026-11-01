@@ -351,12 +351,12 @@ function tokens(){selectedEl.innerHTML=[...SEL].map(p=>`<span class="chip"><span
  selectedEl.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{SEL.delete(b.dataset.name);atualizarChart()}));}
 function curve(nome){const d=DIAS[nome];if(!d||!d.datas.length)return null;
  let registros=new Map(d.datas.map((x,i)=>[x,{v:d.precos[i],q:d.qtd[i],vol:d.volumes[i]}]));
- let x=[],y=[],size=[],detalhe=[];let v=null;
+ let x=[],y=[],detalhe=[];let v=null;
  for(let t=Date.parse(d.datas[0]+'T00:00:00Z');t<=Date.parse(HOJE+'T00:00:00Z');t+=86400000){
   let iso=new Date(t).toISOString().slice(0,10),r=registros.get(iso);if(r)v=r.v;
-  x.push(iso);y.push(v);size.push(r?5:0);detalhe.push(r?`Negociado (${r.q} negócios; ${fmt(r.vol)} MWh)`:'Carregado do último dia com negócio');
+  x.push(iso);y.push(v);detalhe.push(r?`Negociado (${r.q} negócios; ${fmt(r.vol)} MWh)`:'Carregado do último dia com negócio');
  }
- return {x,y,customdata:detalhe,name:nome,mode:'lines+markers',line:{color:cor(nome),width:2.5,shape:'hv'},marker:{color:cor(nome),size},
+ return {x,y,customdata:detalhe,name:nome,mode:'lines',line:{color:cor(nome),width:2.5,shape:'hv'},
  hovertemplate:'<b>'+safe(nome)+'</b><br>%{x|%d/%m/%Y}<br>R$ %{y:.2f}/MWh<br>%{customdata}<extra></extra>'};}
 function desenhar(){
  let trs=[...SEL].map(curve).filter(Boolean);
@@ -371,7 +371,7 @@ function desenhar(){
   xaxis:{title:'Dia da operação',type:'date',showline:true,linecolor:'#737373',linewidth:1,
     showgrid:true,gridcolor:'rgba(255,255,255,.08)',ticks:'outside',tickcolor:'#777',
     tickfont:{color:'#D6D6D6',size:12},titlefont:{color:'#E0E0E0'},zeroline:false},
-  yaxis:{title:'Preço (R$/MWh)',showline:true,linecolor:'#737373',linewidth:1,
+  yaxis:{title:{text:'Preço (R$/MWh)',font:{color:'#E0E0E0',size:14},standoff:14},showline:true,linecolor:'#737373',linewidth:1,
     showgrid:true,gridcolor:'rgba(255,255,255,.08)',ticks:'outside',tickcolor:'#777',
     tickfont:{color:'#D6D6D6',size:12},titlefont:{color:'#E0E0E0'},zeroline:false},
   legend:pequeno?{orientation:'h',x:.5,xanchor:'center',y:-.22,yanchor:'top',
