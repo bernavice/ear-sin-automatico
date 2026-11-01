@@ -407,19 +407,65 @@ def _ler_download_formulario(arquivo: Path) -> pd.DataFrame:
     return dados.sort_values(['data', 'hora', 'submercado']).drop_duplicates(['data', 'hora', 'submercado'], keep='last')
 
 
-def _locate_form_frame(page):
-    """Busca formulário na página principal ou no iframe que o hospeda."""
-    for _ in range(8):
+# O site CCEE usa o identificador abaixo no controle de consulta/geração.
+# Procurar pelo ID é mais robusto do que depender apenas do texto do botão.
+SELETORES_GERAR_CCEE = (
+    '#filtrarHistoricoPreco',  # XPath fornecido: //*[@id="filtrarHistoricoPreco"]
+    '[id="filtrarHistoricoPreco"]',
+    '#gerarArquivo',
+    '#gerarHistoricoPreco',
+)
+URL_PAINEL_CCEE = 'https://www.ccee.org.br/web/guest/precos/painel-precos'
+
+
+def _botao_formulario_ccee(frame):
+    """Encontra o controle que dispara a busca, seja botão, input ou link."""
+    for css in SELETORES_GERAR_CCEE:
+        try:
+            loc = frame.locator(css)
+            for i in range(min(loc.count(), 4)):
+                candidato = loc.nth(i)
+                if candidato.is_visible():
+                    return candidato
+        except Exception:
+            continue
+    for loc in (
+        frame.get_by_role('button', name=re.compile(r'Gerar\s+Arquivo|Filtrar\s+Hist[oó]rico', re.I)),
+        frame.locator('input[type="submit"][value*="Gerar"], button:has-text("Gerar Arquivo")'),
+        frame.get_by_text('Gerar Arquivo', exact=True),
+    ):
+        try:
+            for i in range(min(loc.count(), 4)):
+                if loc.nth(i).is_visible():
+                    return loc.nth(i)
+        except Exception:
+            pass
+    return None
+
+
+def _locate_form_frame(page, timeout_ms=60000):
+    """Encontra o formulário mesmo se estiver em iframe carregado tardiamente.
+
+    Evita procurar somente o texto 'Gerar Arquivo': a CCEE pode exibir o
+    controle com ID filtrarHistoricoPreco e texto diferente.
+    """
+    from time import monotonic
+    fim = monotonic() + timeout_ms / 1000
+    ultima_contagem = 0
+    while monotonic() < fim:
+        ultima_contagem = len(page.frames)
         for frame in page.frames:
             try:
-                if frame.get_by_role('button', name=re.compile(r'Gerar\s+Arquivo', re.I)).count():
-                    return frame
-                if frame.get_by_text('Gerar Arquivo', exact=True).count():
+                if _botao_formulario_ccee(frame) is not None:
                     return frame
             except Exception:
                 continue
         page.wait_for_timeout(1200)
-    raise RuntimeError('Formulário "Gerar Arquivo" não localizado na página/iframes da CCEE')
+    frames = ', '.join((f.url or '[sem URL]')[:120] for f in page.frames)
+    raise RuntimeError(
+        f'Controle #filtrarHistoricoPreco/Gerar Arquivo não localizado em '
+        f'{ultima_contagem} frame(s). URLs: {frames[:800]}'
+    )
 
 
 def _selecionar_preco_horario(frame):
@@ -463,90 +509,177 @@ def _selecionar_preco_horario(frame):
 
 
 def _preencher_data_ccee(frame, inicio, fim):
-    """Preenche os campos 'De' e 'Até' de preferência pelas labels.
+    """Preenche 'De/Até' NO formulário do PLD, evitando filtros do cabeçalho.
 
-    Admite input type=date (ISO) ou texto dd/mm/aaaa.
+    Aceita input date, text com máscara e componentes controlados por eventos.
     """
-    candidates = []
-    for nome in ['De', 'Até']:
+    botao = _botao_formulario_ccee(frame)
+    escopo = frame
+    if botao is not None:
+        form = botao.locator('xpath=ancestor::form[1]')
+        if form.count():
+            escopo = form
+
+    # Campo data dedicado CCEE, quando disponível.
+    pares_css = (
+        ('#dataInicialHistoricoPreco', '#dataFinalHistoricoPreco'),
+        ('#dataInicioHistoricoPreco', '#dataFimHistoricoPreco'),
+        ('input[name*="dataInicio"]', 'input[name*="dataFim"]'),
+        ('input[id*="dataInicial"]', 'input[id*="dataFinal"]'),
+    )
+    candidatos = []
+    for ini_css, fim_css in pares_css:
         try:
-            loc = frame.get_by_label(nome, exact=True)
-            if loc.count() == 1:
-                candidates.append(loc.first)
+            a, b = frame.locator(ini_css), frame.locator(fim_css)
+            if a.count() and b.count() and a.first.is_visible() and b.first.is_visible():
+                candidatos = [a.first, b.first]
+                break
         except Exception:
             pass
-    if len(candidates) != 2:
-        botao = frame.get_by_role('button', name=re.compile(r'Gerar\s+Arquivo', re.I))
-        escopo = None
-        if botao.count():
-            form = botao.first.locator('xpath=ancestor::form[1]')
-            if form.count():
-                escopo = form
-        if escopo is None:
-            escopo = frame
-        loc = escopo.locator('input[type="date"], input[placeholder*="dd/mm"], input[placeholder*="aaaa"], input[aria-label*="data"]')
-        inputs = [v for v in loc.all() if v.is_visible()]
-        if len(inputs) >= 2:
-            # O site possui outros filtros de período no cabeçalho: usar os dois
-            # últimos campos do bloco do formulário, próximos a "Gerar Arquivo".
-            candidates = inputs[-2:]
-    if len(candidates) != 2:
-        raise RuntimeError('Campos de datas De/Até não localizados no formulário CCEE')
-    for loc, data in zip(candidates, [inicio, fim]):
-        valor = data.strftime('%Y-%m-%d') if loc.get_attribute('type') == 'date' else data.strftime('%d/%m/%Y')
+
+    if not candidatos:
+        for seletor in (
+            'input[placeholder*="dd/mm"], input[type="date"]',
+            'input[placeholder*="aaaa"], input[aria-label*="data"], input[id*="Data"]',
+        ):
+            campos = [i for i in escopo.locator(seletor).all() if i.is_visible()]
+            if len(campos) >= 2:
+                candidatos = campos[-2:]
+                break
+
+    if not candidatos:
+        campos = []
+        for label in ('De', 'Até'):
+            try:
+                elemento = escopo.get_by_label(label, exact=True)
+                if elemento.count() == 1 and elemento.first.is_visible():
+                    campos.append(elemento.first)
+            except Exception:
+                pass
+        if len(campos) == 2:
+            candidatos = campos
+
+    if len(candidatos) != 2:
+        raise RuntimeError('Campos De/Até do formulário histórico CCEE não encontrados')
+
+    for loc, data in zip(candidatos, [inicio, fim]):
+        iso = data.strftime('%Y-%m-%d')
+        brasileiro = data.strftime('%d/%m/%Y')
+        valor = iso if loc.get_attribute('type') == 'date' else brasileiro
         try:
-            loc.fill(valor, timeout=6000)
+            loc.fill(valor, timeout=5000)
             loc.press('Tab', timeout=2000)
         except Exception:
-            # Em componentes controlados, disparar os eventos de input/change.
-            loc.evaluate('''(el, valor) => {
-                const prop = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
-                if (prop && prop.set) prop.set.call(el, valor); else el.value = valor;
+            # Fallback para datepickers/inputs controlados por JavaScript.
+            loc.evaluate("""(el, valor) => {
+                const proto = Object.getPrototypeOf(el);
+                const setter = Object.getOwnPropertyDescriptor(proto, 'value')?.set;
+                if (setter) setter.call(el, valor); else el.value = valor;
                 el.dispatchEvent(new Event('input', {bubbles:true}));
                 el.dispatchEvent(new Event('change', {bubbles:true}));
                 el.blur();
-            }''', valor)
+            }""", valor)
+        print(f'PLD formulário: campo {"De" if loc == candidatos[0] else "Até"} = {valor}')
+
+
+def _links_download_ccee(frame):
+    """Links associados ao resultado da exportação histórica, não à navegação."""
+    seletores = (
+        'a[download]',
+        'a[href$=".xml"], a[href*=".xml?"], a[href$=".xlsx"], a[href$=".csv"]',
+        'a:has-text("Preço Médio Horário")',
+        'a:has-text("Histórico.xml")',
+        'a:has-text("Nome do arquivo")',
+    )
+    links = []
+    for seletor in seletores:
+        try:
+            for loc in frame.locator(seletor).all():
+                if loc.is_visible():
+                    # Usar o elemento como referência para evitar cliques repetidos.
+                    links.append(loc)
+        except Exception:
+            pass
+    return links
 
 
 def _download_por_formulario(page, frame, destino: Path) -> Path:
-    """Aciona Gerar Arquivo e, caso exista, o link de download resultante."""
-    arquivos = []
-    page.on('download', lambda download: arquivos.append(download))
-    botao = frame.get_by_role('button', name=re.compile(r'Gerar\s+Arquivo', re.I))
-    if not botao.count():
-        botao = frame.get_by_text('Gerar Arquivo', exact=True)
-    botao.first.click(timeout=15000)
-    for _ in range(15):
-        if arquivos:
+    """Consulta usando o ID encontrado pelo usuário e salva o arquivo gerado.
+
+    Alguns fluxos iniciam o download diretamente; outros exibem um link na seção
+    'Download do histórico'. Suporta ambos sem depender só do nome do botão.
+    """
+    from time import monotonic
+    downloads = []
+    janelas = []
+    page.on('download', lambda download: downloads.append(download))
+    page.context.on('page', lambda nova: janelas.append(nova))
+    botao = _botao_formulario_ccee(frame)
+    if botao is None:
+        raise RuntimeError('Controle #filtrarHistoricoPreco/Gerar Arquivo ausente')
+    print(f'PLD formulário: acionando {botao.get_attribute("id") or botao.inner_text()[:60] or "controle"}')
+    botao.click(timeout=15000)
+    # Permitir que uma requisição de geração atualize o link da página.
+    page.wait_for_timeout(1800)
+
+    # A CCEE pode primeiro gerar o resultado e só então criar o link.
+    # Dar tempo à geração, mas não clicar em outros botões da página.
+    prazo = monotonic() + 65
+    ultimo_link = None
+    clicou_link = False
+    while monotonic() < prazo and not downloads:
+        if not clicou_link:
+            for link in reversed(_links_download_ccee(frame)):
+                try:
+                    href = link.get_attribute('href') or ''
+                    texto = link.inner_text(timeout=1200)
+                    if not href or href.strip() == '#' or href.lower().startswith('javascript:'):
+                        # Um link com handler JS ainda pode iniciar o download.
+                        if not (link.get_attribute('onclick') or link.get_attribute('download')):
+                            continue
+                    ident = (href, texto[:100])
+                    if ident == ultimo_link:
+                        continue
+                    ultimo_link = ident
+                    link.click(timeout=8000)
+                    clicou_link = True
+                    print(f'PLD formulário: link de resultado acionado: {texto[:80] or href[:80]}')
+                    break
+                except Exception:
+                    continue
+        if downloads:
             break
         page.wait_for_timeout(1000)
-    if not arquivos:
-        links = [
-            frame.get_by_role('link', name=re.compile('Preço Médio Horário', re.I)),
-            frame.get_by_role('link', name=re.compile('download|histórico', re.I)),
-            frame.locator('a[download]'),
-        ]
-        for link in links:
+
+    if not downloads:
+        # Algumas implementações abrem o XML em nova aba, sem evento download.
+        for nova in janelas:
             try:
-                if link.count():
-                    link.last.click(timeout=6000)
-                    break
+                if nova.url.lower().split('?')[0].endswith(('.xml', '.csv', '.xlsx')):
+                    resposta = nova.request.get(nova.url, timeout=30000)
+                    if resposta.ok:
+                        ext = Path(nova.url.split('?', 1)[0]).suffix.lower()
+                        final = destino.with_suffix(ext)
+                        final.write_bytes(resposta.body())
+                        return final
             except Exception:
-                continue
-        for _ in range(12):
-            if arquivos:
-                break
-            page.wait_for_timeout(1000)
-    if not arquivos:
-        raise RuntimeError('CCEE não disponibilizou download após Gerar Arquivo')
-    download = arquivos[-1]
-    if download.failure():
-        raise RuntimeError(f'Download CCEE não concluído: {download.failure()}')
-    nome = Path(download.suggested_filename or 'pld_horario.xml').suffix.lower()
-    if nome not in {'.xml', '.csv', '.xls', '.xlsx', '.html', '.htm'}:
-        nome = '.xml'
-    final = destino.with_suffix(nome)
+                pass
+        raise RuntimeError('CCEE não iniciou o download após consultar #filtrarHistoricoPreco; '
+                           'verificar screenshot em dados/diagnostico_formulario_ccee.png')
+
+    download = downloads[-1]
+    falha = download.failure()
+    if falha:
+        raise RuntimeError(f'Download CCEE falhou: {falha}')
+    extensao = Path(download.suggested_filename or 'pld_horario.xml').suffix.lower()
+    if extensao not in {'.xml', '.csv', '.xls', '.xlsx', '.html', '.htm'}:
+        extensao = '.xml'
+    final = destino.with_suffix(extensao)
     download.save_as(str(final))
+    print(f'PLD formulário: arquivo recebido: {download.suggested_filename}, '
+          f'{final.stat().st_size:,} bytes')
+    if final.stat().st_size < 50:
+        raise ValueError('Download CCEE muito pequeno para conter PLD horário')
     return final
 
 
@@ -692,10 +825,9 @@ def _buscar_base_publica(anos: list[int]) -> list[pd.DataFrame]:
 
 
 def atualizar_com_online(historico: pd.DataFrame, usar_online: bool) -> pd.DataFrame:
-    """Ordem de coleta: API → recurso público → formulário → importação manual.
+    """Ordem priorizada: navegador CCEE → API → base pública → importação.
 
-    Os métodos são tentados em cascata até alcançar a data atual, quando possível.
-    Falhas de acesso não eliminam preços históricos já persistidos no repositório.
+    Não perde o histórico se a CCEE bloquear ou se o arquivo não estiver pronto.
     """
     historico = historico.copy()
     if historico.empty:
@@ -704,33 +836,33 @@ def atualizar_com_online(historico: pd.DataFrame, usar_online: bool) -> pd.DataF
     data_meta = pd.Timestamp(hoje)
     anos = _anos_consulta(hoje, historico)
     if usar_online:
-        # Métodos 1 e 2: prioriza a API, depois a base pública oficial.
+        # Método 1: navegador, prioritário para contornar as restrições da API
+        # apenas através do formulário público oficial (sem acesso autenticado).
+        if pd.Timestamp(historico['data'].max()).normalize() < data_meta:
+            print('PLD: tentativa 1/4 — navegador CCEE (controle #filtrarHistoricoPreco).')
+            try:
+                bloco = buscar_pld_formulario(historico['data'].max(), data_meta)
+                if bloco is not None:
+                    historico = _mesclar_pld(historico, bloco, 'navegador CCEE')
+            except Exception as exc:
+                print(f'::warning title=PLD navegador CCEE::{type(exc).__name__}: {exc}')
+        # Métodos 2 e 3: cascata de contingência; só tentar se faltarem dias.
         for ordem, nome, rotina in [
-            (1, 'API CCEE', _buscar_pela_api),
-            (2, 'base pública CCEE', _buscar_base_publica),
+            (2, 'API CCEE', _buscar_pela_api),
+            (3, 'base pública CCEE', _buscar_base_publica),
         ]:
-            print(f'PLD: tentativa {ordem}/4 — {nome}.')
+            if pd.Timestamp(historico['data'].max()).normalize() >= data_meta:
+                break
+            print(f'PLD: tentativa {ordem}/4 — {nome} (contingência).')
             try:
                 partes = rotina(anos)
                 for parte in partes:
                     historico = _mesclar_pld(historico, parte, nome)
             except Exception as exc:
                 print(f'::warning title=PLD método {ordem} falhou::{nome}: {exc}')
-            if pd.Timestamp(historico['data'].max()).normalize() >= data_meta:
-                print(f'PLD: histórico alcançou {hoje:%d/%m/%Y} pelo método {ordem} ({nome}).')
-                break
-        # Método 3: automatizar o formulário apenas se ainda houver dias a buscar.
-        if pd.Timestamp(historico['data'].max()).normalize() < data_meta:
-            print('PLD: tentativa 3/4 — formulário com navegador automatizado.')
-            try:
-                bloco = buscar_pld_formulario(historico['data'].max(), data_meta)
-                if bloco is not None:
-                    historico = _mesclar_pld(historico, bloco, 'formulário CCEE')
-            except Exception as exc:
-                print(f'::warning title=PLD método 3 (formulário)::{type(exc).__name__}: {exc}')
     else:
         print('PLD: modo offline; fontes remotas não consultadas.')
-    # Método 4: usuário pode deixar CSV anual em dados/pld_importacao_AAAA.csv.
+    # Método 4: CSV anual colocado em dados/pld_importacao_AAAA.csv.
     if pd.Timestamp(historico['data'].max()).normalize() < data_meta or not usar_online:
         print('PLD: tentativa 4/4 — arquivos CSV importados no GitHub.')
         partes = carregar_importacoes_manuais()
@@ -739,7 +871,7 @@ def atualizar_com_online(historico: pd.DataFrame, usar_online: bool) -> pd.DataF
     ultimo = pd.Timestamp(historico['data'].max()).strftime('%d/%m/%Y')
     print(f'PLD: data final consolidada {ultimo}.')
     if usar_online and pd.Timestamp(historico['data'].max()).normalize() < data_meta:
-        print('::warning title=PLD incompleto::Todas as fontes automáticas foram tentadas; '
+        print('::warning title=PLD incompleto::Todas as fontes foram tentadas; '
               f'última data presente no histórico: {ultimo}.')
     return historico
 
