@@ -255,7 +255,11 @@ body{margin:0;background:#fff;color:#193245;font-family:'Century Gothic',Century
 .metric-label{color:#64748b;font-size:10px;margin-top:4px}
 .comparison{border-top:1px solid #dce5ea;margin-top:11px;padding-top:10px;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}
 .compare-number{font-size:16px;font-weight:700;color:#385467}
-.delta{font-weight:750;font-size:17px;white-space:nowrap}
+.delta{font-weight:750;font-size:14px;white-space:nowrap}
+.delta-indice{font-weight:700;font-size:13px;white-space:nowrap;margin-top:6px}
+.delta-indice.pos{color:#b45309}.delta-indice.neg{color:#0f766e}.delta-indice.zero{color:#64748b}
+.delta-unidade{font-weight:500;font-size:10px;letter-spacing:0}
+.delta-duplo{text-align:right}
 .delta.pos{color:#b45309}.delta.neg{color:#0f766e}.delta.zero{color:#64748b}
 .card-foot{font-size:10px;color:#64748b;margin-top:9px;line-height:1.5;overflow-wrap:anywhere}
 .toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:10px 20px 8px}
@@ -268,7 +272,9 @@ body{margin:0;background:#fff;color:#193245;font-family:'Century Gothic',Century
 .catalog{padding:10px;max-height:118px;overflow:auto;margin:0 20px 8px;border:1px solid #e4eaf0;border-radius:9px;display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
 .catalog label{cursor:pointer;display:flex;align-items:center;gap:8px;font-size:12px;padding:7px;border-radius:7px;background:#f8fafb}
 .catalog input{accent-color:#007E80}.catalog label:hover{background:#e8f5f3}
-#market-chart{width:100%;height:550px}
+#market-chart{width:100%;height:610px;background:#0e0e0e}
+.chart-shell{margin:4px 18px 8px;border:1px solid #292929;border-radius:10px;overflow:hidden;background:#0e0e0e}
+@media(max-width:700px){.chart-shell{margin:4px 8px}.delta-duplo{text-align:left}}
 .note{padding:0 20px 15px;color:#667085;font-size:11px;line-height:1.55}
 @media(max-width:1400px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:800px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.strong-number{font-size:21px}}
@@ -276,7 +282,7 @@ body{margin:0;background:#fff;color:#193245;font-family:'Century Gothic',Century
 </style>
 <script>''' + plotly_js + '''</script></head><body>
 <section class="panel"><div class="bar">Preço de Mercado — Resumo</div>
-<p class="caption">Último preço conhecido de cada produto versus o preço vigente na data de comparação. Δ em R$/MWh.</p>
+<p class="caption">Preço atual versus referência. Δ em R$/MWh e Δ do índice de preços (base 100) em p.p.</p>
 <div id="market-cards" class="cards"></div>
 </section>
 <section class="panel"><div class="bar">Preço de Mercado — Evolução diária</div>
@@ -285,8 +291,8 @@ body{margin:0;background:#fff;color:#193245;font-family:'Century Gothic',Century
 <button type="button" id="clear">Limpar seleção</button><button type="button" id="add-visible">Adicionar resultados</button></div>
 <div class="selection" id="selected"></div>
 <div class="catalog" id="catalog" aria-label="Produtos negociados"></div>
-<div id="market-chart"></div>
-<footer class="note">Fonte: histórico de operações enviado pelo usuário (BBCE). Os 17 produtos são os únicos incorporados ao histórico. A continuidade de preço em dias sem negócios é apenas visual e para comparações; não cria registros de negociação.</footer>
+<div class="chart-shell"><div id="market-chart"></div></div>
+<footer class="note">Fonte: BBCE</footer>
 </section>
 <script>
 const DIAS=''' + dados_js + ''';
@@ -296,7 +302,7 @@ const PERIODOS=''' + periodos_js + ''';
 const DEFAULTS=''' + defaults_js + ''';
 const HOJE=''' + json.dumps(hoje.strftime('%Y-%m-%d')) + ''';
 const ULTIMO=''' + json.dumps(pd.Timestamp(ultimo_dia).strftime('%Y-%m-%d')) + ''';
-const CORES=['#2868df','#e18414','#d64245','#00a08a','#885eb7','#cb5685','#558c37','#a6732a','#597ca8','#b96b43','#5269b6','#0a9db4','#80619a','#d6864c','#486aa6','#1b7773','#b34774'];
+const CORES=['#45A0FF','#F6B23B','#FF6B73','#55D6BD','#C39AFF','#EE79D3','#A0D376','#F2BD73','#80B6EA','#EBA48C','#9DB0FB','#68D8ED','#B9A4EA','#FFAE68','#74B7D5','#5ECBA7','#E792B4'];
 const CARTOES=Array.from({length:5},(_,i)=>({produto:DEFAULTS[i],periodo:'7d'}));
 const SEL=new Set(['2027','NOV/26']);
 const cardEl=document.getElementById('market-cards');
@@ -317,6 +323,8 @@ function acharPreco(nome,data){let d=DIAS[nome];if(!d||!d.datas.length)return nu
 function montarCards(){cardEl.innerHTML=CARTOES.map((c,i)=>{
  let atual=acharPreco(c.produto,ULTIMO),alvo=dataComparacao(ULTIMO,c.periodo),antigo=acharPreco(c.produto,alvo);
  let delta=atual&&antigo?atual.valor-antigo.valor:null;
+ // Índice de preços: referência = 100; sua diferença é expressa em pontos percentuais.
+ let deltaIndice=atual&&antigo&&antigo.valor!==0?(100*atual.valor/antigo.valor-100):null;
  let classe=delta===null||Math.abs(delta)<.00001?'zero':delta>0?'pos':'neg';
  let sinal=delta===null?'':delta>0?'+':'';
  let opcoes=NOMES.map(p=>`<option value="${safe(p)}" ${p===c.produto?'selected':''}>${safe(p)}</option>`).join('');
@@ -327,7 +335,8 @@ function montarCards(){cardEl.innerHTML=CARTOES.map((c,i)=>{
  <div class="field"><label>Comparar com</label><select class="card-periodo" aria-label="Período do card ${i+1}">${pp}</select></div>
  <div><div class="strong-number">${atual?'R$ '+fmt(atual.valor):'—'}</div><div class="metric-label">Preço atual · último registro ${atual?br(atual.dia):'—'}</div></div>
  <div class="comparison"><div><div class="compare-number">${antigo?'R$ '+fmt(antigo.valor):'—'}</div><div class="metric-label">Preço na referência · ${br(alvo)}${antigo?' (registro '+br(antigo.dia)+')':''}</div></div>
- <div><div class="delta ${classe}">Δ ${delta===null?'—':sinal+fmt(delta)}</div><div class="metric-label">R$/MWh</div></div></div>
+ <div class="delta-duplo"><div class="delta ${classe}">Δ ${delta===null?'—':sinal+fmt(delta)} <span class="delta-unidade">R$/MWh</span></div>
+ <div class="delta-indice ${classe}">Δ ${deltaIndice===null?'—':(deltaIndice>0?'+':'')+fmt(deltaIndice)} <span class="delta-unidade">p.p.</span></div></div></div>
  ${aviso?`<div class="card-foot">${aviso}</div>`:''}
  </article>`;}).join('');
  cardEl.querySelectorAll('.card').forEach(div=>{
@@ -349,13 +358,30 @@ function curve(nome){const d=DIAS[nome];if(!d||!d.datas.length)return null;
  }
  return {x,y,customdata:detalhe,name:nome,mode:'lines+markers',line:{color:cor(nome),width:2.5,shape:'hv'},marker:{color:cor(nome),size},
  hovertemplate:'<b>'+safe(nome)+'</b><br>%{x|%d/%m/%Y}<br>R$ %{y:.2f}/MWh<br>%{customdata}<extra></extra>'};}
-function desenhar(){let trs=[...SEL].map(curve).filter(Boolean);
- Plotly.react(chart,trs,{height:550,margin:{l:85,r:24,t:25,b:90},font:{family:'Century Gothic,Arial,sans-serif',color:'#193245',size:12},
- paper_bgcolor:'white',plot_bgcolor:'white',hovermode:'closest',
- xaxis:{title:'Dia da operação',type:'date',showline:true,linecolor:'#50627a',showgrid:false,ticks:'outside'},
- yaxis:{title:'Preço (R$/MWh)',showline:true,linecolor:'#50627a',showgrid:false,ticks:'outside',zeroline:false},
- legend:{orientation:'h',x:.5,xanchor:'center',y:-.23,yanchor:'top',font:{size:11}},
- showlegend:trs.length>0,annotations:trs.length?[]:[{text:'Selecione um produto',x:.5,y:.5,xref:'paper',yref:'paper',showarrow:false,font:{color:'#667085',size:15}}]
+function desenhar(){
+ let trs=[...SEL].map(curve).filter(Boolean);
+ const pequeno=window.innerWidth<850;
+ Plotly.react(chart,trs,{
+  height:pequeno?570:615,
+  margin:{l:pequeno?68:92,r:pequeno?24:220,t:64,b:pequeno?96:70},
+  font:{family:'Century Gothic,CenturyGothic,Arial,sans-serif',color:'#E0E0E0',size:13},
+  paper_bgcolor:'#0e0e0e',plot_bgcolor:'#0e0e0e',hovermode:'closest',
+  title:{text:'Preço Médio de Mercado',x:.055,xanchor:'left',font:{color:'#E0E0E0',size:23}},
+  hoverlabel:{bgcolor:'#1f1f1f',bordercolor:'#444',font:{color:'#FFFFFF',size:14}},
+  xaxis:{title:'Dia da operação',type:'date',showline:true,linecolor:'#737373',linewidth:1,
+    showgrid:true,gridcolor:'rgba(255,255,255,.08)',ticks:'outside',tickcolor:'#777',
+    tickfont:{color:'#D6D6D6',size:12},titlefont:{color:'#E0E0E0'},zeroline:false},
+  yaxis:{title:'Preço (R$/MWh)',showline:true,linecolor:'#737373',linewidth:1,
+    showgrid:true,gridcolor:'rgba(255,255,255,.08)',ticks:'outside',tickcolor:'#777',
+    tickfont:{color:'#D6D6D6',size:12},titlefont:{color:'#E0E0E0'},zeroline:false},
+  legend:pequeno?{orientation:'h',x:.5,xanchor:'center',y:-.22,yanchor:'top',
+    bgcolor:'rgba(20,20,20,.62)',font:{color:'#fff',size:11}}:
+    {orientation:'v',x:1.02,xanchor:'left',y:1,yanchor:'top',
+    bgcolor:'rgba(20,20,20,.62)',bordercolor:'rgba(180,180,180,.2)',borderwidth:1,
+    font:{color:'#fff',size:12}},
+  showlegend:trs.length>0,
+  annotations:trs.length?[]:[{text:'Selecione um produto',x:.5,y:.5,xref:'paper',yref:'paper',
+    showarrow:false,font:{color:'#d5d5d5',size:16}}]
  },{responsive:true,displaylogo:false});}
 function atualizarChart(){catalogo();tokens();desenhar();ajustarAltura()}
 searchEl.addEventListener('input',catalogo);

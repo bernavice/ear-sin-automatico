@@ -320,7 +320,7 @@ def grafico_ear(mensal: pd.DataFrame, titulo: str, coluna: str,
             y=np.concatenate([maximo_suave, minimo_suave[::-1]]),
             mode="lines", fill="toself",
             fillcolor="rgba(187, 194, 202, 0.50)",
-            line=dict(width=1.3, color="rgba(155, 164, 175, 0.70)"),
+            line=dict(width=0, color="rgba(187, 194, 202, 0)"),
             name="Faixa hist.", showlegend=True, hoverinfo="skip",
         ))
         if VMIMOP_PCT is not None:

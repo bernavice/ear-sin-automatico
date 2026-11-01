@@ -301,7 +301,7 @@ def grafico_ena(mensal: pd.DataFrame, titulo: str, coluna: str,
         # A fonte é exibida abaixo do gráfico em HTML, nunca na área da legenda.
     )
     f.update_xaxes(
-        title_text='Mês', range=[.75, 12.25],
+        title_text='% da média de longo termo (MLT)', range=[.75, 12.25],
         tickmode='array', tickvals=MESES, ticktext=NOMES_MESES,
         showline=True, linewidth=1.5, linecolor='#475467',
         ticks='', showgrid=False, zeroline=False,
