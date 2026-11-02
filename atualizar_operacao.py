@@ -360,7 +360,7 @@ main{padding:0 12px 24px}.painel{border:1px solid #e0e8ee;border-radius:14px;mar
 .card h3{font-size:14px;margin:0 0 10px;color:#006f75}.select{font-family:inherit;border:1px solid #cbd8e3;border-radius:7px;padding:6px 8px;background:#fff;color:#243547;max-width:100%;width:100%;font-size:12px}
 .valor{font-size:23px;font-weight:700;color:#173b4f;white-space:nowrap;padding-top:12px}.unidade{font-size:11px;color:#69788a}
 .linha{display:flex;justify-content:space-between;font-size:11px;color:#647487;gap:6px;padding-top:9px;border-top:1px solid #e2e8ee;margin-top:9px}.delta{font-size:13px;font-weight:700;white-space:nowrap}.positivo{color:#087f77}.negativo{color:#c44752}
-.referencia{font-size:10px;color:#7a8796;margin-top:9px;line-height:1.5}
+.referencia{font-size:10px;color:#7a8796;margin-top:9px;line-height:1.5}.calendario-card{margin-top:7px}.calendario-card[hidden]{display:none!important}
 .controls{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:13px 18px}.controls label{font-size:13px;font-weight:700;color:#536579}.controls input{font:inherit;padding:8px;border:1px solid #c5d7df;border-radius:8px;color:#243547}
 .graficos-sub{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding-bottom:6px}
 .grafico-box{min-width:0;overflow:hidden;border:1px solid #e0e8ee;border-radius:14px;background:#fff}
@@ -388,16 +388,16 @@ main{padding:0 12px 24px}.painel{border:1px solid #e0e8ee;border-radius:14px;mar
 <section class="painel"><div class="barra">Operação do SIN — Mensal</div>
 <div class="mensal-controles"><strong>Recursos:</strong><div class="chips" id="filtro-recursos"></div></div>
 <div class="mensal-controles"><strong>Anos:</strong><div class="chips" id="filtro-anos"></div></div>
-<div id="chart-mensal" class="mensal-plot"></div><p class="nota">SIN: média mensal das 24 horas dos dias completos publicados pelo ONS. As cores representam os anos; os traçados distinguem os recursos. Fonte: ONS.</p></section>
-<section class="painel"><p class="nota">Clique nas legendas dos gráficos para mostrar ou ocultar fontes. Fonte: ONS — Balanço de Energia nos Subsistemas. Valores em MWmed. As áreas representam Térmica, Eólica, Solar, Hidráulica e Intercâmbio líquido (positivo ou negativo); a Carga é mostrada como linha para evitar dupla contagem. O SIN é a soma das quatro regiões. O sinal do intercâmbio é mantido conforme publicado pelo ONS, sem ajuste artificial para fechar a carga.</p></section>
+<div id="chart-mensal" class="mensal-plot"></div><p class="nota">SIN: média mensal das 24 horas dos dias completos. O ponto «Ano» é a média dos dias completos daquele ano, sem ligação com dezembro. As cores representam anos; os traçados distinguem recursos. Fonte: ONS.</p></section>
+<section class="painel"><p class="nota">Clique nas legendas dos gráficos para mostrar ou ocultar fontes. Fonte: ONS — Balanço de Energia nos Subsistemas. Valores em MWmed. As áreas representam Térmica, Eólica, Solar, Hidráulica e Intercâmbio líquido (quando ativado); a Carga é mostrada como linha para evitar dupla contagem. O SIN é a soma das quatro regiões. A convenção do intercâmbio é invertida somente na visualização, sem modificar o valor original do ONS armazenado.</p></section>
 </main><script>
 const KEYS=['termica','eolica','solar','hidraulica','intercambio','carga'];
 const LABELS=['Térmica','Eólica','Solar','Hidráulica','Intercâmbio','Carga'];
 const CORES=['#E18B51','#6CB7D2','#EACB59','#2B9C89','#9987BB','#23344D'];
 const REGIOES=[['sin','SIN'],['se','SE'],['s','S'],['ne','NE'],['n','N']];
-const PERIODOS=[['dia','Dia anterior'],['semana','Semana anterior'],['mes','Mês anterior'],['ano','Ano anterior']];
+const PERIODOS=[['dia','Dia anterior'],['semana','Semana anterior'],['mes','Mês anterior'],['ano','Ano anterior'],['data','Escolher data…']];
 const fmt=(n,dp=0)=>n==null||!Number.isFinite(n)?'—':n.toLocaleString('pt-BR',{minimumFractionDigits:dp,maximumFractionDigits:dp});
-let DAILY=[], MONTHLY=[], YEARS=[], CACHE={}, state=[3,0,1,2,5].map(metric=>({periodo:'mes',metric}));
+let DAILY=[], MONTHLY=[], YEARS=[], CACHE={}, ANNUAL={}, state=[3,0,1,2,5].map(metric=>({periodo:'mes',metric,data:null}));
 const REC_SELECTED=new Set([5]);let ANOS_SELECTED=new Set();
 const MESES=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 const DASH=['solid','dash','dot','dashdot','longdash','longdashdot'];
@@ -408,13 +408,17 @@ function refDate(day,p){if(p==='mes')return addMonths(day,-1);if(p==='ano')retur
 function prior(day){let lo=0,hi=DAILY.length-1,found=null;while(lo<=hi){let mid=Math.floor((lo+hi)/2);if(DAILY[mid][0]<=day){found=DAILY[mid];lo=mid+1}else hi=mid-1}return found}
 function renderCards(){let box=document.getElementById('cards');if(!DAILY.length){box.innerHTML='<p>Sem histórico diário consolidado disponível.</p>';return}
  const latest=DAILY[DAILY.length-1];box.innerHTML=state.map((s,i)=>{
-  let old=prior(refDate(latest[0],s.periodo));let cur=latest[1+s.metric],before=old?old[1+s.metric]:null;let diff=old?cur-before:null;
+  const defaultDate=refDate(latest[0],'mes');
+  const alvo=s.periodo==='data'?(s.data||defaultDate):refDate(latest[0],s.periodo);
+  let old=prior(alvo);let cur=latest[1+s.metric],before=old?old[1+s.metric]:null;let diff=old?cur-before:null;
   let pp=old&&Number.isFinite(before)&&before!==0?(cur/before-1)*100:null;
   let klass=diff==null?'':diff>=0?'positivo':'negativo';let sel=PERIODOS.map(([v,l])=>`<option value="${v}" ${s.periodo===v?'selected':''}>${l}</option>`).join('');
   return `<article class="card"><h3>${LABELS[s.metric]}</h3><select class="select" data-card="${i}" aria-label="Comparar ${LABELS[s.metric]}">${sel}</select>
+  <input type="date" class="select calendario-card" data-card-data="${i}" min="${DAILY[0][0]}" max="${latest[0]}" value="${s.data||defaultDate}" ${s.periodo==='data'?'':'hidden'} aria-label="Data de comparação ${LABELS[s.metric]}">
   <div class="valor">${fmt(cur)} <span class="unidade">MWmed</span></div><div class="linha"><span>Referência ${old?old[0].split('-').reverse().join('/'):'—'}</span><strong>${fmt(before)} MWmed</strong></div>
-  <div class="linha"><span>Δ (MWmed)</span><span class="delta ${klass}">${diff==null?'—':(diff>=0?'+':'')+fmt(diff)}</span></div><div class="linha"><span>Δ (%)</span><span class="delta ${pp==null?'':pp>=0?'positivo':'negativo'}">${pp==null?'—':(pp>=0?'+':'')+fmt(pp,2)}</span></div></article>`
- }).join('');box.querySelectorAll('select').forEach(s=>s.addEventListener('change',()=>{state[Number(s.dataset.card)].periodo=s.value;renderCards()}))}
+  <div class="linha"><span>Δ (MWmed)</span><span class="delta ${klass}">${diff==null?'—':(diff>=0?'+':'')+fmt(diff)}</span></div><div class="linha"><span>Δ (%)</span><span class="delta ${pp==null?'':pp>=0?'positivo':'negativo'}">${pp==null?'—':(pp>=0?'+':'')+fmt(pp,2)}${pp==null?'':'%'}</span></div></article>`
+ }).join('');box.querySelectorAll('select[data-card]').forEach(el=>el.addEventListener('change',()=>{state[Number(el.dataset.card)].periodo=el.value;renderCards()}));
+ box.querySelectorAll('input[data-card-data]').forEach(el=>el.addEventListener('change',()=>{state[Number(el.dataset.cardData)].data=el.value;renderCards()}))}
 async function yearData(y){if(CACHE[y])return CACHE[y];const r=await fetch(`operacao_sin/${y}.json`);if(!r.ok)throw Error('Dados anuais indisponíveis: '+y);CACHE[y]=await r.json();return CACHE[y]}
 function renderLegend(){} // cada Plotly possui sua própria legenda interativa
 function regionalData(doc,id,pos,end){
@@ -425,8 +429,12 @@ function regionalData(doc,id,pos,end){
  }
  const sub={'se':'SE','s':'S','ne':'NE','n':'N'}[id];return doc.s[sub]?doc.s[sub].slice(pos,end):null
 }
+// Os arquivos persistidos preservam a convenção de sinal original do ONS.
+// A apresentação usa a convenção invertida de intercâmbio solicitada no dashboard.
+const valorParaGrafico=(metric,valor)=>metric===4?-valor:valor;
 function chartTraces(xs,rows){return KEYS.map((k,i)=>({
- type:'scatter',mode:'lines',name:LABELS[i],x:xs,y:rows.map(v=>v[i]),
+ type:'scatter',mode:'lines',uid:KEYS[i],name:LABELS[i],x:xs,y:rows.map(v=>valorParaGrafico(i,v[i])),
+ visible:i===4?'legendonly':true,
  line:{color:CORES[i],width:i===5?3:0.85,shape:'linear'},
  ...(i===5?{}:{stackgroup:'geracao'}),
  hovertemplate:`<b>${LABELS[i]}</b><br>%{x|%d/%m/%Y %H:%M}<br>%{y:,.1f} MWmed<extra></extra>`
@@ -445,7 +453,7 @@ async function plotDay(day){const status=document.getElementById('status');statu
    xaxis:{title:'Hora',type:'date',tickformat:'%H:%M',dtick:7200000,showgrid:false,showline:true,linecolor:'#94a3b8'},
    yaxis:{title:'Energia MWm',tickformat:',.0f',gridcolor:'#edf1f5',zeroline:true,zerolinecolor:'#94a3b8'},
    legend:{orientation:'h',x:.5,xanchor:'center',y:-.28,yanchor:'top',font:{size:10},itemclick:'toggle',itemdoubleclick:'toggleothers'},font:{family:'Century Gothic,Arial',color:'#344054',size:12},hovermode:'x unified',hoverlabel:{bgcolor:'#f7f9fc'},uirevision:'operacao-'+id},{responsive:true,displaylogo:false});
-  const residual=rows.map(v=>v[5]-v.slice(0,5).reduce((a,z)=>a+z,0));const maxres=Math.max(...residual.map(Math.abs));
+  const residual=rows.map(v=>v[5]-v.slice(0,5).reduce((a,z,i)=>a+valorParaGrafico(i,z),0));const maxres=Math.max(...residual.map(Math.abs));
   aviso.textContent=maxres>1000?`Diferença máxima entre carga e geração + intercâmbio: ${fmt(maxres)} MWmed (dados ONS sem ajuste).`:'';
  }));
  status.textContent=`${xs.length} horas • ${day.split('-').reverse().join('/')}`;
@@ -459,26 +467,51 @@ function renderMensalFiltros(){
  a.innerHTML=anos.map(y=>`<button type="button" class="chip-filtro chip-ano" data-ano="${y}" aria-pressed="${ANOS_SELECTED.has(y)}"><span class="ponto-ano" style="background:${COR_ANO(y)}"></span>${y}</button>`).join('');
  a.querySelectorAll('button').forEach(b=>b.onclick=()=>{let y=Number(b.dataset.ano);if(ANOS_SELECTED.has(y)){if(ANOS_SELECTED.size>1)ANOS_SELECTED.delete(y)}else ANOS_SELECTED.add(y);renderMensalFiltros();renderMensal()});
 }
+// Média anual ponderada pelo número de dias completos: evita atribuir o
+// mesmo peso a fevereiro e a meses com 31 dias. O ano corrente é parcial.
+function montarMediasAnuais(){
+ const soma={}, contagem={};
+ for(const linha of DAILY){
+  const ano=Number(linha[0].slice(0,4));
+  if(!soma[ano]){soma[ano]=Array(KEYS.length).fill(0);contagem[ano]=Array(KEYS.length).fill(0)}
+  for(let k=0;k<KEYS.length;k++){
+   const valor=Number(linha[1+k]);
+   if(Number.isFinite(valor)){soma[ano][k]+=valor;contagem[ano][k]++}
+  }
+ }
+ ANNUAL={};
+ for(const ano of Object.keys(soma))ANNUAL[ano]=soma[ano].map((v,k)=>contagem[ano][k]?v/contagem[ano][k]:null);
+}
 function renderMensal(){
  const traces=[];
  for(const ano of [...ANOS_SELECTED].sort((a,b)=>a-b)){
   const items=MONTHLY.filter(r=>r[0]===ano).sort((a,b)=>a[1]-b[1]);
   for(const k of [...REC_SELECTED].sort((a,b)=>a-b)){
+   const cor=COR_ANO(ano), grupo=`${ano}-${KEYS[k]}`;
+   // Apenas os 12 meses ficam ligados por linhas.
    traces.push({type:'scatter',mode:'lines+markers',name:`${ano} · ${LABELS[k]}`,
-    x:items.map(r=>r[1]),y:items.map(r=>r[2+k]),
-    line:{color:COR_ANO(ano),width:ano===Math.max(...ANOS_SELECTED)?3:2,dash:DASH[k],shape:'spline',smoothing:.55},
-    marker:{size:5,color:COR_ANO(ano)},
-    hovertemplate:`<b>${ano} · ${LABELS[k]}</b><br>%{x}º mês<br>%{y:,.1f} MWm<extra></extra>`});
+    legendgroup:grupo,x:items.map(r=>r[1]),y:items.map(r=>valorParaGrafico(k,r[2+k])),
+    line:{color:cor,width:ano===Math.max(...ANOS_SELECTED)?3:2,dash:DASH[k],shape:'spline',smoothing:.55},
+    marker:{size:5,color:cor},
+    hovertemplate:`<b>${ano} · ${LABELS[k]}</b><br>Mês: %{x}<br>%{y:,.1f} MWm<extra></extra>`});
+   // Ponto 13 = média anual isolada: não liga dezembro ao ano por uma linha.
+   const media=ANNUAL[ano]?.[k];
+   if(media!=null){
+    traces.push({type:'scatter',mode:'markers',showlegend:false,legendgroup:grupo,
+     name:`${ano} · ${LABELS[k]} — Ano`,x:[13],y:[valorParaGrafico(k,media)],
+     marker:{color:cor,symbol:'diamond',size:12,line:{color:'#fff',width:1.2}},
+     hovertemplate:`<b>${ano} · ${LABELS[k]}</b><br>Média anual: %{y:,.1f} MWm<extra></extra>`});
+   }
   }
  }
  Plotly.react('chart-mensal',traces,{height:540,showlegend:true,hovermode:'closest',paper_bgcolor:'#fff',plot_bgcolor:'#fff',
  margin:{t:16,l:92,r:24,b:95},font:{family:'Century Gothic,Arial',size:12,color:'#344054'},
- xaxis:{title:'Mês',range:[.7,12.3],tickmode:'array',tickvals:[1,2,3,4,5,6,7,8,9,10,11,12],ticktext:MESES,showline:true,linecolor:'#94a3b8',showgrid:false},
+ xaxis:{title:'Mês',range:[.7,13.35],tickmode:'array',tickvals:[1,2,3,4,5,6,7,8,9,10,11,12,13],ticktext:[...MESES,'Ano'],showline:true,linecolor:'#94a3b8',showgrid:false},
  yaxis:{title:'Energia (MWm)',showline:true,linecolor:'#94a3b8',gridcolor:'#e7edf2',tickformat:',.0f'},
- legend:{orientation:'h',x:.5,xanchor:'center',y:-.27,yanchor:'top',font:{size:10}}},{responsive:true,displaylogo:false});
+ legend:{orientation:'h',x:.5,xanchor:'center',y:-.27,yanchor:'top',font:{size:10},groupclick:'togglegroup'}},{responsive:true,displaylogo:false});
 }
 async function main(){renderLegend();try{
- const r=await fetch('operacao_sin/resumo.json');if(!r.ok)throw Error('Resumo não encontrado');const o=await r.json();DAILY=o.daily||[];MONTHLY=o.monthly||[];YEARS=o.years||[];
+ const r=await fetch('operacao_sin/resumo.json');if(!r.ok)throw Error('Resumo não encontrado');const o=await r.json();DAILY=o.daily||[];MONTHLY=o.monthly||[];YEARS=o.years||[];montarMediasAnuais();
  const ys=[...new Set(MONTHLY.map(r=>r[0]))].sort((a,b)=>a-b);ANOS_SELECTED=new Set(ys.slice(-2));if(!ANOS_SELECTED.size&&ys.length)ANOS_SELECTED.add(ys[ys.length-1]);renderMensalFiltros();if(MONTHLY.length)renderMensal();
  if(!DAILY.length){document.getElementById('status').textContent='Aguardando primeira coleta do ONS';renderCards();return}
  renderCards();const input=document.getElementById('data');input.min=DAILY[0][0];input.max=DAILY[DAILY.length-1][0];input.value=DAILY[DAILY.length-1][0];input.addEventListener('change',()=>plotDay(input.value));await plotDay(input.value)

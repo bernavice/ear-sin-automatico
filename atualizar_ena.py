@@ -12,6 +12,7 @@ Execute este script depois de atualizar_ear.py.
 from __future__ import annotations
 
 import argparse
+import json
 from datetime import date, datetime, timedelta
 from io import BytesIO
 from pathlib import Path
@@ -312,7 +313,7 @@ def grafico_ena(mensal: pd.DataFrame, titulo: str, coluna: str,
         font=dict(family=FONTE, size=12, color='#344054'),
         template='plotly_white', height=580 if grande else 450,
         autosize=True, paper_bgcolor='white', plot_bgcolor='white',
-        hovermode='closest', showlegend=False, margin=dict(l=68, r=32, t=18, b=82),
+        hovermode='closest', showlegend=False, margin=dict(l=110 if grande else 104, r=32, t=18, b=82),
         # Sem título embutido na legenda: ele ocupava a mesma linha dos anos
         # e causava sobreposição nas visualizações com duas colunas.
         legend=dict(orientation='h',
@@ -334,7 +335,7 @@ def grafico_ena(mensal: pd.DataFrame, titulo: str, coluna: str,
                    tickcolor='#98A2B3', showgrid=False),
     )
     f.update_yaxes(
-        title_text='% da média de longo termo (MLT)', rangemode='tozero',
+        title_text='% da Média de Longo Termo %MLT)', title_standoff=16, rangemode='tozero',
         ticksuffix='%', showline=True, linewidth=1.5,
         linecolor='#475467', ticks='outside', ticklen=6,
         tickcolor='#475467', showgrid=False, zeroline=False,
@@ -366,51 +367,78 @@ def legenda_interativa(fig: go.Figure, plot_id: str) -> str:
 
 
 def montar_resumo_ena(diario: pd.DataFrame) -> str:
-    """Compara ENA média do mês corrente com o mesmo período do ano anterior."""
+    """Média mensal acumulada com ano anterior padrão e calendário por card."""
     if diario.empty:
         raise ValueError('ENA: histórico diário vazio para resumo')
-    ultima = pd.Timestamp(diario['data'].max()).normalize()
-    mes_atual = diario.loc[(diario['data'].dt.year == ultima.year) &
-                           (diario['data'].dt.month == ultima.month) &
-                           (diario['data'].dt.day <= ultima.day)].copy()
-    ano_anterior = ultima.year - 1
-    ultimo_dia_mes = pd.Period(f'{ano_anterior}-{ultima.month:02d}').days_in_month
-    ate_dia = min(ultima.day, ultimo_dia_mes)
-    mes_anterior = diario.loc[(diario['data'].dt.year == ano_anterior) &
-                              (diario['data'].dt.month == ultima.month) &
-                              (diario['data'].dt.day <= ate_dia)].copy()
-    # Sempre calcula a média dos percentuais SIN diários já ponderados pelas MLTs.
-    cols = [('SIN', 'enasinpp'), ('SE/CO', 'enasepp'), ('Sul', 'enasupp'),
-            ('Norte', 'enanpp'), ('Nordeste', 'enanepp')]
+    ultima=pd.Timestamp(diario['data'].max()).normalize()
+    m_atual=diario.loc[(diario['data'].dt.year==ultima.year)&(diario['data'].dt.month==ultima.month)]
+    ano=ultima.year-1
+    ultimo_dia=pd.Period(f'{ano}-{ultima.month:02d}').days_in_month
+    alvo=pd.Timestamp(ano,ultima.month,min(ultima.day,ultimo_dia))
+    m_ant=diario.loc[(diario['data'].dt.year==alvo.year)&(diario['data'].dt.month==alvo.month)&(diario['data']<=alvo)]
+    cols=[('SIN','enasinpp'),('SE/CO','enasepp'),('Sul','enasupp'),('Norte','enanpp'),('Nordeste','enanepp')]
     cards=[]
-    for nome,col in cols:
-        agora = float(mes_atual[col].mean()) if not mes_atual.empty else float('nan')
-        antes = float(mes_anterior[col].mean()) if not mes_anterior.empty else float('nan')
-        delta = agora - antes
-        fmt = lambda n: f'{n:.1f}%'.replace('.', ',') if pd.notna(n) else '—'
-        fmt_delta = lambda n: f'{n:+.1f}'.replace('.', ',') + ' p.p.' if pd.notna(n) else '—'
-        classe = 'delta-positivo' if pd.notna(delta) and delta >= 0 else 'delta-negativo'
+    for i,(nome,col) in enumerate(cols):
+        atual=float(m_atual[col].mean()) if not m_atual.empty else float('nan')
+        antes=float(m_ant[col].mean()) if not m_ant.empty else float('nan')
+        delta=atual-antes
+        fmt=lambda v:f'{v:.1f}%'.replace('.',',') if pd.notna(v) else '—'
+        diff=(f'{delta:+.1f}'.replace('.',',')+' p.p.') if pd.notna(delta) else '—'
+        classe='delta-positivo' if pd.notna(delta) and delta>=0 else 'delta-negativo'
+        ultima_anterior=m_ant['data'].max() if not m_ant.empty else None
+        ref=ultima_anterior.strftime('%d/%m/%Y') if ultima_anterior is not None else '—'
         cards.append(
-            '<div class="resumo-card">'
+            f'<div class="resumo-card" data-ena-card="{i}">'
             f'<div class="resumo-nome">{nome}</div>'
-            '<div class="resumo-linha"><span class="resumo-rotulo">Atual</span>'
-            f'<strong class="resumo-numero">{fmt(agora)}</strong></div>'
-            '<div class="resumo-linha"><span class="resumo-rotulo">Ano anterior</span>'
-            f'<strong class="resumo-numero">{fmt(antes)}</strong></div>'
+            '<label class="resumo-label">Comparar com</label>'
+            f'<select class="resumo-filtro" data-ena-modo="{i}" aria-label="Comparação ENA {nome}">'
+            '<option value="ano">Ano anterior</option><option value="data">Escolher data…</option></select>'
+            f'<input type="date" class="resumo-calendario" data-ena-data="{i}" value="{alvo:%Y-%m-%d}" '
+            f'min="{diario["data"].min():%Y-%m-%d}" max="{ultima:%Y-%m-%d}" hidden aria-label="Data de comparação ENA {nome}">'
+            '<div class="resumo-linha"><span class="resumo-rotulo">Atual (média mensal)</span>'
+            f'<strong class="resumo-numero">{fmt(atual)}</strong></div>'
+            f'<div class="resumo-linha"><span class="resumo-rotulo" data-ena-ref="{i}">Referência {ref}</span>'
+            f'<strong class="resumo-numero" data-ena-valor="{i}">{fmt(antes)}</strong></div>'
             '<div class="resumo-linha"><span class="resumo-rotulo">Δ</span>'
-            f'<strong class="resumo-numero {classe}">{fmt_delta(delta)}</strong></div>'
-            '</div>'
+            f'<strong class="resumo-numero {classe}" data-ena-delta="{i}">{diff}</strong></div></div>'
         )
-    periodo_atual = (f'01/{ultima.strftime("%m/%Y")}–{ultima.strftime("%d/%m/%Y")} '
-                     f'({len(mes_atual)} dias com dados)')
-    periodo_anterior = (f'01/{ultima.month:02d}/{ano_anterior}–'
-                        f'{ate_dia:02d}/{ultima.month:02d}/{ano_anterior} '
-                        f'({len(mes_anterior)} dias com dados)')
-    nota = (f'Média de ENA bruta (% MLT): {periodo_atual}; '
-            f'ano anterior: {periodo_anterior}. Δ em pontos percentuais.')
     return ('<section class="painel resumo"><div class="barra-titulo">ENA — Resumo</div>'
-            '<div class="resumo-conteudo"><div class="resumo-cards">' + ''.join(cards) + '</div>'
-            f'<div class="resumo-nota">Fonte: ONS · {nota}</div></div></section>')
+            '<div class="resumo-conteudo"><div class="resumo-cards">'+''.join(cards)+'</div>'
+            '<div class="resumo-nota">Fonte: ONS · Média de ENA (% MLT) desde o 1º dia do mês até a data de referência. '
+            'Comparação inicial: igual período do ano anterior. Δ em p.p.</div></div></section>')
+
+
+def js_resumo_ena(diario: pd.DataFrame) -> str:
+    colunas=['enasinpp','enasepp','enasupp','enanpp','enanepp']
+    tabela=[[r['data'].strftime('%Y-%m-%d')]+[round(float(r[c]),4) for c in colunas]
+            for _,r in diario.sort_values('data').iterrows()]
+    return r"""
+(function(){
+ const dados=__DADOS_ENA__;
+ if(!dados.length)return;
+ const hoje=dados[dados.length-1][0];
+ const fmt=n=>n==null||!Number.isFinite(n)?'—':n.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1});
+ const anteriorAno=iso=>{let [y,m,d]=iso.split('-').map(Number);const max=new Date(Date.UTC(y-1,m,0)).getUTCDate();return `${y-1}-${String(m).padStart(2,'0')}-${String(Math.min(d,max)).padStart(2,'0')}`};
+ const br=iso=>iso?iso.split('-').reverse().join('/'):'—';
+ function mediaMes(iso,col){const mes=iso.slice(0,7);let soma=0,n=0,ultima=null;for(const r of dados){if(r[0]>iso)break;if(r[0].slice(0,7)===mes&&Number.isFinite(r[col])){soma+=r[col];n++;ultima=r[0]}}return n?{valor:soma/n,data:ultima}:null}
+ for(let i=0;i<5;i++){
+  const card=document.querySelector(`[data-ena-card="${i}"]`);
+  const modo=card.querySelector(`[data-ena-modo="${i}"]`), calendario=card.querySelector(`[data-ena-data="${i}"]`);
+  const valorAtual=mediaMes(hoje,i+1)?.valor;
+  function atualizar(){
+   calendario.hidden=modo.value!=='data';const alvo=modo.value==='data'?calendario.value:anteriorAno(hoje);
+   const referencia=mediaMes(alvo,i+1);const antes=referencia?.valor??null;
+   const delta=antes===null||valorAtual==null?null:valorAtual-antes;
+   card.querySelector(`[data-ena-ref="${i}"]`).textContent='Referência '+br(referencia?.data);
+   card.querySelector(`[data-ena-valor="${i}"]`).textContent=antes===null?'—':fmt(antes)+'%';
+   const el=card.querySelector(`[data-ena-delta="${i}"]`);
+   el.textContent=delta===null?'—':(delta>=0?'+':'')+fmt(delta)+' p.p.';
+   el.classList.toggle('delta-positivo',delta!==null&&delta>=0);el.classList.toggle('delta-negativo',delta!==null&&delta<0);
+  }
+  modo.addEventListener('change',atualizar);calendario.addEventListener('change',atualizar);atualizar();
+ }
+})();
+""".replace('__DADOS_ENA__',json.dumps(tabela,ensure_ascii=False,separators=(',',':')))
 
 def pagina_ena(mensal: pd.DataFrame, diario: pd.DataFrame) -> str:
     configs = [
@@ -421,6 +449,7 @@ def pagina_ena(mensal: pd.DataFrame, diario: pd.DataFrame) -> str:
         ('Nordeste', 'enanepp', False),
     ]
     blocos = [montar_resumo_ena(diario)]
+    script_resumo = js_resumo_ena(diario)
     ultima_data_ena = pd.Timestamp(mensal['data'].max()).strftime('%d/%m/%Y')
     for i, (nome, coluna, maior) in enumerate(configs):
         titulo_barra = f'ENA — {nome}'
@@ -462,6 +491,9 @@ def pagina_ena(mensal: pd.DataFrame, diario: pd.DataFrame) -> str:
   .resumo-numero.delta-positivo {{color:#007E80;}}
   .resumo-numero.delta-negativo {{color:#b5474a;}}
   .resumo-nota {{margin-top:13px;color:#667085;font-size:11px;line-height:1.6;}}
+  .resumo-label {{display:block;font-size:10px;color:#64748b;margin-bottom:4px}}
+  .resumo-filtro,.resumo-calendario {{width:100%;max-width:100%;font:inherit;font-size:11px;color:#344054;background:#fff;border:1px solid #ccd8df;border-radius:7px;padding:7px;margin-bottom:8px;min-height:33px}}
+  .resumo-calendario[hidden] {{display:none!important}}
   @media(max-width:1050px) {{.resumo-cards {{grid-template-columns:repeat(3,minmax(0,1fr));}}}}
   @media(max-width:650px) {{.resumo-conteudo {{padding:12px;}} .resumo-cards {{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}} .resumo-card {{padding:12px 8px;}} .resumo-numero {{font-size:13px;}} .resumo-rotulo {{font-size:10px;}}}}
   @media(max-width:380px) {{.resumo-cards {{grid-template-columns:1fr;}}}}
@@ -481,6 +513,7 @@ def pagina_ena(mensal: pd.DataFrame, diario: pd.DataFrame) -> str:
 </style></head>
 <body><main class="area">{''.join(blocos)}</main>
 <script>
+{script_resumo}
   document.querySelectorAll('.legenda-item').forEach(function(botao) {{
     botao.addEventListener('click', function() {{
       const grafico=document.getElementById(botao.dataset.plot);

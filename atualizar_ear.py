@@ -8,6 +8,7 @@ O arquivo anual do ONS é baixado, mas apenas uma janela recente é incorporada
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import unicodedata
 from datetime import date, datetime, timedelta
@@ -375,7 +376,7 @@ def grafico_ear(mensal: pd.DataFrame, titulo: str, coluna: str,
             entrywidth=92, entrywidthmode="pixels",
             itemsizing="constant",
         ),
-        margin=dict(l=75 if grande else 64, r=36 if grande else 27,
+        margin=dict(l=110 if grande else 100, r=36 if grande else 27,
                     t=18, b=82),
     )
     fig.update_xaxes(
@@ -389,7 +390,7 @@ def grafico_ear(mensal: pd.DataFrame, titulo: str, coluna: str,
                    tickcolor="#98A2B3", showgrid=False),
     )
     fig.update_yaxes(
-        title_text="EAR (%)", range=[0, 100],
+        title_text="Níveis dos reservatórios (%)", title_standoff=16, range=[0, 100],
         tickmode="linear", tick0=0, dtick=10, ticksuffix="%",
         showline=True, linewidth=1.5, linecolor="#475467",
         ticks="outside", ticklen=6, tickwidth=1.2,
@@ -423,50 +424,85 @@ def legenda_interativa(fig: go.Figure, plot_id: str) -> str:
 
 
 def montar_resumo_ear(diario: pd.DataFrame) -> str:
-    """Compara EAR verificada no último dia com mesma data no ano anterior."""
+    """Cards de EAR com comparação anual inicial e calendário independente."""
     if diario.empty:
         raise ValueError("EAR: histórico diário vazio para resumo")
-    atual_data = pd.Timestamp(diario['data'].max()).normalize()
-    atual = diario.loc[diario['data'] == atual_data].iloc[-1]
-    # Trata 29/02: o dia equivalente no ano anterior é 28/02.
-    ano_anterior = atual_data.year - 1
-    ultimo_dia_mes = pd.Period(f'{ano_anterior}-{atual_data.month:02d}').days_in_month
-    dia_anterior = min(atual_data.day, ultimo_dia_mes)
-    alvo = pd.Timestamp(ano_anterior, atual_data.month, dia_anterior)
-    comparaveis = diario.loc[
-        (diario['data'].dt.year == ano_anterior) &
-        (diario['data'].dt.month == atual_data.month) &
-        (diario['data'] <= alvo)
-    ].sort_values('data')
-    anterior = comparaveis.iloc[-1] if not comparaveis.empty else None
-    data_anterior = pd.Timestamp(anterior['data']).strftime('%d/%m/%Y') if anterior is not None else 'indisponível'
-
-    cols = [('SIN', 'earsin'), ('SE/CO', 'earse'), ('Sul', 'earsu'),
-            ('Norte', 'earn'), ('Nordeste', 'earne')]
+    diario = diario.sort_values('data')
+    ultima = pd.Timestamp(diario['data'].max()).normalize()
+    atual = diario.iloc[-1]
+    ano_anterior = ultima.year - 1
+    ultimo_dia = pd.Period(f'{ano_anterior}-{ultima.month:02d}').days_in_month
+    alvo = pd.Timestamp(ano_anterior, ultima.month, min(ultima.day, ultimo_dia))
+    prev = diario.loc[(diario['data'].dt.year == ano_anterior) &
+                      (diario['data'].dt.month == ultima.month) &
+                      (diario['data'] <= alvo)]
+    anterior = prev.iloc[-1] if not prev.empty else None
+    cols = [('SIN','earsin'),('SE/CO','earse'),('Sul','earsu'),
+            ('Norte','earn'),('Nordeste','earne')]
     cards=[]
-    for nome, col in cols:
-        agora = float(atual[col]) if pd.notna(atual[col]) else float('nan')
-        antes = float(anterior[col]) if anterior is not None and pd.notna(anterior[col]) else float('nan')
-        delta = agora - antes
-        fmt = lambda n: f'{n:.2f}%'.replace('.', ',') if pd.notna(n) else '—'
-        fmt_delta = lambda n: (f'{n:+.2f}'.replace('.', ',') + ' p.p.' if pd.notna(n) else '—')
-        classe = 'delta-positivo' if pd.notna(delta) and delta >= 0 else 'delta-negativo'
+    for i,(nome,col) in enumerate(cols):
+        agora = float(atual[col])
+        antes = float(anterior[col]) if anterior is not None else float('nan')
+        delta=agora-antes
+        fmt=lambda n: f'{n:.2f}%'.replace('.', ',') if pd.notna(n) else '—'
+        dlt=(f'{delta:+.2f}'.replace('.', ',')+' p.p.') if pd.notna(delta) else '—'
+        classe='delta-positivo' if pd.notna(delta) and delta>=0 else 'delta-negativo'
+        ref=anterior['data'].strftime('%d/%m/%Y') if anterior is not None else '—'
         cards.append(
-            '<div class="resumo-card">'
+            f'<div class="resumo-card" data-ear-card="{i}">'
             f'<div class="resumo-nome">{nome}</div>'
+            '<label class="resumo-label">Comparar com</label>'
+            f'<select class="resumo-filtro" data-ear-modo="{i}" aria-label="Comparação EAR {nome}">'
+            '<option value="ano">Ano anterior</option><option value="data">Escolher data…</option></select>'
+            f'<input class="resumo-calendario" type="date" data-ear-data="{i}" '
+            f'min="{diario["data"].min():%Y-%m-%d}" max="{ultima:%Y-%m-%d}" value="{alvo:%Y-%m-%d}" hidden '
+            f'aria-label="Data de comparação EAR {nome}">'
             '<div class="resumo-linha"><span class="resumo-rotulo">Atual</span>'
             f'<strong class="resumo-numero">{fmt(agora)}</strong></div>'
-            '<div class="resumo-linha"><span class="resumo-rotulo">Ano anterior</span>'
-            f'<strong class="resumo-numero">{fmt(antes)}</strong></div>'
+            f'<div class="resumo-linha"><span class="resumo-rotulo" data-ear-ref="{i}">Referência {ref}</span>'
+            f'<strong class="resumo-numero" data-ear-valor="{i}">{fmt(antes)}</strong></div>'
             '<div class="resumo-linha"><span class="resumo-rotulo">Δ</span>'
-            f'<strong class="resumo-numero {classe}">{fmt_delta(delta)}</strong></div>'
-            '</div>'
+            f'<strong class="resumo-numero {classe}" data-ear-delta="{i}">{dlt}</strong></div></div>'
         )
-    nota = (f'Atual: {atual_data.strftime("%d/%m/%Y")} · '
-            f'Comparação anual: {data_anterior} · Δ = atual − ano anterior (pontos percentuais).')
     return ('<section class="painel resumo"><div class="barra-titulo">EAR — Resumo</div>'
-            '<div class="resumo-conteudo"><div class="resumo-cards">' + ''.join(cards) + '</div>'
-            f'<div class="resumo-nota">Fonte: ONS · {nota}</div></div></section>')
+            '<div class="resumo-conteudo"><div class="resumo-cards">'+''.join(cards)+'</div>'
+            '<div class="resumo-nota">Fonte: ONS · Δ em p.p. · Referência inicial: '
+            'mesma data do ano anterior. No calendário, usa o último registro disponível até a data escolhida.</div>'
+            '</div></section>')
+
+
+def js_resumo_ear(diario: pd.DataFrame) -> str:
+    colunas = ['earsin','earse','earsu','earn','earne']
+    tabela = [[r['data'].strftime('%Y-%m-%d')]+[round(float(r[c]),3) for c in colunas]
+              for _,r in diario.sort_values('data').iterrows()]
+    return r"""
+(function(){
+ const dados=__DADOS_EAR__;
+ if(!dados.length)return;
+ const hoje=dados[dados.length-1];
+ const fmt=n=>n==null||!Number.isFinite(n)?'—':n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+ const anoAnterior=iso=>{let [y,m,d]=iso.split('-').map(Number);let max=new Date(Date.UTC(y-1,m,0)).getUTCDate();return `${y-1}-${String(m).padStart(2,'0')}-${String(Math.min(d,max)).padStart(2,'0')}`};
+ const escolher=(alvo,anual)=>{let achado=null;for(const linha of dados){if(linha[0]>alvo)break;if(!anual||(linha[0].slice(0,7)===alvo.slice(0,7)))achado=linha;}return achado};
+ const dataBr=iso=>iso?iso.split('-').reverse().join('/'):'—';
+ for(let i=0;i<5;i++){
+  const modo=document.querySelector(`[data-ear-modo="${i}"]`), calendario=document.querySelector(`[data-ear-data="${i}"]`);
+  const card=document.querySelector(`[data-ear-card="${i}"]`);
+  function atualizar(){
+   const escolhaData=modo.value==='data';calendario.hidden=!escolhaData;
+   const alvo=escolhaData?calendario.value:anoAnterior(hoje[0]);
+   const antes=escolher(alvo,!escolhaData);const ref=antes?antes[i+1]:null;
+   const delta=ref===null?null:hoje[i+1]-ref;
+   card.querySelector(`[data-ear-ref="${i}"]`).textContent='Referência '+dataBr(antes?.[0]);
+   card.querySelector(`[data-ear-valor="${i}"]`).textContent=ref===null?'—':fmt(ref)+'%';
+   const elemento=card.querySelector(`[data-ear-delta="${i}"]`);
+   elemento.textContent=delta===null?'—':(delta>=0?'+':'')+fmt(delta)+' p.p.';
+   elemento.classList.toggle('delta-positivo',delta!==null&&delta>=0);
+   elemento.classList.toggle('delta-negativo',delta!==null&&delta<0);
+  }
+  modo.addEventListener('change',atualizar);calendario.addEventListener('change',atualizar);atualizar();
+ }
+})();
+""".replace('__DADOS_EAR__',json.dumps(tabela,ensure_ascii=False,separators=(',',':')))
 
 def montar_grafico(mensal: pd.DataFrame, diario: pd.DataFrame) -> str:
     """Página EAR com SIN em largura total e quatro subsistemas em grade 2×2."""
@@ -479,6 +515,7 @@ def montar_grafico(mensal: pd.DataFrame, diario: pd.DataFrame) -> str:
     ]
     ultima_data = pd.Timestamp(mensal["data"].max()).strftime("%d/%m/%Y")
     blocos = [montar_resumo_ear(diario)]
+    script_resumo = js_resumo_ear(diario)
     for i, (nome, coluna, grande) in enumerate(configuracoes):
         titulo_barra = f"EAR — {nome}"
         fig = grafico_ear(mensal, titulo_barra, coluna, grande=grande)
@@ -525,6 +562,9 @@ def montar_grafico(mensal: pd.DataFrame, diario: pd.DataFrame) -> str:
   .resumo-numero.delta-positivo {{color:#007E80;}}
   .resumo-numero.delta-negativo {{color:#b5474a;}}
   .resumo-nota {{margin-top:13px;color:#667085;font-size:11px;line-height:1.6;}}
+  .resumo-label {{display:block;font-size:10px;color:#64748b;margin-bottom:4px}}
+  .resumo-filtro,.resumo-calendario {{width:100%;max-width:100%;font:inherit;font-size:11px;color:#344054;background:#fff;border:1px solid #ccd8df;border-radius:7px;padding:7px;margin-bottom:8px;min-height:33px}}
+  .resumo-calendario[hidden] {{display:none!important}}
   @media(max-width:1050px) {{.resumo-cards {{grid-template-columns:repeat(3,minmax(0,1fr));}}}}
   @media(max-width:650px) {{.resumo-conteudo {{padding:12px;}} .resumo-cards {{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}} .resumo-card {{padding:12px 8px;}} .resumo-numero {{font-size:13px;}} .resumo-rotulo {{font-size:10px;}}}}
   @media(max-width:380px) {{.resumo-cards {{grid-template-columns:1fr;}}}}
@@ -548,6 +588,7 @@ def montar_grafico(mensal: pd.DataFrame, diario: pd.DataFrame) -> str:
 </style></head><body>
 <main class="area">{''.join(blocos)}</main>
 <script>
+{script_resumo}
   document.querySelectorAll('.legenda-item').forEach(function(botao) {{
     botao.addEventListener('click', function() {{
       const grafico=document.getElementById(botao.dataset.plot);
