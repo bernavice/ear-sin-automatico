@@ -41,6 +41,7 @@ ESTILOS_SUB = {'SE/CO': 'solid', 'SUL': 'dash', 'NE': 'dot', 'N': 'dashdot'}
 
 URL_DATASET = 'https://dadosabertos.ccee.org.br/dataset/pld_horario'
 URL_API = 'https://dadosabertos.ccee.org.br/api/3/action/package_show'
+URL_API_REGISTROS = 'https://dadosabertos.ccee.org.br/api/3/action/datastore_search'
 # Identificadores dos recursos anuais confirmados no catálogo público da CCEE.
 # Identificadores de anos futuros são descobertos quando publicados.
 IDS_ANUAIS_CONHECIDOS = {
@@ -48,6 +49,15 @@ IDS_ANUAIS_CONHECIDOS = {
     2026: '3f279d6b-1069-42f7-9b0a-217b084729c4',
 }
 URL_DUMP = 'https://dadosabertos.ccee.org.br/datastore/dump/{id}?bom=True'
+# Links CSV oficiais PUBLICADOS na página PLD_HORARIO do portal Dados Abertos.
+# São links de download da CCEE em domínio próprio, distintos da API/Datastore
+# e do formulário histórico (descontinuado em 2025).
+# Para anos futuros, descobre a URL do novo recurso no catálogo, quando acessível.
+DOWNLOADS_OFICIAIS_CONHECIDOS = {
+    2025: 'https://pda-download.ccee.org.br/korJMXwpSLGyVlpRMQWduA/content',
+    2026: 'https://pda-download.ccee.org.br/6A5wq97KTCWv_bvs3CqsQQ/content',
+}
+
 
 def url_dump(recurso_id: str) -> str:
     if not re.fullmatch(r'[0-9a-fA-F-]{36}', recurso_id):
@@ -332,6 +342,100 @@ def baixar_csv_ano(recurso: dict, ano: int) -> pd.DataFrame:
     except UnicodeDecodeError:
         df = pd.read_csv(BytesIO(raw), sep=sep, dtype=str, encoding='latin1', low_memory=False)
     return normalizar_csv_ccee(df, ano)
+
+
+def _descobrir_downloads_oficiais_catalogo(anos: list[int]) -> dict[int, str]:
+    """Encontra links do domínio oficial pda-download no catálogo CKAN.
+
+    Falhas de acesso (403 etc.) NÃO interrompem a publicação do histórico.
+    Links configurados por variável de ambiente dispensam essa consulta.
+    """
+    import requests
+    from html.parser import HTMLParser
+
+    class Catalogo(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.ultimo_ano = None
+            self.links = {}
+            self._href = None
+            self._texto = []
+
+        def handle_starttag(self, tag, attrs):
+            if tag.lower() == 'a':
+                self._href = dict(attrs).get('href', '')
+                self._texto = []
+
+        def handle_data(self, data):
+            m = re.search(r'pld_horario_(20\d{2})', data, flags=re.I)
+            if m:
+                self.ultimo_ano = int(m.group(1))
+            if self._href is not None:
+                self._texto.append(data)
+
+        def handle_endtag(self, tag):
+            if tag.lower() != 'a' or self._href is None:
+                return
+            href = urljoin(URL_DATASET, self._href)
+            # O link de download aparece depois do título do recurso do ano.
+            if (self.ultimo_ano in anos and
+                    href.startswith('https://pda-download.ccee.org.br/') and
+                    href.endswith('/content')):
+                self.links[self.ultimo_ano] = href
+            self._href = None
+            self._texto = []
+
+    r = requests.get(URL_DATASET, timeout=25, headers={'User-Agent': 'Mozilla/5.0'})
+    r.raise_for_status()
+    parser = Catalogo()
+    parser.feed(r.text)
+    return parser.links
+
+
+def _buscar_download_oficial(anos: list[int]) -> list[pd.DataFrame]:
+    """Primeira prioridade: CSV oficial de Dados Abertos (pda-download.ccee.org.br).
+
+    Não contorna políticas de acesso da CCEE. Um HTTP 403 é comunicado
+    explicitamente; não se inventam preços nem se modifica o histórico.
+    """
+    urls = {ano: url for ano, url in DOWNLOADS_OFICIAIS_CONHECIDOS.items() if ano in anos}
+    for ano in anos:
+        configurada = os.getenv(f'CCEE_PLD_DOWNLOAD_{ano}', '').strip()
+        if configurada:
+            if not configurada.startswith('https://pda-download.ccee.org.br/'):
+                print(f'::warning title=PLD URL {ano} inválida::Use URL HTTPS do download oficial CCEE.')
+            else:
+                urls[ano] = configurada
+    faltando = [ano for ano in anos if ano not in urls]
+    if faltando:
+        try:
+            urls.update(_descobrir_downloads_oficiais_catalogo(faltando))
+        except Exception as exc:
+            print(f'::warning title=PLD catálogo de downloads::Não foi possível descobrir ' 
+                  f'os links anuais ({type(exc).__name__}: {exc}).')
+    partes = []
+    for ano in anos:
+        url = urls.get(ano)
+        if not url:
+            print(f'::warning title=PLD sem link {ano}::Arquivo oficial anual ainda não identificado. ' 
+                  f'Informe CCEE_PLD_DOWNLOAD_{ano} quando publicado.')
+            continue
+        try:
+            print(f'PLD download oficial {ano}: tentando {url}')
+            base = baixar_csv_ano({'url': url}, ano)
+            partes.append(base)
+            print(f'PLD download oficial {ano}: {len(base):,} registros; ' 
+                  f'último dia {base.data.max():%d/%m/%Y}.')
+        except Exception as exc:
+            status = getattr(getattr(exc, 'response', None), 'status_code', None)
+            if status == 403:
+                print(f'::warning title=PLD acesso negado pela CCEE {ano}::'
+                      'O domínio de download oficial retornou HTTP 403 ao GitHub. '
+                      'É necessário autorização da CCEE ou coletor em ambiente autorizado.')
+            else:
+                print(f'::warning title=PLD download oficial {ano}::'
+                      f'{type(exc).__name__}: {exc}')
+    return partes
 
 
 def carregar_importacoes_manuais() -> list[pd.DataFrame]:
@@ -876,31 +980,118 @@ def _anos_consulta(hoje, historico: pd.DataFrame) -> list[int]:
     return sorted(anos)
 
 
-def _buscar_pela_api(anos: list[int]) -> list[pd.DataFrame]:
-    """1º método: API CKAN descobre os recursos e baixa seus CSVs."""
-    recursos = recursos_ccee()
-    partes = []
-    for ano in anos:
-        rec = recursos.get(ano)
-        if not rec:
-            print(f'PLD API: arquivo anual {ano} ainda não consta do catálogo.')
-            continue
+def _meses_api_incremental(ultimo_dia, hoje, ano: int) -> list[str]:
+    """Meses desde uma pequena janela de revisão até a data atual.
+
+    Mantém a consulta leve: não baixa todo o CSV anual em cada execução.
+    """
+    inicio = (pd.Timestamp(ultimo_dia).normalize() - pd.Timedelta(days=7)).replace(day=1)
+    final = pd.Timestamp(hoje).normalize().replace(day=1)
+    if inicio > final:
+        inicio = final
+    meses = pd.period_range(inicio.to_period('M'), final.to_period('M'), freq='M')
+    return [str(m.year) + f'{m.month:02d}' for m in meses if m.year == ano]
+
+
+def _consultar_mes_api(session, recurso_id: str, ano: int, mes: str) -> pd.DataFrame:
+    """Consulta o DataStore CKAN, não a API de metadados package_show.
+
+    A paginação usa offset e o filtro exato MES_REFERENCIA = AAAAMM.
+    Os registros só são retornados após todas as páginas do mês serem lidas.
+    """
+    pagina = 2000
+    limite_paginas = 50
+    registros = []
+    offset = 0
+    for indice in range(limite_paginas):
+        resp = session.get(
+            URL_API_REGISTROS,
+            params={
+                'resource_id': recurso_id,
+                'filters': json.dumps({'MES_REFERENCIA': mes}, separators=(',', ':')),
+                'limit': pagina,
+                'offset': offset,
+            },
+            timeout=45,
+        )
+        resp.raise_for_status()
         try:
-            urls = []
-            if rec.get('url') or rec.get('download_url'):
-                urls.append(rec.get('url') or rec.get('download_url'))
-            if rec.get('id'):
-                urls.append(url_dump(rec['id']))
-            for url in dict.fromkeys(urls):
-                try:
-                    df = baixar_csv_ano({'url': url}, ano)
-                    partes.append(df)
-                    print(f'PLD API {ano}: {len(df):,} registros até {df.data.max():%d/%m/%Y}.')
-                    break
-                except Exception as exc:
-                    print(f'::warning title=PLD API {ano}::{type(exc).__name__}: {exc}')
+            payload = resp.json()
+        except ValueError as exc:
+            raise ValueError('API CCEE não retornou JSON; verificar resposta HTTP') from exc
+        if not isinstance(payload, dict) or not payload.get('success'):
+            raise ValueError(f'API CCEE retornou success=false para {mes}')
+        result = payload.get('result') or {}
+        bloco = result.get('records') or []
+        if not isinstance(bloco, list):
+            raise ValueError('API CCEE retornou records em formato inesperado')
+        if not bloco:
+            break
+        registros.extend(bloco)
+        offset += len(bloco)
+        total = result.get('total')
+        if len(bloco) < pagina or (isinstance(total, int) and offset >= total):
+            break
+    else:
+        raise RuntimeError(f'API CCEE excedeu limite seguro de páginas para {mes}')
+
+    if not registros:
+        print(f'PLD API de dados {mes}: sem registros disponíveis.')
+        return pd.DataFrame(columns=['data', 'hora', 'submercado', 'pld'])
+    tabela = pd.DataFrame.from_records(registros)
+    base = normalizar_csv_ccee(tabela, ano)
+    print(f'PLD API de dados {mes}: {len(base):,} preços horários.')
+    return base
+
+
+def _buscar_pela_api(anos: list[int], ultimo_dia=None) -> list[pd.DataFrame]:
+    """Consulta registros horários pela API pública CKAN DataStore.
+
+    Mesmo se package_show estiver bloqueado, os IDs já conhecidos permitem
+    testar o endpoint de dados diretamente. HTTP 403 significa acesso negado,
+    e não deve ser tratado como ausência de preços.
+    """
+    import requests
+    hoje = datetime.now(ZoneInfo('America/Sao_Paulo')).date()
+    if ultimo_dia is None:
+        ultimo_dia = pd.Timestamp(hoje) - pd.Timedelta(days=7)
+    recursos = dict(IDS_ANUAIS_CONHECIDOS)
+    faltantes = [a for a in anos if a not in recursos]
+    if faltantes:
+        try:
+            recursos.update({a: rec['id'] for a, rec in recursos_ccee().items()
+                             if a in faltantes and rec.get('id')})
         except Exception as exc:
-            print(f'::warning title=PLD API {ano}::{exc}')
+            print(f'::warning title=PLD descoberta API::{type(exc).__name__}: {exc}')
+        if any(a not in recursos for a in faltantes):
+            try:
+                recursos.update({a: rec['id'] for a, rec in recursos_ccee_html().items()
+                                 if a in faltantes and rec.get('id')})
+            except Exception as exc:
+                print(f'::warning title=PLD catálogo API::{type(exc).__name__}: {exc}')
+    partes = []
+    with requests.Session() as sessao:
+        sessao.headers.update({'User-Agent': 'AcompanhamentoMercado/1.0', 'Accept': 'application/json'})
+        for ano in anos:
+            rid = os.getenv(f'CCEE_PLD_RECURSO_{ano}', '').strip() or recursos.get(ano)
+            if not rid or not re.fullmatch(r'[a-fA-F0-9-]{36}', rid):
+                print(f'::warning title=PLD API {ano}::ID do recurso anual não identificado.')
+                continue
+            meses = _meses_api_incremental(ultimo_dia, hoje, ano)
+            for mes in meses:
+                try:
+                    bloco = _consultar_mes_api(sessao, rid, ano, mes)
+                    if not bloco.empty:
+                        partes.append(bloco)
+                except Exception as exc:
+                    status = getattr(getattr(exc, 'response', None), 'status_code', None)
+                    if status == 403:
+                        print(f'::warning title=PLD API de dados bloqueada {mes}::'
+                              'O endpoint datastore_search respondeu HTTP 403. '
+                              'É necessário acesso autorizado pela CCEE.')
+                    else:
+                        print(f'::warning title=PLD API de dados {mes}::'
+                              f'{type(exc).__name__}: {exc}')
     return partes
 
 
@@ -939,9 +1130,10 @@ def _buscar_base_publica(anos: list[int]) -> list[pd.DataFrame]:
 
 
 def atualizar_com_online(historico: pd.DataFrame, usar_online: bool) -> pd.DataFrame:
-    """Ordem priorizada: navegador CCEE → API → base pública → importação.
+    """Ordem: API de registros → CSV oficial → Datastore → CSV no GitHub.
 
-    Não perde o histórico se a CCEE bloquear ou se o arquivo não estiver pronto.
+    O painel antigo, cuja publicação histórica a CCEE descontinuou, só é
+    tentado se CCEE_PLD_USAR_PAINEL=1 (diagnóstico opcional).
     """
     historico = historico.copy()
     if historico.empty:
@@ -949,42 +1141,49 @@ def atualizar_com_online(historico: pd.DataFrame, usar_online: bool) -> pd.DataF
     hoje = datetime.now(ZoneInfo('America/Sao_Paulo')).date()
     data_meta = pd.Timestamp(hoje)
     anos = _anos_consulta(hoje, historico)
-    if usar_online:
-        # Método 1: navegador, prioritário para contornar as restrições da API
-        # apenas através do formulário público oficial (sem acesso autenticado).
-        if pd.Timestamp(historico['data'].max()).normalize() < data_meta:
-            print('PLD: tentativa 1/4 — navegador CCEE (controle #filtrarHistoricoPreco).')
-            try:
-                bloco = buscar_pld_formulario(historico['data'].max(), data_meta)
-                if bloco is not None:
-                    historico = _mesclar_pld(historico, bloco, 'navegador CCEE')
-            except Exception as exc:
-                print(f'::warning title=PLD navegador CCEE::{type(exc).__name__}: {exc}')
-        # Métodos 2 e 3: cascata de contingência; só tentar se faltarem dias.
+    def atrasado() -> bool:
+        return pd.Timestamp(historico['data'].max()).normalize() < data_meta
+
+    if usar_online and atrasado():
+        print('PLD: tentativa 1/4 — API de dados CCEE (datastore_search).')
+        try:
+            for parte in _buscar_pela_api(anos, historico['data'].max()):
+                historico = _mesclar_pld(historico, parte, 'API de dados CCEE')
+        except Exception as exc:
+            print(f'::warning title=PLD API de dados falhou::{type(exc).__name__}: {exc}')
+
         for ordem, nome, rotina in [
-            (2, 'API CCEE', _buscar_pela_api),
-            (3, 'base pública CCEE', _buscar_base_publica),
+            (2, 'Download CSV oficial CCEE', _buscar_download_oficial),
+            (3, 'Datastore CCEE', _buscar_base_publica),
         ]:
-            if pd.Timestamp(historico['data'].max()).normalize() >= data_meta:
+            if not atrasado():
                 break
             print(f'PLD: tentativa {ordem}/4 — {nome} (contingência).')
             try:
-                partes = rotina(anos)
-                for parte in partes:
+                for parte in rotina(anos):
                     historico = _mesclar_pld(historico, parte, nome)
             except Exception as exc:
                 print(f'::warning title=PLD método {ordem} falhou::{nome}: {exc}')
-    else:
+
+        if atrasado() and os.getenv('CCEE_PLD_USAR_PAINEL', '0') == '1':
+            print('PLD: tentativa opcional — formulário antigo CCEE (diagnóstico).')
+            try:
+                bloco = buscar_pld_formulario(historico['data'].max(), data_meta)
+                if bloco is not None:
+                    historico = _mesclar_pld(historico, bloco, 'painel CCEE')
+            except Exception as exc:
+                print(f'::warning title=PLD painel legado::{type(exc).__name__}: {exc}')
+    elif not usar_online:
         print('PLD: modo offline; fontes remotas não consultadas.')
-    # Método 4: CSV anual colocado em dados/pld_importacao_AAAA.csv.
-    if pd.Timestamp(historico['data'].max()).normalize() < data_meta or not usar_online:
-        print('PLD: tentativa 4/4 — arquivos CSV importados no GitHub.')
-        partes = carregar_importacoes_manuais()
-        for parte in partes:
-            historico = _mesclar_pld(historico, parte, 'arquivo importado')
+
+    if atrasado() or not usar_online:
+        print('PLD: tentativa 4/4 — CSV anual importado no GitHub.')
+        for parte in carregar_importacoes_manuais():
+            historico = _mesclar_pld(historico, parte, 'CSV importado')
+
     ultimo = pd.Timestamp(historico['data'].max()).strftime('%d/%m/%Y')
     print(f'PLD: data final consolidada {ultimo}.')
-    if usar_online and pd.Timestamp(historico['data'].max()).normalize() < data_meta:
+    if usar_online and atrasado():
         print('::warning title=PLD incompleto::Todas as fontes foram tentadas; '
               f'última data presente no histórico: {ultimo}.')
     return historico
