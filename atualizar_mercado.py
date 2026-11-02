@@ -302,9 +302,11 @@ const PERIODOS=''' + periodos_js + ''';
 const DEFAULTS=''' + defaults_js + ''';
 const HOJE=''' + json.dumps(hoje.strftime('%Y-%m-%d')) + ''';
 const ULTIMO=''' + json.dumps(pd.Timestamp(ultimo_dia).strftime('%Y-%m-%d')) + ''';
-const CORES=['#45A0FF','#F6B23B','#FF6B73','#55D6BD','#C39AFF','#EE79D3','#A0D376','#F2BD73','#80B6EA','#EBA48C','#9DB0FB','#68D8ED','#B9A4EA','#FFAE68','#74B7D5','#5ECBA7','#E792B4'];
+const CORES=NOMES.map((_,i)=>`hsl(${Math.round((i*137.508)%360)}, ${i%3===0?77:72}%, ${i%4===0?62:55}%)`); // 17 cores diferentes, uma por produto
 const CARTOES=Array.from({length:5},(_,i)=>({produto:DEFAULTS[i],periodo:'7d'}));
-const SEL=new Set(['2027','NOV/26']);
+const ANO_CORRENTE=Number(HOJE.slice(0,4));
+const PRODUTO_INICIAL=NOMES.includes(String(ANO_CORRENTE))?String(ANO_CORRENTE):(NOMES.includes('Q4_'+String(ANO_CORRENTE).slice(-2))?'Q4_'+String(ANO_CORRENTE).slice(-2):NOMES.find(x=>x.includes('/'+String(ANO_CORRENTE).slice(-2)))||NOMES[0]);
+const SEL=new Set([PRODUTO_INICIAL]);
 const cardEl=document.getElementById('market-cards');
 const chart=document.getElementById('market-chart');
 const catalogEl=document.getElementById('catalog');

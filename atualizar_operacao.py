@@ -192,28 +192,161 @@ def make_assets(years):
    if any(int(v[(m,'count')])!=24 for m in METRICS):continue
    daily.append([d]+[round(float(v[(m,'mean')]),2) for m in METRICS])
  daily.sort(key=lambda r:r[0])
- (PUBLIC_DIR/'resumo.json').write_text(json.dumps({'years':published,'daily':daily},separators=(',',':')),encoding='utf8')
+ # Consolidação mensal do SIN baseada apenas em dias completos (24 horas).
+ # Pequeno agregado para todas as séries e anos: evita transferir décadas de dados horários.
+ monthly=[]
+ if daily:
+  dm=pd.DataFrame(daily,columns=['dia']+METRICS)
+  dm['ano']=dm['dia'].str[:4].astype(int);dm['mes']=dm['dia'].str[5:7].astype(int)
+  agg=dm.groupby(['ano','mes'],sort=True)[METRICS].mean().reset_index()
+  monthly=[[int(row['ano']),int(row['mes'])]+[round(float(row[k]),2) for k in METRICS] for _,row in agg.iterrows()]
+ (PUBLIC_DIR/'resumo.json').write_text(json.dumps({'years':published,'daily':daily,'monthly':monthly},separators=(',',':')),encoding='utf8')
  return published,daily
 
 def integrate_index():
+ '''Finaliza o index depois de ENA, Mercado e Operação, sempre reaplicando a ordem.'''
  idx=GRAF/'index.html'
- if not idx.exists():return
+ if not idx.exists(): return
  txt=idx.read_text(encoding='utf8')
- if 'id="botao-operacao"' in txt:return
- button='<button role="tab" id="botao-operacao" aria-selected="false" aria-controls="aba-operacao" onclick="selecionar(\'operacao\')">Operação do SIN</button>\n'
- panel='<section class="aba" id="aba-operacao" role="tabpanel" aria-labelledby="botao-operacao"><div class="molde"><iframe id="quadro-operacao" title="Operação do SIN" src="operacao.html" loading="lazy" style="height:2500px"></iframe></div></section>\n'
- txt=txt.replace('</nav>',button+'</nav>',1).replace('</main>',panel+'</main>',1)
- # extend the existing selection logic, including resize + message handler
+ if 'id="botao-operacao"' not in txt:
+  button='<button role="tab" id="botao-operacao" aria-selected="false" aria-controls="aba-operacao" onclick="selecionar(\'operacao\')">Operação</button>\n'
+  panel='<section class="aba" id="aba-operacao" role="tabpanel" aria-labelledby="botao-operacao"><div class="molde"><iframe id="quadro-operacao" title="Operação do SIN" src="operacao.html" loading="eager" style="height:3450px"></iframe></div></section>\n'
+  txt=txt.replace('</nav>',button+'</nav>',1).replace('</main>',panel+'</main>',1)
  for old,new in (
-  ("['ear','ena','pld','mercado']","['ear','ena','pld','mercado','operacao']"),
-  ("['ena','ear','pld','mercado']","['ena','ear','pld','mercado','operacao']"),
-  ("['ena','pld','mercado']","['ena','pld','mercado','operacao']"),
-  ("['ear','ena','pld']","['ear','ena','pld','operacao']"),
-  ("['ena','ear','pld']","['ena','ear','pld','operacao']"),
-  ("['ena','pld']","['ena','pld','operacao']"),
+  ("['ear','ena','pld','mercado']", "['ear','ena','pld','mercado','operacao']"),
+  ("['ena','ear','pld','mercado']", "['ena','ear','pld','mercado','operacao']"),
+  ("['ena','pld','mercado']", "['ena','pld','mercado','operacao']"),
+  ("['ear','ena','pld']", "['ear','ena','pld','operacao']"),
+  ("['ena','ear','pld']", "['ena','ear','pld','operacao']"),
+  ("['ena','pld']", "['ena','pld','operacao']"),
  ):
   txt=txt.replace(old,new)
+ import re
+ ordem=['operacao','ena','ear','pld','mercado']
+ # Reorder without changing the underlying tab management code.
+ padrao_botao=re.compile(r'<button\s+role="tab"\s+id="botao-(operacao|ena|ear|pld|mercado)"[^>]*>.*?</button>',re.S)
+ botoes={m.group(1):m.group(0) for m in padrao_botao.finditer(txt)}
+ if set(botoes)!=set(ordem):
+  raise RuntimeError(f'Botões incompletos no index.html: {list(botoes)}')
+ txt=padrao_botao.sub('',txt)
+ txt=txt.replace('</nav>', '\n'.join(botoes[k] for k in ordem)+'\n</nav>',1)
+ txt=txt.replace('>Operação do SIN</button>', '>Operação</button>')
+ # Sections have only one closing section tag, no nested sections.
+ padrao_aba=re.compile(r'<section class="aba(?: ativa)?" id="aba-(operacao|ena|ear|pld|mercado)".*?</section>',re.S)
+ abas={m.group(1):m.group(0) for m in padrao_aba.finditer(txt)}
+ if set(abas)!=set(ordem):
+  raise RuntimeError(f'Abas incompletas no index.html: {list(abas)}')
+ txt=padrao_aba.sub('',txt)
+ partes=[]
+ for k in ordem:
+  sec=abas[k].replace('class="aba ativa"','class="aba"')
+  if k=='operacao':
+   sec=sec.replace('class="aba"','class="aba ativa"',1).replace('loading="lazy"','loading="eager"')
+  partes.append(sec)
+ txt=txt.replace('</main>','\n'.join(partes)+'\n</main>',1)
+ for k in ordem:
+  txt=txt.replace(botoes[k],botoes[k].replace('aria-selected="true"','aria-selected="false"'))
+ # Update aria-selected for exactly the first tab.
+ txt=txt.replace('id="botao-operacao" aria-selected="false"','id="botao-operacao" aria-selected="true"')
+ txt=re.sub(r'<p class="subtexto">.*?</p>\s*','',txt,count=1,flags=re.S)
+ date_str='—'
+ path=PUBLIC_DIR/'resumo.json'
+ if path.exists():
+  try:
+   daily=json.loads(path.read_text(encoding='utf8')).get('daily',[])
+   if daily: date_str=datetime.strptime(daily[-1][0],'%Y-%m-%d').strftime('%d/%m/%Y')
+  except (ValueError,KeyError,IndexError,TypeError): pass
+ txt=txt.replace('Fonte: ONS / CCEE &nbsp;', 'Fonte: ONS / CCEE / Mercado &nbsp;')
+ if ' · Operação ' not in txt:
+  txt=txt.replace('Dados atualizados até:',f'Dados atualizados até: Operação {date_str} ·',1)
+ else:
+  txt=re.sub(r'Operação [\d/—]+ ·',f'Operação {date_str} ·',txt,count=1)
+ # Ensure default first tab as Operation; query string still controls any other tab.
+ txt=txt.replace('const visao = new URLSearchParams', 'const visao = new URLSearchParams')
+ # Print button and printing support. No external Python server or browser extension needed.
+ if 'id="imprimir-dashboard"' not in txt:
+  txt=txt.replace('</nav>', '''</nav><div class="barra-impresso"><button id="imprimir-dashboard" type="button" onclick="imprimirDashboardCompleto()" title="Imprimir todos os módulos em um único PDF">Imprimir dashboard em PDF</button></div>''',1)
+  txt=txt.replace('</style>', '''
+  .barra-impresso{display:flex;justify-content:flex-end;margin:8px 0 2px}
+  #imprimir-dashboard{background:#007E80;color:#fff;border-color:#007E80;padding:9px 18px;font-size:12px}
+  @media print {.abas,.barra-impresso{display:none!important}}
+</style>''',1)
+ if 'async function imprimirDashboardCompleto' not in txt:
+  txt=txt.replace('</body>', '<script>'+PRINT_JS+'</script></body>',1)
  idx.write_text(txt,encoding='utf8')
+
+PRINT_JS = r'''
+async function imprimirDashboardCompleto(){
+  // A janela deve abrir diretamente no clique; o navegador controla o destino do PDF.
+  const janela=window.open('','_blank');
+  if(!janela){alert('Permita pop-ups deste site para abrir a impressão do dashboard.');return;}
+  janela.document.open();janela.document.write(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Acompanhamento de mercado — Relatório</title>
+    <style>@page{size:A4 landscape;margin:10mm}body{font-family:Arial,sans-serif;color:#253345;margin:0}
+    .report-header{border-bottom:3px solid #007E80;padding:10px 0;margin-bottom:10px}
+    .report-title{font-size:22px;font-weight:bold;color:#007E80;margin:0 0 6px}
+    .pdf-modulo{display:block;break-before:page;margin-bottom:30px;}
+    img.chart-export{display:block;max-width:100%;height:auto;object-fit:contain;margin:auto}
+    @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}.pdf-modulo{page-break-before:always}}
+    </style></head><body><header class="report-header"><h1 class="report-title">Acompanhamento de mercado</h1><p>${document.querySelector('.fonte-atualizacao')?.textContent||''}</p></header><div id="pdf-status">Preparando todas as abas e gráficos para impressão…</div><div id="pdf-content"></div></body></html>`);janela.document.close();
+  const status=janela.document.getElementById('pdf-status');
+  const nomes=[['operacao','Operação do SIN'],['ena','ENA'],['ear','EAR'],['pld','PLD'],['mercado','Preço de Mercado']];
+  const original=document.querySelector('.aba.ativa');
+  const impressaoStyle=document.createElement('style');impressaoStyle.textContent='.aba{display:block!important;position:absolute!important;left:-30000px!important;top:0!important;width:1350px!important;visibility:visible!important}';document.head.appendChild(impressaoStyle);
+  try{
+    for(const [id,titulo] of nomes){
+      status.textContent='Preparando '+titulo+'…';
+      const frame=document.getElementById('quadro-'+id);
+      frame.loading='eager';
+      if(!frame.contentDocument||frame.contentDocument.readyState!=='complete'){
+        await Promise.race([new Promise(resolve=>frame.addEventListener('load',resolve,{once:true})),new Promise(resolve=>setTimeout(resolve,12000))]);
+      }
+      const doc=frame.contentDocument;
+      if(!doc){throw Error('Não foi possível ler o módulo '+titulo+'. Abra pelo endereço do GitHub Pages.')}
+      const alvoEsperado={operacao:6,ena:5,ear:5,pld:5,mercado:1}[id]||1;
+      for(let n=0;n<24;n++){
+        const prontos=[...doc.querySelectorAll('.js-plotly-plot')].filter(el=>el._fullLayout).length;
+        if(prontos>=alvoEsperado)break;
+        await new Promise(resolve=>setTimeout(resolve,350));
+      }
+      const origem=doc.querySelector('main')||doc.body;
+      const copia=origem.cloneNode(true);
+      // Convert Plotly canvases to SVG / image before cloning into the print window.
+      const plots=[...origem.querySelectorAll('.js-plotly-plot')].filter(el=>el._fullLayout);
+      for(let i=0;i<plots.length;i++){
+        const plot=plots[i];
+        try{
+          const limite=plot.closest('.painel, .grafico-box')?.clientWidth||1000;
+          const width=Math.min(1250,Math.max(660,limite));
+          const height=Math.min(490,Math.max(290,plot.clientHeight||430));
+          const url=await frame.contentWindow.Plotly.toImage(plot,{format:'svg',width,height});
+          const originalNodes=[...origem.querySelectorAll('.js-plotly-plot')];
+          const index=originalNodes.indexOf(plot);
+          const nodes=[...copia.querySelectorAll('.js-plotly-plot')];
+          if(index>=0&&nodes[index]){
+            const img=janela.document.createElement('img');img.src=url;img.alt='Gráfico '+(i+1)+' de '+titulo;img.className='chart-export';
+            nodes[index].replaceWith(img);
+          }
+        }catch(e){console.warn('Exportação de gráfico',titulo,i,e)}
+      }
+      // Each module uses its own independent stylesheet. Shadow DOM prevents CSS collisions.
+      const div=janela.document.createElement('section');div.className='pdf-modulo';
+      const shadow=div.attachShadow({mode:'open'});
+      const styles=[...doc.querySelectorAll('head style')].map(x=>x.textContent).join('\n');
+      const st=janela.document.createElement('style');
+      st.textContent=':host{display:block}img.chart-export{display:block;max-width:100%;height:auto;object-fit:contain;margin:8px auto}'+styles+'\n@media print {.js-plotly-plot{display:none!important}.painel,.grafico-box,.card{break-inside:avoid} .area,.graficos-sub{gap:9px!important} .fonte-dados{padding-bottom:8px}}';
+      shadow.appendChild(st);
+      const h=janela.document.createElement('h2');h.textContent=titulo;h.style.cssText='font-family:Arial;color:#007E80;font-size:20px;margin:12px 0';shadow.appendChild(h);
+      // importNode ensures all cloned elements belong to this print document.
+      shadow.appendChild(janela.document.importNode(copia,true));
+      janela.document.getElementById('pdf-content').appendChild(div);
+    }
+    status.remove();
+    await new Promise(resolve=>setTimeout(resolve,700));
+    janela.focus();janela.print();
+  }catch(e){status.textContent='Falha ao preparar o relatório: '+e.message;console.error(e)}
+  finally{impressaoStyle.remove();}
+}
+'''
 
 HTML_TEMPLATE = r'''<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Operação do SIN — Acompanhamento de mercado</title>
@@ -232,17 +365,17 @@ main{padding:0 12px 24px}.painel{border:1px solid #e0e8ee;border-radius:14px;mar
 .graficos-sub{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding-bottom:6px}
 .grafico-box{min-width:0;overflow:hidden;border:1px solid #e0e8ee;border-radius:14px;background:#fff}
 .grafico-box.sin{grid-column:1 / -1}
-.grafico-box .barra{font-size:16px;padding:12px}.chart{width:100%;height:425px}.sin .chart{height:530px}
+.grafico-box .barra{font-size:16px;padding:12px}.chart{width:100%;height:470px}.sin .chart{height:560px}
 .legenda{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;padding:9px 14px 15px;font-size:12px}
 .itemleg{display:flex;gap:7px;align-items:center;white-space:nowrap}.bolinha{width:25px;height:0;border-top:4px solid;border-radius:2px}
 .itemleg:last-child .bolinha{border-top-width:3px}
-.nota{padding:7px 18px 16px;color:#66768a;font-size:11px;line-height:1.6}.status{font-size:12px;color:#6b7888}
+.mensal-controles{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:14px 18px 6px}.mensal-controles strong{font-size:12px;color:#506377}.chips{display:flex;flex-wrap:wrap;gap:6px}.chip-filtro{font:inherit;font-size:11px;font-weight:600;background:#fff;border:1px solid #cbd7df;border-radius:7px;padding:6px 9px;color:#344054;cursor:pointer}.chip-filtro[aria-pressed='true']{background:#e5f4f2;border-color:#007E80;color:#006d74}.chip-ano{display:inline-flex;align-items:center;gap:6px}.ponto-ano{width:13px;height:4px;border-radius:3px;display:inline-block}.mensal-plot{width:100%;height:540px}.nota{padding:7px 18px 16px;color:#66768a;font-size:11px;line-height:1.6}.status{font-size:12px;color:#6b7888}
 .aviso{padding:0 18px 10px;color:#8a530d;font-size:11px}
 @media(max-width:1150px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:750px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));padding:10px;gap:8px}.valor{font-size:20px}.graficos-sub{grid-template-columns:1fr}.grafico-box.sin{grid-column:auto}.chart{height:360px}.sin .chart{height:420px}}
 @media(max-width:430px){.grid{grid-template-columns:1fr}}
 </style></head><body><main>
-<section class="painel"><div class="barra">Operação do SIN — Resumo</div><div class="grid" id="cards"></div><p class="nota">Média das 24 horas do último dia completo. Δ em MWmed e p.p. da participação na carga; para Carga, p.p. do índice com referência = 100.</p></section>
+<section class="painel"><div class="barra">Operação do SIN — Resumo</div><div class="grid" id="cards"></div><p class="nota">Média das 24 horas do último dia completo. Δ em MWmed e variação relativa (%) em relação ao próprio valor de referência.</p></section>
 <section class="painel"><div class="barra">Operação do SIN — Balanço Horário</div>
 <div class="controls"><label for="data">Selecione a data: <input type="date" id="data"></label><span class="status" id="status">Carregando…</span></div></section>
 <div class="graficos-sub" id="graficos-sub">
@@ -252,7 +385,11 @@ main{padding:0 12px 24px}.painel{border:1px solid #e0e8ee;border-radius:14px;mar
 <section class="grafico-box"><div class="barra">Nordeste (NE)</div><div id="chart-ne" class="chart"></div><p class="aviso" id="aviso-ne"></p></section>
 <section class="grafico-box"><div class="barra">Norte (N)</div><div id="chart-n" class="chart"></div><p class="aviso" id="aviso-n"></p></section>
 </div>
-<section class="painel"><div class="legenda" id="legenda"></div><p class="nota">Fonte: ONS — Balanço de Energia nos Subsistemas. Valores em MWmed. As áreas representam Térmica, Eólica, Solar, Hidráulica e Intercâmbio líquido (positivo ou negativo); a Carga é mostrada como linha para evitar dupla contagem. O SIN é a soma das quatro regiões. O sinal do intercâmbio é mantido conforme publicado pelo ONS, sem ajuste artificial para fechar a carga.</p></section>
+<section class="painel"><div class="barra">Operação do SIN — Mensal</div>
+<div class="mensal-controles"><strong>Recursos:</strong><div class="chips" id="filtro-recursos"></div></div>
+<div class="mensal-controles"><strong>Anos:</strong><div class="chips" id="filtro-anos"></div></div>
+<div id="chart-mensal" class="mensal-plot"></div><p class="nota">SIN: média mensal das 24 horas dos dias completos publicados pelo ONS. As cores representam os anos; os traçados distinguem os recursos. Fonte: ONS.</p></section>
+<section class="painel"><p class="nota">Clique nas legendas dos gráficos para mostrar ou ocultar fontes. Fonte: ONS — Balanço de Energia nos Subsistemas. Valores em MWmed. As áreas representam Térmica, Eólica, Solar, Hidráulica e Intercâmbio líquido (positivo ou negativo); a Carga é mostrada como linha para evitar dupla contagem. O SIN é a soma das quatro regiões. O sinal do intercâmbio é mantido conforme publicado pelo ONS, sem ajuste artificial para fechar a carga.</p></section>
 </main><script>
 const KEYS=['termica','eolica','solar','hidraulica','intercambio','carga'];
 const LABELS=['Térmica','Eólica','Solar','Hidráulica','Intercâmbio','Carga'];
@@ -260,7 +397,11 @@ const CORES=['#E18B51','#6CB7D2','#EACB59','#2B9C89','#9987BB','#23344D'];
 const REGIOES=[['sin','SIN'],['se','SE'],['s','S'],['ne','NE'],['n','N']];
 const PERIODOS=[['dia','Dia anterior'],['semana','Semana anterior'],['mes','Mês anterior'],['ano','Ano anterior']];
 const fmt=(n,dp=0)=>n==null||!Number.isFinite(n)?'—':n.toLocaleString('pt-BR',{minimumFractionDigits:dp,maximumFractionDigits:dp});
-let DAILY=[], YEARS=[], CACHE={}, state=[3,0,1,2,5].map(metric=>({periodo:'mes',metric}));
+let DAILY=[], MONTHLY=[], YEARS=[], CACHE={}, state=[3,0,1,2,5].map(metric=>({periodo:'mes',metric}));
+const REC_SELECTED=new Set([5]);let ANOS_SELECTED=new Set();
+const MESES=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const DASH=['solid','dash','dot','dashdot','longdash','longdashdot'];
+const COR_ANO=(ano)=>`hsl(${Math.round(((ano-2000)*137.508)%360)}, 66%, 43%)`;
 const msDay=86400000;
 function addMonths(iso,n){let [y,m,d]=iso.split('-').map(Number);m+=n;while(m<=0){m+=12;y--}while(m>12){m-=12;y++};d=Math.min(d,new Date(Date.UTC(y,m,0)).getUTCDate());return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`}
 function refDate(day,p){if(p==='mes')return addMonths(day,-1);if(p==='ano')return addMonths(day,-12);let d=new Date(day+'T12:00:00Z');d=new Date(d.getTime()-(p==='semana'?7:1)*msDay);return d.toISOString().slice(0,10)}
@@ -268,15 +409,14 @@ function prior(day){let lo=0,hi=DAILY.length-1,found=null;while(lo<=hi){let mid=
 function renderCards(){let box=document.getElementById('cards');if(!DAILY.length){box.innerHTML='<p>Sem histórico diário consolidado disponível.</p>';return}
  const latest=DAILY[DAILY.length-1];box.innerHTML=state.map((s,i)=>{
   let old=prior(refDate(latest[0],s.periodo));let cur=latest[1+s.metric],before=old?old[1+s.metric]:null;let diff=old?cur-before:null;
-  let cLoad=latest[6],pLoad=old?old[6]:null;
-  let pp=old&&pLoad>0&&cLoad>0?(s.metric===5?(cur/before-1)*100:(cur/cLoad-before/pLoad)*100):null;
+  let pp=old&&Number.isFinite(before)&&before!==0?(cur/before-1)*100:null;
   let klass=diff==null?'':diff>=0?'positivo':'negativo';let sel=PERIODOS.map(([v,l])=>`<option value="${v}" ${s.periodo===v?'selected':''}>${l}</option>`).join('');
   return `<article class="card"><h3>${LABELS[s.metric]}</h3><select class="select" data-card="${i}" aria-label="Comparar ${LABELS[s.metric]}">${sel}</select>
   <div class="valor">${fmt(cur)} <span class="unidade">MWmed</span></div><div class="linha"><span>Referência ${old?old[0].split('-').reverse().join('/'):'—'}</span><strong>${fmt(before)} MWmed</strong></div>
-  <div class="linha"><span>Δ (MWmed)</span><span class="delta ${klass}">${diff==null?'—':(diff>=0?'+':'')+fmt(diff)}</span></div><div class="linha"><span>Δ (p.p.)</span><span class="delta ${pp==null?'':pp>=0?'positivo':'negativo'}">${pp==null?'—':(pp>=0?'+':'')+fmt(pp,2)}</span></div></article>`
+  <div class="linha"><span>Δ (MWmed)</span><span class="delta ${klass}">${diff==null?'—':(diff>=0?'+':'')+fmt(diff)}</span></div><div class="linha"><span>Δ (%)</span><span class="delta ${pp==null?'':pp>=0?'positivo':'negativo'}">${pp==null?'—':(pp>=0?'+':'')+fmt(pp,2)}</span></div></article>`
  }).join('');box.querySelectorAll('select').forEach(s=>s.addEventListener('change',()=>{state[Number(s.dataset.card)].periodo=s.value;renderCards()}))}
 async function yearData(y){if(CACHE[y])return CACHE[y];const r=await fetch(`operacao_sin/${y}.json`);if(!r.ok)throw Error('Dados anuais indisponíveis: '+y);CACHE[y]=await r.json();return CACHE[y]}
-function renderLegend(){document.getElementById('legenda').innerHTML=LABELS.map((s,i)=>`<span class="itemleg"><span class="bolinha" style="border-color:${CORES[i]}"></span>${s}</span>`).join('')}
+function renderLegend(){} // cada Plotly possui sua própria legenda interativa
 function regionalData(doc,id,pos,end){
  if(id==='sin'&&doc.sin)return doc.sin.slice(pos,end);
  if(!doc.s)return null;
@@ -300,18 +440,46 @@ async function plotDay(day){const status=document.getElementById('status');statu
  await Promise.all(REGIOES.map(async ([id,title])=>{
   const rows=regionalData(doc,id,pos,end);const target='chart-'+id;const aviso=document.getElementById('aviso-'+id);
   if(!rows){Plotly.purge(target);document.getElementById(target).textContent='Histórico regional ainda não disponível para este ano. Aguardando coleta dos quatro subsistemas.';aviso.textContent='';return}
-  const traces=chartTraces(xs,rows);
-  await Plotly.react(target,traces,{height:id==='sin'?530:425,showlegend:false,margin:{t:24,b:55,l:83,r:17},paper_bgcolor:'#fff',plot_bgcolor:'#fff',
+  const traces=chartTraces(xs,rows); // Carga = rows[i][5], valor original do ONS, nunca soma das fontes.
+  await Plotly.react(target,traces,{height:id==='sin'?560:470,showlegend:true,margin:{t:24,b:100,l:84,r:18},paper_bgcolor:'#fff',plot_bgcolor:'#fff',
    xaxis:{title:'Hora',type:'date',tickformat:'%H:%M',dtick:7200000,showgrid:false,showline:true,linecolor:'#94a3b8'},
-   yaxis:{title:'Potência média (MWmed)',tickformat:',.0f',gridcolor:'#edf1f5',zeroline:true,zerolinecolor:'#94a3b8'},
-   font:{family:'Century Gothic,Arial',color:'#344054',size:12},hovermode:'x unified',hoverlabel:{bgcolor:'#f7f9fc'},uirevision:'operacao-'+id},{responsive:true,displaylogo:false});
+   yaxis:{title:'Energia MWm',tickformat:',.0f',gridcolor:'#edf1f5',zeroline:true,zerolinecolor:'#94a3b8'},
+   legend:{orientation:'h',x:.5,xanchor:'center',y:-.28,yanchor:'top',font:{size:10},itemclick:'toggle',itemdoubleclick:'toggleothers'},font:{family:'Century Gothic,Arial',color:'#344054',size:12},hovermode:'x unified',hoverlabel:{bgcolor:'#f7f9fc'},uirevision:'operacao-'+id},{responsive:true,displaylogo:false});
   const residual=rows.map(v=>v[5]-v.slice(0,5).reduce((a,z)=>a+z,0));const maxres=Math.max(...residual.map(Math.abs));
   aviso.textContent=maxres>1000?`Diferença máxima entre carga e geração + intercâmbio: ${fmt(maxres)} MWmed (dados ONS sem ajuste).`:'';
  }));
  status.textContent=`${xs.length} horas • ${day.split('-').reverse().join('/')}`;
 }catch(e){status.textContent='Não foi possível carregar '+day+': '+e.message;console.error(e)}}
+function renderMensalFiltros(){
+ const r=document.getElementById('filtro-recursos');
+ r.innerHTML=LABELS.map((t,i)=>`<button type="button" class="chip-filtro" data-recurso="${i}" aria-pressed="${REC_SELECTED.has(i)}">${t}</button>`).join('');
+ r.querySelectorAll('button').forEach(b=>b.onclick=()=>{let k=Number(b.dataset.recurso);if(REC_SELECTED.has(k)){if(REC_SELECTED.size>1)REC_SELECTED.delete(k)}else REC_SELECTED.add(k);renderMensalFiltros();renderMensal()});
+ const anos=[...new Set(MONTHLY.map(r=>r[0]))].sort((a,b)=>a-b);
+ const a=document.getElementById('filtro-anos');
+ a.innerHTML=anos.map(y=>`<button type="button" class="chip-filtro chip-ano" data-ano="${y}" aria-pressed="${ANOS_SELECTED.has(y)}"><span class="ponto-ano" style="background:${COR_ANO(y)}"></span>${y}</button>`).join('');
+ a.querySelectorAll('button').forEach(b=>b.onclick=()=>{let y=Number(b.dataset.ano);if(ANOS_SELECTED.has(y)){if(ANOS_SELECTED.size>1)ANOS_SELECTED.delete(y)}else ANOS_SELECTED.add(y);renderMensalFiltros();renderMensal()});
+}
+function renderMensal(){
+ const traces=[];
+ for(const ano of [...ANOS_SELECTED].sort((a,b)=>a-b)){
+  const items=MONTHLY.filter(r=>r[0]===ano).sort((a,b)=>a[1]-b[1]);
+  for(const k of [...REC_SELECTED].sort((a,b)=>a-b)){
+   traces.push({type:'scatter',mode:'lines+markers',name:`${ano} · ${LABELS[k]}`,
+    x:items.map(r=>r[1]),y:items.map(r=>r[2+k]),
+    line:{color:COR_ANO(ano),width:ano===Math.max(...ANOS_SELECTED)?3:2,dash:DASH[k],shape:'spline',smoothing:.55},
+    marker:{size:5,color:COR_ANO(ano)},
+    hovertemplate:`<b>${ano} · ${LABELS[k]}</b><br>%{x}º mês<br>%{y:,.1f} MWm<extra></extra>`});
+  }
+ }
+ Plotly.react('chart-mensal',traces,{height:540,showlegend:true,hovermode:'closest',paper_bgcolor:'#fff',plot_bgcolor:'#fff',
+ margin:{t:16,l:92,r:24,b:95},font:{family:'Century Gothic,Arial',size:12,color:'#344054'},
+ xaxis:{title:'Mês',range:[.7,12.3],tickmode:'array',tickvals:[1,2,3,4,5,6,7,8,9,10,11,12],ticktext:MESES,showline:true,linecolor:'#94a3b8',showgrid:false},
+ yaxis:{title:'Energia (MWm)',showline:true,linecolor:'#94a3b8',gridcolor:'#e7edf2',tickformat:',.0f'},
+ legend:{orientation:'h',x:.5,xanchor:'center',y:-.27,yanchor:'top',font:{size:10}}},{responsive:true,displaylogo:false});
+}
 async function main(){renderLegend();try{
- const r=await fetch('operacao_sin/resumo.json');if(!r.ok)throw Error('Resumo não encontrado');const o=await r.json();DAILY=o.daily||[];YEARS=o.years||[];
+ const r=await fetch('operacao_sin/resumo.json');if(!r.ok)throw Error('Resumo não encontrado');const o=await r.json();DAILY=o.daily||[];MONTHLY=o.monthly||[];YEARS=o.years||[];
+ const ys=[...new Set(MONTHLY.map(r=>r[0]))].sort((a,b)=>a-b);ANOS_SELECTED=new Set(ys.slice(-2));if(!ANOS_SELECTED.size&&ys.length)ANOS_SELECTED.add(ys[ys.length-1]);renderMensalFiltros();if(MONTHLY.length)renderMensal();
  if(!DAILY.length){document.getElementById('status').textContent='Aguardando primeira coleta do ONS';renderCards();return}
  renderCards();const input=document.getElementById('data');input.min=DAILY[0][0];input.max=DAILY[DAILY.length-1][0];input.value=DAILY[DAILY.length-1][0];input.addEventListener('change',()=>plotDay(input.value));await plotDay(input.value)
 }catch(e){document.getElementById('status').textContent='Histórico indisponível: '+e.message;renderCards()}}
