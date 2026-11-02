@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - 'dados/todosnegocios.xlsx'
+      - 'dados/preco_horario.csv'
+      - 'preco_horario.csv'
   schedule:
     - cron: '15 20 * * *'
       timezone: 'America/Sao_Paulo'
