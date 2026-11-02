@@ -1,12 +1,11 @@
-name: Atualizar painel EAR, ENA, PLD e Mercado
+name: Atualizar painel EAR, ENA, PLD, Mercado e Operacao SIN
 
 on:
   push:
     branches: [main]
     paths:
       - 'dados/todosnegocios.xlsx'
-      - 'dados/preco_horario.csv'
-      - 'preco_horario.csv'
+      - 'atualizar_operacao.py'
   schedule:
     - cron: '15 20 * * *'
       timezone: 'America/Sao_Paulo'
@@ -55,19 +54,22 @@ jobs:
         run: python atualizar_ena.py
       - name: Atualizar Preco de Mercado e pagina principal
         run: python atualizar_mercado.py
+      - name: Atualizar Operacao do SIN (ONS balanco horario)
+        run: python atualizar_operacao.py
       - name: Conferir painel completo
         run: |
           python - <<'PYVALID'
           from pathlib import Path
           import pandas as pd
           page = Path('graficos/index.html').read_text(encoding='utf-8')
-          assert all(s in page for s in ['botao-ear', 'botao-ena', 'botao-pld', 'botao-mercado', 'ear_sin.html', 'ena.html', 'pld.html', 'mercado.html'])
+          assert all(s in page for s in ['botao-ear', 'botao-ena', 'botao-pld', 'botao-mercado', 'botao-operacao', 'ear_sin.html', 'ena.html', 'pld.html', 'mercado.html', 'operacao.html'])
           pld = pd.read_csv('dados/pld_historico_long.csv', sep=';', decimal=',')
           assert {'data','hora','submercado','pld'}.issubset(pld.columns)
           assert set(pld['submercado'].unique()) == {'SE/CO', 'SUL', 'NE', 'N'}
           assert len(pld) > 0
           assert Path('graficos/pld.html').exists()
           assert Path('graficos/mercado.html').exists()
+          assert Path('graficos/operacao.html').exists()
           assert Path('dados/historico_precos_bbce.csv').exists()
           print('Painel EAR + ENA + PLD gerado. PLD ate', pld['data'].max())
           PYVALID
@@ -77,7 +79,9 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add dados/ear_diaria.csv dados/ear_mensal.csv dados/ena_diaria.csv dados/ena_mensal.csv dados/pld_historico_long.csv
           git add dados/historico_precos_bbce.csv dados/precos_mercado_diario.csv dados/produtos_mercado.csv
-          git add graficos/ear_sin.html graficos/ena.html graficos/pld.html graficos/mercado.html graficos/index.html
+          git add graficos/ear_sin.html graficos/ena.html graficos/pld.html graficos/mercado.html graficos/operacao.html graficos/index.html
+          if [ -d dados/operacao_sin ]; then git add -A dados/operacao_sin; fi
+          git add -A graficos/operacao_sin
           if git diff --cached --quiet; then
             echo "Nenhuma alteracao encontrada."
           else
@@ -92,6 +96,8 @@ jobs:
           cp graficos/ena.html site/ena.html
           cp graficos/pld.html site/pld.html
           cp graficos/mercado.html site/mercado.html
+          cp graficos/operacao.html site/operacao.html
+          cp -r graficos/operacao_sin site/operacao_sin
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
       - name: Enviar site
