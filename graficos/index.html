@@ -30,15 +30,17 @@
 <button role="tab" id="botao-ear" aria-selected="true" aria-controls="aba-ear" onclick="selecionar('ear')">EAR · Armazenamento</button>
 <button role="tab" id="botao-ena" aria-selected="false" aria-controls="aba-ena" onclick="selecionar('ena')">ENA · Afluências</button>
 <button role="tab" id="botao-pld" aria-selected="false" aria-controls="aba-pld" onclick="selecionar('pld')">PLD · Preços</button>
-<button role="tab" id="botao-mercado" aria-selected="false" aria-controls="aba-mercado" onclick="selecionar('mercado')">Mercado · Negócios</button></nav></header>
+<button role="tab" id="botao-mercado" aria-selected="false" aria-controls="aba-mercado" onclick="selecionar('mercado')">Mercado · Negócios</button><button role="tab" id="botao-operacao" aria-selected="false" aria-controls="aba-operacao" onclick="selecionar('operacao')">Operação do SIN</button>
+</nav></header>
 <main class="conteudo">
 <section class="aba ativa" id="aba-ear" role="tabpanel" aria-labelledby="botao-ear"><div class="molde"><iframe id="quadro-ear" title="Energia armazenada" src="ear_sin.html" loading="eager" style="height:1900px"></iframe></div></section>
 <section class="aba" id="aba-ena" role="tabpanel" aria-labelledby="botao-ena"><div class="molde"><iframe id="quadro-ena" title="Energia natural afluente" src="ena.html" loading="eager" style="height:1900px"></iframe></div></section>
 <section class="aba" id="aba-pld" role="tabpanel" aria-labelledby="botao-pld"><div class="molde"><iframe id="quadro-pld" title="PLD" src="pld.html" loading="eager" style="height:3300px"></iframe></div></section>
-<section class="aba" id="aba-mercado" role="tabpanel" aria-labelledby="botao-mercado"><div class="molde"><iframe id="quadro-mercado" title="Preço de Mercado" src="mercado.html" loading="eager" style="height:1250px"></iframe></div></section></main>
+<section class="aba" id="aba-mercado" role="tabpanel" aria-labelledby="botao-mercado"><div class="molde"><iframe id="quadro-mercado" title="Preço de Mercado" src="mercado.html" loading="eager" style="height:1250px"></iframe></div></section><section class="aba" id="aba-operacao" role="tabpanel" aria-labelledby="botao-operacao"><div class="molde"><iframe id="quadro-operacao" title="Operação do SIN" src="operacao.html" loading="lazy" style="height:2500px"></iframe></div></section>
+</main>
 <script>
   function selecionar(tipo) {
-    for (const t of ['ear','ena','pld','mercado']) {
+    for (const t of ['ear','ena','pld','mercado','operacao']) {
       document.getElementById('aba-'+t).classList.toggle('ativa',tipo===t);
       document.getElementById('botao-'+t).setAttribute('aria-selected',tipo===t?'true':'false');
     }
@@ -62,15 +64,15 @@
       }
     } catch(e) { }
   }
-  for(const nome of ['ear','ena','pld','mercado']) { const quadro=document.getElementById('quadro-'+nome); quadro.addEventListener('load',()=>ajustarAltura(quadro)); }
+  for(const nome of ['ear','ena','pld','mercado','operacao']) { const quadro=document.getElementById('quadro-'+nome); quadro.addEventListener('load',()=>ajustarAltura(quadro)); }
   window.addEventListener('message',(event)=> {
     if(event.origin!==location.origin) return;
-    if(event.data?.tipo==='altura-painel-ons' && ['ena','ear','pld','mercado'].includes(event.data.id)) {
+    if(event.data?.tipo==='altura-painel-ons' && ['ena','ear','pld','mercado','operacao'].includes(event.data.id)) {
       const alturaMinima=event.data.id==='pld'?3200:(event.data.id==='ena'?700:1600);
       document.getElementById('quadro-'+event.data.id).style.height=Math.max(alturaMinima,event.data.altura+8)+'px';
     }
   });
   window.addEventListener('resize',()=> { const ativo=document.querySelector('.aba.ativa iframe'); if(ativo) ajustarAltura(ativo); });
   const visao = new URLSearchParams(location.search).get('visao');
-  if(['ena','pld','mercado'].includes(visao)) selecionar(visao);
+  if(['ena','pld','mercado','operacao'].includes(visao)) selecionar(visao);
 </script></body></html>
