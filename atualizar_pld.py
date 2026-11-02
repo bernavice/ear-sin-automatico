@@ -1321,7 +1321,8 @@ def configurar_layout(fig: go.Figure, eixo_x: str, y_title: str = 'Preço (R$/MW
         font=dict(family=FONTE, size=13, color='#263142'),
         showlegend=False,
         hovermode='x unified',
-        margin=dict(l=96, r=30, t=24, b=86),
+        # Margem suficiente para exibir a unidade do eixo Y também no iframe do painel.
+        margin=dict(l=132, r=30, t=24, b=86),
         xaxis=dict(
             title=eixo_x, showgrid=False, showline=True,
             linecolor='#50627a', tickcolor='#50627a', ticks='outside',
@@ -1330,7 +1331,8 @@ def configurar_layout(fig: go.Figure, eixo_x: str, y_title: str = 'Preço (R$/MW
             automargin=True,
         ),
         yaxis=dict(
-            title=y_title, showgrid=False, showline=True,
+            title=dict(text='Preço (R$/MWh)', font=dict(size=15, color='#263142'), standoff=20),
+            showgrid=False, showline=True,
             linecolor='#50627a', tickcolor='#50627a', ticks='outside',
             ticklen=7, tickwidth=1.2, zeroline=False, rangemode='tozero',
             minor=dict(ticks='outside', ticklen=3, tickcolor='#98a2b3', showgrid=False),
@@ -1371,6 +1373,10 @@ def criar_figura(df: pd.DataFrame, coluna_x: str, eixo_x: str, granularidade: st
         fig.update_xaxes(type='category', tickmode='array', tickvals=vals, ticktext=txt, tickangle=-40)
     else:
         fig.update_xaxes(type='linear', tickmode='linear', tick0=0, dtick=1, range=[-0.5, 23.5])
+    # Todos os gráficos do PLD usam a mesma unidade e o mesmo título visível.
+    fig.update_yaxes(title_text='Preço (R$/MWh)',
+                     title_font=dict(size=15, color='#263142'), title_standoff=20,
+                     automargin=True)
     return fig
 
 
@@ -1429,7 +1435,11 @@ def figura_mensal_anos(hist: pd.DataFrame) -> tuple[go.Figure, list[int], list[s
             ))
     configurar_layout(fig, 'Mês / Ano', y_title='Preço (R$/MWh)')
     fig.update_layout(height=520, hovermode='closest',
-                      margin={'l': 95, 'r': 34, 't': 18, 'b': 78}, showlegend=False)
+                      margin={'l': 132, 'r': 34, 't': 18, 'b': 78}, showlegend=False)
+    # Reforça o rótulo no mensal, que tem filtros e layout próprios.
+    fig.update_yaxes(title_text='Preço (R$/MWh)',
+                     title_font=dict(size=15, color='#263142'), title_standoff=20,
+                     automargin=True)
     fig.update_xaxes(type='linear', tickmode='array', tickvals=meses + [posicao_anual],
                      ticktext=nomes_meses + ['Ano'], range=[.7, 13.8], tickangle=0)
     return fig, anos, [cores_ano[a] for a in anos]
