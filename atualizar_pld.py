@@ -439,35 +439,74 @@ def _buscar_download_oficial(anos: list[int]) -> list[pd.DataFrame]:
 
 
 def carregar_importacoes_manuais() -> list[pd.DataFrame]:
-    """Permite alimentar a base pelo próprio GitHub quando a CCEE bloqueia o servidor."""
-    partes = []
-    for arquivo in sorted(DADOS.glob('pld_importacao_*.csv')):
-        ano_match = re.search(r'(20\d{2})', arquivo.stem)
-        if not ano_match:
-            print(f'PLD: importação {arquivo.name} ignorada (ano ausente do nome).')
-            continue
-        ano = int(ano_match.group(1))
+    """Contingência: lê exclusivamente `dados/preco_horario.csv`.
+
+    Formato exportado da CCEE: Hora;Submercado;1/11/2026;2/11/2026;...
+    Cada coluna de data contém os preços em R$/MWh, com vírgula decimal.
+    O arquivo pode conter vários dias; somente dias completos (24h x 4
+    submercados) entram no histórico. Uma segunda execução não duplica dados.
+    """
+    principal = DADOS / 'preco_horario.csv'
+    alternativo = RAIZ / 'preco_horario.csv'
+    if principal.exists():
+        arquivo = principal
+        if alternativo.exists():
+            print('::warning title=PLD manual::Encontrado preco_horario.csv também na raiz. '
+                  'Será utilizado apenas dados/preco_horario.csv.')
+    elif alternativo.exists():
+        arquivo = alternativo
+        print('PLD manual: arquivo na raiz detectado. Recomenda-se movê-lo para dados/preco_horario.csv.')
+    else:
+        print('PLD manual: dados/preco_horario.csv não encontrado; '
+              'nenhuma importação manual disponível.')
+        return []
+
+    try:
+        raw = arquivo.read_bytes()
+        if not raw:
+            raise ValueError('arquivo vazio')
         try:
-            raw = arquivo.read_bytes()
-            if not raw:
-                raise ValueError('arquivo vazio')
-            # Download do Datastore costuma usar BOM UTF-8; nunca interpretar o BOM
-            # como caracteres latinos no primeiro nome de coluna.
-            try:
-                primeiro = raw[:4096].decode('utf-8-sig').splitlines()[0]
-                encoding = 'utf-8-sig'
-            except UnicodeDecodeError:
-                primeiro = raw[:4096].decode('latin1').splitlines()[0]
-                encoding = 'latin1'
-            sep = ';' if primeiro.count(';') > primeiro.count(',') else ','
-            df = pd.read_csv(BytesIO(raw), sep=sep, encoding=encoding, dtype=str)
-            df.columns = [str(c).lstrip('\ufeff').strip() for c in df.columns]
-            df = normalizar_csv_ccee(df, ano)
-            partes.append(df)
-            print(f'PLD: importação manual {ano}: até {df.data.max().date()} ({len(df)} preços).')
-        except Exception as exc:
-            print(f'::warning title=PLD arquivo manual inválido::{arquivo.name} ({exc})')
-    return partes
+            primeira = raw[:4096].decode('utf-8-sig').splitlines()[0]
+            encoding = 'utf-8-sig'
+        except UnicodeDecodeError:
+            primeira = raw[:4096].decode('latin1').splitlines()[0]
+            encoding = 'latin1'
+        sep = ';' if primeira.count(';') > primeira.count(',') else ','
+        bruto = pd.read_csv(BytesIO(raw), sep=sep, encoding=encoding, dtype=str)
+        bruto.columns = [str(c).lstrip('\ufeff').strip() for c in bruto.columns]
+        normalizadas = {_sem_acento(c): c for c in bruto.columns}
+        datas = [c for c in bruto.columns if _eh_coluna_data(c)]
+        if 'hora' not in normalizadas or 'submercado' not in normalizadas or not datas:
+            raise ValueError('Formato não reconhecido: esperado Hora;Submercado;1/11/2026;2/11/2026;...')
+
+        # `normalizar_bruto` converte as colunas de datas em registros horários,
+        # padroniza SUDESTE/SUL/NORDESTE/NORTE e interpreta a vírgula decimal.
+        dados = normalizar_bruto(bruto)
+        partes = []
+        for dia, bloco in dados.groupby('data', sort=True):
+            bloco = bloco.copy()
+            chaves = bloco[['hora', 'submercado']].apply(tuple, axis=1)
+            completo = (len(bloco) == 24 * len(ORDEM)
+                        and not chaves.duplicated().any()
+                        and set(bloco['hora']) == set(range(24))
+                        and set(bloco['submercado']) == set(ORDEM)
+                        and pd.to_numeric(bloco['pld'], errors='coerce').ge(0).all())
+            if not completo:
+                print(f'::warning title=PLD manual dia incompleto::{dia:%d/%m/%Y} '
+                      'não foi importado (esperadas 24 horas para os 4 submercados, '
+                      'sem preços inválidos).')
+                continue
+            partes.append(bloco[['data', 'hora', 'submercado', 'pld']])
+        if not partes:
+            raise ValueError('nenhum dia completo e válido no arquivo')
+        combinado = pd.concat(partes, ignore_index=True)
+        print(f'PLD manual: {arquivo.name} — {len(partes)} dia(s), '
+              f'{len(combinado):,} preços; último dia {combinado.data.max():%d/%m/%Y}.')
+        return [combinado]
+    except Exception as exc:
+        print(f'::warning title=PLD preco_horario.csv inválido::{arquivo} '
+              f'({type(exc).__name__}: {exc}). Histórico anterior preservado.')
+        return []
 
 
 def _ler_download_formulario(arquivo: Path) -> pd.DataFrame:
@@ -1177,7 +1216,7 @@ def atualizar_com_online(historico: pd.DataFrame, usar_online: bool) -> pd.DataF
         print('PLD: modo offline; fontes remotas não consultadas.')
 
     if atrasado() or not usar_online:
-        print('PLD: tentativa 4/4 — CSV anual importado no GitHub.')
+        print('PLD: tentativa 4/4 — dados/preco_horario.csv enviado ao GitHub (contingência).')
         for parte in carregar_importacoes_manuais():
             historico = _mesclar_pld(historico, parte, 'CSV importado')
 
@@ -1783,7 +1822,7 @@ def salvar(hist: pd.DataFrame) -> None:
     data_max = ultimo.strftime('%d/%m/%Y')
     atraso = (datetime.now(ZoneInfo('America/Sao_Paulo')).date() - ultimo.date()).days
     if atraso > 2:
-        print(f'::warning title=PLD desatualizado::Último PLD: {data_max} ({atraso} dias atrás). Verifique o bloqueio da CCEE ou importe manualmente o CSV.')
+        print(f'::warning title=PLD desatualizado::Último PLD: {data_max} ({atraso} dias atrás). Verifique o bloqueio da CCEE ou envie dados/preco_horario.csv.')
     print(f'Histórico PLD: {len(hist):,} registros horários.')
     print(f'Última data do PLD: {data_max}')
     print(f'Página: {PAGINA_PLD}')
