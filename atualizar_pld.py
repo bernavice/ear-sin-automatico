@@ -1505,117 +1505,220 @@ def _horarios_por_dia(hist: pd.DataFrame) -> dict[str, list[list[float | None]]]
     return mapa
 
 
-def tabela_resumo_html(tabela: pd.DataFrame, notas: dict) -> str:
-    """Cards com estilos inline para não depender da folha CSS do site/iframe."""
+def dados_resumo_interativo(hist: pd.DataFrame) -> dict:
+    """Agregações verdadeiras por submercado. Sem inferir registros faltantes."""
+    from collections import OrderedDict
+
+    def montar(df, eixo, label):
+        tabela = df.groupby([eixo, 'submercado'], sort=True)['pld'].mean().unstack('submercado')
+        tabela = tabela.reindex(columns=ORDEM).sort_index()
+        result = OrderedDict()
+        for chave, linha in tabela.iterrows():
+            k = pd.Timestamp(chave).strftime('%Y-%m-%d') if eixo in {'data', 'inicio_semana', 'mes_dt'} else str(chave)
+            valores = [round(float(v), 4) if pd.notna(v) else None for v in linha]
+            result[k] = {'label': label(chave), 'valores': valores}
+        return result
+
+    dias = montar(hist, 'data', lambda v: pd.Timestamp(v).strftime('%d/%m/%Y'))
+    df_sem = hist.assign(inicio_semana=inicio_semana_operativa(hist['data']))
+    semanas = montar(df_sem, 'inicio_semana', lambda v: (
+        f'{codigo_semana(pd.Timestamp(v))} · {pd.Timestamp(v).strftime("%d/%m/%Y")} a '
+        f'{(pd.Timestamp(v) + pd.Timedelta(days=6)).strftime("%d/%m/%Y")}'))
+    df_mes = hist.assign(mes_dt=hist['data'].dt.to_period('M').dt.to_timestamp())
+    meses = montar(df_mes, 'mes_dt', lambda v: f'{MESES_PT[pd.Timestamp(v).month].upper()}/{pd.Timestamp(v).year}')
+    anos = montar(hist.assign(ano=hist['data'].dt.year), 'ano', lambda v: str(v))
+
+    extremos = hist.groupby(['data', 'submercado'])['pld'].agg(['max', 'min']).reset_index()
+    extremos_map = {}
+    for dia, bloco in extremos.groupby('data'):
+        mapa = bloco.set_index('submercado')
+        extremos_map[pd.Timestamp(dia).strftime('%Y-%m-%d')] = [
+            {'max': round(float(mapa.loc[sub, 'max']), 4),
+             'min': round(float(mapa.loc[sub, 'min']), 4)} if sub in mapa.index else None
+            for sub in ORDEM
+        ]
+    return {'dia': dias, 'semana': semanas, 'mes': meses, 'ano': anos, 'extremos': extremos_map}
+
+
+def tabela_resumo_html(hist: pd.DataFrame) -> str:
+    """Quatro cards com períodos e comparações independentes; dados embutidos no HTML."""
+    import json as _json
     from html import escape
-
-    def fmt(v):
-        if pd.isna(v):
-            return '—'
-        return f'{float(v):,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.')
-
-    cabecalhos = {'SE/CO': 'SE/CO', 'SUL': 'SUL', 'NE': 'NE', 'N': 'Norte'}
-    cores_periodos = ['#007E80', '#007E80', '#007E80', '#007E80']
-
-    def cor_extremo(valor: float) -> str:
-        # Cores solicitadas para os preços máximos e mínimos horários do dia.
-        # A fronteira superior extrema tem prioridade sobre a primeira faixa.
-        if valor >= 1611.04 - 1e-6:
-            return '#990D1B'  # vermelho intenso / mais escuro
-        if valor > 785.27 + 1e-6:
-            return '#E03131'  # vermelho
-        if abs(valor - 57.31) < 0.005:
-            return '#3AAE78'  # verde-claro (piso)
-        return '#1B2634'      # preto
-
-    def detalhe_extremos(sub: str) -> str:
-        dados = notas.get('extremos_hoje', {}).get(sub)
-        if not dados:
-            return ''
-        maior, menor = dados['max'], dados['min']
-        return (
-            '<div class="faixa-extremos" style="margin-top:8px;padding-top:7px;'
-            'border-top:1px solid #edf1f5;display:flex;flex-direction:column;gap:3px;'
-            'font-size:11px;line-height:1.35;font-variant-numeric:tabular-nums">'
-            f'<span style="color:{cor_extremo(maior)}">'
-            f'Máx.: <strong>{fmt(maior)}</strong></span>'
-            f'<span style="color:{cor_extremo(menor)}">'
-            f'Mín.: <strong>{fmt(menor)}</strong></span>'
-            '</div>'
-        )
-
-    # As referências agora ocupam uma faixa mais larga, abaixo do card
-    # PLD Semana e se estendem até a largura dos dois blocos centrais.
-    notas_periodos = (
-        '<aside class="nota-resumo nota-semana-larga" '
-        'style="min-width:0;padding:8px 4px 2px;margin-top:0;'
-        'background:transparent;border:none;border-radius:0;'
-        'color:#596978;font-size:11px;line-height:1.45;overflow-wrap:anywhere;'
-        'box-sizing:border-box">'
-        '<div style="font-weight:700;color:#344054;margin-bottom:6px">'
-        'Períodos de referência</div>'
-        '<div class="grade-nota-referencias" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:14px;row-gap:8px">'
-        '<div style="min-width:0">'
-        f'<div><strong>PLD Horário:</strong> {escape(notas["hoje"])}</div>'
-        f'<div class="nota-semana-texto" style="margin-top:4px"><strong>Semana:</strong> {escape(notas["semana"])}</div>'
-        '</div>'
-        '<div class="referencias-mes-ano" style="min-width:0;grid-column:2;padding-left:28px">'
-        f'<div><strong>Mês:</strong> {escape(notas["mes"])}</div>'
-        f'<div style="margin-top:4px"><strong>Ano:</strong> {escape(notas["ano"])}</div>'
-        '</div>'
-        '</div>'
-        '</aside>'
-    )
-
+    dados = dados_resumo_interativo(hist)
+    metadados = [
+        ('dia', 'PLD Horário', 'Dia selecionado', 'Comparar com o dia'),
+        ('semana', 'PLD Semana', 'Semana selecionada', 'Comparar com a semana'),
+        ('mes', 'PLD Mês', 'Mês selecionado', 'Comparar com o mês'),
+        ('ano', 'PLD Ano', 'Ano selecionado', 'Comparar com o ano'),
+    ]
     cards = []
-    for indice, (_, linha) in enumerate(tabela.iterrows()):
-        eh_hoje = linha['Indicador'] == 'PLD Horário'
-        itens = []
-        for sm in ORDEM:
-            detalhe = detalhe_extremos(sm) if eh_hoje else ''
-            itens.append(
-                '<div class="item-resumo" '
-                'style="min-width:0;display:flex;flex-direction:column;gap:5px;'
-                'padding:10px 12px;background:#ffffff;border:1px solid #e4eaf0;'
-                'border-radius:10px;box-sizing:border-box">'
-                f'<span class="rotulo-resumo" style="font-size:11px;line-height:1.4;'
-                f'font-weight:700;color:#667085;letter-spacing:.02em">{escape(cabecalhos[sm])}</span>'
-                f'<span class="valor-resumo" style="font-size:19px;line-height:1.3;'
-                f'font-weight:700;color:#17354a;font-variant-numeric:tabular-nums">{fmt(linha[sm])}</span>'
-                + detalhe + '</div>'
-            )
-        artigo = (
-            '<article class="card-resumo" '
-            'style="min-width:0;box-sizing:border-box;background:#f8fafb;'
-            'border:1px solid #dce6e9;border-radius:14px;padding:16px;'
-            'box-shadow:0 2px 7px rgba(17,53,64,.04)">'
-            f'<div class="titulo-card-resumo" style="font-size:15px;'
-            f'font-weight:700;color:{cores_periodos[indice]};margin-bottom:14px">'
-            f'{escape(str(linha["Indicador"]))}</div>'
-            '<div class="grade-resumo" '
-            'style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px">'
-            + ''.join(itens) + '</div></article>'
+    for chave, titulo, texto_atual, texto_ref in metadados:
+        lista = list(dados[chave])
+        atual = lista[-1]
+        anterior = lista[-2] if len(lista) >= 2 else ''
+        if chave == 'dia':
+            controle_atual = (f'<input type="date" class="pld-periodo" aria-label="Dia selecionado" '
+                              f'value="{atual}" min="{lista[0]}" max="{atual}">')
+            controle_ref = (f'<input type="date" class="pld-comparacao" aria-label="Dia de comparação" '
+                            f'value="{anterior}" min="{lista[0]}" max="{atual}">')
+        else:
+            opts = ''.join(
+                f'<option value="{escape(k)}" {"selected" if k == atual else ""}>'
+                f'{escape(dados[chave][k]["label"])}</option>' for k in reversed(lista))
+            controle_atual = f'<select class="pld-periodo" aria-label="{texto_atual}">{opts}</select>'
+            opts_ref = ''.join(
+                f'<option value="{escape(k)}" {"selected" if k == anterior else ""}>'
+                f'{escape(dados[chave][k]["label"])}</option>' for k in reversed(lista[:-1]))
+            controle_ref = f'<select class="pld-comparacao" aria-label="{texto_ref}">{opts_ref}</select>'
+        itens = ''.join(
+            f'<div class="pld-sub-item" data-sub="{sub}">'
+            f'<div class="pld-sub-nome">{escape(nome)}</div>'
+            '<div class="pld-sub-preco" data-campo="preco">—</div>'
+            '<div class="pld-sub-extremos" data-campo="extremos"></div>'
+            '<div class="pld-sub-referencia" data-campo="referencia">—</div>'
+            '<div class="pld-sub-delta" data-campo="delta">Δ —</div>'
+            '</div>'
+            for sub, nome in zip(ORDEM, ['SE/CO', 'SUL', 'NE', 'Norte']))
+        cards.append(
+            f'<article class="pld-card-interativo" data-periodo="{chave}">'
+            f'<div class="pld-card-titulo">{titulo}</div>'
+            '<div class="pld-controles">'
+            f'<label>{texto_atual}{controle_atual}</label>'
+            f'<label>{texto_ref}{controle_ref}</label>'
+            '</div>'
+            '<div class="pld-cabecalho-valores">'
+            '<span>Preço médio <span class="pld-unidade">(R$/MWh)</span></span>'
+            '<span class="pld-base-legenda">Valor principal = média</span>'
+            '</div>'
+            '<div class="pld-grade-sub">' + itens + '</div>'
+            '<div class="pld-card-status" role="status"></div>'
+            '</article>'
         )
-        cards.append(artigo)
-
-    # O grid externo possui quatro colunas iguais. O grupo à direita
-    # (Semana/Mês/Ano + nota) é um grid aninhado de três colunas iguais.
-    # Assim a nota começa imediatamente abaixo de Semana/Mês, sem ser
-    # empurrada pela maior altura do card PLD Horário.
+    # JSON em script não executável para manter o mesmo arquivo HTML autocontido.
+    json_data = _json.dumps(dados, ensure_ascii=False, separators=(',', ':')).replace('<', r'\u003c')
     return (
-        '<section class="painel">'
-        '<div class="barra-titulo">PLD — Resumo</div>'
-        '<div class="quadro-resumo" style="padding:20px 22px 18px;box-sizing:border-box">'
-        '<div class="cards-resumo" '
-        'style="display:grid;gap:14px;align-items:start;width:100%;box-sizing:border-box">'
-        + cards[0]
-        + '<div class="grupo-cards-direita" '
-        'style="min-width:0;display:grid;gap:14px;align-items:start">'
-        + ''.join(cards[1:]) + notas_periodos
-        + '</div>'
-        + '</div></div></section>'
+        '<section class="painel"><div class="barra-titulo">PLD — Resumo</div>'
+        '<div class="quadro-resumo">'
+        '<div class="cards-resumo">' + ''.join(cards) + '</div>'
+        '<p class="pld-nota-media">Valores em preto: <strong>média do período selecionado</strong>. '
+        'No PLD Horário, o valor principal é a média diária dos preços horários; '
+        'máximo e mínimo são do dia escolhido. Δ = preço selecionado − preço de comparação. '
+        'Variação relativa indicada em %.</p>'
+        '</div></section>'
+        f'<script type="application/json" id="dados-resumo-pld">{json_data}</script>'
     )
 
+
+CSS_RESUMO_PLD = r'''
+/* Cards de comparação PLD */
+.cards-resumo{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:stretch}
+.pld-card-interativo{min-width:0;background:#f8fafb;border:1px solid #dce6e9;border-radius:14px;padding:14px;box-shadow:0 1px 4px rgba(17,53,64,.04)}
+.pld-card-titulo{font-size:15px;font-weight:700;color:#007E80;margin-bottom:12px}
+.pld-controles{display:grid;grid-template-columns:minmax(0,1fr);gap:9px;margin-bottom:15px}
+.pld-controles label{min-width:0;display:flex;flex-direction:column;gap:5px;font-size:10.5px;font-weight:700;color:#667085}
+.pld-controles input,.pld-controles select{min-width:0;width:100%;border:1px solid #cad7e1;border-radius:7px;background:#fff;color:#263142;font:inherit;font-size:12px;font-weight:500;padding:7px 8px;height:34px;outline-color:#007e80}
+.pld-cabecalho-valores{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:space-between;font-size:11px;font-weight:700;color:#223647;margin:5px 0 9px}
+.pld-unidade{color:#65758b;font-weight:400}
+.pld-base-legenda{font-size:9px;font-weight:400;color:#667085}
+.pld-grade-sub{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.pld-sub-item{min-width:0;background:#fff;border:1px solid #e4eaf0;border-radius:10px;padding:9px 8px;display:flex;flex-direction:column;gap:5px}
+.pld-sub-nome{font-size:10.5px;color:#667085;font-weight:700}
+.pld-sub-preco{color:#111827;font-size:19px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pld-sub-extremos{display:grid;gap:2px;color:#667085;font-size:9.5px;font-variant-numeric:tabular-nums}
+.pld-sub-referencia{color:#5f6f81;font-size:9.5px;line-height:1.35;font-variant-numeric:tabular-nums}
+.pld-sub-delta{font-size:10px;font-weight:700;line-height:1.45;font-variant-numeric:tabular-nums;white-space:normal}
+.pld-sub-delta.positivo{color:#008f80}.pld-sub-delta.negativo{color:#d83a45}
+.pld-card-status{font-size:10px;color:#697586;padding-top:8px;min-height:17px}
+.pld-nota-media{font-size:11px;color:#667085;line-height:1.5;margin:14px 4px 2px}
+@media(max-width:1300px){.cards-resumo{grid-template-columns:repeat(2,minmax(0,1fr))}.pld-controles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.cards-resumo{grid-template-columns:1fr}.pld-controles{grid-template-columns:1fr}}
+'''
+
+JS_RESUMO_PLD = r'''
+(function(){
+  const dataset = document.getElementById('dados-resumo-pld');
+  if (!dataset) return;
+  const historicos = JSON.parse(dataset.textContent);
+  const nomes = ['SE/CO','SUL','NE','N'];
+  const dataBR = value => value ? value.split('-').reverse().join('/') : '—';
+  const dinheiro = value => Number.isFinite(value) ? value.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
+  const sinal = value => value > 0 ? '+' : (value < 0 ? '−' : '');
+  const COR_PLD = value => value >= 1611.04 ? '#990D1B' : value > 785.27 ? '#e03131' : Math.abs(value-57.31)<0.005 ? '#3aae78' : '#1b2634';
+  const chaves = tipo => Object.keys(historicos[tipo]);
+  function controlarComparacoes(card){
+    const tipo=card.dataset.periodo;
+    const atual=card.querySelector('.pld-periodo').value;
+    const comparacao=card.querySelector('.pld-comparacao');
+    const validos=chaves(tipo).filter(k=>k<atual);
+    if(tipo==='dia'){
+      comparacao.max=validos.length ? validos[validos.length-1] : atual;
+      // A referência nunca é posterior nem igual à data atual.
+      if(!validos.includes(comparacao.value)) comparacao.value=validos.at(-1)||'';
+    }else{
+      const escolhido=comparacao.value;
+      comparacao.replaceChildren();
+      validos.reverse().forEach(k=>{
+        const option=document.createElement('option'); option.value=k;
+        option.textContent=historicos[tipo][k].label;
+        comparacao.appendChild(option);
+      });
+      if(validos.includes(escolhido)) comparacao.value=escolhido;
+    }
+    comparacao.disabled=validos.length===0;
+  }
+  function atualizar(card){
+    const tipo=card.dataset.periodo;
+    const atual=card.querySelector('.pld-periodo').value;
+    const ref=card.querySelector('.pld-comparacao').value;
+    const dados=historicos[tipo][atual];
+    const anterior=historicos[tipo][ref];
+    const extras=tipo==='dia' ? historicos.extremos[atual] : null;
+    const valido=!!(dados && anterior && ref < atual);
+    card.querySelectorAll('.pld-sub-item').forEach((item,i)=>{
+      const campo=campo=>item.querySelector('[data-campo="'+campo+'"]');
+      const v=dados?.valores?.[i];
+      const r=anterior?.valores?.[i];
+      const preco=campo('preco');
+      preco.textContent=v==null?'—':dinheiro(v);
+      campo('referencia').textContent=r==null?'Referência: —':'Referência: '+dinheiro(r)+' R$/MWh';
+      const extra=campo('extremos');
+      extra.replaceChildren();
+      const minmax=extras?.[i];
+      if(minmax){
+        [['Máx.',minmax.max],['Mín.',minmax.min]].forEach(([nome,valor])=>{
+          const el=document.createElement('span');el.style.color=COR_PLD(valor);
+          el.textContent=nome+' '+dinheiro(valor);extra.appendChild(el);
+        });
+      }
+      const campoDelta=campo('delta');
+      campoDelta.classList.remove('positivo','negativo');
+      if(!valido || v==null || r==null){campoDelta.textContent='Δ —';return;}
+      const delta=v-r;
+      const percentual=r!==0?100*delta/r:null;
+      campoDelta.textContent='Δ '+sinal(delta)+dinheiro(Math.abs(delta))+' R$/MWh'+
+        (percentual===null?'':' ('+sinal(percentual)+dinheiro(Math.abs(percentual))+' %)');
+      campoDelta.classList.add(delta>=0?'positivo':'negativo');
+    });
+    card.querySelector('.pld-card-status').textContent=tipo==='dia' ?
+      ('Dia: '+dataBR(atual)+(valido?' · Comparação: '+dataBR(ref):' · Escolha uma data anterior válida')) :
+      ('Período: '+(dados?.label||'—')+(valido?'':' · Sem referência anterior válida'));
+  }
+  document.querySelectorAll('.pld-card-interativo').forEach(card=>{
+    const atual=card.querySelector('.pld-periodo');
+    const comparacao=card.querySelector('.pld-comparacao');
+    controlarComparacoes(card);
+    atualizar(card);
+    atual.addEventListener('change',()=>{controlarComparacoes(card);atualizar(card);});
+    comparacao.addEventListener('change',()=>atualizar(card));
+  });
+  // Integração: altura da área PLD quando os filtros mudam no iframe.
+  if(window.parent!==window){
+    document.querySelectorAll('.pld-controles input,.pld-controles select').forEach(e=>e.addEventListener('change',()=>{
+      window.parent.postMessage({tipo:'altura-painel-ons',id:'pld',altura:document.querySelector('main').offsetHeight+12},'*');
+    }));
+  }
+})();
+'''
 
 def pagina_pld(hist: pd.DataFrame) -> str:
     from html import escape
@@ -1640,7 +1743,7 @@ def pagina_pld(hist: pd.DataFrame) -> str:
     semanal = agregar_semanal(hist)
     diario = agregar_diario(hist)
     horario = agregar_horario(hist, ultima)
-    resumo, notas = resumo_pld(hist)
+    # Cards PLD usam os dados reais agregados para cada período selecionável
 
     configs = [
         ('PLD — Anual', f'Média anual dos preços horários por submercado — último ano parcial até {ultima_br}', criar_figura(anual, 'ano', 'Ano', 'ano', y_title='Preço (R$/MWh)')),
@@ -1650,7 +1753,7 @@ def pagina_pld(hist: pd.DataFrame) -> str:
         ('PLD — Horário', 'Curva horária por data selecionada', criar_figura(horario, 'hora', 'Hora', 'hora', y_title='Preço (R$/MWh)')),
     ]
 
-    blocos = [tabela_resumo_html(resumo, notas)]
+    blocos = [tabela_resumo_html(hist)]
     for i, (titulo, subtitulo, figura) in enumerate(configs):
         if titulo == 'PLD — Mensal':
             blocos.append(painel_mensal_html(hist, ultima_br))
@@ -1743,6 +1846,7 @@ def pagina_pld(hist: pd.DataFrame) -> str:
   #status-data-pld {{color:#667085}}
   .fonte-dados {{padding:7px 18px 18px;color:#667085;font-size:11px;line-height:1.5;margin-top:auto}}
   @media(max-width:750px) {{.area {{padding:0;gap:10px}} .painel {{border-radius:8px}} .quadro-resumo {{padding:12px 8px 14px}} .legenda-externa {{gap:7px}} .legenda-item {{min-width:76px;padding:7px 8px}} }}
+  {CSS_RESUMO_PLD}
 </style></head><body>
 <main class="area">{aviso_defasagem}{''.join(blocos)}</main>
 <script>
@@ -1809,7 +1913,7 @@ def pagina_pld(hist: pd.DataFrame) -> str:
   window.addEventListener('resize', comunicarAlturaPLD);
   if(window.ResizeObserver) new ResizeObserver(comunicarAlturaPLD).observe(document.querySelector('main'));
 }})();
-</script></body></html>'''
+</script><script>{JS_RESUMO_PLD}</script></body></html>'''
 
 
 def salvar(hist: pd.DataFrame) -> None:
