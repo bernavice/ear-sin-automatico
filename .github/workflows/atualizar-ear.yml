@@ -5,7 +5,13 @@ on:
     branches: [main]
     paths:
       - 'dados/todosnegocios.xlsx'
+      - 'dados/preco_horario.csv'
+      - 'atualizar_ear.py'
+      - 'atualizar_ena.py'
+      - 'atualizar_pld.py'
+      - 'atualizar_mercado.py'
       - 'atualizar_operacao.py'
+      - 'requirements-ear.txt'
   schedule:
     - cron: '15 20 * * *'
       timezone: 'America/Sao_Paulo'
