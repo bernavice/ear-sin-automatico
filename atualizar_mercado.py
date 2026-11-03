@@ -183,21 +183,23 @@ def calc_diario(hist):
 
 
 def inserir_aba_index():
-    """Integra Mercado sem pressupor quais abas ENA/Operação já criaram.
+    """Integra Mercado a versões novas e antigas do menu, sem perder outras abas.
 
-    Funciona com as versões antigas (EAR/ENA/PLD) e atuais do index.html.
-    Não substitui as outras seções nem repete botões em execuções sucessivas.
+    A ENA atual usa modulosDisponiveis() e NÃO contém um array literal na
+    função selecionar(). Nesse caso, basta criar a seção e o botão: o JavaScript
+    descobre ambos pelo DOM. Apenas os menus legados exigem atualizar arrays.
     """
     if not INDEX.exists():
         print('Mercado: graficos/index.html ausente; gerado apenas mercado.html.')
         return
     html = INDEX.read_text(encoding='utf-8')
-    abas_obrigatorias = ('ear', 'ena', 'pld')
-    faltantes = [aba for aba in abas_obrigatorias if f'id="botao-{aba}"' not in html or f'id="aba-{aba}"' not in html]
+    obrigatorias = ('ear', 'ena', 'pld')
+    faltantes = [nome for nome in obrigatorias
+                 if f'id="botao-{nome}"' not in html or f'id="aba-{nome}"' not in html]
     if faltantes:
-        raise RuntimeError(f'Index sem as abas obrigatórias: {faltantes}. Arquivo preservado.')
+        raise RuntimeError(f'Index sem as abas básicas {faltantes}; arquivo preservado.')
     if '</nav>' not in html or '</main>' not in html:
-        raise RuntimeError('Index sem fechamento de nav/main. Arquivo preservado.')
+        raise RuntimeError('Index sem nav/main completos; arquivo preservado.')
 
     botao = ('<button role="tab" id="botao-mercado" aria-selected="false" '
              'aria-controls="aba-mercado" onclick="selecionar(\'mercado\')">'
@@ -212,35 +214,54 @@ def inserir_aba_index():
     if 'id="aba-mercado"' not in html:
         html = html.replace('</main>', secao + '\n</main>', 1)
 
-    # O index da ENA pode conter 3, 4 ou 5 abas; não amarrar o script
-    # à existência literal do array ['ear','ena','pld'] das primeiras versões.
-    existentes = [a for a in ('operacao', 'ena', 'ear', 'pld', 'mercado')
-                  if f'id="botao-{a}"' in html and f'id="aba-{a}"' in html]
-    array_js = '[' + ','.join(repr(a) for a in existentes) + ']'
-    html, n_select = re.subn(
-        r'(for\s*\(\s*const\s+\w+\s+of\s*)\[[^\]]*\]',
-        lambda m: m.group(1) + array_js, html, count=1)
-    if not n_select:
-        raise RuntimeError('Não foi possível localizar a lista de abas em selecionar(). Index preservado.')
+    # A versão nova de atualizar_ena.py usa modulosDisponiveis(): o menu é
+    # dinâmico e não se deve exigir uma lista literal dentro de selecionar().
+    if re.search(r'function\s+modulosDisponiveis\s*\(', html):
+        print('Mercado: navegação dinâmica da ENA detectada; mantendo o JavaScript original.')
+    else:
+        # Compatibilidade com as versões antigas, nas quais as abas aparecem
+        # explicitamente em arrays no JavaScript. Atualiza SOMENTE arrays
+        # de nomes de abas, preservando as demais estruturas do script.
+        ordem = ('operacao', 'ena', 'ear', 'pld', 'mercado')
+        permitidas = set(ordem)
+        def atualizar_array(match):
+            itens = re.findall(r"['\"]([^'\"]+)['\"]", match.group('itens'))
+            if {'ear', 'ena', 'pld'}.issubset(itens) and set(itens).issubset(permitidas):
+                ativos = set(itens) | {'mercado'}
+                novo = '[' + ','.join(repr(x) for x in ordem if x in ativos) + ']'
+                return match.group('prefixo') + novo + match.group('sufixo')
+            return match.group(0)
 
-    # Permite que o usuário escolha Mercado diretamente por ?visao=mercado.
-    html = re.sub(
-        r'\[[\s*\'\"a-zA-Z0-9_, ]+\]\.includes\(visao\)',
-        lambda m: array_js + '.includes(visao)' if 'ena' in m.group(0) and 'pld' in m.group(0) else m.group(0),
-        html)
+        html, n_loops = re.subn(
+            r'(?P<prefixo>for\s*\(\s*const\s+\w+\s+of\s*)'
+            r'\[(?P<itens>[^\]\r\n]*)\](?P<sufixo>)',
+            atualizar_array, html)
+        html, n_visao = re.subn(
+            r'(?P<prefixo>)\[(?P<itens>[^\]\r\n]*)\]'
+            r'(?P<sufixo>\s*\.includes\(\s*visao\s*\))',
+            atualizar_array, html)
+        print(f'Mercado: listas do menu legado verificadas ({n_loops} laços, {n_visao} seleções).')
+
     if 'Fonte: ONS / CCEE / Mercado' not in html:
         html = html.replace('Fonte: ONS / CCEE', 'Fonte: ONS / CCEE / Mercado', 1)
 
-    # Mantém a ordem pedida (Operação, ENA, EAR, PLD, Mercado) em qualquer
-    # geração. Reordena só botões das cinco abas, sem alterar outros controles.
-    padrao = re.compile(r'<button\s+role="tab"\s+id="botao-(operacao|ena|ear|pld|mercado)"[^>]*>.*?</button>', re.S)
-    botoes = {m.group(1): m.group(0) for m in padrao.finditer(html)}
-    ordem_encontrada = [m.group(1) for m in padrao.finditer(html)]
-    if set(botoes) == set(existentes) and ordem_encontrada != existentes:
-        html = padrao.sub('', html)
-        html = html.replace('</nav>', '\n'.join(botoes[aba] for aba in existentes) + '\n</nav>', 1)
+    # Ordem preferida nos botões. Operação pode ser acrescentada posteriormente
+    # por atualizar_operacao.py, sem exigir sua presença neste momento.
+    ordem = ('operacao', 'ena', 'ear', 'pld', 'mercado')
+    padrao = re.compile(
+        r'<button\s+role="tab"\s+id="botao-(operacao|ena|ear|pld|mercado)"[^>]*>.*?</button>',
+        re.S)
+    achados = {m.group(1):m.group(0) for m in padrao.finditer(html)}
+    if len(achados) >= 3:
+        sequencia_atual = [m.group(1) for m in padrao.finditer(html)]
+        nova_sequencia = [k for k in ordem if k in achados]
+        if sequencia_atual != nova_sequencia:
+            html = padrao.sub('', html)
+            html = html.replace('</nav>', '\n'.join(achados[k] for k in nova_sequencia) + '\n</nav>', 1)
+
+    # Escreve só após todas as validações; evita corromper o painel em falhas.
     INDEX.write_text(html, encoding='utf-8')
-    print('Mercado: aba integrada ao painel (' + ', '.join(existentes) + ').')
+    print('Mercado: aba integrada ao index.html sem alterar outras seções.')
 
 
 def pagina_mercado(diario, hoje):
