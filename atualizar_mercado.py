@@ -66,7 +66,7 @@ APELIDO_A_ORIGINAL = {apelido: original for original, apelido in PRODUTOS}
 DEFAULT_CARDS = ['Q1_27', '2027', '2028', '2029', '2030']
 PERIODOS = [('1d', 'Dia anterior'), ('7d', 'Semana anterior'),
             ('15d', '15 dias atrás'), ('30d', '30 dias atrás'),
-            ('1y', 'Ano passado')]
+            ('1y', 'Ano passado'), ('data', 'Escolher data')]
 
 
 def corrigir_texto(valor) -> str:
@@ -300,7 +300,9 @@ body{margin:0;background:#fff;color:#193245;font-family:'Century Gothic',Century
 .card-date{font-size:10px;color:#667085}
 .field{display:flex;flex-direction:column;gap:4px;margin-bottom:11px}
 .field label{font-size:10px;color:#667085;font-weight:700}
-.field select{width:100%;min-width:0;padding:8px 7px;font:inherit;font-size:12px;border-radius:7px;border:1px solid #cbd8df;background:#fff;color:#16384a}
+.field select,.field input[type=date]{width:100%;min-width:0;padding:8px 7px;font:inherit;font-size:12px;border-radius:7px;border:1px solid #cbd8df;background:#fff;color:#16384a}
+.field input[type=date]{color-scheme:light;min-height:36px}
+.field.calendario{margin-top:-2px;margin-bottom:11px}
 .strong-number{font-size:24px;font-weight:750;letter-spacing:-.04em;color:#113e4c;line-height:1.15}
 .metric-label{color:#64748b;font-size:10px;margin-top:4px}
 .comparison{border-top:1px solid #dce5ea;margin-top:11px;padding-top:10px;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}
@@ -332,7 +334,6 @@ body{margin:0;background:#fff;color:#193245;font-family:'Century Gothic',Century
 </style>
 <script>''' + plotly_js + '''</script></head><body>
 <section class="panel"><div class="bar">Preço de Mercado — Resumo</div>
-<p class="caption">Preço atual versus referência. Δ em R$/MWh e Δ do índice de preços (base 100) em p.p.</p>
 <div id="market-cards" class="cards"></div>
 </section>
 <section class="panel"><div class="bar">Preço de Mercado — Evolução diária</div>
@@ -353,7 +354,7 @@ const DEFAULTS=''' + defaults_js + ''';
 const HOJE=''' + json.dumps(hoje.strftime('%Y-%m-%d')) + ''';
 const ULTIMO=''' + json.dumps(pd.Timestamp(ultimo_dia).strftime('%Y-%m-%d')) + ''';
 const CORES=NOMES.map((_,i)=>`hsl(${Math.round((i*137.508)%360)}, ${i%3===0?77:72}%, ${i%4===0?62:55}%)`); // 17 cores diferentes, uma por produto
-const CARTOES=Array.from({length:5},(_,i)=>({produto:DEFAULTS[i],periodo:'7d'}));
+const CARTOES=Array.from({length:5},(_,i)=>({produto:DEFAULTS[i],periodo:'7d',dataReferencia:addDays(ULTIMO,-7)}));
 const ANO_CORRENTE=Number(HOJE.slice(0,4));
 const PRODUTO_INICIAL=NOMES.includes(String(ANO_CORRENTE))?String(ANO_CORRENTE):(NOMES.includes('Q4_'+String(ANO_CORRENTE).slice(-2))?'Q4_'+String(ANO_CORRENTE).slice(-2):NOMES.find(x=>x.includes('/'+String(ANO_CORRENTE).slice(-2)))||NOMES[0]);
 const SEL=new Set([PRODUTO_INICIAL]);
@@ -367,13 +368,13 @@ function fmt(n){return n===null||n===undefined||!Number.isFinite(n)?'—':Number
 function br(iso){return iso?iso.slice(8,10)+'/'+iso.slice(5,7)+'/'+iso.slice(0,4):'—'}
 function addDays(iso,n){let d=new Date(iso+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10)}
 function subtractYear(iso){let d=new Date(iso+'T00:00:00Z');let dia=d.getUTCDate();d.setUTCFullYear(d.getUTCFullYear()-1);if(d.getUTCDate()!==dia)d.setUTCDate(0);return d.toISOString().slice(0,10)}
-function dataComparacao(d,p){return p==='1d'?addDays(d,-1):p==='7d'?addDays(d,-7):p==='15d'?addDays(d,-15):p==='30d'?addDays(d,-30):subtractYear(d)}
+function dataComparacao(d,p,personalizada){return p==='data'?(personalizada||addDays(d,-7)):p==='1d'?addDays(d,-1):p==='7d'?addDays(d,-7):p==='15d'?addDays(d,-15):p==='30d'?addDays(d,-30):subtractYear(d)}
 function acharPreco(nome,data){let d=DIAS[nome];if(!d||!d.datas.length)return null;
  let i=d.datas.length-1;while(i>=0&&d.datas[i]>data)i--;
  let futuro=false;if(i<0){i=0;futuro=true} // ausência anterior: usa o primeiro registro da série.
  return {valor:d.precos[i],dia:d.datas[i],semAnterior:futuro};}
 function montarCards(){cardEl.innerHTML=CARTOES.map((c,i)=>{
- let atual=acharPreco(c.produto,ULTIMO),alvo=dataComparacao(ULTIMO,c.periodo),antigo=acharPreco(c.produto,alvo);
+ let atual=acharPreco(c.produto,ULTIMO),alvo=dataComparacao(ULTIMO,c.periodo,c.dataReferencia),antigo=acharPreco(c.produto,alvo);
  let delta=atual&&antigo?atual.valor-antigo.valor:null;
  // Índice de preços: referência = 100; sua diferença é expressa em pontos percentuais.
  let deltaIndice=atual&&antigo&&antigo.valor!==0?(100*atual.valor/antigo.valor-100):null;
@@ -385,6 +386,7 @@ function montarCards(){cardEl.innerHTML=CARTOES.map((c,i)=>{
  return `<article class="card" data-card="${i}"><div class="card-top"><span class="card-index">${safe(c.produto)}</span><span class="card-date">Ref. ${br(ULTIMO)}</span></div>
  <div class="field"><label>Produto</label><select class="card-produto" aria-label="Produto do card ${i+1}">${opcoes}</select></div>
  <div class="field"><label>Comparar com</label><select class="card-periodo" aria-label="Período do card ${i+1}">${pp}</select></div>
+ ${c.periodo==='data'?`<div class="field calendario"><label>Data de referência</label><input class="card-data" type="date" aria-label="Data de referência do card ${i+1}" max="${ULTIMO}" value="${c.dataReferencia||addDays(ULTIMO,-7)}"></div>`:''}
  <div><div class="strong-number">${atual?'R$ '+fmt(atual.valor):'—'}</div><div class="metric-label">Preço atual · último registro ${atual?br(atual.dia):'—'}</div></div>
  <div class="comparison"><div><div class="compare-number">${antigo?'R$ '+fmt(antigo.valor):'—'}</div><div class="metric-label">Preço na referência · ${br(alvo)}${antigo?' (registro '+br(antigo.dia)+')':''}</div></div>
  <div class="delta-duplo"><div class="delta ${classe}">Δ ${delta===null?'—':sinal+fmt(delta)} <span class="delta-unidade">R$/MWh</span></div>
@@ -394,6 +396,11 @@ function montarCards(){cardEl.innerHTML=CARTOES.map((c,i)=>{
  cardEl.querySelectorAll('.card').forEach(div=>{
   const i=Number(div.dataset.card);div.querySelector('.card-produto').addEventListener('change',e=>{CARTOES[i].produto=e.target.value;montarCards();ajustarAltura()});
   div.querySelector('.card-periodo').addEventListener('change',e=>{CARTOES[i].periodo=e.target.value;montarCards();ajustarAltura()});
+  const calendario=div.querySelector('.card-data');
+  if(calendario)calendario.addEventListener('change',e=>{
+    if(!e.target.value||e.target.value>ULTIMO)return;
+    CARTOES[i].dataReferencia=e.target.value;montarCards();ajustarAltura();
+  });
  });}
 function cor(nome){return CORES[Math.max(0,NOMES.indexOf(nome))%CORES.length]}
 function catalogo(){const q=searchEl.value.trim().toUpperCase();catalogEl.innerHTML=NOMES.filter(p=>p.toUpperCase().includes(q)).map(p=>
