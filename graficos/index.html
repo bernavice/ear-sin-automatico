@@ -34,6 +34,11 @@
 
 
 
+
+
+
+
+
 <button role="tab" id="botao-operacao" aria-selected="true" aria-controls="aba-operacao" onclick="selecionar('operacao')">Operação</button>
 <button role="tab" id="botao-ena" aria-selected="false" aria-controls="aba-ena" onclick="selecionar('ena')">ENA · Afluências</button>
 <button role="tab" id="botao-ear" aria-selected="false" aria-controls="aba-ear" onclick="selecionar('ear')">EAR · Armazenamento</button>
@@ -45,6 +50,7 @@
 
 
 
+
 <section class="aba ativa" id="aba-operacao" role="tabpanel" aria-labelledby="botao-operacao"><div class="molde"><iframe id="quadro-operacao" title="Operação do SIN" src="operacao.html" loading="eager" style="height:3450px"></iframe></div></section>
 <section class="aba" id="aba-ena" role="tabpanel" aria-labelledby="botao-ena"><div class="molde"><iframe id="quadro-ena" title="Energia natural afluente" src="ena.html" loading="eager" style="height:1900px"></iframe></div></section>
 <section class="aba" id="aba-ear" role="tabpanel" aria-labelledby="botao-ear"><div class="molde"><iframe id="quadro-ear" title="Energia armazenada" src="ear_sin.html" loading="eager" style="height:1900px"></iframe></div></section>
@@ -52,19 +58,43 @@
 <section class="aba" id="aba-mercado" role="tabpanel" aria-labelledby="botao-mercado"><div class="molde"><iframe id="quadro-mercado" title="Preço de Mercado" src="mercado.html" loading="eager" style="height:1250px"></iframe></div></section>
 </main>
 <script>
-  function selecionar(tipo) {
-    for (const t of ['ear','ena','pld','mercado','operacao']) {
-      document.getElementById('aba-'+t).classList.toggle('ativa',tipo===t);
-      document.getElementById('botao-'+t).setAttribute('aria-selected',tipo===t?'true':'false');
-    }
-    history.replaceState(null,'',location.pathname+(tipo==='ear'?'':'?visao='+tipo));
-    requestAnimationFrame(()=> {
-      const quadro=document.getElementById('quadro-'+tipo);
-      if(quadro.contentWindow && quadro.contentWindow.Plotly) {
-        quadro.contentWindow.document.querySelectorAll('.js-plotly-plot').forEach(g=> {quadro.contentWindow.Plotly.Plots.resize(g);});
+  // Os graficos do Plotly carregados em iframes ocultos precisam ser
+  // redimensionados APOS a aba estar visivel, inclusive no carregamento inicial.
+  function modulosDisponiveis() {
+    return Array.from(document.querySelectorAll('main .aba[id^="aba-"]'))
+      .map(a => a.id.slice(4));
+  }
+  function redimensionarGraficos(tipo) {
+    const sec=document.getElementById('aba-'+tipo);
+    const quadro=document.getElementById('quadro-'+tipo);
+    if(!quadro || !sec?.classList.contains('ativa')) return;
+    try {
+      const plotly=quadro.contentWindow?.Plotly;
+      const plots=quadro.contentDocument?.querySelectorAll('.js-plotly-plot');
+      if(plotly && plots) {
+        plots.forEach(g => {
+          if(g.getBoundingClientRect().width>100 && g._fullLayout) {
+            Promise.resolve(plotly.Plots.resize(g)).catch(()=>{});
+          }
+        });
       }
-      ajustarAltura(quadro);
-    });
+      quadro.contentWindow?.postMessage({tipo:'ativar-painel-plotly'},location.origin);
+    } catch(e) { /* A falta de carga do iframe nao deve impedir a navegacao. */ }
+    ajustarAltura(quadro);
+  }
+  function agendarRedimensionamento(tipo) {
+    requestAnimationFrame(() => requestAnimationFrame(() => redimensionarGraficos(tipo)));
+    [100,350,950].forEach(ms => setTimeout(() => redimensionarGraficos(tipo),ms));
+  }
+  function selecionar(tipo) {
+    if(!document.getElementById('aba-'+tipo)) return;
+    for(const t of modulosDisponiveis()) {
+      document.getElementById('aba-'+t).classList.toggle('ativa',tipo===t);
+      const b=document.getElementById('botao-'+t);
+      if(b) b.setAttribute('aria-selected',tipo===t?'true':'false');
+    }
+    try { history.replaceState(null,'',location.pathname+(tipo==='ear'?'':'?visao='+tipo)); } catch(e) { /* arquivo HTML aberto localmente */ }
+    agendarRedimensionamento(tipo);
   }
   function ajustarAltura(quadro) {
     try {
@@ -77,17 +107,34 @@
       }
     } catch(e) { }
   }
-  for(const nome of ['ear','ena','pld','mercado','operacao']) { const quadro=document.getElementById('quadro-'+nome); quadro.addEventListener('load',()=>ajustarAltura(quadro)); }
+  // Dispara a correção apos carregar um iframe, inclusive se foi carregado
+  // tardiamente porque a aba estava oculta na primeira abertura.
+  document.querySelectorAll('main .aba iframe').forEach(quadro => {
+    quadro.addEventListener('load', () => {
+      if(quadro.closest('.aba')?.classList.contains('ativa')) {
+        ajustarAltura(quadro);
+        agendarRedimensionamento(quadro.id.slice(7));
+      }
+    });
+  });
   window.addEventListener('message',(event)=> {
     if(event.origin!==location.origin) return;
-    if(event.data?.tipo==='altura-painel-ons' && ['ena','ear','pld','mercado','operacao'].includes(event.data.id)) {
-      const alturaMinima=event.data.id==='pld'?3200:(event.data.id==='ena'?700:1600);
-      document.getElementById('quadro-'+event.data.id).style.height=Math.max(alturaMinima,event.data.altura+8)+'px';
+    if(event.data?.tipo==='altura-painel-ons') {
+      const quadro=document.getElementById('quadro-'+event.data.id);
+      if(!quadro || !quadro.closest('.aba')?.classList.contains('ativa')) return;
+      const alturaMinima=event.data.id==='pld'?3200:(event.data.id==='ear'?1600:700);
+      quadro.style.height=Math.max(alturaMinima,event.data.altura+8)+'px';
     }
   });
-  window.addEventListener('resize',()=> { const ativo=document.querySelector('.aba.ativa iframe'); if(ativo) ajustarAltura(ativo); });
+  window.addEventListener('resize',()=> {
+    const ativo=document.querySelector('.aba.ativa');
+    if(ativo) agendarRedimensionamento(ativo.id.slice(4));
+  });
+  // Inclui a Operacao mesmo quando ela for inserida por atualizar_operacao.py.
   const visao = new URLSearchParams(location.search).get('visao');
-  if(['ena','pld','mercado','operacao'].includes(visao)) selecionar(visao);
+  const inicial=document.querySelector('.aba.ativa')?.id.slice(4) || 'ear';
+  if(visao && document.getElementById('aba-'+visao)) selecionar(visao);
+  else agendarRedimensionamento(inicial);
 </script><script>
 async function imprimirDashboardCompleto(){
   // A janela deve abrir diretamente no clique; o navegador controla o destino do PDF.
