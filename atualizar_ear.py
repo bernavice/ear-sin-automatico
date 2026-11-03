@@ -376,7 +376,7 @@ def grafico_ear(mensal: pd.DataFrame, titulo: str, coluna: str,
             entrywidth=92, entrywidthmode="pixels",
             itemsizing="constant",
         ),
-        margin=dict(l=110 if grande else 100, r=36 if grande else 27,
+        margin=dict(l=138 if grande else 126, r=36 if grande else 27,
                     t=18, b=82),
     )
     fig.update_xaxes(
@@ -390,7 +390,8 @@ def grafico_ear(mensal: pd.DataFrame, titulo: str, coluna: str,
                    tickcolor="#98A2B3", showgrid=False),
     )
     fig.update_yaxes(
-        title_text="Níveis dos reservatórios (%)", title_standoff=16, range=[0, 100],
+        title_text="Níveis dos reservatórios (%)", title_standoff=18,
+        title_font=dict(size=14, color="#344054"), automargin=True, range=[0, 100],
         tickmode="linear", tick0=0, dtick=10, ticksuffix="%",
         showline=True, linewidth=1.5, linecolor="#475467",
         ticks="outside", ticklen=6, tickwidth=1.2,
@@ -603,7 +604,21 @@ def montar_grafico(mensal: pd.DataFrame, diario: pd.DataFrame) -> str:
       {{tipo:'altura-painel-ons', id:'ear',
         altura:document.querySelector('main').offsetHeight+12}}, '*');
   }}
-  window.addEventListener('load', comunicarAlturaEAR);
+  // Abas em iframe podem ter largura zero quando o Plotly renderiza.
+  // Redesenha somente após o painel ficar visível na página principal.
+  function atualizarEixosEAR() {{
+    if(!window.Plotly) return;
+    document.querySelectorAll('.js-plotly-plot').forEach(g => {{
+      if(g.getBoundingClientRect().width > 100 && g._fullLayout) {{
+        Promise.resolve(Plotly.Plots.resize(g)).catch(() => {{}});
+      }}
+    }});
+    comunicarAlturaEAR();
+  }}
+  window.addEventListener('message', e => {{
+    if(e.origin === location.origin && e.data?.tipo === 'ativar-painel-plotly') atualizarEixosEAR();
+  }});
+  window.addEventListener('load', () => {{comunicarAlturaEAR(); setTimeout(atualizarEixosEAR, 180);}});
   window.addEventListener('resize', comunicarAlturaEAR);
   if (window.ResizeObserver) {{
     new ResizeObserver(comunicarAlturaEAR)

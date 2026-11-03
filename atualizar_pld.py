@@ -1322,7 +1322,7 @@ def configurar_layout(fig: go.Figure, eixo_x: str, y_title: str = 'Preço (R$/MW
         showlegend=False,
         hovermode='x unified',
         # Margem suficiente para exibir a unidade do eixo Y também no iframe do painel.
-        margin=dict(l=132, r=30, t=24, b=86),
+        margin=dict(l=146, r=30, t=24, b=86),
         xaxis=dict(
             title=eixo_x, showgrid=False, showline=True,
             linecolor='#50627a', tickcolor='#50627a', ticks='outside',
@@ -1435,7 +1435,7 @@ def figura_mensal_anos(hist: pd.DataFrame) -> tuple[go.Figure, list[int], list[s
             ))
     configurar_layout(fig, 'Mês / Ano', y_title='Preço (R$/MWh)')
     fig.update_layout(height=520, hovermode='closest',
-                      margin={'l': 132, 'r': 34, 't': 18, 'b': 78}, showlegend=False)
+                      margin={'l': 146, 'r': 34, 't': 18, 'b': 78}, showlegend=False)
     # Reforça o rótulo no mensal, que tem filtros e layout próprios.
     fig.update_yaxes(title_text='Preço (R$/MWh)',
                      title_font=dict(size=15, color='#263142'), title_standoff=20,
@@ -1916,6 +1916,18 @@ def pagina_pld(hist: pd.DataFrame) -> str:
     Plotly.restyle(plotHorario, {{y: data}}, [0,1,2,3]);
   }}
   if (inputData) inputData.addEventListener('change', atualizarDia);
+  function atualizarEixosPLD() {{
+    if(!window.Plotly) return;
+    document.querySelectorAll('.js-plotly-plot').forEach(g => {{
+      if(g.getBoundingClientRect().width>100 && g._fullLayout) {{
+        Promise.resolve(Plotly.Plots.resize(g)).catch(()=>{{}});
+      }}
+    }});
+    comunicarAlturaPLD();
+  }}
+  window.addEventListener('message', e => {{
+    if(e.origin===location.origin && e.data?.tipo==='ativar-painel-plotly') atualizarEixosPLD();
+  }});
   function comunicarAlturaPLD() {{
     if(window.parent !== window) window.parent.postMessage({{tipo:'altura-painel-ons', id:'pld', altura:document.querySelector('main').offsetHeight+12}}, '*');
   }}

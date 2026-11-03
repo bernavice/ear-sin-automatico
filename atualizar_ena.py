@@ -313,7 +313,7 @@ def grafico_ena(mensal: pd.DataFrame, titulo: str, coluna: str,
         font=dict(family=FONTE, size=12, color='#344054'),
         template='plotly_white', height=580 if grande else 450,
         autosize=True, paper_bgcolor='white', plot_bgcolor='white',
-        hovermode='closest', showlegend=False, margin=dict(l=110 if grande else 104, r=32, t=18, b=82),
+        hovermode='closest', showlegend=False, margin=dict(l=145 if grande else 132, r=32, t=18, b=82),
         # Sem título embutido na legenda: ele ocupava a mesma linha dos anos
         # e causava sobreposição nas visualizações com duas colunas.
         legend=dict(orientation='h',
@@ -335,7 +335,8 @@ def grafico_ena(mensal: pd.DataFrame, titulo: str, coluna: str,
                    tickcolor='#98A2B3', showgrid=False),
     )
     f.update_yaxes(
-        title_text='% da Média de Longo Termo %MLT)', title_standoff=16, rangemode='tozero',
+        title_text='% da Média de Longo Termo %MLT)', title_standoff=18,
+        title_font=dict(size=14, color='#344054'), automargin=True, rangemode='tozero',
         ticksuffix='%', showline=True, linewidth=1.5,
         linecolor='#475467', ticks='outside', ticklen=6,
         tickcolor='#475467', showgrid=False, zeroline=False,
@@ -528,6 +529,18 @@ def pagina_ena(mensal: pd.DataFrame, diario: pd.DataFrame) -> str:
       altura:document.querySelector('main').offsetHeight+12}},'*');
   }}
   window.addEventListener('load',comunicarAltura);
+  function atualizarEixosENA() {{
+    if(!window.Plotly) return;
+    document.querySelectorAll('.js-plotly-plot').forEach(g => {{
+      if(g.getBoundingClientRect().width>100 && g._fullLayout) {{
+        Promise.resolve(Plotly.Plots.resize(g)).catch(()=>{{}});
+      }}
+    }});
+    comunicarAltura();
+  }}
+  window.addEventListener('message', e => {{
+    if(e.origin===location.origin && e.data?.tipo==='ativar-painel-plotly') atualizarEixosENA();
+  }});
   window.addEventListener('resize',comunicarAltura);
   if(window.ResizeObserver) new ResizeObserver(comunicarAltura).observe(document.querySelector('main'));
 </script></body></html>'''
@@ -574,19 +587,43 @@ def pagina_abertura(data_ear: str, data_ena: str, data_pld: str | None = None) -
 <section class="aba" id="aba-pld" role="tabpanel" aria-labelledby="botao-pld"><div class="molde"><iframe id="quadro-pld" title="PLD" src="pld.html" loading="eager" style="height:3300px"></iframe></div></section>
 </main>
 <script>
-  function selecionar(tipo) {{
-    for (const t of ['ear','ena','pld']) {{
-      document.getElementById('aba-'+t).classList.toggle('ativa',tipo===t);
-      document.getElementById('botao-'+t).setAttribute('aria-selected',tipo===t?'true':'false');
-    }}
-    history.replaceState(null,'',location.pathname+(tipo==='ear'?'':'?visao='+tipo));
-    requestAnimationFrame(()=> {{
-      const quadro=document.getElementById('quadro-'+tipo);
-      if(quadro.contentWindow && quadro.contentWindow.Plotly) {{
-        quadro.contentWindow.document.querySelectorAll('.js-plotly-plot').forEach(g=> {{quadro.contentWindow.Plotly.Plots.resize(g);}});
+  // Os graficos do Plotly carregados em iframes ocultos precisam ser
+  // redimensionados APOS a aba estar visivel, inclusive no carregamento inicial.
+  function modulosDisponiveis() {{
+    return Array.from(document.querySelectorAll('main .aba[id^="aba-"]'))
+      .map(a => a.id.slice(4));
+  }}
+  function redimensionarGraficos(tipo) {{
+    const sec=document.getElementById('aba-'+tipo);
+    const quadro=document.getElementById('quadro-'+tipo);
+    if(!quadro || !sec?.classList.contains('ativa')) return;
+    try {{
+      const plotly=quadro.contentWindow?.Plotly;
+      const plots=quadro.contentDocument?.querySelectorAll('.js-plotly-plot');
+      if(plotly && plots) {{
+        plots.forEach(g => {{
+          if(g.getBoundingClientRect().width>100 && g._fullLayout) {{
+            Promise.resolve(plotly.Plots.resize(g)).catch(()=>{{}});
+          }}
+        }});
       }}
-      ajustarAltura(quadro);
-    }});
+      quadro.contentWindow?.postMessage({{tipo:'ativar-painel-plotly'}},location.origin);
+    }} catch(e) {{ /* A falta de carga do iframe nao deve impedir a navegacao. */ }}
+    ajustarAltura(quadro);
+  }}
+  function agendarRedimensionamento(tipo) {{
+    requestAnimationFrame(() => requestAnimationFrame(() => redimensionarGraficos(tipo)));
+    [100,350,950].forEach(ms => setTimeout(() => redimensionarGraficos(tipo),ms));
+  }}
+  function selecionar(tipo) {{
+    if(!document.getElementById('aba-'+tipo)) return;
+    for(const t of modulosDisponiveis()) {{
+      document.getElementById('aba-'+t).classList.toggle('ativa',tipo===t);
+      const b=document.getElementById('botao-'+t);
+      if(b) b.setAttribute('aria-selected',tipo===t?'true':'false');
+    }}
+    try {{ history.replaceState(null,'',location.pathname+(tipo==='ear'?'':'?visao='+tipo)); }} catch(e) {{ /* arquivo HTML aberto localmente */ }}
+    agendarRedimensionamento(tipo);
   }}
   function ajustarAltura(quadro) {{
     try {{
@@ -599,17 +636,34 @@ def pagina_abertura(data_ear: str, data_ena: str, data_pld: str | None = None) -
       }}
     }} catch(e) {{ }}
   }}
-  for(const nome of ['ear','ena','pld']) {{ const quadro=document.getElementById('quadro-'+nome); quadro.addEventListener('load',()=>ajustarAltura(quadro)); }}
+  // Dispara a correção apos carregar um iframe, inclusive se foi carregado
+  // tardiamente porque a aba estava oculta na primeira abertura.
+  document.querySelectorAll('main .aba iframe').forEach(quadro => {{
+    quadro.addEventListener('load', () => {{
+      if(quadro.closest('.aba')?.classList.contains('ativa')) {{
+        ajustarAltura(quadro);
+        agendarRedimensionamento(quadro.id.slice(7));
+      }}
+    }});
+  }});
   window.addEventListener('message',(event)=> {{
     if(event.origin!==location.origin) return;
-    if(event.data?.tipo==='altura-painel-ons' && ['ena','ear','pld'].includes(event.data.id)) {{
-      const alturaMinima=event.data.id==='pld'?3200:(event.data.id==='ena'?700:1600);
-      document.getElementById('quadro-'+event.data.id).style.height=Math.max(alturaMinima,event.data.altura+8)+'px';
+    if(event.data?.tipo==='altura-painel-ons') {{
+      const quadro=document.getElementById('quadro-'+event.data.id);
+      if(!quadro || !quadro.closest('.aba')?.classList.contains('ativa')) return;
+      const alturaMinima=event.data.id==='pld'?3200:(event.data.id==='ear'?1600:700);
+      quadro.style.height=Math.max(alturaMinima,event.data.altura+8)+'px';
     }}
   }});
-  window.addEventListener('resize',()=> {{ const ativo=document.querySelector('.aba.ativa iframe'); if(ativo) ajustarAltura(ativo); }});
+  window.addEventListener('resize',()=> {{
+    const ativo=document.querySelector('.aba.ativa');
+    if(ativo) agendarRedimensionamento(ativo.id.slice(4));
+  }});
+  // Inclui a Operacao mesmo quando ela for inserida por atualizar_operacao.py.
   const visao = new URLSearchParams(location.search).get('visao');
-  if(['ena','pld'].includes(visao)) selecionar(visao);
+  const inicial=document.querySelector('.aba.ativa')?.id.slice(4) || 'ear';
+  if(visao && document.getElementById('aba-'+visao)) selecionar(visao);
+  else agendarRedimensionamento(inicial);
 </script></body></html>'''
 
 
