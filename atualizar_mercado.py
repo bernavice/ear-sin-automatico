@@ -183,14 +183,22 @@ def calc_diario(hist):
 
 
 def inserir_aba_index():
-    """Compatibilidade com o workflow existente, executado após atualizar_ena.py."""
+    """Integra Mercado sem pressupor quais abas ENA/Operação já criaram.
+
+    Funciona com as versões antigas (EAR/ENA/PLD) e atuais do index.html.
+    Não substitui as outras seções nem repete botões em execuções sucessivas.
+    """
     if not INDEX.exists():
         print('Mercado: graficos/index.html ausente; gerado apenas mercado.html.')
         return
     html = INDEX.read_text(encoding='utf-8')
-    if 'id="botao-mercado"' in html:
-        print('Mercado: aba já presente no index.html.')
-        return
+    abas_obrigatorias = ('ear', 'ena', 'pld')
+    faltantes = [aba for aba in abas_obrigatorias if f'id="botao-{aba}"' not in html or f'id="aba-{aba}"' not in html]
+    if faltantes:
+        raise RuntimeError(f'Index sem as abas obrigatórias: {faltantes}. Arquivo preservado.')
+    if '</nav>' not in html or '</main>' not in html:
+        raise RuntimeError('Index sem fechamento de nav/main. Arquivo preservado.')
+
     botao = ('<button role="tab" id="botao-mercado" aria-selected="false" '
              'aria-controls="aba-mercado" onclick="selecionar(\'mercado\')">'
              'Mercado · Negócios</button>')
@@ -198,20 +206,41 @@ def inserir_aba_index():
              'aria-labelledby="botao-mercado"><div class="molde"><iframe '
              'id="quadro-mercado" title="Preço de Mercado" src="mercado.html" '
              'loading="eager" style="height:1250px"></iframe></div></section>')
-    trocas = [
-        ('</nav></header>', botao + '</nav></header>'),
-        ('</main>', secao + '</main>'),
-        ("['ear','ena','pld']", "['ear','ena','pld','mercado']"),
-        ("['ena','ear','pld']", "['ena','ear','pld','mercado']"),
-        ("['ena','pld'].includes(visao)", "['ena','pld','mercado'].includes(visao)"),
-    ]
-    for de, para in trocas:
-        if de not in html:
-            raise RuntimeError(f'graficos/index.html incompatível: {de!r}. Corrija a integração, preservando as outras abas.')
-        html = html.replace(de, para)
-    html = html.replace('Fonte: ONS / CCEE', 'Fonte: ONS / CCEE / Mercado')
+
+    if 'id="botao-mercado"' not in html:
+        html = html.replace('</nav>', botao + '\n</nav>', 1)
+    if 'id="aba-mercado"' not in html:
+        html = html.replace('</main>', secao + '\n</main>', 1)
+
+    # O index da ENA pode conter 3, 4 ou 5 abas; não amarrar o script
+    # à existência literal do array ['ear','ena','pld'] das primeiras versões.
+    existentes = [a for a in ('operacao', 'ena', 'ear', 'pld', 'mercado')
+                  if f'id="botao-{a}"' in html and f'id="aba-{a}"' in html]
+    array_js = '[' + ','.join(repr(a) for a in existentes) + ']'
+    html, n_select = re.subn(
+        r'(for\s*\(\s*const\s+\w+\s+of\s*)\[[^\]]*\]',
+        lambda m: m.group(1) + array_js, html, count=1)
+    if not n_select:
+        raise RuntimeError('Não foi possível localizar a lista de abas em selecionar(). Index preservado.')
+
+    # Permite que o usuário escolha Mercado diretamente por ?visao=mercado.
+    html = re.sub(
+        r'\[[\s*\'\"a-zA-Z0-9_, ]+\]\.includes\(visao\)',
+        lambda m: array_js + '.includes(visao)' if 'ena' in m.group(0) and 'pld' in m.group(0) else m.group(0),
+        html)
+    if 'Fonte: ONS / CCEE / Mercado' not in html:
+        html = html.replace('Fonte: ONS / CCEE', 'Fonte: ONS / CCEE / Mercado', 1)
+
+    # Mantém a ordem pedida (Operação, ENA, EAR, PLD, Mercado) em qualquer
+    # geração. Reordena só botões das cinco abas, sem alterar outros controles.
+    padrao = re.compile(r'<button\s+role="tab"\s+id="botao-(operacao|ena|ear|pld|mercado)"[^>]*>.*?</button>', re.S)
+    botoes = {m.group(1): m.group(0) for m in padrao.finditer(html)}
+    ordem_encontrada = [m.group(1) for m in padrao.finditer(html)]
+    if set(botoes) == set(existentes) and ordem_encontrada != existentes:
+        html = padrao.sub('', html)
+        html = html.replace('</nav>', '\n'.join(botoes[aba] for aba in existentes) + '\n</nav>', 1)
     INDEX.write_text(html, encoding='utf-8')
-    print('Mercado: quarta aba integrada ao painel principal.')
+    print('Mercado: aba integrada ao painel (' + ', '.join(existentes) + ').')
 
 
 def pagina_mercado(diario, hoje):
