@@ -44,6 +44,7 @@
 <button role="tab" id="botao-ear" aria-selected="false" aria-controls="aba-ear" onclick="selecionar('ear')">EAR · Armazenamento</button>
 <button role="tab" id="botao-pld" aria-selected="false" aria-controls="aba-pld" onclick="selecionar('pld')">PLD · Preços</button>
 <button role="tab" id="botao-mercado" aria-selected="false" aria-controls="aba-mercado" onclick="selecionar('mercado')">Mercado · Negócios</button>
+<button role="tab" id="botao-newave" aria-selected="false" aria-controls="aba-newave" onclick="selecionar('newave')">Projeções Newave</button>
 </nav><div class="barra-impresso"><button id="imprimir-dashboard" type="button" onclick="imprimirDashboardCompleto()" title="Imprimir todos os módulos em um único PDF">Imprimir dashboard em PDF</button></div></header>
 <main class="conteudo">
 
@@ -56,6 +57,7 @@
 <section class="aba" id="aba-ear" role="tabpanel" aria-labelledby="botao-ear"><div class="molde"><iframe id="quadro-ear" title="Energia armazenada" src="ear_sin.html" loading="eager" style="height:1900px"></iframe></div></section>
 <section class="aba" id="aba-pld" role="tabpanel" aria-labelledby="botao-pld"><div class="molde"><iframe id="quadro-pld" title="PLD" src="pld.html" loading="eager" style="height:3300px"></iframe></div></section>
 <section class="aba" id="aba-mercado" role="tabpanel" aria-labelledby="botao-mercado"><div class="molde"><iframe id="quadro-mercado" title="Preço de Mercado" src="mercado.html" loading="eager" style="height:1250px"></iframe></div></section>
+<section class="aba" id="aba-newave" role="tabpanel" aria-labelledby="botao-newave"><div class="molde"><iframe id="quadro-newave" title="Projeções Newave" src="newave.html" loading="lazy" style="height:4200px"></iframe></div></section>
 </main>
 <script>
   // Os graficos do Plotly carregados em iframes ocultos precisam ser
@@ -149,7 +151,7 @@ async function imprimirDashboardCompleto(){
     @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}.pdf-modulo{page-break-before:always}}
     </style></head><body><header class="report-header"><h1 class="report-title">Acompanhamento de mercado</h1><p>${document.querySelector('.fonte-atualizacao')?.textContent||''}</p></header><div id="pdf-status">Preparando todas as abas e gráficos para impressão…</div><div id="pdf-content"></div></body></html>`);janela.document.close();
   const status=janela.document.getElementById('pdf-status');
-  const nomes=[['operacao','Operação do SIN'],['ena','ENA'],['ear','EAR'],['pld','PLD'],['mercado','Preço de Mercado']];
+  const nomes=[['operacao','Operação do SIN'],['ena','ENA'],['ear','EAR'],['pld','PLD'],['mercado','Preço de Mercado'],['newave','Projeções Newave']];
   const original=document.querySelector('.aba.ativa');
   const impressaoStyle=document.createElement('style');impressaoStyle.textContent='.aba{display:block!important;position:absolute!important;left:-30000px!important;top:0!important;width:1350px!important;visibility:visible!important}';document.head.appendChild(impressaoStyle);
   try{
