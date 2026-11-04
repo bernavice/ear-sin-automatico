@@ -1,4 +1,4 @@
-name: Atualizar painel EAR, ENA, PLD, Mercado e Operacao SIN
+name: Atualizar painel EAR, ENA, PLD, Mercado, Operacao SIN e Newave
 
 on:
   push:
@@ -11,6 +11,9 @@ on:
       - 'atualizar_pld.py'
       - 'atualizar_mercado.py'
       - 'atualizar_operacao.py'
+      - 'atualizar_newave.py'
+      - 'dados/Produtos Novo.xlsx'
+      - 'dados/Produto Novo.xlsx'
       - 'requirements-ear.txt'
   schedule:
     - cron: '15 20 * * *'
@@ -32,6 +35,8 @@ jobs:
     steps:
       - name: Baixar repositorio
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Necessario para sincronizar commits antes do push.
       - name: Preparar Python
         uses: actions/setup-python@v5
         with:
@@ -62,6 +67,8 @@ jobs:
         run: python atualizar_mercado.py
       - name: Atualizar Operacao do SIN (ONS balanco horario)
         run: python atualizar_operacao.py
+      - name: Atualizar Projecoes Newave
+        run: python atualizar_newave.py
       - name: Conferir painel completo
         run: |
           python - <<'PYVALID'
@@ -76,6 +83,8 @@ jobs:
           assert Path('graficos/pld.html').exists()
           assert Path('graficos/mercado.html').exists()
           assert Path('graficos/operacao.html').exists()
+          assert Path('graficos/newave.html').exists()
+          assert 'botao-newave' in page
           assert Path('dados/historico_precos_bbce.csv').exists()
           print('Painel EAR + ENA + PLD gerado. PLD ate', pld['data'].max())
           PYVALID
@@ -85,14 +94,36 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add dados/ear_diaria.csv dados/ear_mensal.csv dados/ena_diaria.csv dados/ena_mensal.csv dados/pld_historico_long.csv
           git add dados/historico_precos_bbce.csv dados/precos_mercado_diario.csv dados/produtos_mercado.csv
-          git add graficos/ear_sin.html graficos/ena.html graficos/pld.html graficos/mercado.html graficos/operacao.html graficos/index.html
+          git add graficos/ear_sin.html graficos/ena.html graficos/pld.html graficos/mercado.html graficos/operacao.html graficos/newave.html graficos/index.html
+          if [ -f dados/newave_resumo.json ]; then git add dados/newave_resumo.json; fi
           if [ -d dados/operacao_sin ]; then git add -A dados/operacao_sin; fi
           git add -A graficos/operacao_sin
           if git diff --cached --quiet; then
             echo "Nenhuma alteracao encontrada."
           else
-            git commit -m "Atualizar painel EAR ENA e PLD"
-            git push
+            git commit -m "Atualizar painel EAR ENA PLD Mercado e Operacao"
+            # Um commit pode ter sido enviado ao GitHub durante esta execucao.
+            # Sincroniza sem force-push e repete a tentativa se a main avancar.
+            publicado=false
+            for tentativa in 1 2 3 4 5; do
+              echo "Tentativa de publicacao ${tentativa}/5"
+              git fetch --no-tags origin main
+              if ! git rebase origin/main; then
+                echo "::error::Conflito durante a sincronizacao com a main. Nenhum arquivo remoto foi sobrescrito. Execute novamente a Action apos revisar o conflito."
+                git rebase --abort || true
+                exit 1
+              fi
+              if git push origin HEAD:main; then
+                publicado=true
+                break
+              fi
+              echo "Main alterada enquanto a Action publicava; nova tentativa apos 3 segundos."
+              sleep 3
+            done
+            if [ "$publicado" != "true" ]; then
+              echo "::error::Nao foi possivel publicar apos 5 tentativas. Nenhum force-push foi executado."
+              exit 1
+            fi
           fi
       - name: Preparar site GitHub Pages
         run: |
@@ -103,6 +134,7 @@ jobs:
           cp graficos/pld.html site/pld.html
           cp graficos/mercado.html site/mercado.html
           cp graficos/operacao.html site/operacao.html
+          cp graficos/newave.html site/newave.html
           cp -r graficos/operacao_sin site/operacao_sin
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
