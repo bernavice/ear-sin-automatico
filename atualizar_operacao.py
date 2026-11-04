@@ -75,10 +75,22 @@ def normalize_ons(frame, year):
  """Keep the ONS values per subsystem; never infer regional trade from SIN balances."""
  m=pick_columns(frame.columns)
  raw=pd.DataFrame({k:frame[c] for k,c in m.items()})
- raw['datahora']=pd.to_datetime(raw['datahora'],dayfirst=False,errors='coerce',format='mixed')
+ # O ONS pode publicar datas ISO ou no padrão brasileiro. Datas com barra
+ # (01/11/2026) precisam de dayfirst=True; ISO (2026-11-01) usa yearfirst.
+ originais=raw['datahora'].astype('string').str.strip()
+ iso=originais.str.match(r'^\d{4}[-/]',na=False)
+ datas=pd.Series(pd.NaT,index=raw.index,dtype='datetime64[ns]')
+ for mask,prioridade in ((iso,'iso'),(~iso,'br')):
+  if not mask.any():continue
+  datas.loc[mask]=pd.to_datetime(originais.loc[mask],dayfirst=(prioridade=='br'),
+                                   errors='coerce',format='mixed')
+ raw['datahora']=datas
  if getattr(raw['datahora'].dt,'tz',None) is not None:
   raw['datahora']=raw['datahora'].dt.tz_localize(None)
  raw=raw.loc[raw['datahora'].notna() & (raw['datahora'].dt.year==int(year))].copy()
+ if raw.empty:raise ValueError(f'ONS {year}: nenhuma data válida após interpretação das datas')
+ ultimo_bruto=raw['datahora'].max()
+ print(f'ONS {year} diagnóstico: última data/hora encontrada no CSV recebido: {ultimo_bruto:%d/%m/%Y %H:%M}')
  subs=raw['subsistema'].astype(str).map(key)
  mapa={'se':'SE','seco':'SE','sudeste':'SE','sudestecentrooeste':'SE',
        's':'S','sul':'S','ne':'NE','nordeste':'NE','n':'N','norte':'N'}
@@ -94,11 +106,35 @@ def normalize_ons(frame, year):
  if year<2015: raw['solar']=raw['solar'].fillna(0)
  if year<2005: raw['eolica']=raw['eolica'].fillna(0)
  mandatory=METRICS
+ # Diagnóstico enxuto: preserva a regra de exigir 4 subsistemas completos,
+ # mas explica em quais datas/variáveis foram perdidas horas recentes.
+ ultima_data=raw['datahora'].max().normalize()
+ limite_diag=ultima_data-pd.Timedelta(days=4)
+ recentes=raw.loc[raw['datahora']>=limite_diag].copy()
+ validos=recentes.dropna(subset=mandatory).drop_duplicates(['datahora','subsistema'],keep='last')
+ for data_diag,g in recentes.groupby(recentes['datahora'].dt.date,sort=True):
+  gv=validos.loc[validos['datahora'].dt.date==data_diag]
+  sub_por_hora=gv.groupby('datahora')['subsistema'].nunique()
+  horas_completas=int(sub_por_hora.eq(4).sum())
+  faltantes={m:int(g[m].isna().sum()) for m in mandatory if g[m].isna().any()}
+  print(f'ONS {year} diagnóstico {data_diag:%d/%m/%Y}: '
+        f'{g["datahora"].nunique()} horas recebidas; '
+        f'{horas_completas}/24 horas com os 4 subsistemas válidos; '
+        f'campos ausentes={faltantes or "nenhum"}')
  raw=raw.dropna(subset=mandatory)
  raw=raw.drop_duplicates(['datahora','subsistema'],keep='last')
  complete=raw.groupby('datahora')['subsistema'].nunique()
  raw=raw[raw['datahora'].isin(complete[complete==4].index)]
  raw=raw.sort_values(['datahora','subsistema'])
+ if not raw.empty:
+  print(f'ONS {year} diagnóstico: última hora completa de todos os subsistemas: '
+        f'{raw["datahora"].max():%d/%m/%Y %H:%M}')
+  por_dia=raw.groupby(raw['datahora'].dt.date)['datahora'].nunique()
+  dias_completos=por_dia[por_dia==24]
+  if not dias_completos.empty:
+   print(f'ONS {year} diagnóstico: último dia completo elegível aos cards: '
+         f'{dias_completos.index.max():%d/%m/%Y}')
+  else:print(f'ONS {year} AVISO: nenhuma data com 24 horas completas para os cards')
  raw['datahora']=raw['datahora'].dt.strftime('%Y-%m-%dT%H:%M:%S')
  print(f'ONS {year}: {len(raw)//4} horas completas com quatro subsistemas')
  return raw[['datahora','subsistema']+METRICS]
