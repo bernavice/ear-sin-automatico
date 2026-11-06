@@ -15610,3 +15610,728 @@ FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 10:24:23,1,MWm,744,MWh,173,Neg�
 FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 10:24:39,3,MWm,6552,MWh,229,Registro/Boleta,,Ativo
 FEN - SE CON MEN FEV/27 - Preço Fixo,04/11/2026 10:26:36,10,MWm,6720,MWh,202,Registro/Boleta,,Ativo
 FEN - SE CON MEN FEV/27 - Preço Fixo,04/11/2026 10:26:40,10,MWm,6720,MWh,202,Registro/Boleta,,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 10:28:03,2,MWm,1440,MWh,96.2,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 10:31:38,1,MWm,2160,MWh,198,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN FEV/27 - Preço Fixo,04/11/2026 10:32:16,1,MWm,672,MWh,206,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 10:35:02,1,MWm,744,MWh,172.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 10:37:27,1,MWm,744,MWh,173.99,Negócio/Balcão,Compra,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,04/11/2026 10:37:50,5,MWm,43800,MWh,246,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 10:37:57,1,MWm,744,MWh,110.5,Registro/Boleta,,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,04/11/2026 10:39:17,20,MWm,44160,MWh,256,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 10:39:34,1,MWm,2160,MWh,198.22,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 10:40:13,1,MWm,2184,MWh,233,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 10:43:00,3,MWm,2232,MWh,113,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 10:44:34,3,MWm,2232,MWh,114,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 10:44:38,1,MWm,744,MWh,114.8,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 10:44:48,1,MWm,744,MWh,114.8,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 10:44:52,1,MWm,744,MWh,114.8,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 10:45:03,1,MWm,744,MWh,110.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN FEV/27 - Preço Fixo,04/11/2026 10:45:57,1,MWm,672,MWh,205,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 10:45:59,1,MWm,744,MWh,112,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 10:45:59,1,MWm,744,MWh,113,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 10:45:59,1,MWm,744,MWh,114,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 10:51:36,5,MWm,3720,MWh,115.5,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,04/11/2026 10:54:02,5,MWm,43800,MWh,246,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 10:55:16,6,MWm,13104,MWh,230,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 10:56:11,1,MWm,2184,MWh,231,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 10:56:20,1,MWm,2184,MWh,231.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 11:03:39,2,MWm,1488,MWh,174.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 11:05:16,2,MWm,1488,MWh,174,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 11:05:29,5,MWm,10800,MWh,198.5,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 11:06:09,2,MWm,1488,MWh,115,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 11:07:38,2,MWm,1488,MWh,114,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 11:07:48,1,MWm,744,MWh,111.3,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 11:10:54,2,MWm,1488,MWh,174.5,Registro/Boleta,,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 11:12:20,5,MWm,3600,MWh,99,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 11:12:38,1,MWm,2160,MWh,200,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 11:13:45,1,MWm,744,MWh,116,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 11:14:21,1,MWm,744,MWh,115.99,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 11:14:35,1,MWm,2160,MWh,201,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 11:14:39,1,MWm,2160,MWh,201,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 11:14:51,2,MWm,1488,MWh,116,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI OUT/27 DEZ/27 - Preço Fixo,04/11/2026 11:15:13,1,MWm,2208,MWh,299,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 11:15:18,1,MWm,744,MWh,117,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 11:15:18,2,MWm,1488,MWh,117.5,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 11:15:30,2,MWm,1440,MWh,99,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 11:16:03,1,MWm,720,MWh,100,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 11:16:20,1,MWm,720,MWh,100,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 11:17:46,1,MWm,720,MWh,100,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 11:18:13,2,MWm,1488,MWh,117.4,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 11:18:45,1,MWm,2160,MWh,202,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 11:21:17,10,MWm,7440,MWh,117.4,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 11:21:29,1,MWm,744,MWh,117,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 11:21:29,1,MWm,744,MWh,117.5,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 11:24:45,2,MWm,4320,MWh,199,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 11:25:50,1,MWm,744,MWh,117,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 11:26:07,1,MWm,720,MWh,99.99,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 11:27:07,5,MWm,3720,MWh,117.5,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 11:27:19,1,MWm,744,MWh,117.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 11:31:15,1,MWm,2160,MWh,202,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 11:46:39,10,MWm,21840,MWh,233,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 11:46:46,4,MWm,8736,MWh,232,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/28 DEZ/28 - Preço Fixo,04/11/2026 11:47:47,1.475,MWm,12956.4,MWh,253.8,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/29 DEZ/29 - Preço Fixo,04/11/2026 11:48:27,0.983,MWm,8611.08,MWh,231.42,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/30 DEZ/30 - Preço Fixo,04/11/2026 11:48:33,0.423,MWm,3705.48,MWh,217.9,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/31 DEZ/31 - Preço Fixo,04/11/2026 11:48:53,0.314,MWm,2750.64,MWh,210,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/32 DEZ/32 - Preço Fixo,04/11/2026 11:49:00,0.07,MWm,614.88,MWh,200,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/28 DEZ/28 - Preço Fixo,04/11/2026 11:54:34,10,MWm,87840,MWh,260,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 12:00:51,1,MWm,2160,MWh,202,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 12:13:28,2,MWm,4368,MWh,231,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 13:06:22,1,MWm,2184,MWh,232,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 13:06:22,4,MWm,8736,MWh,232.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 13:37:21,1,MWm,2184,MWh,232,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 13:38:15,1,MWm,2184,MWh,232,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 13:39:19,3,MWm,6480,MWh,198.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 13:39:19,2,MWm,4320,MWh,199,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 13:43:00,1,MWm,2184,MWh,232,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 13:47:22,1,MWm,2184,MWh,232,Registro/Boleta,,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 13:48:13,2,MWm,1440,MWh,102,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 13:48:13,2,MWm,1440,MWh,102.8,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 13:48:21,1,MWm,720,MWh,100,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 13:48:25,2,MWm,1488,MWh,117.99,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 13:48:25,1,MWm,744,MWh,118,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 13:48:28,1,MWm,744,MWh,118,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 13:48:29,1,MWm,744,MWh,119,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 13:49:01,2,MWm,4320,MWh,198.5,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 13:49:23,1,MWm,744,MWh,177,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 13:49:30,1,MWm,2160,MWh,201,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 13:49:43,1,MWm,744,MWh,176.9,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 13:55:34,4,MWm,2976,MWh,119.5,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 13:56:52,2,MWm,4368,MWh,232,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 14:01:36,1,MWm,2184,MWh,232,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 14:02:05,2,MWm,4320,MWh,200,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 14:25:33,1,MWm,744,MWh,119.5,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 14:25:33,1,MWm,744,MWh,119.99,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 14:25:33,1,MWm,744,MWh,120,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 14:25:33,2,MWm,1488,MWh,120,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 14:30:09,5,MWm,10800,MWh,200,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 14:32:49,3,MWm,2232,MWh,120,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 14:33:08,2,MWm,4320,MWh,201.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 14:35:22,5,MWm,10920,MWh,233,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 14:41:43,10,MWm,21600,MWh,199,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 14:41:46,10,MWm,21840,MWh,233,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 14:43:51,5,MWm,3720,MWh,118.5,Registro/Boleta,,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 14:43:54,5,MWm,3600,MWh,100,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 14:47:05,5,MWm,3720,MWh,120,Registro/Boleta,,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 14:47:10,5,MWm,3600,MWh,101.5,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 14:49:29,1,MWm,744,MWh,119.5,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 14:51:08,1,MWm,744,MWh,119.49,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 14:52:33,1,MWm,744,MWh,118.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 14:54:09,1,MWm,744,MWh,119.5,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 14:56:38,15,MWm,11160,MWh,174,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 15:14:53,5,MWm,3720,MWh,118,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 15:16:21,2,MWm,1440,MWh,102.7,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 15:16:26,2,MWm,1440,MWh,102.9,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 15:17:57,1,MWm,720,MWh,100,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 15:25:38,1,MWm,720,MWh,99,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 15:41:08,2,MWm,4320,MWh,201.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 15:41:16,2,MWm,4320,MWh,201.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 15:53:31,1,MWm,744,MWh,173,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 15:55:46,2,MWm,1488,MWh,173,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 15:56:16,20,MWm,43200,MWh,195,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 15:56:21,1,MWm,744,MWh,174,Registro/Boleta,,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 15:58:39,1,MWm,720,MWh,97.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 15:58:46,5,MWm,3600,MWh,98,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 15:58:48,5,MWm,3720,MWh,118,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 15:59:16,2,MWm,1440,MWh,95,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 15:59:24,1,MWm,720,MWh,96,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 15:59:30,1,MWm,744,MWh,114.05,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 15:59:30,1,MWm,720,MWh,97,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 15:59:34,1,MWm,720,MWh,98,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 15:59:37,1,MWm,2160,MWh,199,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 15:59:38,1,MWm,744,MWh,115,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 16:00:03,1,MWm,744,MWh,115,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 16:00:08,1,MWm,744,MWh,115,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 16:00:16,1,MWm,744,MWh,115,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,04/11/2026 16:01:35,4,MWm,35040,MWh,250,Registro/Boleta,,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 16:01:36,3,MWm,2160,MWh,94.2,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,04/11/2026 16:03:06,1,MWm,8760,MWh,244.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 16:03:49,1,MWm,720,MWh,94.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 16:03:55,1,MWm,720,MWh,94.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 16:03:55,2,MWm,1440,MWh,94.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 16:05:02,1,MWm,720,MWh,94.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 16:32:10,20,MWm,43680,MWh,233,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 16:32:28,10,MWm,21600,MWh,200,Registro/Boleta,,Ativo
+FEN - SE CON MEN FEV/27 - Preço Fixo,04/11/2026 16:37:29,2,MWm,1344,MWh,209,Registro/Boleta,,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 17:00:50,4,MWm,2880,MWh,94.1,Registro/Boleta,,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,04/11/2026 17:12:13,5,MWm,11040,MWh,257,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 17:12:16,15,MWm,11160,MWh,173,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 17:14:10,2,MWm,4320,MWh,199,Registro/Boleta,,Ativo
+FEN - SE CON MEN OUT/26 - Preço Fixo,04/11/2026 17:16:44,16,MWm,11904,MWh,57.31,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,04/11/2026 17:23:02,3.5,MWm,30660,MWh,243,Registro/Boleta,,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 17:31:31,2,MWm,1440,MWh,94.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 17:31:32,1,MWm,720,MWh,94.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 17:31:32,2,MWm,1440,MWh,94.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 17:31:51,1,MWm,720,MWh,94.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 17:32:33,1,MWm,720,MWh,95,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 17:32:41,1,MWm,720,MWh,93.5,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 17:32:47,1,MWm,720,MWh,93.5,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,04/11/2026 17:32:58,1,MWm,744,MWh,111.11,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN FEV/27 - Preço Fixo,04/11/2026 17:33:34,3,MWm,2016,MWh,207,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 17:36:40,1,MWm,744,MWh,170.05,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 17:38:14,3,MWm,2160,MWh,93.5,Registro/Boleta,,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 17:42:57,1,MWm,720,MWh,95,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 17:44:03,15,MWm,11160,MWh,176.5,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 17:44:57,1,MWm,2160,MWh,198.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 17:44:57,1,MWm,2160,MWh,198.6,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 17:44:57,1,MWm,2160,MWh,198.65,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN MAR/27 - Preço Fixo,04/11/2026 17:45:26,1,MWm,744,MWh,212,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,04/11/2026 17:51:06,1,MWm,8760,MWh,248,Negócio/Balcão,Compra,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,04/11/2026 17:51:06,1,MWm,8760,MWh,249,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 17:52:55,1,MWm,720,MWh,94.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 17:53:43,1,MWm,744,MWh,171,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 17:53:43,5,MWm,3720,MWh,171.2,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 17:53:44,1,MWm,720,MWh,94.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 17:54:04,2,MWm,1440,MWh,94.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,04/11/2026 17:54:11,2,MWm,1440,MWh,93.6,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 17:54:24,1,MWm,2160,MWh,199,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN FEV/27 - Preço Fixo,04/11/2026 17:54:48,1,MWm,672,MWh,202,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN FEV/27 - Preço Fixo,04/11/2026 17:54:58,3,MWm,2016,MWh,207,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 17:54:58,2,MWm,1488,MWh,171,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 17:55:59,1,MWm,744,MWh,170,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 17:58:45,2,MWm,4368,MWh,233.5,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 17:59:24,1,MWm,744,MWh,169,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 17:59:25,1,MWm,744,MWh,169,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 17:59:31,1,MWm,744,MWh,170,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 17:59:35,1,MWm,2160,MWh,197,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 17:59:38,1,MWm,744,MWh,169,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 17:59:55,2,MWm,4368,MWh,233.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,04/11/2026 18:03:19,5,MWm,3720,MWh,170.5,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,04/11/2026 18:03:44,1,MWm,2160,MWh,198.65,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,04/11/2026 18:05:20,3,MWm,6552,MWh,230,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:06:45,1,MWm,744,MWh,167,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 09:07:04,1,MWm,2184,MWh,225,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,05/11/2026 09:07:25,1,MWm,2208,MWh,251,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,05/11/2026 09:10:30,2,MWm,4416,MWh,251.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 09:13:37,1,MWm,2184,MWh,227,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:23:59,1,MWm,744,MWh,167,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:26:02,2,MWm,1488,MWh,168,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 09:26:29,2,MWm,1440,MWh,92,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 09:26:29,4,MWm,2880,MWh,92.15,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:27:07,3,MWm,2232,MWh,168,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:27:37,4,MWm,2976,MWh,167.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:27:45,2,MWm,1488,MWh,165.55,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:27:53,1,MWm,744,MWh,167,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:27:58,1,MWm,744,MWh,165.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 09:28:41,2,MWm,4368,MWh,227,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:29:22,1,MWm,744,MWh,164,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 09:29:34,2,MWm,1488,MWh,110,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 09:29:40,1,MWm,2184,MWh,226,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:29:43,1,MWm,744,MWh,164.22,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:30:23,2,MWm,1488,MWh,165,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:30:57,1,MWm,744,MWh,164,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:30:59,2,MWm,1488,MWh,166,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 09:31:07,1,MWm,2184,MWh,225,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 09:31:12,1,MWm,2184,MWh,225.22,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:31:13,1,MWm,744,MWh,164.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 09:31:16,1,MWm,2184,MWh,225,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 09:31:17,1,MWm,2184,MWh,225.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 09:31:22,3,MWm,6552,MWh,225,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:31:27,1,MWm,744,MWh,164,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 09:31:27,5,MWm,10920,MWh,225,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:31:30,1,MWm,744,MWh,164,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 09:31:34,1,MWm,2160,MWh,191,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:31:36,1,MWm,744,MWh,164,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:31:37,1,MWm,744,MWh,164,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 09:31:41,1,MWm,2160,MWh,190,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,05/11/2026 09:31:42,2,MWm,4416,MWh,251.05,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 09:31:46,1,MWm,2160,MWh,189,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 09:31:51,2,MWm,4320,MWh,187,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 09:31:52,1,MWm,2160,MWh,188,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:31:57,2,MWm,1488,MWh,162.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,05/11/2026 09:31:58,1,MWm,2208,MWh,250,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN MAR/27 - Preço Fixo,05/11/2026 09:32:01,2,MWm,1488,MWh,215,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:32:02,2,MWm,1488,MWh,162,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 09:32:05,1,MWm,2184,MWh,224,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:32:07,1,MWm,744,MWh,160,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:32:08,1,MWm,744,MWh,160,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,05/11/2026 09:32:08,1,MWm,2208,MWh,251,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 09:32:10,1,MWm,2160,MWh,188,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 09:32:16,2,MWm,1488,MWh,110,Registro/Boleta,,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,05/11/2026 09:32:18,1,MWm,2208,MWh,251,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 09:32:26,1,MWm,744,MWh,110,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 09:32:28,1,MWm,2184,MWh,223.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 09:32:41,1,MWm,2184,MWh,223,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/28 DEZ/28 - Preço Fixo,05/11/2026 09:33:00,1,MWm,8784,MWh,255,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 09:33:59,1,MWm,720,MWh,91,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,05/11/2026 09:34:12,1,MWm,2208,MWh,252,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 09:34:19,2,MWm,1488,MWh,110.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 09:34:26,2,MWm,1488,MWh,110,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 09:34:32,2,MWm,1488,MWh,110.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 09:34:37,1,MWm,744,MWh,109,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 09:34:38,2,MWm,1488,MWh,108.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 09:34:43,2,MWm,1488,MWh,110.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 09:34:52,2,MWm,1488,MWh,106,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,05/11/2026 09:34:55,2,MWm,4416,MWh,251.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 09:35:09,2,MWm,1488,MWh,110.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 09:35:10,3,MWm,2232,MWh,109,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 09:35:10,2,MWm,1488,MWh,109.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 09:35:14,5,MWm,3720,MWh,108,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 09:35:23,1,MWm,744,MWh,108.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 09:35:23,2,MWm,1488,MWh,109,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:36:11,1,MWm,744,MWh,159,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 09:36:16,2,MWm,1488,MWh,108.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 09:36:16,2,MWm,1440,MWh,91.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 09:36:16,2,MWm,1440,MWh,92.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 09:36:16,1,MWm,720,MWh,92.15,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,05/11/2026 09:36:41,1,MWm,8760,MWh,244,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 09:36:46,2,MWm,4368,MWh,225,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 09:37:01,2,MWm,1440,MWh,91,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 09:37:43,2,MWm,4368,MWh,225,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:39:04,1,MWm,744,MWh,160,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:39:12,1,MWm,744,MWh,157,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 09:41:18,1,MWm,2160,MWh,185,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:41:51,5,MWm,3720,MWh,167,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 09:43:21,1,MWm,2160,MWh,186,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,05/11/2026 09:43:37,1,MWm,2208,MWh,255,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI OUT/27 DEZ/27 - Preço Fixo,05/11/2026 09:43:49,1,MWm,2208,MWh,299,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 09:50:29,1,MWm,2160,MWh,186,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 09:52:35,3,MWm,6480,MWh,186,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 09:53:01,1,MWm,2160,MWh,185,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 09:53:17,1,MWm,2160,MWh,185,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 09:53:23,1,MWm,2160,MWh,185,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 09:53:32,1,MWm,2160,MWh,185,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 09:53:33,1,MWm,2160,MWh,185,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 09:53:56,1,MWm,2160,MWh,184.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 09:54:36,2,MWm,4320,MWh,185.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 09:55:35,1,MWm,2160,MWh,185,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:56:50,1,MWm,744,MWh,159,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:58:12,1,MWm,744,MWh,157,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 09:58:23,5,MWm,3720,MWh,157,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 09:59:11,1,MWm,2160,MWh,183.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,05/11/2026 10:00:02,5,MWm,43800,MWh,244,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 10:00:04,1,MWm,2160,MWh,185,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,05/11/2026 10:01:38,1,MWm,8760,MWh,243.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,05/11/2026 10:01:38,1,MWm,8760,MWh,243.6,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 10:02:55,5,MWm,3720,MWh,109,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 10:03:46,5,MWm,3720,MWh,107.5,Registro/Boleta,,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 10:03:52,4,MWm,2880,MWh,90.8,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 10:03:52,3,MWm,2160,MWh,90.85,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 10:04:01,1,MWm,720,MWh,91.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 10:04:04,2,MWm,1488,MWh,108.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,05/11/2026 10:05:36,3.5,MWm,30660,MWh,245.75,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 10:07:46,1,MWm,744,MWh,108.5,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,05/11/2026 10:10:12,10,MWm,22080,MWh,256,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,05/11/2026 10:10:27,2,MWm,17520,MWh,242,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,05/11/2026 10:13:28,5,MWm,11040,MWh,254,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 10:17:36,5,MWm,3720,MWh,158.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 10:21:02,2,MWm,1488,MWh,158,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 10:27:43,2,MWm,4320,MWh,185,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 10:28:48,1,MWm,2160,MWh,185,Negócio/Balcão,Compra,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,05/11/2026 10:31:34,1,MWm,8760,MWh,243.5,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,05/11/2026 10:32:28,2,MWm,17520,MWh,242,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 10:32:34,1,MWm,2160,MWh,185,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 10:32:46,1,MWm,2184,MWh,228,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 10:33:20,1,MWm,2160,MWh,185,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,05/11/2026 10:33:32,2,MWm,4416,MWh,252,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN FEV/27 - Preço Fixo,05/11/2026 10:33:50,1,MWm,672,MWh,198,Negócio/Balcão,Compra,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,05/11/2026 10:33:56,2,MWm,17520,MWh,242,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,05/11/2026 10:34:11,2,MWm,4416,MWh,252,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 10:34:14,1,MWm,2160,MWh,185,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 10:34:30,1,MWm,2160,MWh,185,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 10:35:18,1,MWm,744,MWh,108.5,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 10:35:47,3,MWm,6552,MWh,229,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 10:36:54,1,MWm,744,MWh,159,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 10:37:08,2,MWm,1488,MWh,106,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 10:37:13,2,MWm,1488,MWh,159,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 10:37:49,5,MWm,3720,MWh,159,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 10:38:19,1,MWm,744,MWh,159,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 10:38:19,2,MWm,1488,MWh,159,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 10:43:47,2,MWm,1488,MWh,106,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 10:43:48,1,MWm,744,MWh,105.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 10:44:09,1,MWm,744,MWh,105,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 10:44:09,2,MWm,1488,MWh,105,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 10:44:09,3,MWm,2232,MWh,105.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 10:44:14,4,MWm,2976,MWh,108,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 10:44:15,2,MWm,1488,MWh,105,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 10:44:19,1,MWm,744,MWh,106.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 10:44:22,2,MWm,1488,MWh,103.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 10:44:28,1,MWm,744,MWh,157,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 10:44:31,1,MWm,744,MWh,157,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 10:44:34,1,MWm,744,MWh,106.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 10:44:37,1,MWm,744,MWh,106.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 10:44:38,5,MWm,3720,MWh,158,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 10:44:40,1,MWm,744,MWh,156.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 10:44:42,1,MWm,744,MWh,156.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 10:44:48,1,MWm,744,MWh,158,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 10:44:49,1,MWm,744,MWh,156.1,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 10:44:51,1,MWm,744,MWh,106.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 10:44:54,2,MWm,1488,MWh,156.15,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 10:45:09,1,MWm,744,MWh,158,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 10:51:59,4,MWm,2976,MWh,156.5,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 10:56:09,1,MWm,744,MWh,157,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN FEV/27 - Preço Fixo,05/11/2026 11:07:49,2,MWm,1344,MWh,198,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 11:18:59,1,MWm,744,MWh,106,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 11:20:30,4,MWm,8640,MWh,185,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 11:20:48,4,MWm,8640,MWh,185,Registro/Boleta,,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,05/11/2026 11:26:45,1,MWm,2208,MWh,252,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,05/11/2026 11:27:03,1,MWm,2208,MWh,253.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN FEV/27 - Preço Fixo,05/11/2026 11:29:04,2,MWm,1344,MWh,197,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 11:48:25,2,MWm,1488,MWh,105,Registro/Boleta,,Ativo
+FEN - SE CON MEN FEV/27 - Preço Fixo,05/11/2026 11:53:41,1,MWm,672,MWh,198,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 11:53:50,1,MWm,2160,MWh,180,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 11:53:50,1,MWm,2160,MWh,180.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 11:53:50,1,MWm,2160,MWh,181,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 12:00:53,1,MWm,2184,MWh,224,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 12:01:20,1,MWm,2184,MWh,225,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 12:03:09,1,MWm,2160,MWh,185,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,05/11/2026 12:05:47,5,MWm,43800,MWh,243,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 12:15:23,1,MWm,744,MWh,157,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/28 DEZ/28 - Preço Fixo,05/11/2026 12:18:44,1,MWm,8784,MWh,255.55,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 12:37:46,2,MWm,4368,MWh,225,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 12:38:07,10,MWm,21600,MWh,183,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 12:41:06,3,MWm,2232,MWh,103.51,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 12:45:03,2,MWm,1488,MWh,156.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 12:59:06,2,MWm,1488,MWh,104,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN FEV/27 - Preço Fixo,05/11/2026 14:03:42,1,MWm,672,MWh,197,Registro/Boleta,,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 14:16:03,10,MWm,7200,MWh,91.5,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 14:19:46,3,MWm,2232,MWh,104,Registro/Boleta,,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 14:21:16,2,MWm,1440,MWh,91.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 14:21:27,3,MWm,2160,MWh,90,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 14:21:36,1,MWm,720,MWh,91.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 14:22:05,1,MWm,720,MWh,91.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:22:28,1,MWm,744,MWh,156.15,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:22:34,1,MWm,744,MWh,155,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:22:34,3,MWm,2232,MWh,155,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:22:43,2,MWm,1488,MWh,156,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:22:43,1,MWm,744,MWh,156.05,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:22:44,1,MWm,744,MWh,156,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:22:52,1,MWm,744,MWh,156,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN FEV/27 - Preço Fixo,05/11/2026 14:23:16,1,MWm,672,MWh,192,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:23:27,2,MWm,1488,MWh,155.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:25:13,2,MWm,1488,MWh,153.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:25:27,1,MWm,744,MWh,151,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:25:27,2,MWm,1488,MWh,152,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 14:25:41,1,MWm,2160,MWh,180.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 14:25:46,1,MWm,2160,MWh,180.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 14:25:52,2,MWm,4320,MWh,180,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN FEV/27 - Preço Fixo,05/11/2026 14:26:45,1,MWm,672,MWh,190,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN MAR/27 - Preço Fixo,05/11/2026 14:30:59,1,MWm,744,MWh,201,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN FEV/27 - Preço Fixo,05/11/2026 14:31:06,1,MWm,672,MWh,190,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:31:27,1,MWm,744,MWh,153,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 14:31:36,1,MWm,2184,MWh,225,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 14:31:36,2,MWm,4368,MWh,225,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:31:45,10,MWm,7440,MWh,152,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:31:59,1,MWm,744,MWh,151.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 14:32:20,2,MWm,1488,MWh,105,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 14:35:52,1,MWm,744,MWh,104,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 14:36:03,1,MWm,744,MWh,104,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 14:36:07,1,MWm,744,MWh,104,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 14:36:11,1,MWm,744,MWh,104,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 14:36:13,1,MWm,744,MWh,104,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 14:36:14,1,MWm,744,MWh,104,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 14:36:15,1,MWm,744,MWh,104,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:36:22,1,MWm,744,MWh,151.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:36:27,2,MWm,1488,MWh,151,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:36:47,1,MWm,744,MWh,151.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:36:55,1,MWm,744,MWh,151,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:37:18,1,MWm,744,MWh,151,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,05/11/2026 14:37:44,1,MWm,2208,MWh,253.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,05/11/2026 14:37:51,2,MWm,17520,MWh,240.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 14:38:08,1,MWm,2160,MWh,179,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 14:39:17,3,MWm,2232,MWh,104.25,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 14:40:50,1,MWm,720,MWh,90,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 14:41:14,1,MWm,720,MWh,91.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 14:43:03,1,MWm,720,MWh,88,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 14:43:09,1,MWm,720,MWh,91.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 14:43:16,1,MWm,720,MWh,91.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 14:44:12,1,MWm,720,MWh,90,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 14:44:16,1,MWm,720,MWh,91.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 14:44:21,1,MWm,720,MWh,91.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 14:45:35,1,MWm,720,MWh,91.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 14:45:36,1,MWm,720,MWh,90,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:45:53,1,MWm,744,MWh,150.11,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:46:04,1,MWm,744,MWh,150.11,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:46:27,1,MWm,744,MWh,151,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:46:30,1,MWm,744,MWh,151,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:46:42,1,MWm,744,MWh,151,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:46:49,1,MWm,744,MWh,150.11,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:47:12,1,MWm,744,MWh,150,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:47:12,1,MWm,744,MWh,150.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 14:47:26,2,MWm,4368,MWh,224,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:47:30,2,MWm,1488,MWh,150.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:47:47,2,MWm,1488,MWh,150,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 14:48:15,1,MWm,2160,MWh,179,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:48:28,1,MWm,744,MWh,148,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:48:28,2,MWm,1488,MWh,148,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:48:36,1,MWm,744,MWh,146,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:48:39,2,MWm,1488,MWh,150,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:48:40,5,MWm,3720,MWh,150,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:48:43,2,MWm,1488,MWh,150,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:48:48,2,MWm,1488,MWh,150,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 14:49:07,1,MWm,2160,MWh,180.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 14:49:37,1,MWm,2184,MWh,223.6,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 14:49:58,3,MWm,6552,MWh,224,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 14:49:58,1,MWm,2184,MWh,224.51,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:50:10,1,MWm,744,MWh,150.1,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:50:56,1,MWm,744,MWh,148,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 14:52:00,3,MWm,2232,MWh,104.25,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 14:52:28,2,MWm,1488,MWh,104.25,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:52:49,1,MWm,744,MWh,148.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,05/11/2026 14:53:59,6,MWm,52560,MWh,242,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/28 DEZ/28 - Preço Fixo,05/11/2026 14:54:16,1,MWm,8784,MWh,255,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 14:54:29,10,MWm,7200,MWh,91.5,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:57:00,12,MWm,8928,MWh,148.5,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 14:58:18,1,MWm,744,MWh,148,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 14:59:06,1,MWm,2160,MWh,177.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 14:59:32,2,MWm,4320,MWh,180,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 14:59:42,2,MWm,4368,MWh,224,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 14:59:59,1,MWm,2184,MWh,224,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 15:00:06,2,MWm,1488,MWh,104.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 15:00:07,2,MWm,4368,MWh,224,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 15:00:07,2,MWm,4320,MWh,180.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 15:00:11,2,MWm,4320,MWh,178,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 15:00:19,1,MWm,2160,MWh,177.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 15:00:28,2,MWm,1488,MWh,104.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 15:00:33,2,MWm,1488,MWh,104.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 15:00:36,5,MWm,3720,MWh,148.5,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 15:00:39,2,MWm,1488,MWh,104.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 15:00:47,1,MWm,744,MWh,104.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 15:01:12,2,MWm,1488,MWh,150.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN FEV/27 - Preço Fixo,05/11/2026 15:02:39,1,MWm,672,MWh,190,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 15:04:15,1,MWm,720,MWh,91.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 15:04:21,1,MWm,720,MWh,89.9,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 15:05:22,3,MWm,6480,MWh,177.01,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 15:05:38,4,MWm,8736,MWh,223.51,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 15:06:21,1,MWm,744,MWh,149,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 15:06:30,1,MWm,2184,MWh,223.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 15:07:24,2,MWm,1488,MWh,151,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 15:08:02,1,MWm,2184,MWh,223,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 15:08:08,2,MWm,1488,MWh,105,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 15:10:51,2,MWm,4320,MWh,182,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 15:12:04,3,MWm,6552,MWh,223,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 15:14:26,5,MWm,3720,MWh,102,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 15:18:18,1,MWm,2160,MWh,181,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 15:18:22,1,MWm,2184,MWh,225,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 15:20:14,2,MWm,4368,MWh,224,Registro/Boleta,,Ativo
+FEN - SE CON MEN OUT/26 - Preço Fixo,05/11/2026 15:22:14,20,MWm,14880,MWh,85.94,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 15:29:37,2,MWm,4320,MWh,180,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 15:29:38,1,MWm,720,MWh,89,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 15:31:55,3,MWm,6480,MWh,180,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/28 DEZ/28 - Preço Fixo,05/11/2026 15:38:33,10,MWm,87840,MWh,260,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,05/11/2026 15:38:49,10,MWm,87600,MWh,240,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/29 DEZ/29 - Preço Fixo,05/11/2026 15:42:54,5,MWm,43800,MWh,231,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/29 DEZ/29 - Preço Fixo,05/11/2026 15:43:07,4,MWm,35040,MWh,230,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 15:48:09,8,MWm,5952,MWh,104,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 16:00:01,1,MWm,744,MWh,153,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,05/11/2026 16:01:52,1,MWm,2208,MWh,254.5,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN FEV/27 - Preço Fixo,05/11/2026 16:05:05,1,MWm,672,MWh,193,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 16:05:53,5,MWm,3720,MWh,120,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 16:05:53,1,MWm,2184,MWh,223.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN MAR/27 - Preço Fixo,05/11/2026 16:06:20,2,MWm,1488,MWh,205,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,05/11/2026 16:15:38,1,MWm,8760,MWh,242.5,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 16:16:00,3,MWm,6480,MWh,180,Registro/Boleta,,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 16:17:41,2,MWm,1440,MWh,90.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 16:23:33,5,MWm,10800,MWh,180,Registro/Boleta,,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 16:23:48,1,MWm,720,MWh,91.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 16:23:54,1,MWm,720,MWh,89,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 16:24:06,2,MWm,1440,MWh,89,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 16:24:10,1,MWm,720,MWh,91.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 16:25:27,1,MWm,744,MWh,104.3,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI OUT/27 DEZ/27 - Preço Fixo,05/11/2026 16:26:01,10,MWm,22080,MWh,292,Registro/Boleta,,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 16:28:09,1,MWm,720,MWh,91.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 16:28:10,1,MWm,720,MWh,91.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 16:29:51,4,MWm,2880,MWh,89,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 16:31:07,3,MWm,6552,MWh,223,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 16:32:09,1.7,MWm,3672,MWh,182,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/29 DEZ/29 - Preço Fixo,05/11/2026 16:40:18,10,MWm,87600,MWh,234.5,Registro/Boleta,,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 16:41:17,1,MWm,720,MWh,89.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 16:56:11,1,MWm,744,MWh,150,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 16:58:46,1,MWm,744,MWh,103,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 16:58:53,1,MWm,744,MWh,103,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 16:58:58,1,MWm,744,MWh,104.25,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 16:58:59,1,MWm,744,MWh,104.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 16:59:03,1,MWm,744,MWh,103,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 16:59:13,1,MWm,744,MWh,103,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 16:59:24,1,MWm,744,MWh,104.25,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 16:59:32,1,MWm,744,MWh,103,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 16:59:42,1,MWm,744,MWh,103,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 16:59:48,2,MWm,1488,MWh,104.25,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 17:00:59,4,MWm,2976,MWh,150,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 17:01:11,1,MWm,744,MWh,103,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 17:01:19,1,MWm,744,MWh,103,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,05/11/2026 17:07:41,3,MWm,2232,MWh,103,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 17:16:08,1,MWm,744,MWh,149,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 17:16:35,5,MWm,10920,MWh,224,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 17:25:15,3,MWm,6480,MWh,180,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 17:26:55,2,MWm,1488,MWh,147,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,05/11/2026 17:35:14,10,MWm,87600,MWh,245,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,05/11/2026 17:38:56,1,MWm,744,MWh,152,Negócio/Balcão,Compra,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,05/11/2026 17:45:06,15,MWm,131400,MWh,245,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 17:52:47,5,MWm,10800,MWh,181,Registro/Boleta,,Ativo
+FEN - SE CON MEN FEV/27 - Preço Fixo,05/11/2026 17:53:05,5,MWm,3360,MWh,192,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 17:56:32,1,MWm,2184,MWh,224.8,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 17:56:57,2,MWm,4368,MWh,224.8,Negócio/Balcão,Compra,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,05/11/2026 17:58:14,1,MWm,720,MWh,88.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,05/11/2026 17:59:07,2,MWm,4368,MWh,224.8,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 17:59:09,3,MWm,6480,MWh,183,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,05/11/2026 17:59:48,2,MWm,4320,MWh,182.5,Negócio/Balcão,Compra,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,05/11/2026 18:01:35,20,MWm,175200,MWh,242,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,05/11/2026 18:12:53,30,MWm,262800,MWh,242,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/28 DEZ/28 - Preço Fixo,05/11/2026 18:12:58,10,MWm,87840,MWh,253,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,05/11/2026 18:14:02,5,MWm,43800,MWh,243,Registro/Boleta,,Ativo
+FEN - SE CON MEN OUT/26 - Preço Fixo,05/11/2026 18:16:23,0.893,MWm,664.392,MWh,58.81,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:01:51,1,MWm,2160,MWh,175,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 09:10:12,2,MWm,4368,MWh,222,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 09:13:17,1,MWm,744,MWh,101,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 09:13:29,1,MWm,744,MWh,100,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,06/11/2026 09:15:27,1,MWm,8760,MWh,243,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:16:01,1,MWm,2160,MWh,176,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:16:43,1,MWm,2160,MWh,174.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:16:43,1,MWm,2160,MWh,175,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 09:21:47,1,MWm,744,MWh,100,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 09:22:06,1,MWm,2184,MWh,222,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 09:23:03,1,MWm,2184,MWh,222,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:23:09,1,MWm,2160,MWh,175,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 09:23:19,1,MWm,2184,MWh,222,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 09:23:23,1,MWm,2184,MWh,222,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:23:32,1,MWm,2160,MWh,175,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:23:33,1,MWm,2160,MWh,175,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:23:39,1,MWm,2160,MWh,174.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,06/11/2026 09:23:46,1,MWm,744,MWh,140,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:25:38,1,MWm,2160,MWh,174.5,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:25:41,1,MWm,2160,MWh,174.5,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:25:51,1,MWm,2160,MWh,174.5,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:25:52,1,MWm,2160,MWh,174.5,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:25:55,1,MWm,2160,MWh,174.5,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:26:01,1,MWm,2160,MWh,174.5,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:26:10,1,MWm,2160,MWh,174.5,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 09:28:14,1,MWm,2184,MWh,222,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:28:18,1,MWm,2160,MWh,174.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:28:18,1,MWm,2160,MWh,174.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:28:36,1,MWm,2160,MWh,174.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:28:37,1,MWm,2160,MWh,174.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:28:49,1,MWm,2160,MWh,174,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:28:51,3,MWm,6480,MWh,175,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:29:00,2,MWm,4320,MWh,175,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:29:46,2,MWm,4320,MWh,175,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 09:29:59,1,MWm,2184,MWh,219,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:30:10,1,MWm,2160,MWh,174.11,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 09:30:52,1,MWm,2184,MWh,221,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 09:30:53,1,MWm,744,MWh,100,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 09:34:01,1,MWm,2184,MWh,219.6,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 09:34:17,1,MWm,744,MWh,100,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 09:34:20,1,MWm,2184,MWh,219.6,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 09:34:21,1,MWm,2184,MWh,219.6,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 09:34:52,1,MWm,2184,MWh,219,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:35:05,1,MWm,2160,MWh,174,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:35:05,1,MWm,2160,MWh,174.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,06/11/2026 09:36:40,2,MWm,1488,MWh,140.02,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:36:51,1,MWm,2160,MWh,174.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:38:55,3,MWm,6480,MWh,174,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:39:16,5,MWm,10800,MWh,174,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:41:25,2,MWm,4320,MWh,173.5,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 09:42:17,3,MWm,6552,MWh,220,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:45:56,1,MWm,2160,MWh,174.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:46:03,1,MWm,2160,MWh,174.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:46:04,1,MWm,2160,MWh,174,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:46:04,1,MWm,2160,MWh,174.01,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:46:24,1,MWm,2160,MWh,174,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:46:29,1,MWm,2160,MWh,173.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:46:34,1,MWm,2160,MWh,173,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:46:44,1,MWm,2160,MWh,173,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 09:47:42,4,MWm,2976,MWh,100,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 09:47:52,1,MWm,744,MWh,100,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,06/11/2026 09:49:35,1,MWm,744,MWh,140,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 09:49:42,2,MWm,1488,MWh,100,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 09:50:31,1,MWm,2184,MWh,219.65,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 09:50:52,1,MWm,2184,MWh,219,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,06/11/2026 09:51:49,2,MWm,17520,MWh,236,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 09:52:32,1,MWm,2184,MWh,219,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,06/11/2026 09:53:00,1,MWm,744,MWh,141.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 09:54:17,1,MWm,744,MWh,100.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 09:54:24,1,MWm,744,MWh,100.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 09:54:28,1,MWm,744,MWh,100.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 09:54:33,1,MWm,744,MWh,100.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 09:54:38,1,MWm,744,MWh,100.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 09:54:45,3,MWm,2232,MWh,100,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 09:54:48,1,MWm,744,MWh,100.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 09:54:49,1,MWm,744,MWh,100.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 09:54:51,3,MWm,2232,MWh,100,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 09:55:43,2,MWm,4320,MWh,174.01,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 09:56:30,1,MWm,744,MWh,100.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 09:57:04,5,MWm,3720,MWh,100,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,06/11/2026 09:58:09,3,MWm,2232,MWh,140,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,06/11/2026 09:58:12,2,MWm,1488,MWh,140,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 10:01:49,1,MWm,2184,MWh,217,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 10:01:56,1,MWm,2160,MWh,172.91,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 10:02:25,1,MWm,2184,MWh,218,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 10:02:25,2,MWm,4368,MWh,218,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 10:02:40,1,MWm,2184,MWh,218,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 10:02:40,1,MWm,2184,MWh,218.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 10:03:22,1,MWm,744,MWh,99.99,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 10:04:36,1,MWm,2160,MWh,174.02,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 10:07:38,1,MWm,744,MWh,100,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 10:07:39,1,MWm,744,MWh,100,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 10:09:53,5,MWm,10800,MWh,174,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 10:12:45,4,MWm,8640,MWh,174,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 10:13:23,2,MWm,4320,MWh,173,Registro/Boleta,,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,06/11/2026 10:14:15,5,MWm,3600,MWh,87,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 10:14:32,10,MWm,21840,MWh,218,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 10:14:44,10,MWm,21840,MWh,222,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 10:15:59,2,MWm,1488,MWh,100,Registro/Boleta,,Ativo
+FEN - SE CON TRI OUT/27 DEZ/27 - Preço Fixo,06/11/2026 10:16:41,5,MWm,11040,MWh,291.2,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 10:19:22,1,MWm,2184,MWh,217.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 10:21:35,10,MWm,7440,MWh,100.1,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 10:23:13,1,MWm,2160,MWh,173,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 10:23:16,1,MWm,2184,MWh,217,Registro/Boleta,,Ativo
+FEN - SE CON MEN DEZ/26 - Preço Fixo,06/11/2026 10:24:32,4,MWm,2976,MWh,100,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 10:25:19,5,MWm,10920,MWh,218,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 10:27:34,10,MWm,21600,MWh,173,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 10:32:11,1,MWm,2184,MWh,217,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN NOV/26 - Preço Fixo,06/11/2026 10:34:35,10,MWm,7200,MWh,87,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 10:37:36,10,MWm,21840,MWh,218,Registro/Boleta,,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,06/11/2026 10:39:00,1,MWm,2208,MWh,251,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,06/11/2026 10:39:46,1,MWm,2208,MWh,251,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,06/11/2026 10:41:50,5,MWm,11040,MWh,251,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 10:42:05,2,MWm,4320,MWh,173,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 10:47:38,2,MWm,4320,MWh,173.5,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 10:47:49,5,MWm,10920,MWh,217,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 10:47:52,5,MWm,10920,MWh,218,Registro/Boleta,,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,06/11/2026 10:48:27,1,MWm,2208,MWh,250,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,06/11/2026 10:48:27,1,MWm,2208,MWh,250.1,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,06/11/2026 10:48:27,1,MWm,2208,MWh,250.2,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,06/11/2026 10:48:27,1,MWm,2208,MWh,250.3,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,06/11/2026 10:48:27,1,MWm,2208,MWh,250.4,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,06/11/2026 10:48:42,1,MWm,8760,MWh,235,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,06/11/2026 10:48:56,1,MWm,8760,MWh,235,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,06/11/2026 10:49:05,2,MWm,4416,MWh,250,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,06/11/2026 10:49:32,1,MWm,8760,MWh,236,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,06/11/2026 10:49:51,2,MWm,17520,MWh,234.6,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,06/11/2026 10:51:03,1,MWm,2208,MWh,248,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,06/11/2026 10:51:03,2,MWm,4416,MWh,249.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,06/11/2026 10:51:03,2,MWm,4416,MWh,249.51,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,06/11/2026 10:52:47,1,MWm,2208,MWh,249,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 10:55:55,1,MWm,2184,MWh,216,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 10:55:55,1,MWm,2184,MWh,216.51,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 10:55:56,1,MWm,2184,MWh,216,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,06/11/2026 10:58:00,1,MWm,8760,MWh,234.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,06/11/2026 11:04:22,1,MWm,2208,MWh,249,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 11:04:30,1,MWm,2184,MWh,216.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON ANU JAN/27 DEZ/27 - Preço Fixo,06/11/2026 11:05:26,5,MWm,43800,MWh,235,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 11:11:43,1,MWm,2184,MWh,216,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 11:13:52,1,MWm,2160,MWh,172.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 11:14:00,3,MWm,6552,MWh,215.05,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 11:14:02,1,MWm,2160,MWh,173,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,06/11/2026 11:15:28,1,MWm,2208,MWh,249,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,06/11/2026 11:15:28,1,MWm,2208,MWh,249.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 11:20:09,1,MWm,2184,MWh,216,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,06/11/2026 11:25:07,3,MWm,6624,MWh,249,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 11:32:12,2,MWm,4368,MWh,216,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/28 DEZ/28 - Preço Fixo,06/11/2026 11:36:00,5,MWm,43920,MWh,255,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 11:36:04,3,MWm,6552,MWh,216,Registro/Boleta,,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 11:40:53,1,MWm,2184,MWh,215,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 11:40:53,1,MWm,2184,MWh,215.5,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI ABR/27 JUN/27 - Preço Fixo,06/11/2026 11:46:28,1,MWm,2184,MWh,215,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 11:47:15,4,MWm,8640,MWh,172.5,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 11:51:23,5,MWm,10800,MWh,173.5,Registro/Boleta,,Ativo
+FEN - SE CON ANU JAN/28 DEZ/28 - Preço Fixo,06/11/2026 11:56:41,5,MWm,43920,MWh,255,Registro/Boleta,,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,06/11/2026 12:03:04,2,MWm,4416,MWh,249,Negócio/Balcão,Venda,Ativo
+FEN - SE CON TRI JUL/27 SET/27 - Preço Fixo,06/11/2026 12:06:44,4,MWm,8832,MWh,249,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 12:12:07,3,MWm,6480,MWh,173.5,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 12:26:18,3,MWm,6480,MWh,173,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 12:42:23,2,MWm,4320,MWh,172,Registro/Boleta,,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 13:49:20,1,MWm,2160,MWh,173.5,Negócio/Balcão,Compra,Ativo
+FEN - SE CON TRI JAN/27 MAR/27 - Preço Fixo,06/11/2026 14:02:19,2,MWm,4320,MWh,172.5,Registro/Boleta,,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,06/11/2026 14:12:12,1,MWm,744,MWh,143,Negócio/Balcão,Venda,Ativo
+FEN - SE CON MEN JAN/27 - Preço Fixo,06/11/2026 14:14:20,1,MWm,744,MWh,143,Negócio/Balcão,Venda,Ativo
