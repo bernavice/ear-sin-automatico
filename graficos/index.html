@@ -142,7 +142,7 @@
 </script><script>
 function imprimirDashboardCompleto(){
   const url = new URL('impressao.html', window.location.href);
-  const janela = window.open(url.href, '_blank', 'noopener');
+  const janela = window.open(url.href, '_blank');
   if (!janela) alert('Libere pop-ups para este site ou abra impressao.html diretamente.');
 }
 </script></body></html>

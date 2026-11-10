@@ -39,7 +39,7 @@ iframe.collector{position:fixed;width:1260px;height:900px;left:-5000px;top:0;opa
 </style></head><body>
 <div class="toolbar"><div><h1>Relatório completo · Acompanhamento de mercado</h1><p>Inclui Operação, ENA, EAR, PLD, Mercado, Newave e Decomp</p></div><div class="actions"><button class="secondary" id="reload" onclick="location.reload()">Atualizar relatório</button><button id="print" disabled>Imprimir / Salvar PDF</button></div></div>
 <div id="status" role="status">Iniciando preparação…</div>
-<div id="report"><header class="cover"><h1>Acompanhamento de mercado</h1><div class="date" id="report-date"></div><div class="small-note">Dados e filtros iniciais dos módulos na versão publicada. A seleção de gráficos no painel original não é transferida automaticamente ao relatório.</div></header><div id="sections"></div></div>
+<div id="report"><header class="cover"><h1>Acompanhamento de mercado</h1><div class="date" id="report-date"></div><div class="small-note">Se aberto pelo dashboard, o relatório utiliza as séries selecionadas na janela original. Módulos ainda não carregados usam a configuração inicial publicada.</div></header><div id="sections"></div></div>
 <script>
 'use strict';
 const MODULES=[
@@ -109,6 +109,26 @@ function scopeCss(doc,root){
  `;
  root.appendChild(style);
 }
+// Quando o relatório é aberto pelo dashboard, preferimos os gráficos já configurados.
+// Assim, escolhas de séries (inclusive Mercado), cenários e submercados são preservadas.
+function plotAtualDoPainel(doc,id,src){
+ try{
+  const pai=window.opener;
+  if(!pai||pai.closed||pai.location.origin!==window.location.origin)return null;
+  const iframe=pai.document.getElementById('quadro-'+id);
+  const atual=iframe&&iframe.contentDocument;
+  if(!atual)return null;
+  const plotsAtuais=[...atual.querySelectorAll('.js-plotly-plot')];
+  const ident=src.id;
+  if(ident){
+   const porId=atual.getElementById(ident);
+   if(porId&&porId.classList.contains('js-plotly-plot')&&porId._fullLayout)return porId;
+  }
+  const idx=[...doc.querySelectorAll('.js-plotly-plot')].indexOf(src);
+  const candidato=plotsAtuais[idx];
+  return candidato&&candidato._fullLayout?candidato:null;
+ }catch(err){console.warn('Não foi possível acessar seleção ativa de',id,err);return null;}
+}
 async function exportCharts(doc,original,cloned,id){
  const sourcePlots=[...original.querySelectorAll('.js-plotly-plot')];
  const clonedPlots=[...cloned.querySelectorAll('.js-plotly-plot')];
@@ -116,14 +136,16 @@ async function exportCharts(doc,original,cloned,id){
  for(let i=0;i<sourcePlots.length;i++){
   const src=sourcePlots[i],dst=clonedPlots[i];
   if(!dst)continue;
-  if(!src._fullLayout){dst.remove();continue;}
+  const ativo=plotAtualDoPainel(doc,id,src);
+  const grafico=ativo||src;
+  if(!grafico._fullLayout){dst.remove();continue;}
   try{
-   const width=Math.min(1150,Math.max(700,src.clientWidth||920));
-   const height=Math.min(460,Math.max(270,src.clientHeight||390));
+   const width=Math.min(1150,Math.max(700,src.clientWidth||grafico.clientWidth||920));
+   const height=Math.min(460,Math.max(270,src.clientHeight||grafico.clientHeight||390));
    // SVG retains sharp labels/lines in PDF; raster PNG fallback for unsupported traces.
    let imgsrc;
-   try{imgsrc=await doc.defaultView.Plotly.toImage(src,{format:'svg',width,height,scale:1});}
-   catch(_){imgsrc=await doc.defaultView.Plotly.toImage(src,{format:'png',width,height,scale:1.6});}
+   try{imgsrc=await grafico.ownerDocument.defaultView.Plotly.toImage(grafico,{format:'svg',width,height,scale:1});}
+   catch(_){imgsrc=await grafico.ownerDocument.defaultView.Plotly.toImage(grafico,{format:'png',width,height,scale:1.6});}
    const im=document.createElement('img');im.src=imgsrc;im.className='plot-export';im.alt='Gráfico do módulo '+id+' '+(i+1);
    dst.replaceWith(im);captured++;
   }catch(err){console.warn('Gráfico não exportado',id,i,err);dst.remove();}
