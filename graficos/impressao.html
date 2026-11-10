@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Relatório completo — Acompanhamento de mercado</title>
+<style>
+:root{font-family:Arial,'Segoe UI',sans-serif;color:#233443;background:#eaf0f3}
+*{box-sizing:border-box}
+body{margin:0} .toolbar{position:sticky;top:0;z-index:10;background:#fff;border-bottom:3px solid #007e80;display:flex;align-items:center;justify-content:space-between;padding:13px 22px;gap:16px;box-shadow:0 2px 12px #1a344220}
+.toolbar h1{font-size:17px;color:#007e80;margin:0 0 3px}.toolbar p{font-size:12px;margin:0;color:#607180}
+.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}button{padding:11px 16px;background:#007e80;color:#fff;border:0;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer}button:disabled{opacity:.5;cursor:wait}button.secondary{background:#e9f2f3;color:#006970}
+#status{max-width:1090px;margin:15px auto;font-size:13px;color:#425968;background:white;border-radius:9px;padding:13px 16px}
+#report{max-width:1090px;margin:20px auto;padding:20px 24px;background:white;box-shadow:0 3px 20px #0a2d371a}
+.cover{padding:28px 20px 24px;border-bottom:4px solid #007e80;margin-bottom:26px}
+.cover h1{font-size:27px;color:#007e80;margin:0 0 10px}.cover .date{color:#677886;font-size:13px}
+.module-heading{font-size:21px;color:#006d74;line-height:1.2;margin:0 0 10px; padding:9px 10px 10px;border-bottom:2px solid #007e80;break-after:avoid}
+.module{margin:0 0 20px}.module+.module{break-before:page;page-break-before:always}
+.print-piece{display:block;width:100%;margin:0 0 16px;break-inside:auto;page-break-inside:auto}
+.print-piece.chart-piece{break-inside:avoid;page-break-inside:avoid}
+.print-piece.chart-piece:has(img.plot-export){break-inside:avoid;page-break-inside:avoid}
+.print-piece .piece-shell{width:100%;min-width:0}
+.print-piece img.plot-export{width:100%;height:auto;max-height:420px;object-fit:contain;display:block;margin:5px auto}
+.print-piece .js-plotly-plot{display:none!important}
+.print-piece .modebar,.print-piece button,.print-piece input,.print-piece select,.print-piece textarea,.print-piece .toolbar,.print-piece .filtros,.print-piece .filters,.print-piece .controls,.print-piece .toolbar-botoes{display:none!important}
+.print-piece [style*="overflow: auto"],.print-piece [style*="overflow:auto"]{overflow:visible!important}
+iframe.collector{position:fixed;width:1260px;height:900px;left:-5000px;top:0;opacity:0;pointer-events:none;border:0}
+.error{background:#fff3eb;border-left:4px solid #c66b1e;padding:12px;font-size:13px}
+.small-note{font-size:10px;color:#6c7780}
+@page{size:A4 landscape;margin:11mm 12mm 14mm;@bottom-right{content:"Página " counter(page);font:9px Arial;color:#69818c}@bottom-left{content:"Acompanhamento de mercado";font:9px Arial;color:#69818c}}
+@media print {
+ :root{background:#fff}body{margin:0;color:#172b38;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ .toolbar,#status,iframe.collector{display:none!important}
+ #report{box-shadow:none;margin:0;max-width:none;padding:0;width:auto}
+ .cover{padding:12px 0 14px;margin-bottom:18px}
+ .cover h1{font-size:24px}
+ .module-heading{font-size:18px;margin-bottom:9px}
+ .module{width:100%;margin:0}.print-piece{margin-bottom:10px}
+ .print-piece img.plot-export{max-height:385px}
+ .print-piece [class*="grid"],.print-piece [class*="cards"]{max-width:100%}
+}
+</style></head><body>
+<div class="toolbar"><div><h1>Relatório completo · Acompanhamento de mercado</h1><p>Inclui Operação, ENA, EAR, PLD, Mercado, Newave e Decomp</p></div><div class="actions"><button class="secondary" id="reload" onclick="location.reload()">Atualizar relatório</button><button id="print" disabled>Imprimir / Salvar PDF</button></div></div>
+<div id="status" role="status">Iniciando preparação…</div>
+<div id="report"><header class="cover"><h1>Acompanhamento de mercado</h1><div class="date" id="report-date"></div><div class="small-note">Dados e filtros iniciais dos módulos na versão publicada. A seleção de gráficos no painel original não é transferida automaticamente ao relatório.</div></header><div id="sections"></div></div>
+<script>
+'use strict';
+const MODULES=[
+ ['operacao','Operação do SIN','operacao.html'],
+ ['ena','ENA · Afluências','ena.html'],
+ ['ear','EAR · Armazenamento','ear_sin.html'],
+ ['pld','PLD · Preços','pld.html'],
+ ['mercado','Mercado · Negócios e MTM','mercado.html'],
+ ['newave','Projeções Newave','newave.html'],
+ ['decomp','Projeções Decomp','decomp.html']
+];
+const $=id=>document.getElementById(id);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const waitForLoad=(frame,ms=45000)=>new Promise((resolve,reject)=>{
+ let finished=false;
+ const timer=setTimeout(()=>{if(!finished){finished=true;reject(new Error('Tempo limite ao carregar módulo'))}},ms);
+ frame.addEventListener('load',()=>{if(!finished){finished=true;clearTimeout(timer);resolve()}},{once:true});
+ frame.addEventListener('error',()=>{if(!finished){finished=true;clearTimeout(timer);reject(new Error('Falha ao carregar módulo'))}},{once:true});
+});
+function getPieces(doc,id){
+ const area=doc.querySelector('main')||doc.body;
+ if(id==='decomp'){
+  const out=[];
+  const summary=doc.getElementById('panel-summary');if(summary)out.push(summary);
+  const group=doc.getElementById('sections');
+  if(group)out.push(...[...group.children].filter(el=>el.tagName!=='SCRIPT'));
+  return out.length?out:[...area.children].filter(el=>el.tagName!=='SCRIPT');
+ }
+ if(id==='operacao'){
+  const elems=[...area.children].filter(el=>el.tagName!=='SCRIPT');
+  return elems.flatMap(el=>el.id==='graficos-sub'?[...el.children]:[el]);
+ }
+ return [...area.children].filter(el=>!['SCRIPT','STYLE'].includes(el.tagName));
+}
+function scopeCss(doc,root){
+ const css=[...doc.querySelectorAll('head style')].map(el=>el.textContent||'').join('\n');
+ const style=document.createElement('style');
+ // Each print piece is isolated in a shadow root to avoid CSS from other modules.
+ style.textContent=css+`\n:host{display:block;width:100%;font-family:Arial,sans-serif;color:#193245;background:white}
+ *{box-sizing:border-box}
+ .js-plotly-plot{display:none!important}
+ img.plot-export{width:100%;max-height:405px;object-fit:contain;display:block;margin:3px auto}
+ .modebar,button,input,select,textarea,[role="button"],.toolbar,.filters,.filtros{display:none!important}
+ .panel,.painel,.section,.grafico-box{margin:0!important;max-width:100%!important;width:100%!important;overflow:visible!important}
+ .cards,.graficos-sub,.grid{max-width:100%!important}
+ @media print{:host{display:block}img.plot-export{max-height:365px!important}.painel,.panel,.section{break-inside:auto!important}}
+ `;
+ root.appendChild(style);
+}
+async function exportCharts(doc,original,cloned,id){
+ const sourcePlots=[...original.querySelectorAll('.js-plotly-plot')];
+ const clonedPlots=[...cloned.querySelectorAll('.js-plotly-plot')];
+ let captured=0;
+ for(let i=0;i<sourcePlots.length;i++){
+  const src=sourcePlots[i],dst=clonedPlots[i];
+  if(!dst)continue;
+  if(!src._fullLayout){dst.remove();continue;}
+  try{
+   const width=Math.min(1150,Math.max(700,src.clientWidth||920));
+   const height=Math.min(460,Math.max(270,src.clientHeight||390));
+   // SVG retains sharp labels/lines in PDF; raster PNG fallback for unsupported traces.
+   let imgsrc;
+   try{imgsrc=await doc.defaultView.Plotly.toImage(src,{format:'svg',width,height,scale:1});}
+   catch(_){imgsrc=await doc.defaultView.Plotly.toImage(src,{format:'png',width,height,scale:1.6});}
+   const im=document.createElement('img');im.src=imgsrc;im.className='plot-export';im.alt='Gráfico do módulo '+id+' '+(i+1);
+   dst.replaceWith(im);captured++;
+  }catch(err){console.warn('Gráfico não exportado',id,i,err);dst.remove();}
+ }
+ return captured;
+}
+async function prepare(){
+ $('report-date').textContent='Gerado em '+new Date().toLocaleString('pt-BR',{dateStyle:'long',timeStyle:'short'});
+ let errors=[], charts=0;
+ for(let index=0;index<MODULES.length;index++){
+  const [id,name,filename]=MODULES[index];
+  $('status').textContent='Preparando '+(index+1)+' de '+MODULES.length+': '+name+'…';
+  let frame;
+  const module=document.createElement('section');module.className='module';module.id='mod-'+id;
+  const heading=document.createElement('h2');heading.className='module-heading';heading.textContent=name;module.appendChild(heading);
+  $('sections').appendChild(module);
+  try{
+   frame=document.createElement('iframe');frame.className='collector';frame.title='Carregamento de '+name;
+   document.body.appendChild(frame);
+   const loaded=waitForLoad(frame);
+   frame.src=filename;
+   await loaded;
+   const doc=frame.contentDocument;if(!doc)throw new Error('Não foi possível acessar o conteúdo do módulo.');
+   // Let scripts mount and Plotly finish drawing before export.
+   const expected={operacao:3,ena:5,ear:5,pld:5,mercado:1,newave:3,decomp:1}[id]||1;
+   for(let n=0;n<34;n++){
+    const plots=[...doc.querySelectorAll('.js-plotly-plot')].filter(el=>el._fullLayout);
+    if(plots.length>=expected)break;
+    await sleep(350);
+   }
+   await sleep(400);
+   const parts=getPieces(doc,id);
+   if(!parts.length)throw new Error('Nenhuma seção identificada.');
+   for(const piece of parts){
+    const origPlots=piece.querySelectorAll('.js-plotly-plot').length;
+    const clone=piece.cloneNode(true);
+    charts+=await exportCharts(doc,piece,clone,id);
+    const holder=document.createElement('div');holder.className='print-piece'+(origPlots===1?' chart-piece':'');
+    const sh=holder.attachShadow({mode:'open'});scopeCss(doc,sh);
+    const shell=document.createElement('div');shell.className='piece-shell';shell.appendChild(document.importNode(clone,true));sh.appendChild(shell);
+    module.appendChild(holder);
+   }
+  }catch(err){
+   errors.push(name+': '+err.message);
+   let item=document.createElement('p');item.className='error';item.textContent='Falha ao preparar '+name+': '+err.message;module.appendChild(item);
+  }finally{if(frame){frame.remove()}}
+ }
+ // Wait for imported images and fonts before enabling printing.
+ const imgs=[...document.querySelectorAll('.print-piece')].flatMap(x=>[...x.shadowRoot.querySelectorAll('img.plot-export')]);
+ await Promise.all(imgs.map(img=>img.complete?Promise.resolve():new Promise(resolve=>{img.onload=resolve;img.onerror=resolve;setTimeout(resolve,15000)})));
+ await (document.fonts?.ready||Promise.resolve());
+ $('status').textContent=`Relatório preparado: ${MODULES.length-errors.length}/${MODULES.length} módulos; ${charts} gráficos exportados.`+(errors.length?' Falhas: '+errors.join(' | '):' Confira as seções antes de salvar o PDF.');
+ $('print').disabled=false;
+ if(errors.length)console.warn(errors);
+}
+$('print').addEventListener('click',()=>window.print());
+window.addEventListener('load',()=>prepare().catch(err=>{$('status').textContent='Erro ao preparar relatório: '+err.message;console.error(err)}));
+</script></body></html>
