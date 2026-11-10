@@ -4014,7 +4014,7 @@ const CORES=NOMES.map((_,i)=>`hsl(${Math.round((i*137.508)%360)}, ${i%3===0?77:7
 const CARTOES=Array.from({length:5},(_,i)=>({produto:DEFAULTS[i],periodo:'7d',dataReferencia:addDays(ULTIMO,-7)}));
 const ANO_CORRENTE=Number(HOJE.slice(0,4));
 const PRODUTO_INICIAL=NOMES.includes(String(ANO_CORRENTE))?String(ANO_CORRENTE):(NOMES.includes('Q4_'+String(ANO_CORRENTE).slice(-2))?'Q4_'+String(ANO_CORRENTE).slice(-2):NOMES.find(x=>x.includes('/'+String(ANO_CORRENTE).slice(-2)))||NOMES[0]);
-const SEL=new Set([PRODUTO_INICIAL]);
+const SEL=new Set();
 const cardEl=document.getElementById('market-cards');
 const chart=document.getElementById('market-chart');
 const catalogEl=document.getElementById('catalog');
@@ -4132,7 +4132,7 @@ function mtmVal(op,day){let result=0;for(let l of op.positions)for(let s of l.pr
 function mtmSave(){try{localStorage.setItem(mtmKey,JSON.stringify(mtmOps));}catch(e){mtmId('mtm-message').textContent='Armazenamento local indisponível neste navegador.';}}
 function mtmRenderProducts(){mtmId('mtm-components').innerHTML=mtmProducts.length?mtmProducts.map((s,i)=>`<div class="mtm-component"><span><b>${safe(s)}</b> · ${fmt(mtmHours(s))} h</span><button data-i="${i}" aria-label="Remover ${safe(s)}">×</button></div>`).join(''):'<div class="mtm-empty">Adicione um ou mais produtos para esta ponta.</div>';
  mtmId('mtm-components').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{mtmProducts.splice(Number(b.dataset.i),1);mtmRenderProducts();}));}
-function mtmRenderDraft(){mtmId('mtm-draft-legs').innerHTML=mtmDraftLegs.length?mtmDraftLegs.map((l,i)=>`<div class="mtm-component"><span><b>${i+1}. ${l.side==='compra'?'Compra':'Venda'} ${fmt(l.mw)} MWm</b> · R$ ${fmt(l.price)}/MWh<br>${l.products.map(safe).join(' + ')}</span><button data-i="${i}" aria-label="Remover ponta ${i+1}">×</button></div>`).join(''):'<div class="mtm-empty">Nenhuma ponta adicionada. Inclua compras e/ou vendas.</div>';
+function mtmRenderDraft(){mtmId('mtm-draft-legs').innerHTML=mtmDraftLegs.length?mtmDraftLegs.map((l,i)=>`<div class="mtm-component"><span><b>${i+1}. ${l.side==='compra'?'Compra':'Venda'} ${fmt(l.mw)} MWm</b> · R$ ${fmt(l.price)}/MWh<br>${l.products.map(safe).join(' + ')}</span><button data-i="${i}" aria-label="Remover ponta ${i+1}">×</button></div>`).join(''):'<div class="mtm-empty">Nenhuma operação adicionada. Inclua compras e/ou vendas.</div>';
  mtmId('mtm-draft-legs').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{mtmDraftLegs.splice(Number(b.dataset.i),1);mtmRenderDraft();}));}
 function mtmBuildLeg(){let mw=Number(mtmId('mtm-volume').value),pr=Number(mtmId('mtm-price').value),err=mtmCheck(mtmProducts);
  if(err)return [null,err];if(!(mw>0)||!Number.isFinite(mw))return [null,'Informe um volume positivo em MWm.'];if(mtmId('mtm-price').value===''||!Number.isFinite(pr)||pr<0)return [null,'Informe um preço contratado válido.'];
