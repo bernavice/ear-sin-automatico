@@ -331,11 +331,46 @@ body{margin:0;background:#fff;color:#193245;font-family:'Century Gothic',Century
 @media(max-width:1400px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:800px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.strong-number{font-size:21px}}
 @media(max-width:540px){.cards{grid-template-columns:1fr}.toolbar{padding:12px}.catalog{margin:0 12px 8px}.selection{padding:4px 12px 8px}}
+
+/* MTM */
+.mtm-layout{display:grid;grid-template-columns:minmax(300px,370px) minmax(0,1fr);gap:16px;padding:17px}
+.mtm-editor{background:#f8fafb;border:1px solid #dfe8ed;border-radius:12px;padding:16px;align-self:start}
+.mtm-editor h3{margin:0 0 12px;color:#164c53;font-size:16px}
+.mtm-editor label{display:block;font-size:11px;font-weight:700;color:#667085;margin:11px 0 5px}
+.mtm-editor input,.mtm-editor select{width:100%;padding:10px;border:1px solid #cbd8df;border-radius:8px;background:white;color:#193245;font:inherit;font-size:13px}
+.mtm-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mtm-btn{background:#007E80!important;color:#fff!important;border:0!important;border-radius:8px;cursor:pointer;padding:11px 14px;font:inherit;font-size:12px;font-weight:700}
+.mtm-btn.alt{background:white!important;color:#007E80!important;border:1px solid #007E80!important}
+.mtm-btn.danger{background:#fff!important;color:#b42318!important;border:1px solid #e8b9b6!important}
+.mtm-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}
+.mtm-components{border:1px dashed #b7d1d2;border-radius:10px;padding:9px;margin-top:7px;background:white}
+.mtm-component{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:7px 4px;border-bottom:1px solid #edf0f3;font-size:12px}
+.mtm-component:last-child{border-bottom:0}
+.mtm-component button{border:0;background:transparent;color:#a32929;cursor:pointer;font-size:18px}
+.mtm-main{min-width:0}
+.mtm-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.mtm-metric{background:#f8fafb;border:1px solid #dfe7ed;border-radius:11px;padding:13px;min-width:0}
+.mtm-metric small{display:block;font-size:11px;color:#64748b;margin-bottom:6px}
+.mtm-metric strong{font-size:22px;color:#164454;white-space:nowrap}
+.mtm-chart-shell{border-radius:11px;overflow:hidden;background:#0e0e0e}
+#mtm-chart{height:410px;width:100%}
+.mtm-op-table{width:100%;border-collapse:collapse;font-size:12px}
+.mtm-op-table td,.mtm-op-table th{padding:10px;border-bottom:1px solid #e7edf0;text-align:left}
+.mtm-op-table th{color:#64748b;background:#f8fafb}
+.mtm-table-wrap{overflow:auto;border:1px solid #e7edf0;border-radius:9px;margin-top:12px}
+.mtm-pick{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.mtm-pick select{padding:8px 10px;border:1px solid #cbd8df;border-radius:8px;font:inherit;font-size:12px;max-width:270px}
+.mtm-small{font-size:11px;color:#64748b;line-height:1.6;margin:8px 0}
+.mtm-message{font-size:12px;color:#b42318;min-height:17px}
+.mtm-empty{color:#64748b;font-size:13px;padding:20px;text-align:center}
+@media(max-width:970px){.mtm-layout{grid-template-columns:1fr}.mtm-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.mtm-metrics{grid-template-columns:1fr}.mtm-pair{grid-template-columns:1fr}}
 </style>
 <script>''' + plotly_js + '''</script></head><body>
 <section class="panel"><div class="bar">Preço de Mercado — Resumo</div>
 <div id="market-cards" class="cards"></div>
 </section>
+
 <section class="panel"><div class="bar">Preço de Mercado — Evolução diária</div>
 <p class="caption">Preço médio diário ponderado por MWh. Nos dias sem negócios, mantém-se o último preço disponível.</p>
 <div class="toolbar"><input type="search" class="search" id="search" placeholder="Buscar produto (ex.: Q1_27, 2028, NOV/26)" aria-label="Buscar produto">
@@ -345,6 +380,33 @@ body{margin:0;background:#fff;color:#193245;font-family:'Century Gothic',Century
 <div class="chart-shell"><div id="market-chart"></div></div>
 <footer class="note">Fonte: BBCE</footer>
 </section>
+<section class="panel" id="mtm-section"><div class="bar">Marcação a Mercado (MTM) — Operações e Swaps</div>
+<div class="mtm-layout"><aside class="mtm-editor">
+<h3>Montagem da operação</h3>
+<label for="mtm-name">Nome da operação</label><input id="mtm-name" placeholder="Ex.: Swap Q1/27 × 2028">
+<label for="mtm-date">Data de fechamento</label><input id="mtm-date" type="date">
+<div class="mtm-pair"><div><label for="mtm-side">Ponta</label><select id="mtm-side"><option value="compra">Compra</option><option value="venda">Venda</option></select></div>
+<div><label for="mtm-volume">Volume (MWm)</label><input id="mtm-volume" type="number" min="0.0001" step="any" value="5"></div></div>
+<label for="mtm-price">Preço contratado (R$/MWh)</label><input id="mtm-price" type="number" min="0" step="any" value="230">
+<label for="mtm-product">Produto da ponta (ou componente mensal)</label><select id="mtm-product"></select>
+<div class="mtm-toolbar"><button type="button" id="mtm-add-component" class="mtm-btn alt">+ Adicionar produto para marcação de mercado</button><button type="button" id="mtm-clear-components" class="mtm-btn alt">Limpar produtos</button></div>
+<div class="mtm-components" id="mtm-components"></div>
+<p class="mtm-small">Monte JAN/27 + FEV/27 + MAR/27 para formar Q1/27. Produtos sobrepostos não podem ficar na mesma ponta; pontas de compra e venda podem ter períodos coincidentes.</p>
+<button type="button" id="mtm-add-leg" class="mtm-btn" style="width:100%;margin:5px 0">+ Incluir outros produtos na operação</button>
+<label>Produtos da operação em montagem</label><div class="mtm-components" id="mtm-draft-legs"></div>
+<div class="mtm-toolbar"><button type="button" id="mtm-close" class="mtm-btn">Fechar operação</button><button type="button" id="mtm-new" class="mtm-btn alt">+ MTM operação</button></div>
+<div id="mtm-message" class="mtm-message" role="status"></div>
+</aside><div class="mtm-main">
+<div class="mtm-metrics"><div class="mtm-metric"><small>MTM consolidado da carteira</small><strong id="mtm-total">—</strong></div>
+<div class="mtm-metric"><small>Operações cadastradas</small><strong id="mtm-count">0</strong></div>
+<div class="mtm-metric"><small>Data da última cotação disponível</small><strong id="mtm-ref">—</strong></div></div>
+<div class="mtm-pick"><label for="mtm-focus" style="font-size:12px;font-weight:700">Escopo:</label><select id="mtm-focus"><option value="all">Carteira consolidada</option></select>
+<label for="mtm-view" style="font-size:12px;font-weight:700">Gráfico:</label><select id="mtm-view"><option value="products">MTM individual de cada produto (todas as séries)</option><option value="total">Soma da carteira (série única)</option></select></div>
+<div class="mtm-pick"><button type="button" class="mtm-btn" id="mtm-export-excel">Exportar Excel — gráficos e memória de cálculo</button></div>
+<div class="mtm-chart-shell"><div id="mtm-chart"></div></div>
+<div class="mtm-table-wrap"><table class="mtm-op-table"><thead><tr><th>Operação</th><th>Estrutura</th><th>Produtos / pontas</th><th>MTM (MMR$)</th><th></th></tr></thead><tbody id="mtm-rows"></tbody></table></div>
+<p class="mtm-small">Compra: (mercado − preço contratado) × MWm × horas / 1.000.000; venda: sinal inverso. Um swap soma o MTM de todas os seus produtos. Para produtos compostos, cada mês usa sua própria cotação e quantidade de horas. Na visualização por produto, cada série identifica o produto e a operação correspondente; produtos iguais em operações distintas aparecem em séries separadas. Sem cotação anterior, o MTM é indisponível. Fonte: BBCE. Operações salvas neste navegador, não compartilhadas entre dispositivos.</p>
+</div></div></section>
 <script>
 const DIAS=''' + dados_js + ''';
 const NOMES=''' + nomes_js + ''';
@@ -450,6 +512,123 @@ function ajustarAltura(){if(window.parent!==window)window.parent.postMessage({ti
 window.addEventListener('load',ajustarAltura);window.addEventListener('resize',ajustarAltura);
 if(window.ResizeObserver)new ResizeObserver(ajustarAltura).observe(document.body);
 montarCards();atualizarChart();
+
+// MTM — utiliza exclusivamente preços da série BBCE e suporta múltiplas pontas por operação.
+const MTM_META={"OUT/26":{"start":"2026-10-01","end":"2026-11-01"},"NOV/26":{"start":"2026-11-01","end":"2026-12-01"},"DEZ/26":{"start":"2026-12-01","end":"2027-01-01"},"Q4_26":{"start":"2026-10-01","end":"2027-01-01"},"2027":{"start":"2027-01-01","end":"2028-01-01"},"Q1_27":{"start":"2027-01-01","end":"2027-04-01"},"JAN/27":{"start":"2027-01-01","end":"2027-02-01"},"FEV/27":{"start":"2027-02-01","end":"2027-03-01"},"MAR/27":{"start":"2027-03-01","end":"2027-04-01"},"Q2_27":{"start":"2027-04-01","end":"2027-07-01"},"Q3_27":{"start":"2027-07-01","end":"2027-10-01"},"Q4_27":{"start":"2027-10-01","end":"2028-01-01"},"2028":{"start":"2028-01-01","end":"2029-01-01"},"2029":{"start":"2029-01-01","end":"2030-01-01"},"2030":{"start":"2030-01-01","end":"2031-01-01"},"2031":{"start":"2031-01-01","end":"2032-01-01"},"2032":{"start":"2032-01-01","end":"2033-01-01"}};
+const mtmId=id=>document.getElementById(id);
+const mtmDate=mtmId('mtm-date');mtmDate.max=HOJE;mtmDate.value=ULTIMO<=HOJE?ULTIMO:HOJE;
+const mtmProd=mtmId('mtm-product');mtmProd.innerHTML=NOMES.map(s=>`<option value="${safe(s)}">${safe(s)}</option>`).join('');
+const mtmKey='mercado-bbce-mtm-v2';
+let mtmOps=[],mtmProducts=[],mtmDraftLegs=[];
+const mtmMoney=v=>v===null||!Number.isFinite(v)?'Indisponível':(v<0?'-':'')+'R$ '+fmt(Math.abs(v))+' MM';
+function mtmHours(s){let m=MTM_META[s];return m?Math.round((Date.parse(m.end+'T00:00:00Z')-Date.parse(m.start+'T00:00:00Z'))/3600000):0;}
+function mtmPrice(s,day){let x=DIAS[s];if(!x||!x.datas.length)return null;let a=0,b=x.datas.length-1,idx=-1;while(a<=b){let mid=(a+b)>>1;if(x.datas[mid]<=day){idx=mid;a=mid+1;}else b=mid-1;}return idx<0?null:Number(x.precos[idx]);}
+function mtmCheck(products){if(!Array.isArray(products)||!products.length||products.some(s=>!MTM_META[s]))return 'Selecione pelo menos um produto válido.';
+ let r=products.map(s=>({name:s,start:MTM_META[s].start,end:MTM_META[s].end})).sort((a,b)=>a.start.localeCompare(b.start));
+ for(let i=1;i<r.length;i++)if(r[i].start<r[i-1].end)return 'Os períodos '+r[i-1].name+' e '+r[i].name+' se sobrepõem na mesma ponta.';return '';}
+function mtmNormalize(op){if(!op||!op.date||op.date>HOJE)return null;
+ let legs=Array.isArray(op.positions)?op.positions:(Array.isArray(op.legs)?[{side:op.side,mw:op.mw,price:op.price,products:op.legs}]:null);
+ if(!legs||!legs.length||legs.some(l=>!l||!['compra','venda'].includes(l.side)||!(Number(l.mw)>0)||!Number.isFinite(Number(l.price))||Number(l.price)<0||mtmCheck(l.products)))return null;
+ return {id:String(op.id||'op-'+Date.now()),name:String(op.name||'Operação'),date:op.date,positions:legs.map(l=>({side:l.side,mw:Number(l.mw),price:Number(l.price),products:[...l.products]}))};}
+try{let raw=JSON.parse(localStorage.getItem(mtmKey)||'[]');if(Array.isArray(raw))mtmOps=raw.map(mtmNormalize).filter(Boolean);
+ if(!localStorage.getItem(mtmKey)){let prev=JSON.parse(localStorage.getItem('mercado-bbce-mtm-v1')||'[]');if(Array.isArray(prev))mtmOps=prev.map(mtmNormalize).filter(Boolean);}}catch(e){}
+function mtmValuePosition(l,s,d){let p=mtmPrice(s,d);return p===null?null:(p-l.price)*l.mw*mtmHours(s)*(l.side==='compra'?1:-1)/1000000;}
+function mtmVal(op,day){let result=0;for(let l of op.positions)for(let s of l.products){let v=mtmValuePosition(l,s,day);if(v===null)return null;result+=v;}return result;}
+function mtmSave(){try{localStorage.setItem(mtmKey,JSON.stringify(mtmOps));}catch(e){mtmId('mtm-message').textContent='Armazenamento local indisponível neste navegador.';}}
+function mtmRenderProducts(){mtmId('mtm-components').innerHTML=mtmProducts.length?mtmProducts.map((s,i)=>`<div class="mtm-component"><span><b>${safe(s)}</b> · ${fmt(mtmHours(s))} h</span><button data-i="${i}" aria-label="Remover ${safe(s)}">×</button></div>`).join(''):'<div class="mtm-empty">Adicione um ou mais produtos para esta ponta.</div>';
+ mtmId('mtm-components').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{mtmProducts.splice(Number(b.dataset.i),1);mtmRenderProducts();}));}
+function mtmRenderDraft(){mtmId('mtm-draft-legs').innerHTML=mtmDraftLegs.length?mtmDraftLegs.map((l,i)=>`<div class="mtm-component"><span><b>${i+1}. ${l.side==='compra'?'Compra':'Venda'} ${fmt(l.mw)} MWm</b> · R$ ${fmt(l.price)}/MWh<br>${l.products.map(safe).join(' + ')}</span><button data-i="${i}" aria-label="Remover ponta ${i+1}">×</button></div>`).join(''):'<div class="mtm-empty">Nenhuma ponta adicionada. Inclua compras e/ou vendas.</div>';
+ mtmId('mtm-draft-legs').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{mtmDraftLegs.splice(Number(b.dataset.i),1);mtmRenderDraft();}));}
+function mtmBuildLeg(){let mw=Number(mtmId('mtm-volume').value),pr=Number(mtmId('mtm-price').value),err=mtmCheck(mtmProducts);
+ if(err)return [null,err];if(!(mw>0)||!Number.isFinite(mw))return [null,'Informe um volume positivo em MWm.'];if(mtmId('mtm-price').value===''||!Number.isFinite(pr)||pr<0)return [null,'Informe um preço contratado válido.'];
+ return [{side:mtmId('mtm-side').value,mw,price:pr,products:[...mtmProducts]},''];}
+function mtmRender(){mtmId('mtm-count').textContent=mtmOps.length;mtmId('mtm-ref').textContent=br(ULTIMO);
+ let values=mtmOps.map(o=>mtmVal(o,HOJE)),total=mtmOps.length&&values.every(x=>x!==null)?values.reduce((a,b)=>a+b,0):null;
+ mtmId('mtm-total').textContent=mtmOps.length?mtmMoney(total):'R$ 0,00 MM';
+ let f=mtmId('mtm-focus'),old=f.value;f.innerHTML='<option value="all">Carteira consolidada</option>'+mtmOps.map(o=>`<option value="${safe(o.id)}">${safe(o.name)}</option>`).join('');f.value=[...f.options].some(o=>o.value===old)?old:'all';
+ mtmId('mtm-rows').innerHTML=mtmOps.length?mtmOps.map((o,i)=>`<tr><td><strong>${safe(o.name)}</strong><div style="color:#64748b">${br(o.date)}</div></td><td>${o.positions.length>1?'Swap / '+o.positions.length+' pontas':o.positions[0].side==='compra'?'Compra':'Venda'}</td><td>${o.positions.map(l=>`<div>${l.side==='compra'?'Compra':'Venda'} ${fmt(l.mw)} MWm @ R$ ${fmt(l.price)} — ${l.products.map(safe).join(' + ')}</div>`).join('')}</td><td style="font-weight:700;color:${values[i]===null?'#64748b':values[i]>=0?'#0f766e':'#b42318'}">${mtmMoney(values[i])}</td><td><button class="mtm-btn danger" data-id="${safe(o.id)}">Excluir</button></td></tr>`).join(''):'<tr><td colspan="5" class="mtm-empty">Nenhuma operação cadastrada. Monte uma ou mais pontas e feche a operação.</td></tr>';
+ mtmId('mtm-rows').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{if(!window.confirm('Excluir esta operação?'))return;mtmOps=mtmOps.filter(o=>o.id!==b.dataset.id);mtmSave();mtmRender();}));mtmDraw();ajustarAltura();}
+function mtmDraw(){let focus=mtmId('mtm-focus').value,view=mtmId('mtm-view').value,selected=focus==='all'?mtmOps:mtmOps.filter(o=>o.id===focus),traces=[];
+ if(selected.length){let begin=selected.map(o=>o.date).sort()[0],xs=[];
+ for(let t=Date.parse(begin+'T00:00:00Z');t<=Date.parse(HOJE+'T00:00:00Z');t+=86400000)xs.push(new Date(t).toISOString().slice(0,10));
+ if(view==='total'){
+  let ys=xs.map(d=>{let active=selected.filter(o=>o.date<=d);if(!active.length)return null;let vals=active.map(o=>mtmVal(o,d));return vals.every(v=>v!==null)?vals.reduce((a,b)=>a+b,0):null;});
+  traces.push({x:xs,y:ys,mode:'lines',name:focus==='all'?'MTM total da carteira':selected[0].name,line:{color:'#48c9bd',width:3},connectgaps:false});
+ }else{
+  // Cada série corresponde à combinação operação + produto, sem misturar operações distintas.
+  let entries=selected.flatMap(op=>[...new Set(op.positions.flatMap(l=>l.products))].map(prod=>({op,prod})));
+  entries.forEach(({op,prod},i)=>{let ys=xs.map(d=>{if(op.date>d)return null;let legs=op.positions.filter(l=>l.products.includes(prod));let vals=legs.map(l=>mtmValuePosition(l,prod,d));return vals.every(v=>v!==null)?vals.reduce((a,b)=>a+b,0):null;});
+   traces.push({x:xs,y:ys,mode:'lines',name:prod+' — '+op.name,connectgaps:false,line:{color:cor(prod),width:2.5,dash:['solid','dot','dash','dashdot'][selected.indexOf(op)%4]},hovertemplate:'<b>'+safe(prod)+' — '+safe(op.name)+'</b><br>%{x|%d/%m/%Y}<br>%{y:.4f} MMR$<extra></extra>'});});
+ }}
+ Plotly.react('mtm-chart',traces,{height:430,paper_bgcolor:'#0e0e0e',plot_bgcolor:'#0e0e0e',font:{family:'Century Gothic,Arial',color:'#eee'},margin:{l:82,r:traces.length>1?215:28,b:65,t:60},title:{text:view==='total'?'MTM consolidado — soma das operações':'MTM da carteira — uma série por produto',x:.03,xanchor:'left',font:{size:18}},xaxis:{title:'Data da marcação',showgrid:false,showline:true,linecolor:'#777'},yaxis:{title:'MTM (MMR$)',showgrid:true,gridcolor:'rgba(255,255,255,.09)',zeroline:true,zerolinecolor:'#a1a1a1'},showlegend:view==='products'&&traces.length>0,legend:{orientation:'v',x:1.02,y:1},hovermode:'x unified',annotations:traces.length?[]:[{text:'Cadastre uma operação para visualizar o histórico',xref:'paper',yref:'paper',x:.5,y:.5,showarrow:false,font:{color:'#ddd',size:13}}]},{responsive:true,displaylogo:false});}
+mtmId('mtm-add-component').addEventListener('click',()=>{let draft=[...mtmProducts,mtmProd.value],error=mtmCheck(draft);if(error){mtmId('mtm-message').textContent=error;return;}mtmProducts=draft;mtmId('mtm-message').textContent='';mtmRenderProducts();});
+mtmId('mtm-clear-components').addEventListener('click',()=>{mtmProducts=[];mtmRenderProducts();});
+mtmId('mtm-add-leg').addEventListener('click',()=>{let [leg,error]=mtmBuildLeg();if(error){mtmId('mtm-message').textContent=error;return;}mtmDraftLegs.push(leg);mtmProducts=[];mtmRenderProducts();mtmRenderDraft();mtmId('mtm-message').textContent='Ponta incluída. Você pode incluir a ponta oposta para formar um swap.';});
+mtmId('mtm-new').addEventListener('click',()=>{mtmProducts=[];mtmDraftLegs=[];mtmId('mtm-name').value='';mtmRenderProducts();mtmRenderDraft();mtmId('mtm-message').textContent='Formulário preparado para uma nova operação.';});
+mtmId('mtm-close').addEventListener('click',()=>{let date=mtmDate.value,legs=[...mtmDraftLegs];if(!date||date>HOJE){mtmId('mtm-message').textContent='Informe uma data de fechamento até hoje.';return;}
+ if(mtmProducts.length){let [leg,error]=mtmBuildLeg();if(error){mtmId('mtm-message').textContent=error;return;}legs.push(leg);}
+ if(!legs.length){mtmId('mtm-message').textContent='Inclua pelo menos uma ponta na operação.';return;}
+ let op={id:'op-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),name:mtmId('mtm-name').value.trim()||'Operação '+(mtmOps.length+1),date,positions:legs};mtmOps.push(op);mtmProducts=[];mtmDraftLegs=[];mtmRenderProducts();mtmRenderDraft();mtmSave();mtmId('mtm-message').textContent='Operação registrada com '+legs.length+' ponta(s).';mtmRender();mtmId('mtm-focus').value=op.id;mtmDraw();});
+mtmId('mtm-focus').addEventListener('change',mtmDraw);mtmId('mtm-view').addEventListener('change',mtmDraw);
+// Exportação XLSX nativa/offline: pacote OOXML ZIP sem bibliotecas externas.
+function mtmQuoteInfo(prod,day){
+ const x=DIAS[prod];if(!x||!x.datas.length)return null;
+ let a=0,b=x.datas.length-1,k=-1;
+ while(a<=b){let m=(a+b)>>1;if(x.datas[m]<=day){k=m;a=m+1;}else b=m-1;}
+ return k<0?null:{price:Number(x.precos[k]),reference:x.datas[k]};
+}
+function mtmDates(from){let days=[];for(let t=Date.parse(from+'T00:00:00Z'),end=Date.parse(HOJE+'T00:00:00Z');t<=end;t+=86400000)days.push(new Date(t).toISOString().slice(0,10));return days;}
+function mtmXlsxCol(n){let s='';while(n){n--;s=String.fromCharCode(65+n%26)+s;n=Math.floor(n/26);}return s;}
+function mtmXmlEscape(value){return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');}
+function mtmSheetXml(rows){let xml='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"/></sheetViews><sheetFormatPr defaultRowHeight="15"/><sheetData>';
+ rows.forEach((cells,i)=>{let n=i+1;xml+='<row r="'+n+'">';cells.forEach((v,j)=>{if(v===null||v===undefined||v==='')return;let pos=mtmXlsxCol(j+1)+n;if(typeof v==='object'&&v.formula){xml+='<c r="'+pos+'" s="2"><f>'+mtmXmlEscape(v.formula)+'</f><v>'+Number(v.value||0)+'</v></c>';}
+ else if(typeof v==='number'&&Number.isFinite(v)){xml+='<c r="'+pos+'" s="2"><v>'+v+'</v></c>';}
+ else {let val=String(v);xml+='<c r="'+pos+'" t="inlineStr"'+(i===0?' s="1"':'')+'><is><t>'+mtmXmlEscape(val)+'</t></is></c>';}});xml+='</row>';});return xml+'</sheetData></worksheet>';}
+function mtmCrcTable(){let table=[];for(let i=0;i<256;i++){let c=i;for(let j=0;j<8;j++)c=c&1?0xEDB88320^(c>>>1):c>>>1;table[i]=c>>>0;}return table;}
+function mtmZip(entries){const enc=new TextEncoder(),tab=mtmCrcTable(),out=[],central=[];let offset=0;
+ const u16=n=>[n&255,(n>>>8)&255],u32=n=>[n&255,(n>>>8)&255,(n>>>16)&255,(n>>>24)&255];
+ for(const [filename,content] of entries){const name=enc.encode(filename),body=enc.encode(content);let crc=0xFFFFFFFF;for(const v of body)crc=tab[(crc^v)&255]^(crc>>>8);crc=(crc^0xFFFFFFFF)>>>0;
+ const local=new Uint8Array([...u32(0x04034b50),...u16(20),...u16(0x0800),...u16(0),...u16(0),...u16(0),...u32(crc),...u32(body.length),...u32(body.length),...u16(name.length),...u16(0),...name]);out.push(local,body);
+ const centralHeader=new Uint8Array([...u32(0x02014b50),...u16(20),...u16(20),...u16(0x0800),...u16(0),...u16(0),...u16(0),...u32(crc),...u32(body.length),...u32(body.length),...u16(name.length),...u16(0),...u16(0),...u16(0),...u16(0),...u32(0),...u32(offset),...name]);central.push(centralHeader);offset+=local.length+body.length;}
+ const centralSize=central.reduce((sum,b)=>sum+b.length,0),ending=new Uint8Array([...u32(0x06054b50),...u16(0),...u16(0),...u16(entries.length),...u16(entries.length),...u32(centralSize),...u32(offset),...u16(0)]);
+ return new Blob([...out,...central,ending],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+}
+function mtmXlsx(sheets){let files=[['[Content_Types].xml','<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>'+sheets.map((_,i)=>'<Override PartName="/xl/worksheets/sheet'+(i+1)+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>').join('')+'</Types>'],
+ ['_rels/.rels','<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
+ ['xl/workbook.xml','<?xml version="1.0" encoding="UTF-8"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><bookViews><workbookView/></bookViews><sheets>'+sheets.map(([name],i)=>'<sheet name="'+mtmXmlEscape(name)+'" sheetId="'+(i+1)+'" r:id="rId'+(i+1)+'"/>').join('')+'</sheets><calcPr calcId="191029" fullCalcOnLoad="1"/></workbook>'],
+ ['xl/_rels/workbook.xml.rels','<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+sheets.map((_,i)=>'<Relationship Id="rId'+(i+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+(i+1)+'.xml"/>').join('')+'<Relationship Id="rId'+(sheets.length+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'],
+ ['xl/styles.xml','<?xml version="1.0" encoding="UTF-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Aptos"/></font><font><b/><color rgb="FFFFFFFF"/><sz val="11"/><name val="Aptos"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF007E80"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="3"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFill="1"/><xf numFmtId="4" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/></cellXfs></styleSheet>']];
+ sheets.forEach(([name,rows],i)=>files.push(['xl/worksheets/sheet'+(i+1)+'.xml',mtmSheetXml(rows)]));return mtmZip(files);
+}
+function mtmExportExcel(){
+ try{
+ if(!mtmOps.length){mtmId('mtm-message').textContent='Cadastre pelo menos uma operação antes de exportar.';return;}
+ const focus=mtmId('mtm-focus').value,selected=focus==='all'?mtmOps:mtmOps.filter(o=>o.id===focus),series=selected.flatMap(op=>[...new Set(op.positions.flatMap(l=>l.products))].map(prod=>({op,prod,label:prod+' — '+op.name}))),start=selected.map(o=>o.date).sort()[0],days=mtmDates(start);
+ const graphs=[['Data',...series.map(s=>'MTM '+s.label+' (MMR$)'),'Total carteira (MMR$)']];
+ const selectedChart=[['Data',...(mtmId('mtm-view').value==='products'?series.map(s=>'MTM '+s.label+' (MMR$)'):['Total carteira (MMR$)'])]];
+ const memo=[['Data MTM','Operação','Fechamento','Ponta','Compra/Venda','Produto','Volume MWm','Preço contratado R$/MWh','Horas','Preço BBCE R$/MWh','Data cotação BBCE','Sinal','MTM (MMR$)','Status cotação']];
+ const operations=[['Operação','Data fechamento','Ponta','Compra/Venda','Produto','Volume MWm','Preço contratado R$/MWh','Horas','MTM atual (MMR$)']];
+ selected.forEach(o=>o.positions.forEach((leg,index)=>leg.products.forEach(prod=>operations.push([o.name,o.date,index+1,leg.side,prod,leg.mw,leg.price,mtmHours(prod),mtmValuePosition(leg,prod,HOJE)]))));
+ for(const day of days){
+ const active=selected.filter(o=>o.date<=day);let total=0,valid=true;
+ const seriesValues=series.map(({op,prod})=>{if(op.date>day)return null;const legs=op.positions.filter(l=>l.products.includes(prod));let sum=0;for(const l of legs){let v=mtmValuePosition(l,prod,day);if(v===null)return null;sum+=v;}return sum;});
+ for(const op of active){for(let legIndex=0;legIndex<op.positions.length;legIndex++){const leg=op.positions[legIndex];for(const prod of leg.products){
+ const quote=mtmQuoteInfo(prod,day),hours=mtmHours(prod),sign=leg.side==='compra'?1:-1,mtm=quote?(quote.price-leg.price)*leg.mw*hours*sign/1000000:null;
+ let rowIndex=memo.length+1;
+ memo.push([day,op.name,op.date,legIndex+1,leg.side,prod,leg.mw,leg.price,hours,quote?quote.price:null,quote?quote.reference:'',sign,mtm===null?null:{formula:`(J${rowIndex}-H${rowIndex})*G${rowIndex}*I${rowIndex}*L${rowIndex}/1000000`,value:mtm},quote?(quote.reference===day?'Negociado no dia':'Última cotação anterior'):'Sem cotação anterior']);
+ if(mtm===null){valid=false;}else total+=mtm;
+ }} }
+ let vals=seriesValues,t=active.length&&valid?total:null;
+ graphs.push([day,...vals,t]);selectedChart.push([day,...(mtmId('mtm-view').value==='products'?vals:[t])]);
+ }
+ const sheetList=[['Gráfico selecionado',selectedChart],['Séries por produto',graphs],['Memória de cálculo',memo],['Operações',operations],['Metodologia',[
+ ['Fonte','BBCE; preços médios diários ponderados por MWh conforme dados do painel'],['Data de exportação',HOJE],['Escopo',focus==='all'?'Carteira consolidada':selected[0].name],['Unidade','MMR$ (milhões de reais)'],['Compra','(Preço BBCE - Preço contratado) × volume MWm × horas / 1.000.000'],['Venda','(Preço contratado - Preço BBCE) × volume MWm × horas / 1.000.000'],['Swap','Soma algébrica das pontas de compra e venda'],['Séries por produto','Cada coluna representa um produto em uma operação específica; o mesmo produto em operações distintas ocupa colunas diferentes'],['Cotação sem negociação','Última cotação registrada até a data da marcação; nunca antecipar cotação futura'],['Cotação indisponível','Célula em branco; sem negócio anterior válido'],['Observação','Horas correspondem ao período completo do produto; não há ajuste de horas remanescentes']]]];
+ const blob=mtmXlsx(sheetList),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='marcacao_mercado_'+HOJE+'.xlsx';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);mtmId('mtm-message').textContent='Excel exportado com séries, operações e memória de cálculo.';
+ }catch(e){console.error(e);mtmId('mtm-message').textContent='Erro na exportação Excel: '+e.message;}
+}
+
+mtmId('mtm-export-excel').addEventListener('click',mtmExportExcel);
+mtmRenderProducts();mtmRenderDraft();mtmRender();
 </script></body></html>'''
 
 
