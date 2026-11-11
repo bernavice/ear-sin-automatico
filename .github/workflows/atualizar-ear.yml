@@ -54,6 +54,25 @@ jobs:
         run: python -m playwright install --with-deps chromium
       - name: Atualizar EAR
         run: python atualizar_ear.py
+
+      - name: Diagnosticar acesso à CCEE
+        run: |
+          echo "=== DATA E HORA UTC ==="
+          date -u
+
+          echo "=== IP PUBLICO DO GITHUB ACTIONS ==="
+          curl -sS --max-time 15 https://checkip.amazonaws.com
+
+          echo "=== TESTE DE ACESSO A CCEE ==="
+          curl -sS --max-time 30 \
+            -o /dev/null \
+            -w "HTTP: %{http_code}\n" \
+            "https://dadosabertos.ccee.org.br/datastore/dump/3f279d6b-1069-42f7-9b0a-217b084729c4?bom=True"
+
+      - name: Atualizar PLD CCEE e gráficos
+        run: python atualizar_pld.py
+
+        
       - name: Atualizar PLD CCEE e graficos
         run: python atualizar_pld.py
       - name: Diagnostico da coleta pelo formulario da CCEE
