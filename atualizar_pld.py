@@ -86,6 +86,58 @@ def diagnosticar_resposta_ccee(resposta, contexto: str):
         print('PLD CCEE: acesso não autorizado ou limitado; nenhuma tentativa de contornar a proteção.')
 
 
+def diagnostico_api_ccee() -> bool:
+    """Teste de uma única chamada pública com os mesmos cabeçalhos do coletor.
+
+    Não grava o CSV, não percorre meses, não tenta disfarçar a requisição.
+    Código HTTP e identificadores ficam nos logs para encaminhar à CCEE.
+    """
+    import requests
+    import ssl
+    import urllib3
+    hoje = datetime.now(ZoneInfo('America/Sao_Paulo'))
+    ano = hoje.year
+    rid = os.getenv(f'CCEE_PLD_RECURSO_{ano}', '').strip() or IDS_ANUAIS_CONHECIDOS.get(ano)
+    if not rid:
+        print(f'PLD diagnóstico: sem ID de recurso cadastrado para {ano}.')
+        return False
+    mes = hoje.strftime('%Y%m')
+    print(f'PLD diagnóstico API: UTC={datetime.now(ZoneInfo("UTC")):%Y-%m-%dT%H:%M:%SZ}; '
+          f'recurso={ano}; mês={mes}; endpoint=datastore_search; limit=1')
+    print(f'PLD diagnóstico ambiente: requests={requests.__version__}; '
+          f'urllib3={urllib3.__version__}; OpenSSL={ssl.OPENSSL_VERSION}')
+    with criar_sessao_ccee() as sessao:
+        print('PLD diagnóstico cabeçalhos: '
+              f'User-Agent={sessao.headers.get("User-Agent")}; '
+              f'Accept-Language={sessao.headers.get("Accept-Language")}; '
+              f'Accept={sessao.headers.get("Accept")}')
+        try:
+            r = sessao.get(URL_API_REGISTROS, params={
+                'resource_id': rid,
+                'filters': json.dumps({'MES_REFERENCIA': mes}, separators=(',', ':')),
+                'limit': 1,
+                'offset': 0,
+            }, timeout=(15, 40), allow_redirects=True)
+            print(f'PLD diagnóstico API: HTTP={r.status_code}; '
+                  f'URL final host={r.url.split("/")[2]}; '
+                  f'content-type={r.headers.get("content-type", "não informado")}')
+            diagnosticar_resposta_ccee(r, 'teste de uma requisição à API')
+            if r.status_code == 200:
+                try:
+                    data = r.json()
+                    ok = isinstance(data, dict) and data.get('success') is True
+                    print(f'PLD diagnóstico API: JSON válido; success={ok}; '
+                          f'registros devolvidos={len((data.get("result") or {}).get("records") or []) if ok else 0}.')
+                    return ok
+                except ValueError:
+                    print('PLD diagnóstico API: resposta HTTP 200, mas não contém JSON válido.')
+            else:
+                print('PLD diagnóstico API: acesso não confirmado. Encaminhar este log à CCEE.')
+        except requests.RequestException as exc:
+            print(f'PLD diagnóstico API: falha de rede {type(exc).__name__}: {exc}')
+    return False
+
+
 def url_dump(recurso_id: str) -> str:
     if not re.fullmatch(r'[0-9a-fA-F-]{36}', recurso_id):
         raise ValueError('Identificador anual CCEE inválido')
@@ -1205,6 +1257,26 @@ def _buscar_base_publica(anos: list[int]) -> list[pd.DataFrame]:
     return partes
 
 
+def ultima_data_completa_valida(hist: pd.DataFrame, data_limite) -> pd.Timestamp | None:
+    """Última data até o limite com 24 horas e 4 submercados sem duplicações.
+
+    Não altera o CSV original; apenas decide se há lacuna para consulta.
+    """
+    limite = pd.Timestamp(data_limite).normalize()
+    base = hist.loc[(hist['data'] <= limite) & hist['submercado'].isin(ORDEM),
+                    ['data', 'hora', 'submercado']].copy()
+    if base.empty:
+        return None
+    base['data'] = pd.to_datetime(base['data']).dt.normalize()
+    base['hora'] = pd.to_numeric(base['hora'], errors='coerce')
+    base = base.dropna()
+    # complete only when all unique pairs are present
+    base = base.drop_duplicates()
+    qtd = base.groupby('data').size()
+    dias = qtd[qtd == 96].index
+    return pd.Timestamp(dias.max()) if len(dias) else None
+
+
 def atualizar_com_online(historico: pd.DataFrame, usar_online: bool) -> pd.DataFrame:
     """Ordem: API de registros → CSV oficial → Datastore → CSV no GitHub.
 
@@ -1217,13 +1289,24 @@ def atualizar_com_online(historico: pd.DataFrame, usar_online: bool) -> pd.DataF
     hoje = datetime.now(ZoneInfo('America/Sao_Paulo')).date()
     data_meta = pd.Timestamp(hoje)
     anos = _anos_consulta(hoje, historico)
+    futura = historico[historico['data'] > data_meta]
+    if not futura.empty:
+        print(f'::warning title=PLD datas futuras no histórico::'
+              f'{len(futura):,} registros posteriores a {data_meta:%d/%m/%Y}; '
+              'não serão usados para decidir se a atualização deve ser consultada. '
+              'Histórico original preservado para conferência.')
+    ultima_completa = ultima_data_completa_valida(historico, data_meta)
+    print(f'PLD controle: última data completa até hoje = '
+          f'{ultima_completa:%d/%m/%Y}' if ultima_completa is not None
+          else 'PLD controle: nenhuma data completa até hoje.')
     def atrasado() -> bool:
-        return pd.Timestamp(historico['data'].max()).normalize() < data_meta
+        ultima = ultima_data_completa_valida(historico, data_meta)
+        return ultima is None or ultima < data_meta
 
     if usar_online and atrasado():
         print('PLD: tentativa 1/4 — API de dados CCEE (datastore_search).')
         try:
-            for parte in _buscar_pela_api(anos, historico['data'].max()):
+            for parte in _buscar_pela_api(anos, ultima_data_completa_valida(historico, data_meta) or (data_meta - pd.Timedelta(days=7))):
                 historico = _mesclar_pld(historico, parte, 'API de dados CCEE')
         except Exception as exc:
             print(f'::warning title=PLD API de dados falhou::{type(exc).__name__}: {exc}')
@@ -1994,8 +2077,12 @@ def salvar(hist: pd.DataFrame) -> None:
 def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument('--somente-local', action='store_true')
+    p.add_argument('--diagnosticar-ccee', action='store_true', help='Faz uma requisição à API, sem alterar o histórico ou gerar gráficos')
     p.add_argument('--historico-base', type=Path)
     args = p.parse_args()
+    if args.diagnosticar_ccee:
+        diagnostico_api_ccee()
+        return
     hist = carregar_historico_base(args.historico_base) if args.historico_base else carregar_base_consolidada()
     hist = atualizar_com_online(hist, usar_online=not args.somente_local)
     salvar(hist)
