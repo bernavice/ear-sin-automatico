@@ -1,0 +1,41 @@
+name: Teste CCEE - Windows (isolado)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostico-ccee-windows:
+    name: Diagnostico CCEE Windows Python 3.14
+    runs-on: windows-2025
+    timeout-minutes: 10
+    steps:
+      - name: Obter codigo do repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python 3.14.2
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14.2'
+          architecture: x64
+
+      - name: Instalar mesma versao de requests do teste local
+        shell: pwsh
+        run: |
+          python -m pip install "requests==2.32.5"
+
+      - name: Testar API e CSV oficiais da CCEE - sem alterar historico
+        shell: pwsh
+        run: |
+          python testar_acesso_ccee_local.py --incluir-ip --saida diagnostico_ccee_windows.json
+
+      - name: Guardar diagnostico para comparacao
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostico-ccee-windows
+          path: diagnostico_ccee_windows.json
+          if-no-files-found: warn
+          retention-days: 7
