@@ -69,8 +69,9 @@ jobs:
             -w "HTTP: %{http_code}\n" \
             "https://dadosabertos.ccee.org.br/datastore/dump/3f279d6b-1069-42f7-9b0a-217b084729c4?bom=True"
 
-      - name: Atualizar PLD CCEE e gráficos
-        run: python atualizar_pld.py
+      
+      - name: Diagnóstico real da API CCEE
+        run: python atualizar_pld.py --diagnosticar-ccee
 
         
       - name: Atualizar PLD CCEE e graficos
