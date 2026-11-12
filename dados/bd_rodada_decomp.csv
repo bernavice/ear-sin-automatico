@@ -1,0 +1,2241 @@
+﻿Time;Variável;Valor
+nov/2026;PLD SE/CO ve;57,31
+nov/2026;PLD SUL ve;57,31
+nov/2026;PLD NE ve;57,31
+nov/2026;PLD NORTE ve;57,31
+nov/2026;ENA SE/CO % ve;137
+nov/2026;ENA SUL % ve;157
+nov/2026;ENA NE % ve;68
+nov/2026;ENA NORTE % ve;69
+nov/2026;ENA SIN % ve;128
+nov/2026;G. BELO MONTE ve;352,3
+nov/2026;G. TUCURUI ve;3527,6
+nov/2026;F. LINHAO BM ve;47,7
+nov/2026;F. TOTAL N ve;2413
+nov/2026;VERT. N ve;3,3
+nov/2026;EARi SE/CO ve;57,5
+nov/2026;EARi SUL ve;87,3
+nov/2026;EARi NE ve;58,5
+nov/2026;EARi NORTE ve;53,3
+nov/2026;EARi SIN ve;59
+nov/2026;EARf SIN ve;60
+nov/2026;EARf SE/CO ve;58,2
+nov/2026;EARf SUL ve;86,9
+nov/2026;EARf NE ve;57,9
+nov/2026;EARf NORTE ve;50,5
+nov/2026;CARGA ve;89434
+nov/2026;G.HIDRO ve;51591
+nov/2026;G.TERM ve;6063
+nov/2026;G.PEQ ve;8760
+nov/2026;GSF % ve;-13
+nov/2026;GF ve;59613
+nov/2026;ESS ve;17,972
+nov/2026;BALANCO ve;23020
+dez/2026;PLD SE/CO ve;57,31
+dez/2026;PLD SUL ve;57,31
+dez/2026;PLD NE ve;57,31
+dez/2026;PLD NORTE ve;57,31
+dez/2026;ENA SE/CO % ve;99
+dez/2026;ENA SUL % ve;94
+dez/2026;ENA NE % ve;94
+dez/2026;ENA NORTE % ve;98
+dez/2026;ENA SIN % ve;98
+dez/2026;G. BELO MONTE ve;2332,1
+dez/2026;G. TUCURUI ve;5135
+dez/2026;F. LINHAO BM ve;1111,8
+dez/2026;F. TOTAL N ve;-1111,8
+dez/2026;VERT. N ve;954,4
+dez/2026;EARi SE/CO ve;57,8
+dez/2026;EARi SUL ve;86,3
+dez/2026;EARi NE ve;57
+dez/2026;EARi NORTE ve;48,5
+dez/2026;EARi SIN ve;59
+dez/2026;EARf SIN ve;62
+dez/2026;EARf SE/CO ve;59,4
+dez/2026;EARf SUL ve;93,8
+dez/2026;EARf NE ve;68,5
+dez/2026;EARf NORTE ve;38
+dez/2026;CARGA ve;89828
+dez/2026;G.HIDRO ve;51825
+dez/2026;G.TERM ve;5163
+dez/2026;G.PEQ ve;8956
+dez/2026;GSF % ve;-9
+dez/2026;GF ve;58060
+dez/2026;ESS ve;18,45
+dez/2026;BALANCO ve;23885
+jan/2027;PLD SE/CO ve;57,31
+jan/2027;PLD SUL ve;57,31
+jan/2027;PLD NE ve;57,31
+jan/2027;PLD NORTE ve;57,31
+jan/2027;ENA SE/CO % ve;89
+jan/2027;ENA SUL % ve;87
+jan/2027;ENA NE % ve;84
+jan/2027;ENA NORTE % ve;87
+jan/2027;ENA SIN % ve;88
+jan/2027;G. BELO MONTE ve;5017,2
+jan/2027;G. TUCURUI ve;2947
+jan/2027;F. LINHAO BM ve;3340,7
+jan/2027;F. TOTAL N ve;-2939,9
+jan/2027;VERT. N ve;2,5
+jan/2027;EARi SE/CO ve;58,8
+jan/2027;EARi SUL ve;92,7
+jan/2027;EARi NE ve;67,7
+jan/2027;EARi NORTE ve;37,6
+jan/2027;EARi SIN ve;62
+jan/2027;EARf SIN ve;70
+jan/2027;EARf SE/CO ve;69
+jan/2027;EARf SUL ve;86,9
+jan/2027;EARf NE ve;68,5
+jan/2027;EARf NORTE ve;62,7
+jan/2027;CARGA ve;91140
+jan/2027;G.HIDRO ve;58634
+jan/2027;G.TERM ve;4057
+jan/2027;G.PEQ ve;9113
+jan/2027;GSF % ve;-2
+jan/2027;GF ve;60049
+jan/2027;ESS ve;55,461
+jan/2027;BALANCO ve;19337
+fev/2027;PLD SE/CO ve;57,31
+fev/2027;PLD SUL ve;57,31
+fev/2027;PLD NE ve;57,31
+fev/2027;PLD NORTE ve;57,31
+fev/2027;ENA SE/CO % ve;89
+fev/2027;ENA SUL % ve;85
+fev/2027;ENA NE % ve;84
+fev/2027;ENA NORTE % ve;88
+fev/2027;ENA SIN % ve;88
+fev/2027;G. BELO MONTE ve;8079,1
+fev/2027;G. TUCURUI ve;3929,6
+fev/2027;F. LINHAO BM ve;3906,2
+fev/2027;F. TOTAL N ve;-4929,4
+fev/2027;VERT. N ve;2187,5
+fev/2027;EARi SE/CO ve;68,2
+fev/2027;EARi SUL ve;85,9
+fev/2027;EARi NE ve;67,7
+fev/2027;EARi NORTE ve;61,9
+fev/2027;EARi SIN ve;69
+fev/2027;EARf SIN ve;77
+fev/2027;EARf SE/CO ve;77,2
+fev/2027;EARf SUL ve;95,7
+fev/2027;EARf NE ve;66,1
+fev/2027;EARf NORTE ve;93,4
+fev/2027;CARGA ve;93774
+fev/2027;G.HIDRO ve;56295
+fev/2027;G.TERM ve;3580
+fev/2027;G.PEQ ve;9574
+fev/2027;GSF % ve;1
+fev/2027;GF ve;55986
+fev/2027;ESS ve;64,141
+fev/2027;BALANCO ve;24324
+mar/2027;PLD SE/CO ve;57,31
+mar/2027;PLD SUL ve;57,31
+mar/2027;PLD NE ve;57,31
+mar/2027;PLD NORTE ve;57,31
+mar/2027;ENA SE/CO % ve;90
+mar/2027;ENA SUL % ve;85
+mar/2027;ENA NE % ve;84
+mar/2027;ENA NORTE % ve;93
+mar/2027;ENA SIN % ve;90
+mar/2027;G. BELO MONTE ve;9538,9
+mar/2027;G. TUCURUI ve;2966,9
+mar/2027;F. LINHAO BM ve;3915,3
+mar/2027;F. TOTAL N ve;-5287,6
+mar/2027;VERT. N ve;6277,9
+mar/2027;EARi SE/CO ve;76,4
+mar/2027;EARi SUL ve;94,6
+mar/2027;EARi NE ve;65,4
+mar/2027;EARi NORTE ve;92,6
+mar/2027;EARi SIN ve;77
+mar/2027;EARf SIN ve;82
+mar/2027;EARf SE/CO ve;81,2
+mar/2027;EARf SUL ve;96,2
+mar/2027;EARf NE ve;75,8
+mar/2027;EARf NORTE ve;94
+mar/2027;CARGA ve;92813
+mar/2027;G.HIDRO ve;57602
+mar/2027;G.TERM ve;3470
+mar/2027;G.PEQ ve;9381
+mar/2027;GSF % ve;1
+mar/2027;GF ve;57080
+mar/2027;ESS ve;63,454
+mar/2027;BALANCO ve;22361
+abr/2027;PLD SE/CO ve;57,31
+abr/2027;PLD SUL ve;57,31
+abr/2027;PLD NE ve;57,31
+abr/2027;PLD NORTE ve;57,31
+abr/2027;ENA SE/CO % ve;90
+abr/2027;ENA SUL % ve;85
+abr/2027;ENA NE % ve;83
+abr/2027;ENA NORTE % ve;94
+abr/2027;ENA SIN % ve;90
+abr/2027;G. BELO MONTE ve;8379,1
+abr/2027;G. TUCURUI ve;4329,5
+abr/2027;F. LINHAO BM ve;3941,7
+abr/2027;F. TOTAL N ve;-5232,1
+abr/2027;VERT. N ve;5096,9
+abr/2027;EARi SE/CO ve;80,3
+abr/2027;EARi SUL ve;95,1
+abr/2027;EARi NE ve;74,9
+abr/2027;EARi NORTE ve;93,2
+abr/2027;EARi SIN ve;81
+abr/2027;EARf SIN ve;84
+abr/2027;EARf SE/CO ve;83,4
+abr/2027;EARf SUL ve;96,3
+abr/2027;EARf NE ve;75,8
+abr/2027;EARf NORTE ve;94,9
+abr/2027;CARGA ve;89449
+abr/2027;G.HIDRO ve;53452
+abr/2027;G.TERM ve;2515
+abr/2027;G.PEQ ve;9214
+abr/2027;GSF % ve;8
+abr/2027;GF ve;49298
+abr/2027;ESS ve;62,212
+abr/2027;BALANCO ve;24268
+mai/2027;PLD SE/CO ve;57,31
+mai/2027;PLD SUL ve;57,31
+mai/2027;PLD NE ve;57,31
+mai/2027;PLD NORTE ve;57,31
+mai/2027;ENA SE/CO % ve;89
+mai/2027;ENA SUL % ve;87
+mai/2027;ENA NE % ve;83
+mai/2027;ENA NORTE % ve;92
+mai/2027;ENA SIN % ve;89
+mai/2027;G. BELO MONTE ve;7545,3
+mai/2027;G. TUCURUI ve;3843,4
+mai/2027;F. LINHAO BM ve;3789
+mai/2027;F. TOTAL N ve;-3956,5
+mai/2027;VERT. N ve;5109,6
+mai/2027;EARi SE/CO ve;82,4
+mai/2027;EARi SUL ve;95,2
+mai/2027;EARi NE ve;74,9
+mai/2027;EARi NORTE ve;94,1
+mai/2027;EARi SIN ve;83
+mai/2027;EARf SIN ve;84
+mai/2027;EARf SE/CO ve;83,8
+mai/2027;EARf SUL ve;96,3
+mai/2027;EARf NE ve;74,4
+mai/2027;EARf NORTE ve;96,1
+mai/2027;CARGA ve;86663
+mai/2027;G.HIDRO ve;49798
+mai/2027;G.TERM ve;2700
+mai/2027;G.PEQ ve;8604
+mai/2027;GSF % ve;12
+mai/2027;GF ve;44386
+mai/2027;ESS ve;66,434
+mai/2027;BALANCO ve;25561
+jun/2027;PLD SE/CO ve;57,31
+jun/2027;PLD SUL ve;57,31
+jun/2027;PLD NE ve;57,31
+jun/2027;PLD NORTE ve;57,31
+jun/2027;ENA SE/CO % ve;89
+jun/2027;ENA SUL % ve;89
+jun/2027;ENA NE % ve;83
+jun/2027;ENA NORTE % ve;87
+jun/2027;ENA SIN % ve;88
+jun/2027;G. BELO MONTE ve;3518,5
+jun/2027;G. TUCURUI ve;3721,8
+jun/2027;F. LINHAO BM ve;1920
+jun/2027;F. TOTAL N ve;-794,1
+jun/2027;VERT. N ve;981,1
+jun/2027;EARi SE/CO ve;82,8
+jun/2027;EARi SUL ve;95,2
+jun/2027;EARi NE ve;73,6
+jun/2027;EARi NORTE ve;95,3
+jun/2027;EARi SIN ve;83
+jun/2027;EARf SIN ve;82
+jun/2027;EARf SE/CO ve;82,9
+jun/2027;EARf SUL ve;96,3
+jun/2027;EARf NE ve;71
+jun/2027;EARf NORTE ve;96,1
+jun/2027;CARGA ve;84330
+jun/2027;G.HIDRO ve;47019
+jun/2027;G.TERM ve;3630
+jun/2027;G.PEQ ve;8424
+jun/2027;GSF % ve;8
+jun/2027;GF ve;43423
+jun/2027;ESS ve;68,533
+jun/2027;BALANCO ve;25257
+jul/2027;PLD SE/CO ve;141,51
+jul/2027;PLD SUL ve;141,51
+jul/2027;PLD NE ve;141,51
+jul/2027;PLD NORTE ve;141,51
+jul/2027;ENA SE/CO % ve;88
+jul/2027;ENA SUL % ve;85
+jul/2027;ENA NE % ve;83
+jul/2027;ENA NORTE % ve;86
+jul/2027;ENA SIN % ve;87
+jul/2027;G. BELO MONTE ve;1227,6
+jul/2027;G. TUCURUI ve;2237,4
+jul/2027;F. LINHAO BM ve;2181,9
+jul/2027;F. TOTAL N ve;1078,5
+jul/2027;VERT. N ve;3,7
+jul/2027;EARi SE/CO ve;81,9
+jul/2027;EARi SUL ve;95,2
+jul/2027;EARi NE ve;70,3
+jul/2027;EARi NORTE ve;95,3
+jul/2027;EARi SIN ve;81
+jul/2027;EARf SIN ve;80
+jul/2027;EARf SE/CO ve;80,4
+jul/2027;EARf SUL ve;96,1
+jul/2027;EARf NE ve;66,3
+jul/2027;EARf NORTE ve;95,8
+jul/2027;CARGA ve;83890
+jul/2027;G.HIDRO ve;40204
+jul/2027;G.TERM ve;6905
+jul/2027;G.PEQ ve;8796
+jul/2027;GSF % ve;-22
+jul/2027;GF ve;51392
+jul/2027;ESS ve;47,535
+jul/2027;BALANCO ve;27985
+ago/2027;PLD SE/CO ve;145,06
+ago/2027;PLD SUL ve;145,06
+ago/2027;PLD NE ve;145,06
+ago/2027;PLD NORTE ve;145,06
+ago/2027;ENA SE/CO % ve;88
+ago/2027;ENA SUL % ve;85
+ago/2027;ENA NE % ve;83
+ago/2027;ENA NORTE % ve;84
+ago/2027;ENA SIN % ve;86
+ago/2027;G. BELO MONTE ve;470,7
+ago/2027;G. TUCURUI ve;2975
+ago/2027;F. LINHAO BM ve;174
+ago/2027;F. TOTAL N ve;1100,4
+ago/2027;VERT. N ve;2,5
+ago/2027;EARi SE/CO ve;79,5
+ago/2027;EARi SUL ve;95
+ago/2027;EARi NE ve;65,5
+ago/2027;EARi NORTE ve;95
+ago/2027;EARi SIN ve;79
+ago/2027;EARf SIN ve;75
+ago/2027;EARf SE/CO ve;76,2
+ago/2027;EARf SUL ve;86
+ago/2027;EARf NE ve;60,4
+ago/2027;EARf NORTE ve;85,7
+ago/2027;CARGA ve;85696
+ago/2027;G.HIDRO ve;38962
+ago/2027;G.TERM ve;7816
+ago/2027;G.PEQ ve;9991
+ago/2027;GSF % ve;-24
+ago/2027;GF ve;51574
+ago/2027;ESS ve;50,42
+ago/2027;BALANCO ve;28927
+set/2027;PLD SE/CO ve;216,97
+set/2027;PLD SUL ve;216,97
+set/2027;PLD NE ve;216,97
+set/2027;PLD NORTE ve;216,97
+set/2027;ENA SE/CO % ve;87
+set/2027;ENA SUL % ve;84
+set/2027;ENA NE % ve;83
+set/2027;ENA NORTE % ve;83
+set/2027;ENA SIN % ve;86
+set/2027;G. BELO MONTE ve;224,8
+set/2027;G. TUCURUI ve;3291,8
+set/2027;F. LINHAO BM ve;42,2
+set/2027;F. TOTAL N ve;835,3
+set/2027;VERT. N ve;5,7
+set/2027;EARi SE/CO ve;75,3
+set/2027;EARi SUL ve;85
+set/2027;EARi NE ve;59,7
+set/2027;EARi NORTE ve;85,1
+set/2027;EARi SIN ve;74
+set/2027;EARf SIN ve;69
+set/2027;EARf SE/CO ve;71,6
+set/2027;EARf SUL ve;75,4
+set/2027;EARf NE ve;54,2
+set/2027;EARf NORTE ve;69,8
+set/2027;CARGA ve;88677
+set/2027;G.HIDRO ve;40283
+set/2027;G.TERM ve;8988
+set/2027;G.PEQ ve;9776
+set/2027;GSF % ve;-28
+set/2027;GF ve;55897
+set/2027;ESS ve;41,765
+set/2027;BALANCO ve;29630
+out/2027;PLD SE/CO ve;210,55
+out/2027;PLD SUL ve;210,55
+out/2027;PLD NE ve;210,55
+out/2027;PLD NORTE ve;210,55
+out/2027;ENA SE/CO % ve;88
+out/2027;ENA SUL % ve;86
+out/2027;ENA NE % ve;83
+out/2027;ENA NORTE % ve;84
+out/2027;ENA SIN % ve;87
+out/2027;G. BELO MONTE ve;276,5
+out/2027;G. TUCURUI ve;3184,3
+out/2027;F. LINHAO BM ve;65,2
+out/2027;F. TOTAL N ve;820,1
+out/2027;VERT. N ve;3,8
+out/2027;EARi SE/CO ve;70,8
+out/2027;EARi SUL ve;74,5
+out/2027;EARi NE ve;53,6
+out/2027;EARi NORTE ve;69,4
+out/2027;EARi SIN ve;68
+out/2027;EARf SIN ve;64
+out/2027;EARf SE/CO ve;67,7
+out/2027;EARf SUL ve;83,1
+out/2027;EARf NE ve;47
+out/2027;EARf NORTE ve;54,3
+out/2027;CARGA ve;89808
+out/2027;G.HIDRO ve;43528
+out/2027;G.TERM ve;8982
+out/2027;G.PEQ ve;9756
+out/2027;GSF % ve;-23
+out/2027;GF ve;56671
+out/2027;ESS ve;41,447
+out/2027;BALANCO ve;27543
+nov/2027;PLD SE/CO ve;261,94
+nov/2027;PLD SUL ve;261,94
+nov/2027;PLD NE ve;261,94
+nov/2027;PLD NORTE ve;261,94
+nov/2027;ENA SE/CO % ve;89
+nov/2027;ENA SUL % ve;86
+nov/2027;ENA NE % ve;85
+nov/2027;ENA NORTE % ve;86
+nov/2027;ENA SIN % ve;88
+nov/2027;G. BELO MONTE ve;769,7
+nov/2027;G. TUCURUI ve;2622,6
+nov/2027;F. LINHAO BM ve;486,4
+nov/2027;F. TOTAL N ve;349,8
+nov/2027;VERT. N ve;3,7
+nov/2027;EARi SE/CO ve;66,9
+nov/2027;EARi SUL ve;82,2
+nov/2027;EARi NE ve;46,5
+nov/2027;EARi NORTE ve;54
+nov/2027;EARi SIN ve;64
+nov/2027;EARf SIN ve;62
+nov/2027;EARf SE/CO ve;65,9
+nov/2027;EARf SUL ve;72,2
+nov/2027;EARf NE ve;45,4
+nov/2027;EARf NORTE ve;45,4
+nov/2027;CARGA ve;89704
+nov/2027;G.HIDRO ve;47585
+nov/2027;G.TERM ve;9500
+nov/2027;G.PEQ ve;9658
+nov/2027;GSF % ve;-20
+nov/2027;GF ve;59613
+nov/2027;ESS ve;38,217
+nov/2027;BALANCO ve;22960
+dez/2027;PLD SE/CO ve;161,51
+dez/2027;PLD SUL ve;161,51
+dez/2027;PLD NE ve;161,51
+dez/2027;PLD NORTE ve;161,51
+dez/2027;ENA SE/CO % ve;89
+dez/2027;ENA SUL % ve;85
+dez/2027;ENA NE % ve;85
+dez/2027;ENA NORTE % ve;88
+dez/2027;ENA SIN % ve;88
+dez/2027;G. BELO MONTE ve;2138,6
+dez/2027;G. TUCURUI ve;2715,5
+dez/2027;F. LINHAO BM ve;1036,4
+dez/2027;F. TOTAL N ve;-550
+dez/2027;VERT. N ve;3
+dez/2027;EARi SE/CO ve;65,2
+dez/2027;EARi SUL ve;71,3
+dez/2027;EARi NE ve;44,9
+dez/2027;EARi NORTE ve;45,3
+dez/2027;EARi SIN ve;61
+dez/2027;EARf SIN ve;64
+dez/2027;EARf SE/CO ve;65,6
+dez/2027;EARf SUL ve;84
+dez/2027;EARf NE ve;54,2
+dez/2027;EARf NORTE ve;43,1
+dez/2027;CARGA ve;89844
+dez/2027;G.HIDRO ve;47950
+dez/2027;G.TERM ve;6423
+dez/2027;G.PEQ ve;9818
+dez/2027;GSF % ve;-17
+dez/2027;GF ve;58060
+dez/2027;ESS ve;53,959
+dez/2027;BALANCO ve;25653
+nov/2026;PLD SE/CO li;57,31
+nov/2026;PLD SUL li;57,31
+nov/2026;PLD NE li;57,31
+nov/2026;PLD NORTE li;57,31
+nov/2026;ENA SE/CO % li;130
+nov/2026;ENA SUL % li;137
+nov/2026;ENA NE % li;67
+nov/2026;ENA NORTE % li;66
+nov/2026;ENA SIN % li;119
+nov/2026;G. BELO MONTE li;351,4
+nov/2026;G. TUCURUI li;3556
+nov/2026;F. LINHAO BM li;47,2
+nov/2026;F. TOTAL N li;2399,2
+nov/2026;VERT. N li;3,1
+nov/2026;EARi SE/CO li;57,4
+nov/2026;EARi SUL li;87,8
+nov/2026;EARi NE li;58,5
+nov/2026;EARi NORTE li;54,2
+nov/2026;EARi SIN li;60
+nov/2026;EARf SIN li;59
+nov/2026;EARf SE/CO li;57,9
+nov/2026;EARf SUL li;85,6
+nov/2026;EARf NE li;57,8
+nov/2026;EARf NORTE li;51,2
+nov/2026;CARGA li;89434
+nov/2026;G.HIDRO li;51584
+nov/2026;G.TERM li;6063
+nov/2026;G.PEQ li;8760
+nov/2026;GSF % li;-13
+nov/2026;GF li;59613
+nov/2026;ESS li;17,972
+nov/2026;BALANCO li;23026
+dez/2026;PLD SE/CO li;57,31
+dez/2026;PLD SUL li;57,31
+dez/2026;PLD NE li;57,31
+dez/2026;PLD NORTE li;57,31
+dez/2026;ENA SE/CO % li;86
+dez/2026;ENA SUL % li;82
+dez/2026;ENA NE % li;82
+dez/2026;ENA NORTE % li;84
+dez/2026;ENA SIN % li;85
+dez/2026;G. BELO MONTE li;2045,5
+dez/2026;G. TUCURUI li;4828,1
+dez/2026;F. LINHAO BM li;1482,3
+dez/2026;F. TOTAL N li;-1253,7
+dez/2026;VERT. N li;23,4
+dez/2026;EARi SE/CO li;57,3
+dez/2026;EARi SUL li;84,4
+dez/2026;EARi NE li;56,6
+dez/2026;EARi NORTE li;49
+dez/2026;EARi SIN li;59
+dez/2026;EARf SIN li;60
+dez/2026;EARf SE/CO li;58
+dez/2026;EARf SUL li;78,4
+dez/2026;EARf NE li;65,8
+dez/2026;EARf NORTE li;37,4
+dez/2026;CARGA li;89828
+dez/2026;G.HIDRO li;53008
+dez/2026;G.TERM li;5164
+dez/2026;G.PEQ li;8956
+dez/2026;GSF % li;-10
+dez/2026;GF li;58060
+dez/2026;ESS li;18,45
+dez/2026;BALANCO li;22701
+jan/2027;PLD SE/CO li;88,43
+jan/2027;PLD SUL li;88,43
+jan/2027;PLD NE li;88,43
+jan/2027;PLD NORTE li;88,43
+jan/2027;ENA SE/CO % li;76
+jan/2027;ENA SUL % li;74
+jan/2027;ENA NE % li;71
+jan/2027;ENA NORTE % li;73
+jan/2027;ENA SIN % li;74
+jan/2027;G. BELO MONTE li;4132,1
+jan/2027;G. TUCURUI li;2860,1
+jan/2027;F. LINHAO BM li;1992,9
+jan/2027;F. TOTAL N li;-1992,9
+jan/2027;VERT. N li;2,8
+jan/2027;EARi SE/CO li;57,3
+jan/2027;EARi SUL li;77,5
+jan/2027;EARi NE li;65
+jan/2027;EARi NORTE li;37
+jan/2027;EARi SIN li;59
+jan/2027;EARf SIN li;63
+jan/2027;EARf SE/CO li;63,8
+jan/2027;EARf SUL li;47,5
+jan/2027;EARf NE li;68,9
+jan/2027;EARf NORTE li;53,1
+jan/2027;CARGA li;91140
+jan/2027;G.HIDRO li;60060
+jan/2027;G.TERM li;4330
+jan/2027;G.PEQ li;9113
+jan/2027;GSF % li;0
+jan/2027;GF li;60049
+jan/2027;ESS li;51,563
+jan/2027;BALANCO li;17638
+fev/2027;PLD SE/CO li;109
+fev/2027;PLD SUL li;109
+fev/2027;PLD NE li;57,31
+fev/2027;PLD NORTE li;57,31
+fev/2027;ENA SE/CO % li;76
+fev/2027;ENA SUL % li;72
+fev/2027;ENA NE % li;71
+fev/2027;ENA NORTE % li;74
+fev/2027;ENA SIN % li;75
+fev/2027;G. BELO MONTE li;6857,1
+fev/2027;G. TUCURUI li;2044,4
+fev/2027;F. LINHAO BM li;3906,2
+fev/2027;F. TOTAL N li;-3218,3
+fev/2027;VERT. N li;5
+fev/2027;EARi SE/CO li;63,1
+fev/2027;EARi SUL li;46,9
+fev/2027;EARi NE li;68,1
+fev/2027;EARi NORTE li;52,5
+fev/2027;EARi SIN li;62
+fev/2027;EARf SIN li;68
+fev/2027;EARf SE/CO li;68,9
+fev/2027;EARf SUL li;51,1
+fev/2027;EARf NE li;66
+fev/2027;EARf NORTE li;91,8
+fev/2027;CARGA li;93774
+fev/2027;G.HIDRO li;55646
+fev/2027;G.TERM li;3897
+fev/2027;G.PEQ li;9574
+fev/2027;GSF % li;-1
+fev/2027;GF li;55986
+fev/2027;ESS li;61,109
+fev/2027;BALANCO li;24657
+mar/2027;PLD SE/CO li;150,33
+mar/2027;PLD SUL li;150,33
+mar/2027;PLD NE li;57,31
+mar/2027;PLD NORTE li;57,31
+mar/2027;ENA SE/CO % li;76
+mar/2027;ENA SUL % li;72
+mar/2027;ENA NE % li;72
+mar/2027;ENA NORTE % li;78
+mar/2027;ENA SIN % li;76
+mar/2027;G. BELO MONTE li;7625,8
+mar/2027;G. TUCURUI li;5730,9
+mar/2027;F. LINHAO BM li;3915,3
+mar/2027;F. TOTAL N li;-6138,4
+mar/2027;VERT. N li;3755,4
+mar/2027;EARi SE/CO li;68,1
+mar/2027;EARi SUL li;50,5
+mar/2027;EARi NE li;65,3
+mar/2027;EARi NORTE li;91
+mar/2027;EARi SIN li;68
+mar/2027;EARf SIN li;73
+mar/2027;EARf SE/CO li;74,4
+mar/2027;EARf SUL li;44,6
+mar/2027;EARf NE li;75,3
+mar/2027;EARf NORTE li;92,1
+mar/2027;CARGA li;92813
+mar/2027;G.HIDRO li;56568
+mar/2027;G.TERM li;4113
+mar/2027;G.PEQ li;9381
+mar/2027;GSF % li;-1
+mar/2027;GF li;57080
+mar/2027;ESS li;58,076
+mar/2027;BALANCO li;22752
+abr/2027;PLD SE/CO li;232,14
+abr/2027;PLD SUL li;232,14
+abr/2027;PLD NE li;57,31
+abr/2027;PLD NORTE li;57,31
+abr/2027;ENA SE/CO % li;76
+abr/2027;ENA SUL % li;72
+abr/2027;ENA NE % li;71
+abr/2027;ENA NORTE % li;78
+abr/2027;ENA SIN % li;76
+abr/2027;G. BELO MONTE li;6138,9
+abr/2027;G. TUCURUI li;7159
+abr/2027;F. LINHAO BM li;3941,7
+abr/2027;F. TOTAL N li;-5829,2
+abr/2027;VERT. N li;2539,5
+abr/2027;EARi SE/CO li;73,5
+abr/2027;EARi SUL li;44,2
+abr/2027;EARi NE li;74,5
+abr/2027;EARi NORTE li;91,3
+abr/2027;EARi SIN li;73
+abr/2027;EARf SIN li;74
+abr/2027;EARf SE/CO li;76,8
+abr/2027;EARf SUL li;35,1
+abr/2027;EARf NE li;75,1
+abr/2027;EARf NORTE li;92,9
+abr/2027;CARGA li;89449
+abr/2027;G.HIDRO li;54099
+abr/2027;G.TERM li;3483
+abr/2027;G.PEQ li;9214
+abr/2027;GSF % li;10
+abr/2027;GF li;49298
+abr/2027;ESS li;52,155
+abr/2027;BALANCO li;22653
+mai/2027;PLD SE/CO li;287,19
+mai/2027;PLD SUL li;287,19
+mai/2027;PLD NE li;57,31
+mai/2027;PLD NORTE li;57,31
+mai/2027;ENA SE/CO % li;76
+mai/2027;ENA SUL % li;74
+mai/2027;ENA NE % li;70
+mai/2027;ENA NORTE % li;76
+mai/2027;ENA SIN % li;75
+mai/2027;G. BELO MONTE li;5914,9
+mai/2027;G. TUCURUI li;5980,5
+mai/2027;F. LINHAO BM li;3789
+mai/2027;F. TOTAL N li;-4463,1
+mai/2027;VERT. N li;1942,9
+mai/2027;EARi SE/CO li;75,9
+mai/2027;EARi SUL li;34,7
+mai/2027;EARi NE li;74,2
+mai/2027;EARi NORTE li;92,2
+mai/2027;EARi SIN li;74
+mai/2027;EARf SIN li;73
+mai/2027;EARf SE/CO li;75,7
+mai/2027;EARf SUL li;29,1
+mai/2027;EARf NE li;73,5
+mai/2027;EARf NORTE li;93,9
+mai/2027;CARGA li;86663
+mai/2027;G.HIDRO li;49066
+mai/2027;G.TERM li;3338
+mai/2027;G.PEQ li;8604
+mai/2027;GSF % li;11
+mai/2027;GF li;44386
+mai/2027;ESS li;53,809
+mai/2027;BALANCO li;25655
+jun/2027;PLD SE/CO li;236,09
+jun/2027;PLD SUL li;236,09
+jun/2027;PLD NE li;221,74
+jun/2027;PLD NORTE li;221,74
+jun/2027;ENA SE/CO % li;75
+jun/2027;ENA SUL % li;75
+jun/2027;ENA NE % li;70
+jun/2027;ENA NORTE % li;72
+jun/2027;ENA SIN % li;74
+jun/2027;G. BELO MONTE li;2960,5
+jun/2027;G. TUCURUI li;3582,1
+jun/2027;F. LINHAO BM li;3800
+jun/2027;F. TOTAL N li;-2173,8
+jun/2027;VERT. N li;12,9
+jun/2027;EARi SE/CO li;74,9
+jun/2027;EARi SUL li;28,8
+jun/2027;EARi NE li;72,7
+jun/2027;EARi NORTE li;93,1
+jun/2027;EARi SIN li;72
+jun/2027;EARf SIN li;71
+jun/2027;EARf SE/CO li;73,3
+jun/2027;EARf SUL li;33,4
+jun/2027;EARf NE li;68,7
+jun/2027;EARf NORTE li;91,7
+jun/2027;CARGA li;84330
+jun/2027;G.HIDRO li;41997
+jun/2027;G.TERM li;6219
+jun/2027;G.PEQ li;8424
+jun/2027;GSF % li;-3
+jun/2027;GF li;43423
+jun/2027;ESS li;45,895
+jun/2027;BALANCO li;27689
+jul/2027;PLD SE/CO li;304,94
+jul/2027;PLD SUL li;304,94
+jul/2027;PLD NE li;304,72
+jul/2027;PLD NORTE li;304,72
+jul/2027;ENA SE/CO % li;74
+jul/2027;ENA SUL % li;72
+jul/2027;ENA NE % li;71
+jul/2027;ENA NORTE % li;71
+jul/2027;ENA SIN % li;73
+jul/2027;G. BELO MONTE li;906,9
+jul/2027;G. TUCURUI li;1608,7
+jul/2027;F. LINHAO BM li;2987,8
+jul/2027;F. TOTAL N li;1014,2
+jul/2027;VERT. N li;3,4
+jul/2027;EARi SE/CO li;72,4
+jul/2027;EARi SUL li;33
+jul/2027;EARi NE li;67,9
+jul/2027;EARi NORTE li;91
+jul/2027;EARi SIN li;70
+jul/2027;EARf SIN li;67
+jul/2027;EARf SE/CO li;69
+jul/2027;EARf SUL li;38,7
+jul/2027;EARf NE li;61,7
+jul/2027;EARf NORTE li;93,4
+jul/2027;CARGA li;83890
+jul/2027;G.HIDRO li;36549
+jul/2027;G.TERM li;9186
+jul/2027;G.PEQ li;8796
+jul/2027;GSF % li;-29
+jul/2027;GF li;51392
+jul/2027;ESS li;31,904
+jul/2027;BALANCO li;29359
+ago/2027;PLD SE/CO li;370,34
+ago/2027;PLD SUL li;370,34
+ago/2027;PLD NE li;370,34
+ago/2027;PLD NORTE li;370,34
+ago/2027;ENA SE/CO % li;75
+ago/2027;ENA SUL % li;72
+ago/2027;ENA NE % li;71
+ago/2027;ENA NORTE % li;68
+ago/2027;ENA SIN % li;73
+ago/2027;G. BELO MONTE li;299,8
+ago/2027;G. TUCURUI li;2711,6
+ago/2027;F. LINHAO BM li;1565,4
+ago/2027;F. TOTAL N li;-60,7
+ago/2027;VERT. N li;3,4
+ago/2027;EARi SE/CO li;68,2
+ago/2027;EARi SUL li;38,3
+ago/2027;EARi NE li;61
+ago/2027;EARi NORTE li;92,7
+ago/2027;EARi SIN li;66
+ago/2027;EARf SIN li;61
+ago/2027;EARf SE/CO li;63,6
+ago/2027;EARf SUL li;38,5
+ago/2027;EARf NE li;53,4
+ago/2027;EARf NORTE li;83,2
+ago/2027;CARGA li;85696
+ago/2027;G.HIDRO li;35790
+ago/2027;G.TERM li;10675
+ago/2027;G.PEQ li;9991
+ago/2027;GSF % li;-31
+ago/2027;GF li;51574
+ago/2027;ESS li;29,664
+ago/2027;BALANCO li;29240
+set/2027;PLD SE/CO li;408,37
+set/2027;PLD SUL li;408,37
+set/2027;PLD NE li;408,37
+set/2027;PLD NORTE li;408,37
+set/2027;ENA SE/CO % li;74
+set/2027;ENA SUL % li;71
+set/2027;ENA NE % li;71
+set/2027;ENA NORTE % li;67
+set/2027;ENA SIN % li;72
+set/2027;G. BELO MONTE li;180,6
+set/2027;G. TUCURUI li;3269,7
+set/2027;F. LINHAO BM li;1577,2
+set/2027;F. TOTAL N li;-141,6
+set/2027;VERT. N li;4,9
+set/2027;EARi SE/CO li;62,9
+set/2027;EARi SUL li;38,1
+set/2027;EARi NE li;52,8
+set/2027;EARi NORTE li;82,6
+set/2027;EARi SIN li;60
+set/2027;EARf SIN li;55
+set/2027;EARf SE/CO li;57,6
+set/2027;EARf SUL li;38
+set/2027;EARf NE li;45,3
+set/2027;EARf NORTE li;66,3
+set/2027;CARGA li;88677
+set/2027;G.HIDRO li;38490
+set/2027;G.TERM li;10830
+set/2027;G.PEQ li;9776
+set/2027;GSF % li;-31
+set/2027;GF li;55897
+set/2027;ESS li;26,151
+set/2027;BALANCO li;29581
+out/2027;PLD SE/CO li;425,4
+out/2027;PLD SUL li;425,4
+out/2027;PLD NE li;425,4
+out/2027;PLD NORTE li;425,4
+out/2027;ENA SE/CO % li;75
+out/2027;ENA SUL % li;73
+out/2027;ENA NE % li;71
+out/2027;ENA NORTE % li;68
+out/2027;ENA SIN % li;73
+out/2027;G. BELO MONTE li;182
+out/2027;G. TUCURUI li;3149
+out/2027;F. LINHAO BM li;1422,1
+out/2027;F. TOTAL N li;23,9
+out/2027;VERT. N li;3,6
+out/2027;EARi SE/CO li;56,9
+out/2027;EARi SUL li;37,6
+out/2027;EARi NE li;44,8
+out/2027;EARi NORTE li;65,7
+out/2027;EARi SIN li;54
+out/2027;EARf SIN li;50
+out/2027;EARf SE/CO li;53,2
+out/2027;EARf SUL li;46
+out/2027;EARf NE li;38
+out/2027;EARf NORTE li;50,1
+out/2027;CARGA li;89808
+out/2027;G.HIDRO li;38904
+out/2027;G.TERM li;12969
+out/2027;G.PEQ li;9756
+out/2027;GSF % li;-31
+out/2027;GF li;56671
+out/2027;ESS li;24,456
+out/2027;BALANCO li;28179
+nov/2027;PLD SE/CO li;528,01
+nov/2027;PLD SUL li;528,01
+nov/2027;PLD NE li;528,01
+nov/2027;PLD NORTE li;528,01
+nov/2027;ENA SE/CO % li;75
+nov/2027;ENA SUL % li;73
+nov/2027;ENA NE % li;72
+nov/2027;ENA NORTE % li;71
+nov/2027;ENA SIN % li;74
+nov/2027;G. BELO MONTE li;565,7
+nov/2027;G. TUCURUI li;2476,7
+nov/2027;F. LINHAO BM li;365,1
+nov/2027;F. TOTAL N li;191,5
+nov/2027;VERT. N li;4,1
+nov/2027;EARi SE/CO li;52,6
+nov/2027;EARi SUL li;45,5
+nov/2027;EARi NE li;37,6
+nov/2027;EARi NORTE li;49,5
+nov/2027;EARi SIN li;49
+nov/2027;EARf SIN li;47
+nov/2027;EARf SE/CO li;51
+nov/2027;EARf SUL li;32,8
+nov/2027;EARf NE li;35,3
+nov/2027;EARf NORTE li;42
+nov/2027;CARGA li;89704
+nov/2027;G.HIDRO li;42589
+nov/2027;G.TERM li;13525
+nov/2027;G.PEQ li;9658
+nov/2027;GSF % li;-29
+nov/2027;GF li;59613
+nov/2027;ESS li;18,941
+nov/2027;BALANCO li;23932
+dez/2027;PLD SE/CO li;550,79
+dez/2027;PLD SUL li;550,79
+dez/2027;PLD NE li;550,79
+dez/2027;PLD NORTE li;550,79
+dez/2027;ENA SE/CO % li;75
+dez/2027;ENA SUL % li;72
+dez/2027;ENA NE % li;72
+dez/2027;ENA NORTE % li;73
+dez/2027;ENA SIN % li;74
+dez/2027;G. BELO MONTE li;1721,1
+dez/2027;G. TUCURUI li;2727,2
+dez/2027;F. LINHAO BM li;1698,5
+dez/2027;F. TOTAL N li;-1698,5
+dez/2027;VERT. N li;2,3
+dez/2027;EARi SE/CO li;50,4
+dez/2027;EARi SUL li;32,4
+dez/2027;EARi NE li;34,9
+dez/2027;EARi NORTE li;41,6
+dez/2027;EARi SIN li;46
+dez/2027;EARf SIN li;48
+dez/2027;EARf SE/CO li;51,7
+dez/2027;EARf SUL li;36,3
+dez/2027;EARf NE li;39,9
+dez/2027;EARf NORTE li;40,1
+dez/2027;CARGA li;89844
+dez/2027;G.HIDRO li;43518
+dez/2027;G.TERM li;12178
+dez/2027;G.PEQ li;9818
+dez/2027;GSF % li;-25
+dez/2027;GF li;58060
+dez/2027;ESS li;17,786
+dez/2027;BALANCO li;24330
+nov/2026;PLD SE/CO ls;57,31
+nov/2026;PLD SUL ls;57,31
+nov/2026;PLD NE ls;57,31
+nov/2026;PLD NORTE ls;57,31
+nov/2026;ENA SE/CO % ls;137
+nov/2026;ENA SUL % ls;162
+nov/2026;ENA NE % ls;67
+nov/2026;ENA NORTE % ls;71
+nov/2026;ENA SIN % ls;129
+nov/2026;G. BELO MONTE ls;536,3
+nov/2026;G. TUCURUI ls;3719,3
+nov/2026;F. LINHAO BM ls;382,7
+nov/2026;F. TOTAL N ls;1958,4
+nov/2026;VERT. N ls;2,6
+nov/2026;EARi SE/CO ls;57,9
+nov/2026;EARi SUL ls;90
+nov/2026;EARi NE ls;58,8
+nov/2026;EARi NORTE ls;54,9
+nov/2026;EARi SIN ls;60
+nov/2026;EARf SIN ls;60
+nov/2026;EARf SE/CO ls;58,4
+nov/2026;EARf SUL ls;89,7
+nov/2026;EARf NE ls;56,5
+nov/2026;EARf NORTE ls;51,6
+nov/2026;CARGA ls;89434
+nov/2026;G.HIDRO ls;51670
+nov/2026;G.TERM ls;6063
+nov/2026;G.PEQ ls;8760
+nov/2026;GSF % ls;-13
+nov/2026;GF ls;59613
+nov/2026;ESS ls;17,972
+nov/2026;BALANCO ls;22940
+dez/2026;PLD SE/CO ls;57,31
+dez/2026;PLD SUL ls;57,31
+dez/2026;PLD NE ls;57,31
+dez/2026;PLD NORTE ls;57,31
+dez/2026;ENA SE/CO % ls;111
+dez/2026;ENA SUL % ls;106
+dez/2026;ENA NE % ls;106
+dez/2026;ENA NORTE % ls;111
+dez/2026;ENA SIN % ls;110
+dez/2026;G. BELO MONTE ls;2708,9
+dez/2026;G. TUCURUI ls;5536,5
+dez/2026;F. LINHAO BM ls;1791,7
+dez/2026;F. TOTAL N ls;-1807,7
+dez/2026;VERT. N ls;1138,8
+dez/2026;EARi SE/CO ls;58
+dez/2026;EARi SUL ls;87,9
+dez/2026;EARi NE ls;55,7
+dez/2026;EARi NORTE ls;49,1
+dez/2026;EARi SIN ls;59
+dez/2026;EARf SIN ls;63
+dez/2026;EARf SE/CO ls;59,9
+dez/2026;EARf SUL ls;94
+dez/2026;EARf NE ls;73,1
+dez/2026;EARf NORTE ls;38,7
+dez/2026;CARGA ls;89828
+dez/2026;G.HIDRO ls;52008
+dez/2026;G.TERM ls;5163
+dez/2026;G.PEQ ls;8956
+dez/2026;GSF % ls;-6
+dez/2026;GF ls;58060
+dez/2026;ESS ls;18,45
+dez/2026;BALANCO ls;23701
+jan/2027;PLD SE/CO ls;57,31
+jan/2027;PLD SUL ls;57,31
+jan/2027;PLD NE ls;57,31
+jan/2027;PLD NORTE ls;57,31
+jan/2027;ENA SE/CO % ls;99
+jan/2027;ENA SUL % ls;98
+jan/2027;ENA NE % ls;94
+jan/2027;ENA NORTE % ls;98
+jan/2027;ENA SIN % ls;98
+jan/2027;G. BELO MONTE ls;5553,7
+jan/2027;G. TUCURUI ls;2528
+jan/2027;F. LINHAO BM ls;2222,5
+jan/2027;F. TOTAL N ls;-2526,3
+jan/2027;VERT. N ls;691,4
+jan/2027;EARi SE/CO ls;59,2
+jan/2027;EARi SUL ls;92,9
+jan/2027;EARi NE ls;72,3
+jan/2027;EARi NORTE ls;38,3
+jan/2027;EARi SIN ls;63
+jan/2027;EARf SIN ls;70
+jan/2027;EARf SE/CO ls;70,6
+jan/2027;EARf SUL ls;95,4
+jan/2027;EARf NE ls;68,4
+jan/2027;EARf NORTE ls;42,7
+jan/2027;CARGA ls;91140
+jan/2027;G.HIDRO ls;57067
+jan/2027;G.TERM ls;4057
+jan/2027;G.PEQ ls;9113
+jan/2027;GSF % ls;-5
+jan/2027;GF ls;60049
+jan/2027;ESS ls;55,461
+jan/2027;BALANCO ls;20904
+fev/2027;PLD SE/CO ls;57,31
+fev/2027;PLD SUL ls;57,31
+fev/2027;PLD NE ls;57,31
+fev/2027;PLD NORTE ls;57,31
+fev/2027;ENA SE/CO % ls;100
+fev/2027;ENA SUL % ls;95
+fev/2027;ENA NE % ls;94
+fev/2027;ENA NORTE % ls;100
+fev/2027;ENA SIN % ls;99
+fev/2027;G. BELO MONTE ls;9176,7
+fev/2027;G. TUCURUI ls;1629,8
+fev/2027;F. LINHAO BM ls;3679,7
+fev/2027;F. TOTAL N ls;-3744,2
+fev/2027;VERT. N ls;2427,1
+fev/2027;EARi SE/CO ls;69,8
+fev/2027;EARi SUL ls;94,3
+fev/2027;EARi NE ls;67,6
+fev/2027;EARi NORTE ls;42,6
+fev/2027;EARi SIN ls;70
+fev/2027;EARf SIN ls;76
+fev/2027;EARf SE/CO ls;78,8
+fev/2027;EARf SUL ls;96,2
+fev/2027;EARf NE ls;65,1
+fev/2027;EARf NORTE ls;43,2
+fev/2027;CARGA ls;93774
+fev/2027;G.HIDRO ls;58792
+fev/2027;G.TERM ls;3580
+fev/2027;G.PEQ ls;9574
+fev/2027;GSF % ls;5
+fev/2027;GF ls;55986
+fev/2027;ESS ls;64,141
+fev/2027;BALANCO ls;21827
+mar/2027;PLD SE/CO ls;57,31
+mar/2027;PLD SUL ls;57,31
+mar/2027;PLD NE ls;57,31
+mar/2027;PLD NORTE ls;57,31
+mar/2027;ENA SE/CO % ls;100
+mar/2027;ENA SUL % ls;96
+mar/2027;ENA NE % ls;95
+mar/2027;ENA NORTE % ls;104
+mar/2027;ENA SIN % ls;100
+mar/2027;G. BELO MONTE ls;9542
+mar/2027;G. TUCURUI ls;1459,8
+mar/2027;F. LINHAO BM ls;3528,5
+mar/2027;F. TOTAL N ls;-3783,6
+mar/2027;VERT. N ls;2737,3
+mar/2027;EARi SE/CO ls;77,9
+mar/2027;EARi SUL ls;95,1
+mar/2027;EARi NE ls;64,4
+mar/2027;EARi NORTE ls;43,1
+mar/2027;EARi SIN ls;75
+mar/2027;EARf SIN ls;81
+mar/2027;EARf SE/CO ls;83,2
+mar/2027;EARf SUL ls;96,3
+mar/2027;EARf NE ls;75,8
+mar/2027;EARf NORTE ls;43,7
+mar/2027;CARGA ls;92813
+mar/2027;G.HIDRO ls;56914
+mar/2027;G.TERM ls;3470
+mar/2027;G.PEQ ls;9381
+mar/2027;GSF % ls;0
+mar/2027;GF ls;57080
+mar/2027;ESS ls;63,454
+mar/2027;BALANCO ls;23049
+abr/2027;PLD SE/CO ls;57,31
+abr/2027;PLD SUL ls;57,31
+abr/2027;PLD NE ls;57,31
+abr/2027;PLD NORTE ls;57,31
+abr/2027;ENA SE/CO % ls;100
+abr/2027;ENA SUL % ls;96
+abr/2027;ENA NE % ls;93
+abr/2027;ENA NORTE % ls;106
+abr/2027;ENA SIN % ls;101
+abr/2027;G. BELO MONTE ls;9551,8
+abr/2027;G. TUCURUI ls;1596,8
+abr/2027;F. LINHAO BM ls;3572,3
+abr/2027;F. TOTAL N ls;-3672
+abr/2027;VERT. N ls;2654,3
+abr/2027;EARi SE/CO ls;82,2
+abr/2027;EARi SUL ls;95,2
+abr/2027;EARi NE ls;74,9
+abr/2027;EARi NORTE ls;43,6
+abr/2027;EARi SIN ls;80
+abr/2027;EARf SIN ls;82
+abr/2027;EARf SE/CO ls;85,1
+abr/2027;EARf SUL ls;96,3
+abr/2027;EARf NE ls;75,8
+abr/2027;EARf NORTE ls;44,9
+abr/2027;CARGA ls;89449
+abr/2027;G.HIDRO ls;55132
+abr/2027;G.TERM ls;2515
+abr/2027;G.PEQ ls;9214
+abr/2027;GSF % ls;12
+abr/2027;GF ls;49298
+abr/2027;ESS ls;62,212
+abr/2027;BALANCO ls;22588
+mai/2027;PLD SE/CO ls;57,31
+mai/2027;PLD SUL ls;57,31
+mai/2027;PLD NE ls;57,31
+mai/2027;PLD NORTE ls;57,31
+mai/2027;ENA SE/CO % ls;100
+mai/2027;ENA SUL % ls;98
+mai/2027;ENA NE % ls;93
+mai/2027;ENA NORTE % ls;104
+mai/2027;ENA SIN % ls;100
+mai/2027;G. BELO MONTE ls;8813,8
+mai/2027;G. TUCURUI ls;1365
+mai/2027;F. LINHAO BM ls;2809,9
+mai/2027;F. TOTAL N ls;-2804,8
+mai/2027;VERT. N ls;1823,1
+mai/2027;EARi SE/CO ls;84,1
+mai/2027;EARi SUL ls;95,2
+mai/2027;EARi NE ls;74,9
+mai/2027;EARi NORTE ls;44,8
+mai/2027;EARi SIN ls;81
+mai/2027;EARf SIN ls;85
+mai/2027;EARf SE/CO ls;85,7
+mai/2027;EARf SUL ls;96,3
+mai/2027;EARf NE ls;74,7
+mai/2027;EARf NORTE ls;91,3
+mai/2027;CARGA ls;86663
+mai/2027;G.HIDRO ls;51317
+mai/2027;G.TERM ls;2700
+mai/2027;G.PEQ ls;8604
+mai/2027;GSF % ls;16
+mai/2027;GF ls;44386
+mai/2027;ESS ls;66,434
+mai/2027;BALANCO ls;24042
+jun/2027;PLD SE/CO ls;57,31
+jun/2027;PLD SUL ls;57,31
+jun/2027;PLD NE ls;57,31
+jun/2027;PLD NORTE ls;57,31
+jun/2027;ENA SE/CO % ls;100
+jun/2027;ENA SUL % ls;100
+jun/2027;ENA NE % ls;93
+jun/2027;ENA NORTE % ls;99
+jun/2027;ENA SIN % ls;99
+jun/2027;G. BELO MONTE ls;4134,7
+jun/2027;G. TUCURUI ls;3426,8
+jun/2027;F. LINHAO BM ls;1087,5
+jun/2027;F. TOTAL N ls;-376,5
+jun/2027;VERT. N ls;1784,6
+jun/2027;EARi SE/CO ls;84,7
+jun/2027;EARi SUL ls;95,2
+jun/2027;EARi NE ls;73,8
+jun/2027;EARi NORTE ls;90,6
+jun/2027;EARi SIN ls;84
+jun/2027;EARf SIN ls;84
+jun/2027;EARf SE/CO ls;85
+jun/2027;EARf SUL ls;96,3
+jun/2027;EARf NE ls;72,2
+jun/2027;EARf NORTE ls;96,1
+jun/2027;CARGA ls;84330
+jun/2027;G.HIDRO ls;47325
+jun/2027;G.TERM ls;3630
+jun/2027;G.PEQ ls;8424
+jun/2027;GSF % ls;9
+jun/2027;GF ls;43423
+jun/2027;ESS ls;68,533
+jun/2027;BALANCO ls;24951
+jul/2027;PLD SE/CO ls;57,31
+jul/2027;PLD SUL ls;57,31
+jul/2027;PLD NE ls;57,31
+jul/2027;PLD NORTE ls;57,31
+jul/2027;ENA SE/CO % ls;99
+jul/2027;ENA SUL % ls;95
+jul/2027;ENA NE % ls;93
+jul/2027;ENA NORTE % ls;98
+jul/2027;ENA SIN % ls;97
+jul/2027;G. BELO MONTE ls;1331,5
+jul/2027;G. TUCURUI ls;2468,8
+jul/2027;F. LINHAO BM ls;979,9
+jul/2027;F. TOTAL N ls;1958,6
+jul/2027;VERT. N ls;587,2
+jul/2027;EARi SE/CO ls;84,1
+jul/2027;EARi SUL ls;95,2
+jul/2027;EARi NE ls;71,3
+jul/2027;EARi NORTE ls;95,3
+jul/2027;EARi SIN ls;83
+jul/2027;EARf SIN ls;82
+jul/2027;EARf SE/CO ls;83,5
+jul/2027;EARf SUL ls;96,3
+jul/2027;EARf NE ls;68,2
+jul/2027;EARf NORTE ls;95,8
+jul/2027;CARGA ls;83890
+jul/2027;G.HIDRO ls;42101
+jul/2027;G.TERM ls;5743
+jul/2027;G.PEQ ls;8796
+jul/2027;GSF % ls;-18
+jul/2027;GF ls;51392
+jul/2027;ESS ls;57,736
+jul/2027;BALANCO ls;27251
+ago/2027;PLD SE/CO ls;130,65
+ago/2027;PLD SUL ls;130,65
+ago/2027;PLD NE ls;130,65
+ago/2027;PLD NORTE ls;130,65
+ago/2027;ENA SE/CO % ls;99
+ago/2027;ENA SUL % ls;95
+ago/2027;ENA NE % ls;93
+ago/2027;ENA NORTE % ls;96
+ago/2027;ENA SIN % ls;97
+ago/2027;G. BELO MONTE ls;605,9
+ago/2027;G. TUCURUI ls;3135,5
+ago/2027;F. LINHAO BM ls;265,7
+ago/2027;F. TOTAL N ls;726,1
+ago/2027;VERT. N ls;2,8
+ago/2027;EARi SE/CO ls;82,5
+ago/2027;EARi SUL ls;95,2
+ago/2027;EARi NE ls;67,4
+ago/2027;EARi NORTE ls;95
+ago/2027;EARi SIN ls;81
+ago/2027;EARf SIN ls;78
+ago/2027;EARf SE/CO ls;80,3
+ago/2027;EARf SUL ls;91,9
+ago/2027;EARf NE ls;62,8
+ago/2027;EARf NORTE ls;85,7
+ago/2027;CARGA ls;85696
+ago/2027;G.HIDRO ls;39743
+ago/2027;G.TERM ls;7565
+ago/2027;G.PEQ ls;9991
+ago/2027;GSF % ls;-23
+ago/2027;GF ls;51574
+ago/2027;ESS ls;52,05
+ago/2027;BALANCO ls;28397
+set/2027;PLD SE/CO ls;144,65
+set/2027;PLD SUL ls;144,64
+set/2027;PLD NE ls;144,64
+set/2027;PLD NORTE ls;144,65
+set/2027;ENA SE/CO % ls;98
+set/2027;ENA SUL % ls;94
+set/2027;ENA NE % ls;93
+set/2027;ENA NORTE % ls;96
+set/2027;ENA SIN % ls;96
+set/2027;G. BELO MONTE ls;318
+set/2027;G. TUCURUI ls;3395
+set/2027;F. LINHAO BM ls;49,5
+set/2027;F. TOTAL N ls;1184,5
+set/2027;VERT. N ls;5,4
+set/2027;EARi SE/CO ls;79,4
+set/2027;EARi SUL ls;90,9
+set/2027;EARi NE ls;62,1
+set/2027;EARi NORTE ls;85,1
+set/2027;EARi SIN ls;77
+set/2027;EARf SIN ls;73
+set/2027;EARf SE/CO ls;76,5
+set/2027;EARf SUL ls;85,5
+set/2027;EARf NE ls;56,9
+set/2027;EARf NORTE ls;69,4
+set/2027;CARGA ls;88677
+set/2027;G.HIDRO ls;41622
+set/2027;G.TERM ls;7944
+set/2027;G.PEQ ls;9776
+set/2027;GSF % ls;-26
+set/2027;GF ls;55897
+set/2027;ESS ls;49,146
+set/2027;BALANCO ls;29335
+out/2027;PLD SE/CO ls;150,72
+out/2027;PLD SUL ls;150,72
+out/2027;PLD NE ls;150,72
+out/2027;PLD NORTE ls;150,72
+out/2027;ENA SE/CO % ls;99
+out/2027;ENA SUL % ls;96
+out/2027;ENA NE % ls;93
+out/2027;ENA NORTE % ls;96
+out/2027;ENA SIN % ls;97
+out/2027;G. BELO MONTE ls;370,5
+out/2027;G. TUCURUI ls;3269,2
+out/2027;F. LINHAO BM ls;115,2
+out/2027;F. TOTAL N ls;1394
+out/2027;VERT. N ls;3,8
+out/2027;EARi SE/CO ls;75,6
+out/2027;EARi SUL ls;84,5
+out/2027;EARi NE ls;56,3
+out/2027;EARi NORTE ls;69
+out/2027;EARi SIN ls;72
+out/2027;EARf SIN ls;70
+out/2027;EARf SE/CO ls;73,6
+out/2027;EARf SUL ls;95,1
+out/2027;EARf NE ls;50,5
+out/2027;EARf NORTE ls;55
+out/2027;CARGA ls;89808
+out/2027;G.HIDRO ls;44418
+out/2027;G.TERM ls;8168
+out/2027;G.PEQ ls;9756
+out/2027;GSF % ls;-22
+out/2027;GF ls;56671
+out/2027;ESS ls;47,443
+out/2027;BALANCO ls;27467
+nov/2027;PLD SE/CO ls;134,37
+nov/2027;PLD SUL ls;134,37
+nov/2027;PLD NE ls;134,37
+nov/2027;PLD NORTE ls;134,37
+nov/2027;ENA SE/CO % ls;100
+nov/2027;ENA SUL % ls;96
+nov/2027;ENA NE % ls;95
+nov/2027;ENA NORTE % ls;98
+nov/2027;ENA SIN % ls;98
+nov/2027;G. BELO MONTE ls;930,1
+nov/2027;G. TUCURUI ls;2795,1
+nov/2027;F. LINHAO BM ls;480,9
+nov/2027;F. TOTAL N ls;943,9
+nov/2027;VERT. N ls;2,8
+nov/2027;EARi SE/CO ls;72,8
+nov/2027;EARi SUL ls;94
+nov/2027;EARi NE ls;50
+nov/2027;EARi NORTE ls;54,8
+nov/2027;EARi SIN ls;69
+nov/2027;EARf SIN ls;68
+nov/2027;EARf SE/CO ls;73,5
+nov/2027;EARf SUL ls;79,1
+nov/2027;EARf NE ls;51,2
+nov/2027;EARf NORTE ls;45,9
+nov/2027;CARGA ls;89704
+nov/2027;G.HIDRO ls;48828
+nov/2027;G.TERM ls;7734
+nov/2027;G.PEQ ls;9658
+nov/2027;GSF % ls;-18
+nov/2027;GF ls;59613
+nov/2027;ESS ls;50,811
+nov/2027;BALANCO ls;23484
+dez/2027;PLD SE/CO ls;57,31
+dez/2027;PLD SUL ls;57,31
+dez/2027;PLD NE ls;57,31
+dez/2027;PLD NORTE ls;57,31
+dez/2027;ENA SE/CO % ls;100
+dez/2027;ENA SUL % ls;95
+dez/2027;ENA NE % ls;95
+dez/2027;ENA NORTE % ls;99
+dez/2027;ENA SIN % ls;98
+dez/2027;G. BELO MONTE ls;2371,9
+dez/2027;G. TUCURUI ls;2703,9
+dez/2027;F. LINHAO BM ls;0
+dez/2027;F. TOTAL N ls;0
+dez/2027;VERT. N ls;551,6
+dez/2027;EARi SE/CO ls;72,6
+dez/2027;EARi SUL ls;78,2
+dez/2027;EARi NE ls;50,6
+dez/2027;EARi NORTE ls;45,8
+dez/2027;EARi SIN ls;68
+dez/2027;EARf SIN ls;68
+dez/2027;EARf SE/CO ls;69,6
+dez/2027;EARf SUL ls;92,7
+dez/2027;EARf NE ls;62
+dez/2027;EARf NORTE ls;43,9
+dez/2027;CARGA ls;89844
+dez/2027;G.HIDRO ls;49986
+dez/2027;G.TERM ls;5579
+dez/2027;G.PEQ ls;9818
+dez/2027;GSF % ls;-14
+dez/2027;GF ls;58060
+dez/2027;ESS ls;67,002
+dez/2027;BALANCO ls;24461
+nov/2026;PLD SE/CO livale;57,31
+nov/2026;PLD SUL livale;57,31
+nov/2026;PLD NE livale;57,31
+nov/2026;PLD NORTE livale;57,31
+nov/2026;ENA SE/CO % livale;130
+nov/2026;ENA SUL % livale;137
+nov/2026;ENA NE % livale;67
+nov/2026;ENA NORTE % livale;66
+nov/2026;ENA SIN % livale;119
+nov/2026;G. BELO MONTE livale;351,4
+nov/2026;G. TUCURUI livale;3556
+nov/2026;F. LINHAO BM livale;47,2
+nov/2026;F. TOTAL N livale;2399,2
+nov/2026;VERT. N livale;3,1
+nov/2026;EARi SE/CO livale;57,4
+nov/2026;EARi SUL livale;87,8
+nov/2026;EARi NE livale;58,5
+nov/2026;EARi NORTE livale;54,2
+nov/2026;EARi SIN livale;60
+nov/2026;EARf SIN livale;59
+nov/2026;EARf SE/CO livale;57,9
+nov/2026;EARf SUL livale;85,6
+nov/2026;EARf NE livale;57,8
+nov/2026;EARf NORTE livale;51,2
+nov/2026;CARGA livale;89434
+nov/2026;G.HIDRO livale;51584
+nov/2026;G.TERM livale;6063
+nov/2026;G.PEQ livale;8760
+nov/2026;GSF % livale;-13
+nov/2026;GF livale;59613
+nov/2026;ESS livale;17,972
+nov/2026;BALANCO livale;23026
+dez/2026;PLD SE/CO livale;70,32
+dez/2026;PLD SUL livale;70,32
+dez/2026;PLD NE livale;70,32
+dez/2026;PLD NORTE livale;70,32
+dez/2026;ENA SE/CO % livale;73
+dez/2026;ENA SUL % livale;70
+dez/2026;ENA NE % livale;70
+dez/2026;ENA NORTE % livale;71
+dez/2026;ENA SIN % livale;72
+dez/2026;G. BELO MONTE livale;1639,9
+dez/2026;G. TUCURUI livale;4468,9
+dez/2026;F. LINHAO BM livale;944,9
+dez/2026;F. TOTAL N livale;-455,9
+dez/2026;VERT. N livale;2,6
+dez/2026;EARi SE/CO livale;57,3
+dez/2026;EARi SUL livale;84,4
+dez/2026;EARi NE livale;56,6
+dez/2026;EARi NORTE livale;49
+dez/2026;EARi SIN livale;59
+dez/2026;EARf SIN livale;57
+dez/2026;EARf SE/CO livale;56,1
+dez/2026;EARf SUL livale;61,5
+dez/2026;EARf NE livale;63,1
+dez/2026;EARf NORTE livale;36,3
+dez/2026;CARGA livale;89828
+dez/2026;G.HIDRO livale;54377
+dez/2026;G.TERM livale;5164
+dez/2026;G.PEQ livale;8956
+dez/2026;GSF % livale;-11
+dez/2026;GF livale;58060
+dez/2026;ESS livale;17,509
+dez/2026;BALANCO livale;21331
+jan/2027;PLD SE/CO livale;244,44
+jan/2027;PLD SUL livale;244,44
+jan/2027;PLD NE livale;244,44
+jan/2027;PLD NORTE livale;244,44
+jan/2027;ENA SE/CO % livale;62
+jan/2027;ENA SUL % livale;61
+jan/2027;ENA NE % livale;58
+jan/2027;ENA NORTE % livale;59
+jan/2027;ENA SIN % livale;61
+jan/2027;G. BELO MONTE livale;3246,7
+jan/2027;G. TUCURUI livale;2769,6
+jan/2027;F. LINHAO BM livale;1927,7
+jan/2027;F. TOTAL N livale;-2334,3
+jan/2027;VERT. N livale;2,5
+jan/2027;EARi SE/CO livale;55,5
+jan/2027;EARi SUL livale;60,8
+jan/2027;EARi NE livale;62,4
+jan/2027;EARi NORTE livale;35,9
+jan/2027;EARi SIN livale;56
+jan/2027;EARf SIN livale;57
+jan/2027;EARf SE/CO livale;57,31
+jan/2027;EARf SUL livale;35,7
+jan/2027;EARf NE livale;67,1
+jan/2027;EARf NORTE livale;44,7
+jan/2027;CARGA livale;91140
+jan/2027;G.HIDRO livale;57943
+jan/2027;G.TERM livale;6844
+jan/2027;G.PEQ livale;9113
+jan/2027;GSF % livale;-4
+jan/2027;GF livale;60049
+jan/2027;ESS livale;34,104
+jan/2027;BALANCO livale;17241
+fev/2027;PLD SE/CO livale;335,97
+fev/2027;PLD SUL livale;335,97
+fev/2027;PLD NE livale;153,34
+fev/2027;PLD NORTE livale;153,34
+fev/2027;ENA SE/CO % livale;62
+fev/2027;ENA SUL % livale;59
+fev/2027;ENA NE % livale;58
+fev/2027;ENA NORTE % livale;60
+fev/2027;ENA SIN % livale;61
+fev/2027;G. BELO MONTE livale;5431,5
+fev/2027;G. TUCURUI livale;3205,6
+fev/2027;F. LINHAO BM livale;3906,2
+fev/2027;F. TOTAL N livale;-3737
+fev/2027;VERT. N livale;5,9
+fev/2027;EARi SE/CO livale;56,1
+fev/2027;EARi SUL livale;35,3
+fev/2027;EARi NE livale;66,4
+fev/2027;EARi NORTE livale;44,2
+fev/2027;EARi SIN livale;56
+fev/2027;EARf SIN livale;58
+fev/2027;EARf SE/CO livale;58,7
+fev/2027;EARf SUL livale;30,3
+fev/2027;EARf NE livale;65,8
+fev/2027;EARf NORTE livale;64,3
+fev/2027;CARGA livale;93774
+fev/2027;G.HIDRO livale;54407
+fev/2027;G.TERM livale;5680
+fev/2027;G.PEQ livale;9574
+fev/2027;GSF % livale;-3
+fev/2027;GF livale;55986
+fev/2027;ESS livale;42,178
+fev/2027;BALANCO livale;24113
+mar/2027;PLD SE/CO livale;419,65
+mar/2027;PLD SUL livale;419,65
+mar/2027;PLD NE livale;73,39
+mar/2027;PLD NORTE livale;73,39
+mar/2027;ENA SE/CO % livale;63
+mar/2027;ENA SUL % livale;59
+mar/2027;ENA NE % livale;59
+mar/2027;ENA NORTE % livale;62
+mar/2027;ENA SIN % livale;62
+mar/2027;G. BELO MONTE livale;5906,7
+mar/2027;G. TUCURUI livale;6191,4
+mar/2027;F. LINHAO BM livale;3915,3
+mar/2027;F. TOTAL N livale;-6380,2
+mar/2027;VERT. N livale;33,2
+mar/2027;EARi SE/CO livale;58
+mar/2027;EARi SUL livale;30
+mar/2027;EARi NE livale;65
+mar/2027;EARi NORTE livale;63,7
+mar/2027;EARi SIN livale;58
+mar/2027;EARf SIN livale;61
+mar/2027;EARf SE/CO livale;59,8
+mar/2027;EARf SUL livale;29,6
+mar/2027;EARf NE livale;72,5
+mar/2027;EARf NORTE livale;72,3
+mar/2027;CARGA livale;92813
+mar/2027;G.HIDRO livale;54194
+mar/2027;G.TERM livale;5103
+mar/2027;G.PEQ livale;9381
+mar/2027;GSF % livale;-5
+mar/2027;GF livale;57080
+mar/2027;ESS livale;43,416
+mar/2027;BALANCO livale;24135
+abr/2027;PLD SE/CO livale;480,87
+abr/2027;PLD SUL livale;480,87
+abr/2027;PLD NE livale;207,39
+abr/2027;PLD NORTE livale;207,39
+abr/2027;ENA SE/CO % livale;62
+abr/2027;ENA SUL % livale;59
+abr/2027;ENA NE % livale;58
+abr/2027;ENA NORTE % livale;61
+abr/2027;ENA SIN % livale;61
+abr/2027;G. BELO MONTE livale;4073,7
+abr/2027;G. TUCURUI livale;6691,4
+abr/2027;F. LINHAO BM livale;3941,7
+abr/2027;F. TOTAL N livale;-6155,2
+abr/2027;VERT. N livale;19,6
+abr/2027;EARi SE/CO livale;59,2
+abr/2027;EARi SUL livale;29,2
+abr/2027;EARi NE livale;71,8
+abr/2027;EARi NORTE livale;71,8
+abr/2027;EARi SIN livale;60
+abr/2027;EARf SIN livale;61
+abr/2027;EARf SE/CO livale;59
+abr/2027;EARf SUL livale;29,8
+abr/2027;EARf NE livale;73,1
+abr/2027;EARf NORTE livale;79
+abr/2027;CARGA livale;89449
+abr/2027;G.HIDRO livale;49290
+abr/2027;G.TERM livale;6531
+abr/2027;G.PEQ livale;9214
+abr/2027;GSF % livale;0
+abr/2027;GF livale;49298
+abr/2027;ESS livale;30,803
+abr/2027;BALANCO livale;24415
+mai/2027;PLD SE/CO livale;546,21
+mai/2027;PLD SUL livale;546,21
+mai/2027;PLD NE livale;322,84
+mai/2027;PLD NORTE livale;322,84
+mai/2027;ENA SE/CO % livale;62
+mai/2027;ENA SUL % livale;60
+mai/2027;ENA NE % livale;58
+mai/2027;ENA NORTE % livale;61
+mai/2027;ENA SIN % livale;61
+mai/2027;G. BELO MONTE livale;4496,9
+mai/2027;G. TUCURUI livale;3550,5
+mai/2027;F. LINHAO BM livale;3789
+mai/2027;F. TOTAL N livale;-4023,9
+mai/2027;VERT. N livale;6,9
+mai/2027;EARi SE/CO livale;58,3
+mai/2027;EARi SUL livale;29,4
+mai/2027;EARi NE livale;72,2
+mai/2027;EARi NORTE livale;78,4
+mai/2027;EARi SIN livale;60
+mai/2027;EARf SIN livale;58
+mai/2027;EARf SE/CO livale;55,4
+mai/2027;EARf SUL livale;29
+mai/2027;EARf NE livale;69,9
+mai/2027;EARf NORTE livale;92,6
+mai/2027;CARGA livale;86663
+mai/2027;G.HIDRO livale;43314
+mai/2027;G.TERM livale;7429
+mai/2027;G.PEQ livale;8604
+mai/2027;GSF % livale;-2
+mai/2027;GF livale;44386
+mai/2027;ESS livale;25,233
+mai/2027;BALANCO livale;27316
+jun/2027;PLD SE/CO livale;526,25
+jun/2027;PLD SUL livale;526,25
+jun/2027;PLD NE livale;335,14
+jun/2027;PLD NORTE livale;335,14
+jun/2027;ENA SE/CO % livale;62
+jun/2027;ENA SUL % livale;62
+jun/2027;ENA NE % livale;58
+jun/2027;ENA NORTE % livale;57
+jun/2027;ENA SIN % livale;61
+jun/2027;G. BELO MONTE livale;2169,3
+jun/2027;G. TUCURUI livale;3062,9
+jun/2027;F. LINHAO BM livale;3800
+jun/2027;F. TOTAL N livale;-1316
+jun/2027;VERT. N livale;11,5
+jun/2027;EARi SE/CO livale;54,8
+jun/2027;EARi SUL livale;28,7
+jun/2027;EARi NE livale;69,1
+jun/2027;EARi NORTE livale;91,8
+jun/2027;EARi SIN livale;57
+jun/2027;EARf SIN livale;54
+jun/2027;EARf SE/CO livale;51,5
+jun/2027;EARf SUL livale;29
+jun/2027;EARf NE livale;62
+jun/2027;EARf NORTE livale;90,2
+jun/2027;CARGA livale;84330
+jun/2027;G.HIDRO livale;40102
+jun/2027;G.TERM livale;8506
+jun/2027;G.PEQ livale;8424
+jun/2027;GSF % livale;-8
+jun/2027;GF livale;43423
+jun/2027;ESS livale;26,019
+jun/2027;BALANCO livale;27298
+jul/2027;PLD SE/CO livale;532,48
+jul/2027;PLD SUL livale;532,48
+jul/2027;PLD NE livale;362,26
+jul/2027;PLD NORTE livale;472,56
+jul/2027;ENA SE/CO % livale;61
+jul/2027;ENA SUL % livale;59
+jul/2027;ENA NE % livale;58
+jul/2027;ENA NORTE % livale;55
+jul/2027;ENA SIN % livale;60
+jul/2027;G. BELO MONTE livale;589,1
+jul/2027;G. TUCURUI livale;1409,7
+jul/2027;F. LINHAO BM livale;3797
+jul/2027;F. TOTAL N livale;1175
+jul/2027;VERT. N livale;3,3
+jul/2027;EARi SE/CO livale;50,9
+jul/2027;EARi SUL livale;28,7
+jul/2027;EARi NE livale;61,3
+jul/2027;EARi NORTE livale;89,6
+jul/2027;EARi SIN livale;53
+jul/2027;EARf SIN livale;50
+jul/2027;EARf SE/CO livale;46,7
+jul/2027;EARf SUL livale;30,6
+jul/2027;EARf NE livale;56,6
+jul/2027;EARf NORTE livale;89,1
+jul/2027;CARGA livale;83890
+jul/2027;G.HIDRO livale;32793
+jul/2027;G.TERM livale;13074
+jul/2027;G.PEQ livale;8796
+jul/2027;GSF % livale;-36
+jul/2027;GF livale;51392
+jul/2027;ESS livale;20,555
+jul/2027;BALANCO livale;29227
+ago/2027;PLD SE/CO livale;751,73
+ago/2027;PLD SUL livale;751,73
+ago/2027;PLD NE livale;751,73
+ago/2027;PLD NORTE livale;751,73
+ago/2027;ENA SE/CO % livale;61
+ago/2027;ENA SUL % livale;59
+ago/2027;ENA NE % livale;58
+ago/2027;ENA NORTE % livale;52
+ago/2027;ENA SIN % livale;59
+ago/2027;G. BELO MONTE livale;199,1
+ago/2027;G. TUCURUI livale;2412,8
+ago/2027;F. LINHAO BM livale;2042,4
+ago/2027;F. TOTAL N livale;343,5
+ago/2027;VERT. N livale;5,6
+ago/2027;EARi SE/CO livale;46,1
+ago/2027;EARi SUL livale;30,3
+ago/2027;EARi NE livale;55,9
+ago/2027;EARi NORTE livale;88
+ago/2027;EARi SIN livale;49
+ago/2027;EARf SIN livale;43
+ago/2027;EARf SE/CO livale;40,6
+ago/2027;EARf SUL livale;31,9
+ago/2027;EARf NE livale;48
+ago/2027;EARf NORTE livale;75,9
+ago/2027;CARGA livale;85696
+ago/2027;G.HIDRO livale;32574
+ago/2027;G.TERM livale;13585
+ago/2027;G.PEQ livale;9991
+ago/2027;GSF % livale;-37
+ago/2027;GF livale;51574
+ago/2027;ESS livale;7,088
+ago/2027;BALANCO livale;29546
+set/2027;PLD SE/CO livale;751,73
+set/2027;PLD SUL livale;751,73
+set/2027;PLD NE livale;751,73
+set/2027;PLD NORTE livale;751,73
+set/2027;ENA SE/CO % livale;61
+set/2027;ENA SUL % livale;59
+set/2027;ENA NE % livale;58
+set/2027;ENA NORTE % livale;54
+set/2027;ENA SIN % livale;59
+set/2027;G. BELO MONTE livale;163,5
+set/2027;G. TUCURUI livale;3082,2
+set/2027;F. LINHAO BM livale;2824,6
+set/2027;F. TOTAL N livale;139,8
+set/2027;VERT. N livale;6
+set/2027;EARi SE/CO livale;40,1
+set/2027;EARi SUL livale;31,5
+set/2027;EARi NE livale;47,5
+set/2027;EARi NORTE livale;75
+set/2027;EARi SIN livale;43
+set/2027;EARf SIN livale;36
+set/2027;EARf SE/CO livale;34,7
+set/2027;EARf SUL livale;29
+set/2027;EARf NE livale;39,6
+set/2027;EARf NORTE livale;58,1
+set/2027;CARGA livale;88677
+set/2027;G.HIDRO livale;34806
+set/2027;G.TERM livale;14122
+set/2027;G.PEQ livale;9776
+set/2027;GSF % livale;-38
+set/2027;GF livale;55897
+set/2027;ESS livale;6,958
+set/2027;BALANCO livale;29972
+out/2027;PLD SE/CO livale;751,73
+out/2027;PLD SUL livale;751,73
+out/2027;PLD NE livale;751,73
+out/2027;PLD NORTE livale;751,73
+out/2027;ENA SE/CO % livale;61
+out/2027;ENA SUL % livale;60
+out/2027;ENA NE % livale;58
+out/2027;ENA NORTE % livale;53
+out/2027;ENA SIN % livale;60
+out/2027;G. BELO MONTE livale;164,9
+out/2027;G. TUCURUI livale;3043
+out/2027;F. LINHAO BM livale;3695,6
+out/2027;F. TOTAL N livale;-1338,7
+out/2027;VERT. N livale;4,1
+out/2027;EARi SE/CO livale;34,3
+out/2027;EARi SUL livale;28,7
+out/2027;EARi NE livale;39,2
+out/2027;EARi NORTE livale;57,4
+out/2027;EARi SIN livale;36
+out/2027;EARf SIN livale;32
+out/2027;EARf SE/CO livale;30,4
+out/2027;EARf SUL livale;35
+out/2027;EARf NE livale;31,6
+out/2027;EARf NORTE livale;42,1
+out/2027;CARGA livale;89808
+out/2027;G.HIDRO livale;34013
+out/2027;G.TERM livale;17399
+out/2027;G.PEQ livale;9756
+out/2027;GSF % livale;-40
+out/2027;GF livale;56671
+out/2027;ESS livale;6,839
+out/2027;BALANCO livale;28640
+nov/2027;PLD SE/CO livale;751,73
+nov/2027;PLD SUL livale;751,73
+nov/2027;PLD NE livale;751,73
+nov/2027;PLD NORTE livale;751,73
+nov/2027;ENA SE/CO % livale;62
+nov/2027;ENA SUL % livale;59
+nov/2027;ENA NE % livale;59
+nov/2027;ENA NORTE % livale;56
+nov/2027;ENA SIN % livale;60
+nov/2027;G. BELO MONTE livale;360,5
+nov/2027;G. TUCURUI livale;2264,9
+nov/2027;F. LINHAO BM livale;1575,9
+nov/2027;F. TOTAL N livale;-1384,7
+nov/2027;VERT. N livale;2,8
+nov/2027;EARi SE/CO livale;30
+nov/2027;EARi SUL livale;34,6
+nov/2027;EARi NE livale;31,3
+nov/2027;EARi NORTE livale;41,6
+nov/2027;EARi SIN livale;31
+nov/2027;EARf SIN livale;28
+nov/2027;EARf SE/CO livale;27,6
+nov/2027;EARf SUL livale;29,1
+nov/2027;EARf NE livale;28,2
+nov/2027;EARf NORTE livale;34,7
+nov/2027;CARGA livale;89704
+nov/2027;G.HIDRO livale;36020
+nov/2027;G.TERM livale;19343
+nov/2027;G.PEQ livale;9658
+nov/2027;GSF % livale;-40
+nov/2027;GF livale;59613
+nov/2027;ESS livale;6,808
+nov/2027;BALANCO livale;24683
+dez/2027;PLD SE/CO livale;751,73
+dez/2027;PLD SUL livale;751,73
+dez/2027;PLD NE livale;751,73
+dez/2027;PLD NORTE livale;751,73
+dez/2027;ENA SE/CO % livale;62
+dez/2027;ENA SUL % livale;59
+dez/2027;ENA NE % livale;59
+dez/2027;ENA NORTE % livale;59
+dez/2027;ENA SIN % livale;61
+dez/2027;G. BELO MONTE livale;1292,3
+dez/2027;G. TUCURUI livale;2465,7
+dez/2027;F. LINHAO BM livale;2983,5
+dez/2027;F. TOTAL N livale;-3057,2
+dez/2027;VERT. N livale;24,4
+dez/2027;EARi SE/CO livale;27,3
+dez/2027;EARi SUL livale;28,7
+dez/2027;EARi NE livale;27,9
+dez/2027;EARi NORTE livale;34,3
+dez/2027;EARi SIN livale;28
+dez/2027;EARf SIN livale;29
+dez/2027;EARf SE/CO livale;28,8
+dez/2027;EARf SUL livale;31
+dez/2027;EARf NE livale;30,2
+dez/2027;EARf NORTE livale;32,9
+dez/2027;CARGA livale;89844
+dez/2027;G.HIDRO livale;36888
+dez/2027;G.TERM livale;20542
+dez/2027;G.PEQ livale;9818
+dez/2027;GSF % livale;-36
+dez/2027;GF livale;58060
+dez/2027;ESS livale;6,826
+dez/2027;BALANCO livale;22596
+nov/2026;PLD SE/CO LIparaguai;57,31
+nov/2026;PLD SUL LIparaguai;57,31
+nov/2026;PLD NE LIparaguai;57,31
+nov/2026;PLD NORTE LIparaguai;57,31
+nov/2026;ENA SE/CO % LIparaguai;130
+nov/2026;ENA SUL % LIparaguai;137
+nov/2026;ENA NE % LIparaguai;67
+nov/2026;ENA NORTE % LIparaguai;66
+nov/2026;ENA SIN % LIparaguai;119
+nov/2026;G. BELO MONTE LIparaguai;351,4
+nov/2026;G. TUCURUI LIparaguai;3556
+nov/2026;F. LINHAO BM LIparaguai;47,2
+nov/2026;F. TOTAL N LIparaguai;2399,2
+nov/2026;VERT. N LIparaguai;3,1
+nov/2026;EARi SE/CO LIparaguai;57,4
+nov/2026;EARi SUL LIparaguai;87,8
+nov/2026;EARi NE LIparaguai;58,5
+nov/2026;EARi NORTE LIparaguai;54,2
+nov/2026;EARi SIN LIparaguai;60
+nov/2026;EARf SIN LIparaguai;59
+nov/2026;EARf SE/CO LIparaguai;57,9
+nov/2026;EARf SUL LIparaguai;85,6
+nov/2026;EARf NE LIparaguai;57,8
+nov/2026;EARf NORTE LIparaguai;51,2
+nov/2026;CARGA LIparaguai;89434
+nov/2026;G.HIDRO LIparaguai;51584
+nov/2026;G.TERM LIparaguai;6063
+nov/2026;G.PEQ LIparaguai;8760
+nov/2026;GSF % LIparaguai;-13
+nov/2026;GF LIparaguai;59613
+nov/2026;ESS LIparaguai;17,972
+nov/2026;BALANCO LIparaguai;23026
+dez/2026;PLD SE/CO LIparaguai;57,31
+dez/2026;PLD SUL LIparaguai;57,31
+dez/2026;PLD NE LIparaguai;57,31
+dez/2026;PLD NORTE LIparaguai;57,31
+dez/2026;ENA SE/CO % LIparaguai;86
+dez/2026;ENA SUL % LIparaguai;82
+dez/2026;ENA NE % LIparaguai;82
+dez/2026;ENA NORTE % LIparaguai;84
+dez/2026;ENA SIN % LIparaguai;85
+dez/2026;G. BELO MONTE LIparaguai;2044,4
+dez/2026;G. TUCURUI LIparaguai;4828,1
+dez/2026;F. LINHAO BM LIparaguai;1542,7
+dez/2026;F. TOTAL N LIparaguai;-1252,6
+dez/2026;VERT. N LIparaguai;23,7
+dez/2026;EARi SE/CO LIparaguai;57,3
+dez/2026;EARi SUL LIparaguai;84,4
+dez/2026;EARi NE LIparaguai;56,6
+dez/2026;EARi NORTE LIparaguai;49
+dez/2026;EARi SIN LIparaguai;59
+dez/2026;EARf SIN LIparaguai;60
+dez/2026;EARf SE/CO LIparaguai;58,2
+dez/2026;EARf SUL LIparaguai;75,7
+dez/2026;EARf NE LIparaguai;65,9
+dez/2026;EARf NORTE LIparaguai;37,4
+dez/2026;CARGA LIparaguai;89828
+dez/2026;G.HIDRO LIparaguai;53047
+dez/2026;G.TERM LIparaguai;5164
+dez/2026;G.PEQ LIparaguai;8956
+dez/2026;GSF % LIparaguai;-11
+dez/2026;GF LIparaguai;58060
+dez/2026;ESS LIparaguai;18,45
+dez/2026;BALANCO LIparaguai;22661
+jan/2027;PLD SE/CO LIparaguai;189,89
+jan/2027;PLD SUL LIparaguai;189,89
+jan/2027;PLD NE LIparaguai;189,89
+jan/2027;PLD NORTE LIparaguai;189,89
+jan/2027;ENA SE/CO % LIparaguai;76
+jan/2027;ENA SUL % LIparaguai;74
+jan/2027;ENA NE % LIparaguai;71
+jan/2027;ENA NORTE % LIparaguai;73
+jan/2027;ENA SIN % LIparaguai;74
+jan/2027;G. BELO MONTE LIparaguai;4132,1
+jan/2027;G. TUCURUI LIparaguai;2860,1
+jan/2027;F. LINHAO BM LIparaguai;2499,2
+jan/2027;F. TOTAL N LIparaguai;-2503,5
+jan/2027;VERT. N LIparaguai;2,8
+jan/2027;EARi SE/CO LIparaguai;57,5
+jan/2027;EARi SUL LIparaguai;74,8
+jan/2027;EARi NE LIparaguai;65,1
+jan/2027;EARi NORTE LIparaguai;37
+jan/2027;EARi SIN LIparaguai;59
+jan/2027;EARf SIN LIparaguai;63
+jan/2027;EARf SE/CO LIparaguai;64
+jan/2027;EARf SUL LIparaguai;44,3
+jan/2027;EARf NE LIparaguai;67,6
+jan/2027;EARf NORTE LIparaguai;53,1
+jan/2027;CARGA LIparaguai;91140
+jan/2027;G.HIDRO LIparaguai;60034
+jan/2027;G.TERM LIparaguai;5258
+jan/2027;G.PEQ LIparaguai;9113
+jan/2027;GSF % LIparaguai;0
+jan/2027;GF LIparaguai;60049
+jan/2027;ESS LIparaguai;39,777
+jan/2027;BALANCO LIparaguai;16736
+fev/2027;PLD SE/CO LIparaguai;194,78
+fev/2027;PLD SUL LIparaguai;194,78
+fev/2027;PLD NE LIparaguai;57,31
+fev/2027;PLD NORTE LIparaguai;57,31
+fev/2027;ENA SE/CO % LIparaguai;76
+fev/2027;ENA SUL % LIparaguai;72
+fev/2027;ENA NE % LIparaguai;71
+fev/2027;ENA NORTE % LIparaguai;74
+fev/2027;ENA SIN % LIparaguai;75
+fev/2027;G. BELO MONTE LIparaguai;6857,3
+fev/2027;G. TUCURUI LIparaguai;2044,4
+fev/2027;F. LINHAO BM LIparaguai;3906,2
+fev/2027;F. TOTAL N LIparaguai;-3218,3
+fev/2027;VERT. N LIparaguai;5,9
+fev/2027;EARi SE/CO LIparaguai;63,2
+fev/2027;EARi SUL LIparaguai;43,8
+fev/2027;EARi NE LIparaguai;66,8
+fev/2027;EARi NORTE LIparaguai;52,4
+fev/2027;EARi SIN LIparaguai;62
+fev/2027;EARf SIN LIparaguai;68
+fev/2027;EARf SE/CO LIparaguai;68,6
+fev/2027;EARf SUL LIparaguai;46,6
+fev/2027;EARf NE LIparaguai;66,4
+fev/2027;EARf NORTE LIparaguai;91,7
+fev/2027;CARGA LIparaguai;93774
+fev/2027;G.HIDRO LIparaguai;57566
+fev/2027;G.TERM LIparaguai;4270
+fev/2027;G.PEQ LIparaguai;9574
+fev/2027;GSF % LIparaguai;3
+fev/2027;GF LIparaguai;55986
+fev/2027;ESS LIparaguai;56,436
+fev/2027;BALANCO LIparaguai;22364
+mar/2027;PLD SE/CO LIparaguai;298,94
+mar/2027;PLD SUL LIparaguai;298,94
+mar/2027;PLD NE LIparaguai;57,31
+mar/2027;PLD NORTE LIparaguai;57,31
+mar/2027;ENA SE/CO % LIparaguai;76
+mar/2027;ENA SUL % LIparaguai;72
+mar/2027;ENA NE % LIparaguai;72
+mar/2027;ENA NORTE % LIparaguai;78
+mar/2027;ENA SIN % LIparaguai;76
+mar/2027;G. BELO MONTE LIparaguai;7625,8
+mar/2027;G. TUCURUI LIparaguai;5729,9
+mar/2027;F. LINHAO BM LIparaguai;3915,3
+mar/2027;F. TOTAL N LIparaguai;-6137,4
+mar/2027;VERT. N LIparaguai;3757,5
+mar/2027;EARi SE/CO LIparaguai;67,8
+mar/2027;EARi SUL LIparaguai;46,1
+mar/2027;EARi NE LIparaguai;65,7
+mar/2027;EARi NORTE LIparaguai;91
+mar/2027;EARi SIN LIparaguai;67
+mar/2027;EARf SIN LIparaguai;73
+mar/2027;EARf SE/CO LIparaguai;73,8
+mar/2027;EARf SUL LIparaguai;40,4
+mar/2027;EARf NE LIparaguai;75,3
+mar/2027;EARf NORTE LIparaguai;92,3
+mar/2027;CARGA LIparaguai;92813
+mar/2027;G.HIDRO LIparaguai;56763
+mar/2027;G.TERM LIparaguai;4695
+mar/2027;G.PEQ LIparaguai;9381
+mar/2027;GSF % LIparaguai;-1
+mar/2027;GF LIparaguai;57080
+mar/2027;ESS LIparaguai;50,482
+mar/2027;BALANCO LIparaguai;21975
+abr/2027;PLD SE/CO LIparaguai;393,3
+abr/2027;PLD SUL LIparaguai;393,3
+abr/2027;PLD NE LIparaguai;57,31
+abr/2027;PLD NORTE LIparaguai;57,31
+abr/2027;ENA SE/CO % LIparaguai;76
+abr/2027;ENA SUL % LIparaguai;72
+abr/2027;ENA NE % LIparaguai;71
+abr/2027;ENA NORTE % LIparaguai;78
+abr/2027;ENA SIN % LIparaguai;76
+abr/2027;G. BELO MONTE LIparaguai;6138,9
+abr/2027;G. TUCURUI LIparaguai;7153,1
+abr/2027;F. LINHAO BM LIparaguai;3941,7
+abr/2027;F. TOTAL N LIparaguai;-5823,4
+abr/2027;VERT. N LIparaguai;2565,2
+abr/2027;EARi SE/CO LIparaguai;72,9
+abr/2027;EARi SUL LIparaguai;39,9
+abr/2027;EARi NE LIparaguai;74,5
+abr/2027;EARi NORTE LIparaguai;91,5
+abr/2027;EARi SIN LIparaguai;72
+abr/2027;EARf SIN LIparaguai;73
+abr/2027;EARf SE/CO LIparaguai;75,6
+abr/2027;EARf SUL LIparaguai;31,8
+abr/2027;EARf NE LIparaguai;75,1
+abr/2027;EARf NORTE LIparaguai;92,9
+abr/2027;CARGA LIparaguai;89449
+abr/2027;G.HIDRO LIparaguai;55003
+abr/2027;G.TERM LIparaguai;3576
+abr/2027;G.PEQ LIparaguai;9214
+abr/2027;GSF % LIparaguai;12
+abr/2027;GF LIparaguai;49298
+abr/2027;ESS LIparaguai;44,107
+abr/2027;BALANCO LIparaguai;21657
+mai/2027;PLD SE/CO LIparaguai;452,69
+mai/2027;PLD SUL LIparaguai;452,69
+mai/2027;PLD NE LIparaguai;57,31
+mai/2027;PLD NORTE LIparaguai;57,31
+mai/2027;ENA SE/CO % LIparaguai;76
+mai/2027;ENA SUL % LIparaguai;74
+mai/2027;ENA NE % LIparaguai;70
+mai/2027;ENA NORTE % LIparaguai;76
+mai/2027;ENA SIN % LIparaguai;75
+mai/2027;G. BELO MONTE LIparaguai;5914,9
+mai/2027;G. TUCURUI LIparaguai;5971,5
+mai/2027;F. LINHAO BM LIparaguai;3789
+mai/2027;F. TOTAL N LIparaguai;-4454,1
+mai/2027;VERT. N LIparaguai;1952,1
+mai/2027;EARi SE/CO LIparaguai;74,8
+mai/2027;EARi SUL LIparaguai;31,4
+mai/2027;EARi NE LIparaguai;74,3
+mai/2027;EARi NORTE LIparaguai;92,2
+mai/2027;EARi SIN LIparaguai;73
+mai/2027;EARf SIN LIparaguai;72
+mai/2027;EARf SE/CO LIparaguai;74,9
+mai/2027;EARf SUL LIparaguai;29,1
+mai/2027;EARf NE LIparaguai;73,4
+mai/2027;EARf NORTE LIparaguai;93,9
+mai/2027;CARGA LIparaguai;86663
+mai/2027;G.HIDRO LIparaguai;47476
+mai/2027;G.TERM LIparaguai;4987
+mai/2027;G.PEQ LIparaguai;8604
+mai/2027;GSF % LIparaguai;7
+mai/2027;GF LIparaguai;44386
+mai/2027;ESS LIparaguai;45,837
+mai/2027;BALANCO LIparaguai;25597
+jun/2027;PLD SE/CO LIparaguai;418,2
+jun/2027;PLD SUL LIparaguai;418,2
+jun/2027;PLD NE LIparaguai;256,78
+jun/2027;PLD NORTE LIparaguai;256,78
+jun/2027;ENA SE/CO % LIparaguai;75
+jun/2027;ENA SUL % LIparaguai;75
+jun/2027;ENA NE % LIparaguai;70
+jun/2027;ENA NORTE % LIparaguai;72
+jun/2027;ENA SIN % LIparaguai;74
+jun/2027;G. BELO MONTE LIparaguai;2960,5
+jun/2027;G. TUCURUI LIparaguai;3199,1
+jun/2027;F. LINHAO BM LIparaguai;3800
+jun/2027;F. TOTAL N LIparaguai;-2142
+jun/2027;VERT. N LIparaguai;13,9
+jun/2027;EARi SE/CO LIparaguai;74
+jun/2027;EARi SUL LIparaguai;28,8
+jun/2027;EARi NE LIparaguai;72,6
+jun/2027;EARi NORTE LIparaguai;93,1
+jun/2027;EARi SIN LIparaguai;72
+jun/2027;EARf SIN LIparaguai;70
+jun/2027;EARf SE/CO LIparaguai;72,8
+jun/2027;EARf SUL LIparaguai;30,6
+jun/2027;EARf NE LIparaguai;69
+jun/2027;EARf NORTE LIparaguai;94,1
+jun/2027;CARGA LIparaguai;84330
+jun/2027;G.HIDRO LIparaguai;42146
+jun/2027;G.TERM LIparaguai;7242
+jun/2027;G.PEQ LIparaguai;8424
+jun/2027;GSF % LIparaguai;-3
+jun/2027;GF LIparaguai;43423
+jun/2027;ESS LIparaguai;34,301
+jun/2027;BALANCO LIparaguai;26518
+jul/2027;PLD SE/CO LIparaguai;442,48
+jul/2027;PLD SUL LIparaguai;442,48
+jul/2027;PLD NE LIparaguai;356,97
+jul/2027;PLD NORTE LIparaguai;356,97
+jul/2027;ENA SE/CO % LIparaguai;74
+jul/2027;ENA SUL % LIparaguai;72
+jul/2027;ENA NE % LIparaguai;71
+jul/2027;ENA NORTE % LIparaguai;71
+jul/2027;ENA SIN % LIparaguai;73
+jul/2027;G. BELO MONTE LIparaguai;909,1
+jul/2027;G. TUCURUI LIparaguai;2098,5
+jul/2027;F. LINHAO BM LIparaguai;3797
+jul/2027;F. TOTAL N LIparaguai;272,8
+jul/2027;VERT. N LIparaguai;4,2
+jul/2027;EARi SE/CO LIparaguai;71,9
+jul/2027;EARi SUL LIparaguai;30,3
+jul/2027;EARi NE LIparaguai;68,2
+jul/2027;EARi NORTE LIparaguai;93,4
+jul/2027;EARi SIN LIparaguai;70
+jul/2027;EARf SIN LIparaguai;67
+jul/2027;EARf SE/CO LIparaguai;68,8
+jul/2027;EARf SUL LIparaguai;40,5
+jul/2027;EARf NE LIparaguai;63,2
+jul/2027;EARf NORTE LIparaguai;93
+jul/2027;CARGA LIparaguai;83890
+jul/2027;G.HIDRO LIparaguai;34726
+jul/2027;G.TERM LIparaguai;11693
+jul/2027;G.PEQ LIparaguai;8796
+jul/2027;GSF % LIparaguai;-32
+jul/2027;GF LIparaguai;51392
+jul/2027;ESS LIparaguai;25,031
+jul/2027;BALANCO LIparaguai;28675
+ago/2027;PLD SE/CO LIparaguai;446,86
+ago/2027;PLD SUL LIparaguai;446,86
+ago/2027;PLD NE LIparaguai;446,86
+ago/2027;PLD NORTE LIparaguai;446,86
+ago/2027;ENA SE/CO % LIparaguai;75
+ago/2027;ENA SUL % LIparaguai;72
+ago/2027;ENA NE % LIparaguai;71
+ago/2027;ENA NORTE % LIparaguai;68
+ago/2027;ENA SIN % LIparaguai;73
+ago/2027;G. BELO MONTE LIparaguai;299,8
+ago/2027;G. TUCURUI LIparaguai;2607,2
+ago/2027;F. LINHAO BM LIparaguai;1286,2
+ago/2027;F. TOTAL N LIparaguai;106,7
+ago/2027;VERT. N LIparaguai;4,7
+ago/2027;EARi SE/CO LIparaguai;68
+ago/2027;EARi SUL LIparaguai;40
+ago/2027;EARi NE LIparaguai;62,5
+ago/2027;EARi NORTE LIparaguai;92,2
+ago/2027;EARi SIN LIparaguai;66
+ago/2027;EARf SIN LIparaguai;62
+ago/2027;EARf SE/CO LIparaguai;63
+ago/2027;EARf SUL LIparaguai;47,9
+ago/2027;EARf NE LIparaguai;56,6
+ago/2027;EARf NORTE LIparaguai;83,8
+ago/2027;CARGA LIparaguai;85696
+ago/2027;G.HIDRO LIparaguai;33829
+ago/2027;G.TERM LIparaguai;12930
+ago/2027;G.PEQ LIparaguai;9991
+ago/2027;GSF % LIparaguai;-34
+ago/2027;GF LIparaguai;51574
+ago/2027;ESS LIparaguai;24,277
+ago/2027;BALANCO LIparaguai;28946
+set/2027;PLD SE/CO LIparaguai;550,97
+set/2027;PLD SUL LIparaguai;550,97
+set/2027;PLD NE LIparaguai;549,64
+set/2027;PLD NORTE LIparaguai;549,64
+set/2027;ENA SE/CO % LIparaguai;74
+set/2027;ENA SUL % LIparaguai;71
+set/2027;ENA NE % LIparaguai;71
+set/2027;ENA NORTE % LIparaguai;67
+set/2027;ENA SIN % LIparaguai;72
+set/2027;G. BELO MONTE LIparaguai;180,6
+set/2027;G. TUCURUI LIparaguai;3209,2
+set/2027;F. LINHAO BM LIparaguai;2849,4
+set/2027;F. TOTAL N LIparaguai;-24,5
+set/2027;VERT. N LIparaguai;5,6
+set/2027;EARi SE/CO LIparaguai;62,3
+set/2027;EARi SUL LIparaguai;47,3
+set/2027;EARi NE LIparaguai;55,9
+set/2027;EARi NORTE LIparaguai;83,2
+set/2027;EARi SIN LIparaguai;61
+set/2027;EARf SIN LIparaguai;56
+set/2027;EARf SE/CO LIparaguai;58,1
+set/2027;EARf SUL LIparaguai;48,7
+set/2027;EARf NE LIparaguai;48,3
+set/2027;EARf NORTE LIparaguai;67,7
+set/2027;CARGA LIparaguai;88677
+set/2027;G.HIDRO LIparaguai;35552
+set/2027;G.TERM LIparaguai;13864
+set/2027;G.PEQ LIparaguai;9776
+set/2027;GSF % LIparaguai;-36
+set/2027;GF LIparaguai;55897
+set/2027;ESS LIparaguai;17,998
+set/2027;BALANCO LIparaguai;29485
+out/2027;PLD SE/CO LIparaguai;551,12
+out/2027;PLD SUL LIparaguai;551,12
+out/2027;PLD NE LIparaguai;551,12
+out/2027;PLD NORTE LIparaguai;551,12
+out/2027;ENA SE/CO % LIparaguai;75
+out/2027;ENA SUL % LIparaguai;73
+out/2027;ENA NE % LIparaguai;71
+out/2027;ENA NORTE % LIparaguai;68
+out/2027;ENA SIN % LIparaguai;73
+out/2027;G. BELO MONTE LIparaguai;182
+out/2027;G. TUCURUI LIparaguai;3138,2
+out/2027;F. LINHAO BM LIparaguai;869,5
+out/2027;F. TOTAL N LIparaguai;0,5
+out/2027;VERT. N LIparaguai;3,7
+out/2027;EARi SE/CO LIparaguai;57,4
+out/2027;EARi SUL LIparaguai;48,1
+out/2027;EARi NE LIparaguai;47,8
+out/2027;EARi NORTE LIparaguai;67,1
+out/2027;EARi SIN LIparaguai;56
+out/2027;EARf SIN LIparaguai;52
+out/2027;EARf SE/CO LIparaguai;53,7
+out/2027;EARf SUL LIparaguai;55,1
+out/2027;EARf NE LIparaguai;42
+out/2027;EARf NORTE LIparaguai;51,3
+out/2027;CARGA LIparaguai;89808
+out/2027;G.HIDRO LIparaguai;38106
+out/2027;G.TERM LIparaguai;13811
+out/2027;G.PEQ LIparaguai;9756
+out/2027;GSF % LIparaguai;-33
+out/2027;GF LIparaguai;56671
+out/2027;ESS LIparaguai;17,608
+out/2027;BALANCO LIparaguai;28135
+nov/2027;PLD SE/CO LIparaguai;736,76
+nov/2027;PLD SUL LIparaguai;736,76
+nov/2027;PLD NE LIparaguai;736,76
+nov/2027;PLD NORTE LIparaguai;736,76
+nov/2027;ENA SE/CO % LIparaguai;75
+nov/2027;ENA SUL % LIparaguai;73
+nov/2027;ENA NE % LIparaguai;72
+nov/2027;ENA NORTE % LIparaguai;71
+nov/2027;ENA SIN % LIparaguai;74
+nov/2027;G. BELO MONTE LIparaguai;565,7
+nov/2027;G. TUCURUI LIparaguai;2529,6
+nov/2027;F. LINHAO BM LIparaguai;403,1
+nov/2027;F. TOTAL N LIparaguai;58,1
+nov/2027;VERT. N LIparaguai;3,8
+nov/2027;EARi SE/CO LIparaguai;53,1
+nov/2027;EARi SUL LIparaguai;54,4
+nov/2027;EARi NE LIparaguai;41,5
+nov/2027;EARi NORTE LIparaguai;50,7
+nov/2027;EARi SIN LIparaguai;51
+nov/2027;EARf SIN LIparaguai;48
+nov/2027;EARf SE/CO LIparaguai;51,6
+nov/2027;EARf SUL LIparaguai;39
+nov/2027;EARf NE LIparaguai;39,2
+nov/2027;EARf NORTE LIparaguai;42,5
+nov/2027;CARGA LIparaguai;89704
+nov/2027;G.HIDRO LIparaguai;42292
+nov/2027;G.TERM LIparaguai;13912
+nov/2027;G.PEQ LIparaguai;9658
+nov/2027;GSF % LIparaguai;-29
+nov/2027;GF LIparaguai;59613
+nov/2027;ESS LIparaguai;7,608
+nov/2027;BALANCO LIparaguai;23842
+dez/2027;PLD SE/CO LIparaguai;751,73
+dez/2027;PLD SUL LIparaguai;751,73
+dez/2027;PLD NE LIparaguai;751,73
+dez/2027;PLD NORTE LIparaguai;751,73
+dez/2027;ENA SE/CO % LIparaguai;75
+dez/2027;ENA SUL % LIparaguai;72
+dez/2027;ENA NE % LIparaguai;72
+dez/2027;ENA NORTE % LIparaguai;73
+dez/2027;ENA SIN % LIparaguai;74
+dez/2027;G. BELO MONTE LIparaguai;1721,1
+dez/2027;G. TUCURUI LIparaguai;2727,2
+dez/2027;F. LINHAO BM LIparaguai;1247,7
+dez/2027;F. TOTAL N LIparaguai;-1771,3
+dez/2027;VERT. N LIparaguai;2,3
+dez/2027;EARi SE/CO LIparaguai;51
+dez/2027;EARi SUL LIparaguai;38,6
+dez/2027;EARi NE LIparaguai;38,8
+dez/2027;EARi NORTE LIparaguai;42
+dez/2027;EARi SIN LIparaguai;48
+dez/2027;EARf SIN LIparaguai;50
+dez/2027;EARf SE/CO LIparaguai;53,8
+dez/2027;EARf SUL LIparaguai;36
+dez/2027;EARf NE LIparaguai;43,5
+dez/2027;EARf NORTE LIparaguai;40,3
+dez/2027;CARGA LIparaguai;89844
+dez/2027;G.HIDRO LIparaguai;43449
+dez/2027;G.TERM LIparaguai;14666
+dez/2027;G.PEQ LIparaguai;9818
+dez/2027;GSF % LIparaguai;-25
+dez/2027;GF LIparaguai;58060
+dez/2027;ESS LIparaguai;6,826
+dez/2027;BALANCO LIparaguai;21910
