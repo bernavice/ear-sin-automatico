@@ -59,6 +59,33 @@ DOWNLOADS_OFICIAIS_CONHECIDOS = {
 }
 
 
+# Configuração de integração identificável, conforme orientações da CCEE.
+# Não se disfarça o coletor como navegador e não se inventam cookies.
+def criar_sessao_ccee():
+    import requests
+    sessao = requests.Session()
+    sessao.headers.update({
+        'User-Agent': os.getenv('CCEE_USER_AGENT', 'Painel-Vale-PLD/1.1 (integracao-dados-abertos)'),
+        'Accept': 'application/json, text/csv, text/plain, */*',
+        'Accept-Language': 'pt-BR,pt;q=0.9',
+    })
+    return sessao
+
+
+def diagnosticar_resposta_ccee(resposta, contexto: str):
+    """Metadados úteis ao suporte, sem expor cookies, tokens ou corpo da resposta."""
+    if resposta.status_code < 400:
+        return
+    identificadores = ('x-request-id', 'x-correlation-id', 'cf-ray', 'retry-after')
+    extras = ', '.join(f'{chave}={resposta.headers[chave][:120]}'
+                       for chave in identificadores if chave in resposta.headers)
+    momento = datetime.now(ZoneInfo('UTC')).strftime('%Y-%m-%dT%H:%M:%SZ')
+    print(f'PLD CCEE diagnóstico: {contexto}; UTC={momento}; '
+          f'HTTP={resposta.status_code}; host={resposta.url.split("/")[2]}; {extras}')
+    if resposta.status_code in (401, 403, 429):
+        print('PLD CCEE: acesso não autorizado ou limitado; nenhuma tentativa de contornar a proteção.')
+
+
 def url_dump(recurso_id: str) -> str:
     if not re.fullmatch(r'[0-9a-fA-F-]{36}', recurso_id):
         raise ValueError('Identificador anual CCEE inválido')
@@ -250,9 +277,9 @@ def normalizar_csv_ccee(df: pd.DataFrame, ano: int) -> pd.DataFrame:
 
 def recursos_ccee() -> dict[int, dict]:
     import requests
-    s = requests.Session()
-    s.headers.update({'User-Agent': 'Painel-Vale-PLD/1.0'})
-    r = s.get(URL_API, params={'id': 'pld_horario'}, timeout=60)
+    s = criar_sessao_ccee()
+    r = s.get(URL_API, params={'id': 'pld_horario'}, timeout=(15, 60))
+    diagnosticar_resposta_ccee(r, 'package_show')
     r.raise_for_status()
     meta = r.json()
     if not meta.get('success'):
@@ -312,7 +339,9 @@ def extrair_recursos_html(html: str) -> dict[int, dict]:
 
 def recursos_ccee_html() -> dict[int, dict]:
     import requests
-    r = requests.get(URL_DATASET, timeout=60, headers={'User-Agent': 'Mozilla/5.0'})
+    with criar_sessao_ccee() as sessao:
+        r = sessao.get(URL_DATASET, timeout=(15, 60))
+    diagnosticar_resposta_ccee(r, 'catálogo HTML')
     r.raise_for_status()
     rec = extrair_recursos_html(r.text)
     if not rec:
@@ -322,14 +351,14 @@ def recursos_ccee_html() -> dict[int, dict]:
 
 def baixar_csv_ano(recurso: dict, ano: int) -> pd.DataFrame:
     import requests
-    s = requests.Session()
-    s.headers.update({'User-Agent': 'Painel-Vale-PLD/1.0'})
+    s = criar_sessao_ccee()
     url = recurso.get('url') or recurso.get('download_url')
     if not url and recurso.get('id'):
         url = url_dump(recurso['id'])
     if not url:
         raise ValueError('Recurso CCEE sem URL de download')
-    r = s.get(url, timeout=120)
+    r = s.get(url, timeout=(15, 120))
+    diagnosticar_resposta_ccee(r, f'download anual {ano}')
     r.raise_for_status()
     raw = r.content
     if not raw or len(raw) < 1000:
@@ -385,7 +414,9 @@ def _descobrir_downloads_oficiais_catalogo(anos: list[int]) -> dict[int, str]:
             self._href = None
             self._texto = []
 
-    r = requests.get(URL_DATASET, timeout=25, headers={'User-Agent': 'Mozilla/5.0'})
+    with criar_sessao_ccee() as sessao:
+        r = sessao.get(URL_DATASET, timeout=(15, 25))
+    diagnosticar_resposta_ccee(r, 'catálogo download')
     r.raise_for_status()
     parser = Catalogo()
     parser.feed(r.text)
@@ -430,8 +461,8 @@ def _buscar_download_oficial(anos: list[int]) -> list[pd.DataFrame]:
             status = getattr(getattr(exc, 'response', None), 'status_code', None)
             if status == 403:
                 print(f'::warning title=PLD acesso negado pela CCEE {ano}::'
-                      'O domínio de download oficial retornou HTTP 403 ao GitHub. '
-                      'É necessário autorização da CCEE ou coletor em ambiente autorizado.')
+                      'O domínio de download oficial retornou HTTP 403. '
+                      'Verificar requisitos de integração e diagnóstico registrado.')
             else:
                 print(f'::warning title=PLD download oficial {ano}::'
                       f'{type(exc).__name__}: {exc}')
@@ -1053,6 +1084,7 @@ def _consultar_mes_api(session, recurso_id: str, ano: int, mes: str) -> pd.DataF
             },
             timeout=45,
         )
+        diagnosticar_resposta_ccee(resp, f'datastore_search {mes} página {indice+1}')
         resp.raise_for_status()
         try:
             payload = resp.json()
@@ -1109,25 +1141,30 @@ def _buscar_pela_api(anos: list[int], ultimo_dia=None) -> list[pd.DataFrame]:
             except Exception as exc:
                 print(f'::warning title=PLD catálogo API::{type(exc).__name__}: {exc}')
     partes = []
-    with requests.Session() as sessao:
-        sessao.headers.update({'User-Agent': 'AcompanhamentoMercado/1.0', 'Accept': 'application/json'})
+    bloqueado = False
+    with criar_sessao_ccee() as sessao:
         for ano in anos:
+            if bloqueado:
+                break
             rid = os.getenv(f'CCEE_PLD_RECURSO_{ano}', '').strip() or recursos.get(ano)
             if not rid or not re.fullmatch(r'[a-fA-F0-9-]{36}', rid):
                 print(f'::warning title=PLD API {ano}::ID do recurso anual não identificado.')
                 continue
             meses = _meses_api_incremental(ultimo_dia, hoje, ano)
             for mes in meses:
+                if bloqueado:
+                    break
                 try:
                     bloco = _consultar_mes_api(sessao, rid, ano, mes)
                     if not bloco.empty:
                         partes.append(bloco)
                 except Exception as exc:
                     status = getattr(getattr(exc, 'response', None), 'status_code', None)
-                    if status == 403:
+                    if status in (401, 403, 429):
+                        bloqueado = True
                         print(f'::warning title=PLD API de dados bloqueada {mes}::'
-                              'O endpoint datastore_search respondeu HTTP 403. '
-                              'É necessário acesso autorizado pela CCEE.')
+                              f'O endpoint datastore_search respondeu HTTP {status}. '
+                              'Consultar os requisitos de integração junto à CCEE.')
                     else:
                         print(f'::warning title=PLD API de dados {mes}::'
                               f'{type(exc).__name__}: {exc}')
