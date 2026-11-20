@@ -14,6 +14,8 @@ on:
       - 'atualizar_newave.py'
       - 'atualizar_decomp.py'
       - 'atualizar_impressao.py'
+      - 'atualizar_mre.py'
+      - 'dados/mre.xlsx'
       - 'dados/bd_rodada_decomp.xlsx'
       - 'dados/Produtos Novo.xlsx'
       - 'dados/Produto Novo.xlsx'
@@ -96,6 +98,8 @@ jobs:
         run: python atualizar_decomp.py
       - name: Gerar relatorio de impressao PDF
         run: python atualizar_impressao.py
+      - name: Atualizar Ajuste MRE — histórico e projeções
+        run: python atualizar_mre.py
       - name: Conferir painel completo
         run: |
           python - <<'PYVALID'
@@ -115,6 +119,10 @@ jobs:
           assert 'botao-decomp' in page
           assert Path('graficos/decomp.html').exists()
           assert Path('graficos/impressao.html').exists()
+          assert Path('graficos/ajuste_mre.html').exists()
+          assert Path('graficos/ajuste_mre.json').exists()
+          assert 'botao-mre' in page
+          assert 'export-mre-xlsx' in Path('graficos/ajuste_mre.html').read_text(encoding='utf-8')
           assert Path('dados/historico_precos_bbce.csv').exists()
           print('Painel EAR + ENA + PLD gerado. PLD ate', pld['data'].max())
           PYVALID
@@ -125,6 +133,7 @@ jobs:
           git add dados/ear_diaria.csv dados/ear_mensal.csv dados/ena_diaria.csv dados/ena_mensal.csv dados/pld_historico_long.csv
           git add dados/historico_precos_bbce.csv dados/precos_mercado_diario.csv dados/produtos_mercado.csv
           git add graficos/ear_sin.html graficos/ena.html graficos/pld.html graficos/mercado.html graficos/operacao.html graficos/newave.html graficos/decomp.html graficos/impressao.html graficos/index.html
+          git add graficos/ajuste_mre.html graficos/ajuste_mre.json
           if [ -f dados/newave_resumo.json ]; then git add dados/newave_resumo.json; fi
           if [ -d dados/operacao_sin ]; then git add -A dados/operacao_sin; fi
           git add -A graficos/operacao_sin
@@ -167,6 +176,8 @@ jobs:
           cp graficos/newave.html site/newave.html
           cp graficos/decomp.html site/decomp.html
           cp graficos/impressao.html site/impressao.html
+          cp graficos/ajuste_mre.html site/ajuste_mre.html
+          cp graficos/ajuste_mre.json site/ajuste_mre.json
           cp -r graficos/operacao_sin site/operacao_sin
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
