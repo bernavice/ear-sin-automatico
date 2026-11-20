@@ -37,7 +37,7 @@ iframe.collector{position:fixed;width:1260px;height:900px;left:-5000px;top:0;opa
  .print-piece [class*="grid"],.print-piece [class*="cards"]{max-width:100%}
 }
 </style></head><body>
-<div class="toolbar"><div><h1>Relatório completo · Acompanhamento de mercado</h1><p>Inclui Operação, ENA, EAR, PLD, Mercado, Newave e Decomp</p></div><div class="actions"><button class="secondary" id="reload" onclick="location.reload()">Atualizar relatório</button><button id="print" disabled>Imprimir / Salvar PDF</button></div></div>
+<div class="toolbar"><div><h1>Relatório completo · Acompanhamento de mercado</h1><p>Inclui Operação, ENA, EAR, PLD, Mercado, Newave, Decomp e Ajuste MRE</p></div><div class="actions"><button class="secondary" id="reload" onclick="location.reload()">Atualizar relatório</button><button id="print" disabled>Imprimir / Salvar PDF</button></div></div>
 <div id="status" role="status">Iniciando preparação…</div>
 <div id="report"><header class="cover"><h1>Acompanhamento de mercado</h1><div class="date" id="report-date"></div><div class="small-note">Se aberto pelo dashboard, o relatório utiliza as séries selecionadas na janela original. Módulos ainda não carregados usam a configuração inicial publicada.</div></header><div id="sections"></div></div>
 <script>
@@ -49,7 +49,8 @@ const MODULES=[
  ['pld','PLD · Preços','pld.html'],
  ['mercado','Mercado · Negócios e MTM','mercado.html'],
  ['newave','Projeções Newave','newave.html'],
- ['decomp','Projeções Decomp','decomp.html']
+ ['decomp','Projeções Decomp','decomp.html'],
+ ['mre','Ajuste MRE','ajuste_mre.html']
 ];
 const $=id=>document.getElementById(id);
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
