@@ -315,10 +315,16 @@ select,input[type="number"]{font:inherit;font-size:12px;border:1px solid #cbd9e2
 input[type="number"]{width:120px}input:disabled{background:#f2f6f8;color:#617586}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row label{font-size:12px;color:var(--muted)}
 .chips{display:flex;flex-wrap:wrap;gap:7px;padding:5px 17px 13px}
+.chips.series{padding-bottom:8px}.metric-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap;padding:1px 17px 13px}.plot-selection-note{color:var(--muted);font-size:11px;padding:0 17px 11px}.metric-chip .dot{width:11px;height:11px}.chart-control-label{font-size:12px;font-weight:800;padding:8px 17px 0;color:#526778}
+.plot-legend{display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px;max-height:130px;overflow-y:auto;padding:6px 17px 12px;border-top:1px solid #edf2f5}
+.plot-legend button{font:inherit;font-size:10px;border:1px solid #d8e3e9;border-radius:6px;padding:5px 7px;background:#fff;color:#425a6e;cursor:pointer;white-space:nowrap}
+.plot-legend button.off{opacity:.45;text-decoration:line-through}.plot-legend button:hover{border-color:#00877d}
+.plot-legend .sample{display:inline-block;width:20px;border-top:3px solid;vertical-align:middle;margin-right:6px}.plot-legend .sample.dash{border-top-style:dashed}
+.plot-legend-title{width:100%;font-weight:700;font-size:11px;color:#63758a;padding:1px 0 4px}
 .chip{font:inherit;font-size:12px;padding:7px 11px;border-radius:8px;border:1px solid #ccd8e0;background:white;cursor:pointer;color:#3f5869}
 .chip.on{background:#e8f5f4;border-color:#58aba9;color:#007e80;font-weight:800}
 .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
-#plot{width:100%;height:540px}.muted{color:var(--muted)}.note{font-size:11px;line-height:1.7;color:#617286;padding:0 18px 14px}
+#plot{width:100%;min-height:560px}.muted{color:var(--muted)}.note{font-size:11px;line-height:1.7;color:#617286;padding:0 18px 14px}
 .cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;padding:13px 16px 17px}
 .card{border:1px solid var(--line);border-radius:11px;padding:13px;background:#fbfdfe;min-width:0}
 .card .label{font-size:11px;color:var(--muted);font-weight:700}.card .value{font-size:22px;font-weight:800;color:#006d6f;margin:8px 0 5px}
@@ -354,19 +360,23 @@ td.proj{background:#eff8f7}td.missing{color:#a4adb6}.warn{margin:10px 16px;paddi
 
 @media(max-width:1220px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:1000px){.premises{grid-template-columns:1fr 1fr}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:620px){main{padding:8px}.premises,.cards{grid-template-columns:1fr}.bar{font-size:16px}.controls{gap:12px}.card .value{font-size:19px}#plot{height:480px}}
+@media(max-width:620px){main{padding:8px}.premises,.cards{grid-template-columns:1fr}.bar{font-size:16px}.controls{gap:12px}.card .value{font-size:19px}#plot{min-height:560px}}
 @media print{.premises .control,.chips{display:none!important}.box{break-inside:avoid}#plot{height:430px}main{max-width:none}}
 </style></head><body><main>
 <section class="box"><div class="bar">Ajuste MRE — Resumo</div>
 <p class="desc">Ajuste MRE = geração hidráulica MRE / garantia física com ajuste − 1. Valores positivos representam energia secundária; negativos representam déficit de geração (GSF abaixo de 100%). Para o mês corrente, a geração hidráulica SIN é a média mensal disponível na aba Operação do SIN.</p>
 <div class="cards" id="cards"></div><div class="note" id="updated"></div></section>
 <section class="box"><div class="bar">Ajuste MRE — Evolução mensal por ano</div>
-<div class="controls"><div class="control"><label for="variable">Grandeza</label><select id="variable"></select></div>
-<label class="switch"><input type="checkbox" id="toggle-history" checked> Histórico</label>
+<div class="controls"><label class="switch"><input type="checkbox" id="toggle-history" checked> Histórico</label>
 <label class="switch"><input type="checkbox" id="toggle-forecast" checked> Projeções</label></div>
-<div class="small-title">Anos para comparação (cores por ano; linhas contínuas = histórico; tracejadas = projeções)</div>
-<div class="chips" id="years"></div><div id="plot"></div>
-<p class="note" id="plot-note"></p></section>
+<div class="chart-control-label">Grandezas do gráfico — selecione uma ou várias</div>
+<div class="chips series" id="metrics"></div>
+<div class="metric-actions"><button type="button" class="btn-mre" id="select-all-metrics">Todas as 6 grandezas</button><button type="button" class="btn-mre" id="only-gsf">Somente GSF</button></div>
+<div class="small-title">Anos para comparação — selecione quantos desejar</div>
+<div class="chips" id="years"></div>
+<div class="metric-actions"><button type="button" class="btn-mre" id="select-all-years">Todos os anos</button><button type="button" class="btn-mre" id="recent-years">Últimos 3 anos</button></div>
+<div class="plot-selection-note">Cores distinguem os indicadores quando várias grandezas estão selecionadas; símbolos distinguem os anos. Histórico = linha contínua; projeção = tracejada. Percentuais e MWm usam eixos separados.</div>
+<div id="plot"></div><div id="plot-legend" class="plot-legend" aria-label="Legenda de séries: clique para ocultar ou mostrar"></div><p class="note" id="plot-note"></p></section>
 <section class="box"><div class="bar">Premissas das projeções</div>
 <p class="desc">A geração hidráulica SIN pode usar anos de referência diferentes para o ano em curso e o ano seguinte. Padrão dos fatores G e GF: média dos últimos 12 meses realizados. Os percentuais informados manualmente substituem o fator escolhido. As premissas e alterações mensais são salvas somente neste navegador.</p>
 <div class="premises">
@@ -381,7 +391,7 @@ td.proj{background:#eff8f7}td.missing{color:#a4adb6}.warn{margin:10px 16px;paddi
 <p class="desc">Os campos abaixo são preenchidos automaticamente pelas referências selecionadas acima e pela planilha MRE. Você pode <strong>substituir qualquer mês projetado</strong> de forma independente. Campos em verde indicam alterações manuais. A geração do mês corrente vem do ONS por padrão, mas também pode ser editada. O histórico anterior ao mês corrente não é alterado.</p>
 <div class="matrix-actions"><span class="matrix-status" id="matrix-status">Calculando premissas mensais…</span><button id="reset-all-months" type="button" class="btn-mre primary">Restaurar todas as premissas automáticas</button></div>
 <div id="premise-matrix"></div><p class="note">Unidades: geração e garantia física em MWm; Ajuste G, Ajuste GF e GSF em %. As alterações manuais modificam imediatamente o GSF, os cards YTD/fechamento e as projeções dos gráficos. Os valores editados ficam apenas neste navegador (não atualizam a planilha do GitHub).</p></section>
-<section class="box"><div class="bar">Valores mensais — Histórico e projeções</div><p class="desc" id="table-explanation">Indicador selecionado, com projeções recalculadas conforme as premissas acima.</p>
+<section class="box"><div class="bar">Valores mensais — Histórico e projeções</div><div class="controls"><div class="control"><label for="variable">Grandeza da tabela e da exportação Excel</label><select id="variable"></select></div></div><p class="desc" id="table-explanation">Indicador selecionado, com projeções recalculadas conforme as premissas acima.</p>
 <div class="matrix-actions"><span class="matrix-status">Exporta o indicador, os anos e os filtros exibidos, incluindo ajustes mensais manuais.</span><button id="export-mre-xlsx" type="button" class="btn-mre primary">⬇ Exportar Excel (.xlsx)</button></div>
 <div class="table-wrap" id="monthly-table"></div><p class="note">Fonte: <strong>dados/mre.xlsx</strong>, guia MRE; geração hidráulica do mês corrente: <strong>ONS — Operação do SIN</strong>. Projeções são estimativas e não representam valores homologados pela CCEE.</p></section>
 <div id="warnings"></div>
@@ -397,8 +407,11 @@ const VARS=[
  ['gf_aj','Garantia Física com ajuste (MWm)','MWm']
 ];
 const COLORS=['#d85b4c','#2666cf','#078f7d','#9464be','#d77c20','#537887','#789f47','#b85c8c','#139cba','#a27b45'];
+const METRIC_COLORS={gsf:'#d84e59',sin:'#2766c3',gf_sem:'#d48621',mercado:'#895ab6',mre:'#159b87',gf_aj:'#507785'};
+const METRIC_SHORT={gsf:'GSF',sin:'Geração SIN',gf_sem:'GF sem ajuste',mercado:'MRE Mercado',mre:'Geração MRE',gf_aj:'GF ajustada'};
+const YEAR_SYMBOLS=['circle','square','diamond','triangle-up','cross','star','triangle-down','pentagon','x','hexagon'];
 const $=id=>document.getElementById(id);
-let DATA=null, yearsSelected=new Set(),variable='gsf',showHistory=true,showForecast=true;
+let DATA=null, yearsSelected=new Set(),metricsSelected=new Set(['gsf']),hiddenSeries=new Set(),variable='gsf',showHistory=true,showForecast=true;
 // Somente valores explicitamente alterados pelo usuário. Ausência => cálculo automático.
 // Chave: AAAA-MM. Fatores são armazenados como razão (1 = 100%), não em %.
 let monthlyOverrides={};
@@ -605,21 +618,46 @@ function setupMatrix(){
   monthlyOverrides={};savePrefs();renderAll();
  });
 }
+// A seleção das grandezas afeta somente o gráfico; tabela/exportação usam a grandeza própria.
+function chartPrefsSave(){try{localStorage.setItem('painel-ajuste-mre-grafico-v1',JSON.stringify({metrics:[...metricsSelected],years:[...yearsSelected],hidden:[...hiddenSeries],tableVariable:variable,history:showHistory,forecast:showForecast}))}catch(_){}}
+function chartPrefsLoad(){try{return JSON.parse(localStorage.getItem('painel-ajuste-mre-grafico-v1')||'{}')}catch(_){return {}}}
 function setupPlot(){
+ const saved=chartPrefsLoad(), ids=new Set(VARS.map(v=>v[0]));
+ if(Array.isArray(saved.metrics)){const ms=saved.metrics.filter(k=>ids.has(k));if(ms.length)metricsSelected=new Set(ms)}
+ if(ids.has(saved.tableVariable))variable=saved.tableVariable;
+ if(typeof saved.history==='boolean')showHistory=saved.history;
+ if(typeof saved.forecast==='boolean')showForecast=saved.forecast;
  $('variable').innerHTML=VARS.map(([id,name])=>`<option value="${id}">${name}</option>`).join('');
  $('variable').value=variable;
- $('variable').addEventListener('change',()=>{variable=$('variable').value;renderAll()});
- $('toggle-history').addEventListener('change',()=>{showHistory=$('toggle-history').checked;renderAll()});
- $('toggle-forecast').addEventListener('change',()=>{showForecast=$('toggle-forecast').checked;renderAll()});
- const {year:cy}=current();yearsSelected=new Set([cy-1,cy,cy+1]);renderYears();
+ $('variable').addEventListener('change',()=>{variable=$('variable').value;chartPrefsSave();renderTable()});
+ $('toggle-history').checked=showHistory;$('toggle-forecast').checked=showForecast;
+ $('toggle-history').addEventListener('change',()=>{showHistory=$('toggle-history').checked;chartPrefsSave();renderPlot();renderTable()});
+ $('toggle-forecast').addEventListener('change',()=>{showForecast=$('toggle-forecast').checked;chartPrefsSave();renderPlot();renderTable()});
+ const {year:cy}=current(),available=possibleYears();
+ const defaults=[cy-1,cy,cy+1].filter(y=>available.includes(y));
+ yearsSelected=new Set(defaults.length?defaults:available.slice(-3));
+ if(Array.isArray(saved.years)){const valid=saved.years.map(Number).filter(y=>available.includes(y));if(valid.length)yearsSelected=new Set(valid)}
+ if(Array.isArray(saved.hidden))hiddenSeries=new Set(saved.hidden.filter(x=>typeof x==='string'&&/^[a-z_]+\|\d{4}\|(historico|projecao)$/.test(x)).slice(0,500));
+ $('select-all-metrics').addEventListener('click',()=>{metricsSelected=new Set(VARS.map(v=>v[0]));chartPrefsSave();renderMetrics();renderYears();renderPlot()});
+ $('only-gsf').addEventListener('click',()=>{metricsSelected=new Set(['gsf']);chartPrefsSave();renderMetrics();renderYears();renderPlot()});
+ $('select-all-years').addEventListener('click',()=>{yearsSelected=new Set(possibleYears());chartPrefsSave();renderYears();renderPlot();renderTable()});
+ $('recent-years').addEventListener('click',()=>{yearsSelected=new Set(possibleYears().slice(-3));chartPrefsSave();renderYears();renderPlot();renderTable()});
+ renderMetrics();renderYears();
+}
+function renderMetrics(){
+ $('metrics').innerHTML=VARS.map(([id,name])=>`<button type="button" data-metric="${id}" class="chip metric-chip ${metricsSelected.has(id)?'on':''}" aria-pressed="${metricsSelected.has(id)}" title="${name}"><span class="dot" style="background:${METRIC_COLORS[id]}"></span>${name}</button>`).join('');
+ $('metrics').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.metric;if(metricsSelected.has(k)){if(metricsSelected.size>1)metricsSelected.delete(k)}else metricsSelected.add(k);
+  chartPrefsSave();renderMetrics();renderYears();renderPlot();
+ }));
 }
 function renderYears(){
  const ys=possibleYears();
- $('years').innerHTML=ys.map((y,i)=>`<button type="button" data-year="${y}" class="chip ${yearsSelected.has(y)?'on':''}" aria-pressed="${yearsSelected.has(y)}"><span class="dot" style="background:${color(y)}"></span>${y}</button>`).join('');
+ $('years').innerHTML=ys.map((y,i)=>`<button type="button" data-year="${y}" class="chip ${yearsSelected.has(y)?'on':''}" aria-pressed="${yearsSelected.has(y)}">${metricsSelected.size===1?`<span class="dot" style="background:${color(y)}"></span>`:''}${y}</button>`).join('');
  $('years').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
   const y=+b.dataset.year;
   if(yearsSelected.has(y)){if(yearsSelected.size>1)yearsSelected.delete(y)}else yearsSelected.add(y);
-  renderYears();renderAll();
+  chartPrefsSave();renderYears();renderPlot();renderTable();
  }));
 }
 function color(y){const ys=possibleYears();const i=ys.indexOf(y);return COLORS[(i+Math.floor(i/COLORS.length))%COLORS.length]}
@@ -660,48 +698,75 @@ function annualValue(key,year,status){
  return weighted/days;
 }
 function renderPlot(){
- const obj=VARS.find(x=>x[0]===variable),unit=obj[2],ys=[...yearsSelected].sort((a,b)=>a-b);
- let traces=[];
- for(const y of ys){
-  for(const [status,enabled,dash] of [['historico',showHistory,'solid'],['projecao',showForecast,'dash']]){
-   if(!enabled)continue;
-   const xs=[],vs=[],hover=[];
-   for(let m=1;m<=12;m++){
-    const o=value(variable,y,m);
-    if(o.status!==status||o.v==null)continue;
-    xs.push(m);vs.push(valDisplay(variable,o.v));
-    hover.push(`${MONTHS[m-1]}/${y}<br>${status==='historico'?'Histórico':'Projeção'}<br>${obj[1]}: ${formatValue(variable,o.v)}`);
-   }
-   if(!xs.length)continue;
-   const label=`${y} — ${status==='historico'?'Histórico':'Projeção'}`;
-   traces.push({type:'scatter',mode:'lines+markers',name:label,x:xs,y:vs,customdata:hover,
-    line:{color:color(y),width:3,dash},marker:{size:7,color:color(y)},
-    hovertemplate:'%{customdata}<extra></extra>',legendgroup:String(y)});
-   // "Ano": apenas série com 12 meses completos naquele status.
-   const ann=annualValue(variable,y,status);
-   if(ann!=null)traces.push({type:'scatter',mode:'markers',x:[13],y:[ann],name:`${y} — Ano (${status})`,showlegend:false,
-      marker:{color:color(y),size:12,symbol:'diamond'},hovertemplate:`Média anual ${y}: %{y:.2f} ${unit}<extra></extra>`,legendgroup:String(y)});
-  }
-  // Para anos com histórico + projeção (ex.: 2026), consolidar os 12 meses.
-  if(showHistory&&showForecast){
-    const all=Array.from({length:12},(_,i)=>value(variable,y,i+1));
-    if(all.every(o=>o.v!=null) && all.some(o=>o.status==='historico') && all.some(o=>o.status==='projecao')){
-      let total=0,days=0;
-      all.forEach((o,i)=>{const d=new Date(y,i+1,0).getDate();total+=valDisplay(variable,o.v)*d;days+=d});
-      traces.push({type:'scatter',mode:'markers',x:[13],y:[total/days],showlegend:false,
-        name:`${y} — Ano consolidado`,marker:{color:color(y),size:13,symbol:'diamond',line:{color:'#fff',width:1}},
-        hovertemplate:`Média anual consolidada ${y}: %{y:.2f} ${unit}<extra></extra>`,legendgroup:String(y)});
+ const selectedMetrics=VARS.filter(([key])=>metricsSelected.has(key)),ys=[...yearsSelected].sort((a,b)=>a-b);
+ const multi=selectedMetrics.length>1;
+ const hasPct=selectedMetrics.some(x=>x[2]==='%'),hasMw=selectedMetrics.some(x=>x[2]==='MWm');
+ const primaryUnit=hasPct?'%':'MWm';
+ const bothAxes=hasPct&&hasMw;
+ const traces=[],legendItems=[];let meanMarkers=0;
+ for(const [key,label,unit] of selectedMetrics){
+  for(const y of ys){
+   const c=multi?METRIC_COLORS[key]:color(y);
+   const symbol=YEAR_SYMBOLS[Math.max(0,possibleYears().indexOf(y))%YEAR_SYMBOLS.length];
+   const series=`${METRIC_SHORT[key]} · ${y}`;
+   const group=`${key}-${y}`;
+   const ax=(bothAxes&&unit!==primaryUnit)?'y2':'y';
+   for(const [status,enabled,dash] of [['historico',showHistory,'solid'],['projecao',showForecast,'dash']]){
+    if(!enabled)continue;
+    const xs=[],vs=[],hover=[];
+    for(let m=1;m<=12;m++){
+     const o=value(key,y,m);xs.push(m);
+     vs.push(o.status===status&&o.v!=null?valDisplay(key,o.v):null);
+     hover.push(`${MONTHS[m-1]}/${y}<br>${status==='historico'?'Histórico':'Projeção'}<br>${label}: ${formatValue(key,o.status===status?o.v:null)}`);
     }
+    if(vs.every(v=>v==null))continue;
+    const legendKey=`${key}|${y}|${status}`;
+    legendItems.push({key:legendKey,color:c,dash,name:`${series} — ${status==='historico'?'Histórico':'Projeção'}`});
+    traces.push({type:'scatter',mode:'lines+markers',name:`${series} — ${status==='historico'?'Histórico':'Projeção'}`,
+     x:xs,y:vs,customdata:hover,yaxis:ax,visible:hiddenSeries.has(legendKey)?'legendonly':true,
+     connectgaps:false,
+     line:{color:c,width:multi?2.4:3,shape:'spline',smoothing:0.7,dash},
+     marker:{size:multi?6:7,color:c,symbol},
+     hovertemplate:'%{customdata}<extra></extra>',legendgroup:group,opacity:multi?0.88:1});
+    // Média anual apenas quando o status possui os 12 meses válidos.
+    const ann=annualValue(key,y,status);
+    if(ann!=null){meanMarkers++;traces.push({type:'scatter',mode:'markers',x:[13],y:[ann],yaxis:ax,visible:hiddenSeries.has(legendKey)?'legendonly':true,
+     name:`${series} — Ano (${status})`,showlegend:false,marker:{color:c,size:11,symbol:'diamond'},
+     hovertemplate:`${series} · Média anual (${status}): %{y:.2f} ${unit}<extra></extra>`,legendgroup:group})}
+   }
+   // Série que mistura histórico e projeção: ponto consolidado dos 12 meses.
+   if(showHistory&&showForecast){
+    const all=Array.from({length:12},(_,i)=>value(key,y,i+1));
+    if(all.every(o=>o.v!=null)&&all.some(o=>o.status==='historico')&&all.some(o=>o.status==='projecao')){
+     let total=0,days=0;
+     all.forEach((o,i)=>{const d=new Date(y,i+1,0).getDate();total+=valDisplay(key,o.v)*d;days+=d});
+     meanMarkers++;traces.push({type:'scatter',mode:'markers',x:[13],y:[total/days],yaxis:ax,
+      visible:hiddenSeries.has(`${key}|${y}|historico`)||hiddenSeries.has(`${key}|${y}|projecao`)?'legendonly':true,showlegend:false,name:`${series} — Ano consolidado`,marker:{color:c,size:12,symbol:'diamond',line:{color:'#fff',width:1}},
+      hovertemplate:`${series} · Média anual consolidada: %{y:.2f} ${unit}<extra></extra>`,legendgroup:group});
+    }
+   }
   }
  }
  if(!window.Plotly){$('plot').innerHTML='<p class="warn">Biblioteca de gráficos Plotly indisponível.</p>';return}
- Plotly.react('plot',traces,{height:540,showlegend:true,hovermode:'closest',paper_bgcolor:'#fff',plot_bgcolor:'#fff',
-  font:{family:'Century Gothic,Arial',size:12,color:'#334b5a'},margin:{t:20,l:86,r:25,b:95},
+ const lines=traces.length-meanMarkers;
+ const manyLines=lines>14;
+ const yaxis={title:primaryUnit==='%'?'Indicadores (%)':'Energia (MWm)',ticksuffix:primaryUnit==='%'?'%':'',
+  showline:true,linecolor:'#a7b4bf',gridcolor:'#ebf0f4',zeroline:false};
+ const layout={height:manyLines?650:560,showlegend:false,hovermode:'closest',paper_bgcolor:'#fff',plot_bgcolor:'#fff',
+  font:{family:'Century Gothic,Arial',size:12,color:'#334b5a'},margin:{t:30,l:85,r:bothAxes?100:30,b:85},
   xaxis:{title:'Mês',range:[0.65,13.5],tickmode:'array',tickvals:Array.from({length:13},(_,i)=>i+1),ticktext:[...MONTHS,'Ano'],showgrid:false,showline:true,linecolor:'#9eacb7'},
-  yaxis:{title:obj[1],ticksuffix:unit==='%'?'%':'',showline:true,linecolor:'#a7b4bf',gridcolor:'#ebf0f4'},
-  legend:{orientation:'h',x:.5,xanchor:'center',y:-.26,yanchor:'top',font:{size:11}}},{responsive:true,displaylogo:false});
- $('plot-note').textContent=variable==='gsf'? 'Ajuste MRE positivo: energia secundária. Ajuste MRE negativo: déficit (GSF abaixo de 100%). Valores da planilha são históricos; projeções são recalculadas com as premissas selecionadas.' :
-   `Comparação mensal de ${obj[1]}. Cores = anos; linha contínua = realizado; tracejada = projetado. Ponto “Ano” aparece somente para séries de 12 meses completos.`;
+  yaxis};
+ if(bothAxes)layout.yaxis2={title:'Energia (MWm)',overlaying:'y',side:'right',showgrid:false,zeroline:false};
+ // Mesmo com milhares de valores selecionados, o gráfico mantém valores mensais exatos.
+ Plotly.react('plot',traces,layout,{responsive:true,displaylogo:false});
+ const visibleCount=legendItems.filter(it=>!hiddenSeries.has(it.key)).length;
+ $('plot-legend').innerHTML=`<div class="plot-legend-title">Séries exibidas: ${visibleCount} de ${legendItems.length} · clique numa série para ocultar/mostrar</div>`+
+  legendItems.map(it=>`<button type="button" class="${hiddenSeries.has(it.key)?'off':''}" data-key="${it.key}" aria-pressed="${!hiddenSeries.has(it.key)}" title="Clique para ${hiddenSeries.has(it.key)?'exibir':'ocultar'} esta série"><span class="sample ${it.dash==='dash'?'dash':''}" style="border-color:${it.color}"></span>${it.name}</button>`).join('');
+ $('plot-legend').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+  const key=b.dataset.key;if(hiddenSeries.has(key))hiddenSeries.delete(key);else hiddenSeries.add(key);
+  chartPrefsSave();renderPlot();
+ }));
+ $('plot-note').textContent=`${selectedMetrics.length} grandeza(s), ${ys.length} ano(s), ${lines} série(s) de linhas. Curvas suavizadas apenas visualmente: os valores dos meses não são alterados. ${bothAxes?'Eixo esquerdo = %; direito = MWm. ':''}Pontos “Ano” representam médias ponderadas para 12 meses completos. A tabela e o Excel abaixo têm seu próprio seletor de grandeza.`;
 }
 function renderTable(){
  const varname=VARS.find(x=>x[0]===variable)[1],ys=[...yearsSelected].sort((a,b)=>a-b);
