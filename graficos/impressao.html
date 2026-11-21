@@ -37,7 +37,7 @@ iframe.collector{position:fixed;width:1260px;height:900px;left:-5000px;top:0;opa
  .print-piece [class*="grid"],.print-piece [class*="cards"]{max-width:100%}
 }
 </style></head><body>
-<div class="toolbar"><div><h1>Relatório completo · Acompanhamento de mercado</h1><p>Inclui Operação, ENA, EAR, PLD, Mercado, Newave, Decomp e Ajuste MRE</p></div><div class="actions"><button class="secondary" id="reload" onclick="location.reload()">Atualizar relatório</button><button id="print" disabled>Imprimir / Salvar PDF</button></div></div>
+<div class="toolbar"><div><h1>Relatório completo · Acompanhamento de mercado</h1><p>Inclui Operação, ENA, EAR, PLD, Mercado, Newave, Decomp, Ajuste MRE e ENA Longo Prazo</p></div><div class="actions"><button class="secondary" id="reload" onclick="location.reload()">Atualizar relatório</button><button id="print" disabled>Imprimir / Salvar PDF</button></div></div>
 <div id="status" role="status">Iniciando preparação…</div>
 <div id="report"><header class="cover"><h1>Acompanhamento de mercado</h1><div class="date" id="report-date"></div><div class="small-note">Se aberto pelo dashboard, o relatório utiliza as séries selecionadas na janela original. Módulos ainda não carregados usam a configuração inicial publicada.</div></header><div id="sections"></div></div>
 <script>
@@ -50,7 +50,8 @@ const MODULES=[
  ['mercado','Mercado · Negócios e MTM','mercado.html'],
  ['newave','Projeções Newave','newave.html'],
  ['decomp','Projeções Decomp','decomp.html'],
- ['mre','Ajuste MRE','ajuste_mre.html']
+ ['mre','Ajuste MRE','ajuste_mre.html'],
+ ['ena-lp','ENA - Projeção Longo Prazo','ena_longo_prazo.html']
 ];
 const $=id=>document.getElementById(id);
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -171,7 +172,7 @@ async function prepare(){
    await loaded;
    const doc=frame.contentDocument;if(!doc)throw new Error('Não foi possível acessar o conteúdo do módulo.');
    // Let scripts mount and Plotly finish drawing before export.
-   const expected={operacao:3,ena:5,ear:5,pld:5,mercado:1,newave:3,decomp:1}[id]||1;
+   const expected={operacao:3,ena:5,ear:5,pld:5,mercado:1,newave:3,decomp:1,'ena-lp':4}[id]||1;
    for(let n=0;n<34;n++){
     const plots=[...doc.querySelectorAll('.js-plotly-plot')].filter(el=>el._fullLayout);
     if(plots.length>=expected)break;

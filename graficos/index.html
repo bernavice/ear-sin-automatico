@@ -47,6 +47,7 @@
 <button role="tab" id="botao-newave" aria-selected="false" aria-controls="aba-newave" onclick="selecionar('newave')">Projeções Newave</button>
 <button role="tab" id="botao-decomp" aria-selected="false" aria-controls="aba-decomp" onclick="selecionar('decomp')">Projeções Decomp</button>
 <button role="tab" id="botao-mre" aria-selected="false" aria-controls="aba-mre" onclick="selecionar('mre')">Ajuste MRE</button>
+<button role="tab" id="botao-ena-lp" aria-selected="false" aria-controls="aba-ena-lp" onclick="selecionar('ena-lp')">ENA - Projeção Longo Prazo</button>
 </nav><div class="barra-impresso"><button id="imprimir-dashboard" type="button" onclick="imprimirDashboardCompleto()" title="Abrir relatório completo para salvar em PDF">Imprimir dashboard em PDF</button></div></header>
 <main class="conteudo">
 
@@ -62,6 +63,7 @@
 <section class="aba" id="aba-newave" role="tabpanel" aria-labelledby="botao-newave"><div class="molde"><iframe id="quadro-newave" title="Projeções Newave" src="newave.html" loading="lazy" style="height:4200px"></iframe></div></section>
 <section class="aba" id="aba-decomp" role="tabpanel" aria-labelledby="botao-decomp"><div class="molde"><iframe id="quadro-decomp" title="Projeções Decomp" src="decomp.html" loading="lazy" style="height:4200px"></iframe></div></section>
 <section class="aba" id="aba-mre" role="tabpanel" aria-labelledby="botao-mre"><div class="molde"><iframe id="quadro-mre" title="Ajuste MRE" src="ajuste_mre.html" loading="lazy" style="height:2100px"></iframe></div></section>
+<section class="aba" id="aba-ena-lp" role="tabpanel" aria-labelledby="botao-ena-lp"><div class="molde"><iframe id="quadro-ena-lp" title="ENA - Projeção Longo Prazo" src="ena_longo_prazo.html" loading="lazy" style="height:1900px"></iframe></div></section>
 </main>
 <script>
   // Os graficos do Plotly carregados em iframes ocultos precisam ser
