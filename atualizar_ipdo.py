@@ -25,7 +25,7 @@ from urllib.parse import quote
 
 import requests
 from ipdo_enrichment import (parse_capacidade_55, parse_termicas_6, parse_demanda_7,
-                            load_curtailment, load_hydro_anomalies, get_ons_demanda, get_ons_hydro)
+                            load_curtailment, load_hydro_anomalies, get_ons_demanda, get_ons_hydro, load_thermal_dispatch)
 try:
     import fitz
 except ImportError as exc:
@@ -213,16 +213,48 @@ def parse_storages(doc):
                 break
     return found
 
+def _narrative_clean(text):
+    """Não apresenta pedaços de frases/colunas embaralhadas como destaques.
+    Conserva somente parágrafos com pontuação e proporção lexical plausível.
+    """
+    value=re.sub(r'\s+',' ',text).strip('•*- \t')
+    if not (75<=len(value)<=700):return None
+    if not re.search(r'[.!?]\s*$',value):return None
+    terms=re.findall(r'\b[A-Za-zÀ-ÿ]+\b',value)
+    if len(terms)<12:return None
+    if sum(len(t)<=2 for t in terms)/len(terms)>.42:return None
+    if sum(ch.isalpha() for ch in value)<len(value)*.56:return None
+    # Evita reproduzir cabeçalhos de tabelas e descrições sem contexto.
+    if len(value.split())>6 and sum(ch.isupper() for ch in value if ch.isalpha())/max(1,sum(ch.isalpha() for ch in value))>.78:
+        return None
+    return value
+
 def parse_highlights(doc):
-    # Textos explicativos pertencem a seções específicas; não gerar interpretação de texto não extraído.
+    # Extrair somente narrativa legível; jamais publicar títulos quebrados
+    # pelas quebras de posição do PDF como se fossem frases operativas.
     content='\n'.join(get_lines(doc,2)+get_lines(doc,3))
-    sect=extract_section(content,'4 - Destaques da Operação','RESTRIÇÃO DE GERAÇÃO RENOVÁVEL',4000)
-    lines=[re.sub(r'\s+',' ',s).strip('•*- ') for s in sect.splitlines()]
-    highlights=[]
-    for x in lines:
-        if len(x)>47 and not any(s in simple(x) for s in ['operador nacional', 'elaborado a partir','informativo preliminar']):
-            highlights.append(x[:350])
-    return highlights[:8]
+    sect=extract_section(content,'4 - Destaques da Operação','5 - Gerações Térmicas',10000)
+    if not sect:
+        sect=extract_section(content,'CARGA E PRODUÇÃO DE ENERGIA POR SUBMERCADO','5 - Gerações',8000)
+    lines=[x.strip() for x in sect.splitlines() if x.strip()]
+    paragraphs=[];buf=''
+    for line in lines:
+        line=re.sub(r'\s+',' ',line).strip('•*- ')
+        if not line:continue
+        if re.match(r'^\s*(?:\d+(?:\.\d+)*[.:-]?|[-–•])\s+',line) or (line.isupper() and len(line)>12):
+            if buf:paragraphs.append(buf)
+            buf=''
+            if line.isupper():continue
+        if line.isupper() and len(line)>12:continue
+        buf=(buf+' '+line).strip()
+        if re.search(r'[.!?]\s*$',buf):paragraphs.append(buf);buf=''
+        if len(buf)>750:buf=''
+    if buf:paragraphs.append(buf)
+    unique=[]
+    for para in paragraphs:
+        out=_narrative_clean(para)
+        if out and out not in unique:unique.append(out)
+    return unique[:7]
 
 def parse_restrictions(doc):
     body='\n'.join(get_lines(doc,3))
@@ -281,33 +313,35 @@ def load_operation():
         if not re.fullmatch(r'20\d\d-\d\d-\d\d',day):continue
         vals={k: round(float(row[i]),2) for i,k in enumerate(['termica','eolica','solar','hidraulica','intercambio','carga'],start=1) if isinstance(row[i],(int,float))}
         daily.append({'data':day,'subsistema':'SIN',**vals})
-    daily=sorted(daily,key=lambda r:r['data'])[-125:]
+    daily=sorted(daily,key=lambda r:r['data'])[-740:]
     # Subsistemas: médias horárias agrupadas por dia, calculadas dos mesmos arquivos da aba Operação.
-    subpath=ROOT/'dados'/'operacao_sin'/('operacao_subsistemas_'+str(dt.date.today().year)+'.csv.gz')
-    if not subpath.exists():
-        subpath=ROOT/'dados'/'operacao_sin'/'operacao_subsistemas_2026.csv.gz'
+    latest_day=daily[-1]['data'] if daily else None
     subdaily=[]
     hourly_sin=[]
     hourly_data=defaultdict(dict)
-    latest_day=daily[-1]['data'] if daily else None
-    if subpath.exists():
-        aggregates=defaultdict(lambda: defaultdict(list))
+    data_dir=ROOT/'dados'/'operacao_sin'
+    years=sorted({dt.date.today().year,dt.date.today().year-1,dt.date.fromisoformat(latest_day).year if latest_day else dt.date.today().year})
+    subfiles=[data_dir/f'operacao_subsistemas_{y}.csv.gz' for y in years]
+    cutoff=(dt.date.fromisoformat(latest_day)-dt.timedelta(days=58)).isoformat() if latest_day else None
+    aggregates=defaultdict(lambda:defaultdict(list))
+    for subpath in subfiles:
+        if not subpath.exists():continue
         with gzip.open(subpath,'rt',encoding='utf-8-sig') as h:
             for item in csv.DictReader(h):
                 timestamp=item.get('datahora','')
                 d=timestamp[:10];sub=SUBS.get(item.get('subsistema','').upper())
                 if not sub or not d or (daily and d<daily[0]['data']):continue
-                if latest_day and d==latest_day and len(timestamp)>=16:
+                if latest_day and cutoff and cutoff<=d<=latest_day and len(timestamp)>=16:
                     try:
                         hourly_data[timestamp][sub] = {k:float(item[k]) for k in ('carga','eolica','solar')}
                     except (KeyError,TypeError,ValueError):pass
                 for k in KINDS:
                     try: aggregates[(d,sub)][k].append(float(item[k]))
                     except (KeyError,TypeError,ValueError):pass
-        for (day,sub),attrs in sorted(aggregates.items()):
-            row={'data':day,'subsistema':sub}
-            for k,seq in attrs.items():row[k]=round(sum(seq)/len(seq),2)
-            subdaily.append(row)
+    for (day,sub),attrs in sorted(aggregates.items()):
+        row={'data':day,'subsistema':sub}
+        for k,seq in attrs.items():row[k]=round(sum(seq)/len(seq),2)
+        subdaily.append(row)
     for timestamp, subs in sorted(hourly_data.items()):
         if set(subs)=={'SE/CO','SUL','NE','N'}:
             carga=sum(x['carga'] for x in subs.values())
@@ -320,6 +354,12 @@ def load_operation():
     for row in all_daily:
         if all(isinstance(row.get(k),(int,float)) for k in ('carga','eolica','solar')):
             row['carga_liquida_proxy']=round(row['carga']-row['eolica']-row['solar'],2)
+    for row in all_daily:
+        if row.get('carga') and 'carga_liquida_proxy' in row:
+            row['pct_carga_liquida']=round(100*row['carga_liquida_proxy']/row['carga'],3)
+    for row in hourly_sin:
+        if row['carga_mw']>0:
+            row['pct_carga_liquida']=round(100*row['carga_liquida_proxy_mw']/row['carga_mw'],3)
     latest=max((r['data'] for r in daily),default=None)
     changes=[]
     bygroup=defaultdict(list)
@@ -340,7 +380,7 @@ def load_operation():
                 changes.append({'subsistema':sub,'variavel':k,'atual':a,'anterior':b,
                                 'variacao_mwm':round(delta,1),'variacao_pct':round(pct,1),'data':current['data']})
     changes.sort(key=lambda x:abs(x['variacao_mwm']),reverse=True)
-    return {'ultima_data':latest,'series':all_daily,'perfil_horario_sin':hourly_sin,
+    return {'ultima_data':latest,'series':all_daily,'perfil_horario_sin':hourly_sin[-24:], 'perfis_horarios_sin':hourly_sin,
             'variacoes_relevantes':changes[:20],
             'metodo':'Média dos valores horários disponíveis por dia; comparação com dia anterior para cada submercado.'}
 
@@ -364,7 +404,7 @@ select{border:1px solid #cddae6;border-radius:8px;padding:9px;background:white;f
 .thead{background:#173f60;color:white}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:11px 8px;text-align:right;border-bottom:1px solid #e6edf3}th:first-child,td:first-child{text-align:left}tbody tr:hover{background:#f4f9fc}
 .up{color:#10766a;font-weight:700}.down{color:#ad4a39;font-weight:700}.list{margin:0;padding-left:19px;line-height:1.7;color:#32485a;font-size:12px}li{margin-bottom:6px}
 .empty{padding:20px;color:#60768b;font-size:13px;background:#f5f8fa;border-radius:8px}.meta{font-size:11px;color:#5d758b;margin-top:13px}
-.alert-red{background:#fff1ef;border-color:#dc5b50;color:#8b2822}.alert-green{background:#e8f8f3;border-color:#0d9972;color:#126c4d}.highlights-flex{display:grid;grid-template-columns:1fr 1fr;gap:12px}.highlights-flex .part{background:#f5f9fd;padding:13px;border-radius:9px}.panel{min-width:0}.footer{margin:22px 0;font-size:11px;color:#6d7b89}
+.alert-red{background:#fff1ef;border-color:#dc5b50;color:#8b2822}.alert-green{background:#e8f8f3;border-color:#0d9972;color:#126c4d}.highlights-flex{display:grid;grid-template-columns:1fr 1fr;gap:12px}.highlights-flex .part{background:#f5f9fd;padding:13px;border-radius:9px}.panel{min-width:0}.wide{grid-column:1/-1}.control-col{display:flex;flex-direction:column;gap:5px;min-width:130px}.control-col select{min-height:105px;padding:5px;font-size:12px}.mini-table{overflow:auto;max-width:100%}.mini-table table{white-space:nowrap;font-size:11px}.mini-table td,.mini-table th{padding:8px 9px}.mini-table td:not(:first-child){text-align:right}.hint{font-size:11px;color:#6c8194}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.tabs button{border:1px solid #cadae6;background:#fff;color:#204963;padding:8px 14px;border-radius:9px;cursor:pointer}.tabs button.active{background:#145b80;color:white;border-color:#145b80}.info-strip{display:flex;gap:13px;flex-wrap:wrap;margin:10px 0;color:#47687c;font-size:12px}.info-strip b{color:#173e5b}.footer{margin:22px 0;font-size:11px;color:#6d7b89}
 a{color:#087da6}a:visited{color:#3e6985}
 @media(max-width:980px){.highlights-flex{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.summary{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:500px){.wrap{padding:10px}.summary{grid-template-columns:1fr 1fr}.kpi{padding:13px}.kpi strong{font-size:21px}.hero{padding:17px}.plot{height:310px}}
@@ -379,18 +419,25 @@ a{color:#087da6}a:visited{color:#3e6985}
 <section class="summary" id="kpis"></section>
 <div class="grid"><section class="panel"><h2>Programado × verificado — IPDO</h2><div id="balance" class="plot"></div></section>
 <section class="panel"><h2>Participação da geração — IPDO</h2><div id="mix" class="plot"></div></section></div>
-<div class="grid"><section class="panel"><h2>Operação do SIN · Evolução recente</h2>
-<div class="tools"><label for="sub">Submercado:</label><select id="sub"></select><label for="metric">Grandeza:</label><select id="metric"></select></div>
-<div id="trend" class="plot"></div><p class="meta" id="opnote"></p></section>
-<section class="panel"><h2>Variações relevantes de geração e carga</h2><div id="changes"></div><p class="meta">Limiar: carga ≥3% e demais fontes ≥7%, com filtro adicional de materialidade absoluta.</p></section></div>
-<div class="grid"><section class="panel"><h2>Curtailment — energia restringida (MWh)</h2>
-<div id="curtailment" class="plot"></div><p class="meta" id="curtailment-note"></p></section>
-<section class="panel"><h2>Carga líquida — evolução recente</h2><div id="netload-day" class="plot" style="height:265px"></div><div id="netload" class="plot" style="height:295px"></div>
-<p class="meta">Gráfico superior: perfil horário do último dia disponível; inferior: histórico das médias diárias. Indicador aproximado: carga global − eólica − solar. Média diária; não é carga líquida horária de pico. Fontes: módulo Operação do SIN.</p></section></div>
+<section class="panel" style="margin-top:14px"><h2>Operação do SIN · Evolução recente</h2>
+<div class="tools"><div class="control-col"><label for="sub">Submercados</label><select id="sub" multiple size="5" aria-label="Selecione um ou mais submercados"></select></div>
+<div class="control-col"><label for="metric">Grandezas — múltipla seleção</label><select id="metric" multiple size="5" aria-label="Selecione uma ou mais grandezas"></select></div>
+<div class="hint">Use Ctrl+clique para escolher várias séries no computador.<br>As curvas indicam submercado e grandeza.</div></div>
+<div id="trend" class="plot" style="height:405px"></div><div id="trend-table" class="mini-table"></div><p class="meta" id="opnote"></p></section>
+<section class="panel" style="margin-top:14px"><h2>Curtailment — restrição de geração eólica e solar</h2>
+<div class="tabs" id="curt-tabs"><button data-level="dia" class="active">Diário</button><button data-level="mes">Mensal</button><button data-level="ano">Anual</button></div>
+<div id="curtailment-kpis" class="info-strip"></div><div id="curtailment" class="plot" style="height:390px"></div>
+<div id="curtailment-table" class="mini-table"></div><p class="meta" id="curtailment-note"></p></section>
+<section class="panel" style="margin-top:14px"><h2>Carga líquida — perfil diário e histórico</h2>
+<div class="tools"><label for="netload-date">Selecionar dia:</label><select id="netload-date"></select></div>
+<div id="netload-summary" class="info-strip"></div><div id="netload-day" class="plot" style="height:345px"></div>
+<div id="netload" class="plot" style="height:315px"></div>
+<div id="netload-ratio" class="plot" style="height:285px"></div>
+<p class="meta">Indicador aproximado: carga líquida = carga global − geração eólica − geração solar. Razão (%) = carga líquida / carga global. Perfil horário em MW; médias históricas em MWmed. O marcador no fim do perfil indica a média do dia, não o valor da última hora.</p></section>
 <div class="grid"><section class="panel"><h2>Demanda máxima instantânea do SIN — seção 7</h2>
 <div id="demand-max" class="plot"></div><p class="meta" id="demand-note"></p></section>
-<section class="panel"><h2>Disponibilidade térmica — seção 5.5</h2>
-<div id="availability" class="plot"></div><p class="meta" id="availability-note"></p></section></div>
+<section class="panel"><h2>Geração térmica — motivo do despacho (ONS)</h2>
+<div id="thermal-reasons" class="plot"></div><p class="meta" id="thermal-reasons-note"></p></section></div>
 <div class="grid"><section class="panel"><h2>Top 3 — diferenças entre capacidade instalada e disponível</h2>
 <div id="top-capacity"></div></section>
 <section class="panel"><h2>Geração térmica — destaques e justificativas (seção 6)</h2><div id="thermal"></div></section></div>
@@ -426,14 +473,45 @@ function draw(){const ip=DATA.ipdo,op=DATA.operacao,bal=ip?.balanco||[],isDemo=D
  el('detail').innerHTML=bal.map(x=>{const delta=x.verificado-x.programado, pct=x.programado?delta/x.programado*100:null;const cls=delta>0?'up':delta<0?'down':'';
  return `<tr><td>${esc(x.fonte)}</td><td>${f(x.programado)}</td><td>${f(x.verificado)}</td><td class="${cls}">${delta>0?'+':''}${f(delta)}</td><td class="${cls}">${pct>0?'+':''}${f(pct,1)}%</td></tr>`}).join('')||'<tr><td colspan="5">Não foi possível obter o balanço do IPDO.</td></tr>';
  const sels=[...new Set((op.series||[]).map(r=>r.subsistema))].sort((a,b)=>['SIN','SE/CO','SUL','NE','N'].indexOf(a)-['SIN','SE/CO','SUL','NE','N'].indexOf(b));
- el('sub').innerHTML=sels.map(x=>`<option>${esc(x)}</option>`).join('');
- el('metric').innerHTML=[['carga','Carga'],['hidraulica','Hidráulica'],['termica','Térmica'],['eolica','Eólica'],['solar','Solar']].map(([k,n])=>`<option value="${k}">${n}</option>`).join('');
- function updateTrend(){const sub=el('sub').value,m=el('metric').value;let data=(op.series||[]).filter(r=>r.subsistema===sub&&r[m]!==undefined).sort((a,b)=>a.data.localeCompare(b.data));
- if(data.length && window.Plotly)Plotly.newPlot('trend',[{type:'scatter',mode:'lines+markers',name:m,x:data.map(r=>r.data),y:data.map(r=>r[m]),line:{color:'#148bb7',width:3,shape:'spline',smoothing:.45},marker:{size:6}}],{...layout,xaxis:{type:'date',tickformat:'%d/%m',gridcolor:'#eff3f7'},yaxis:{title:'MWmed',gridcolor:'#eff3f7'}},plotCfg);
- else el('trend').textContent='Série de operação indisponível.';
- el('opnote').textContent='Fonte: módulo Operação do SIN. Média diária dos valores horários; base até '+days(data.at(-1)?.data||null)+'. Não corresponde ao total programado/verificado do IPDO.';
- }el('sub').onchange=updateTrend;el('metric').onchange=updateTrend;updateTrend();
- el('changes').innerHTML=(op.variacoes_relevantes||[]).slice(0,12).map(x=>`<div style="border-bottom:1px solid #e7edf4;padding:9px 0;font-size:12px"><b>${esc(x.subsistema)} · ${esc(({carga:'Carga',hidraulica:'Hidráulica',termica:'Térmica',eolica:'Eólica',solar:'Solar'})[x.variavel])}</b><span class="${x.variacao_mwm>0?'up':'down'}" style="float:right">${x.variacao_mwm>0?'+':''}${f(x.variacao_mwm)} MWmed (${x.variacao_pct>0?'+':''}${f(x.variacao_pct,1)}%)</span><div style="color:#718095;font-size:10px;margin-top:3px">${days(x.data)} vs. dia anterior</div></div>`).join('')||'<div class="empty">Nenhuma variação ultrapassou os limites configurados ou ainda não há dois dias consecutivos.</div>';
+ const metricNames={carga:'Carga',hidraulica:'Hidráulica',termica:'Térmica',eolica:'Eólica',solar:'Solar'};
+ el('sub').innerHTML=sels.map(x=>`<option value="${esc(x)}"${x==='SIN'?' selected':''}>${esc(x)}</option>`).join('');
+ el('metric').innerHTML=Object.entries(metricNames).map(([k,n])=>`<option value="${k}"${['carga','hidraulica'].includes(k)?' selected':''}>${n}</option>`).join('');
+ const chosen=(id)=>[...el(id).selectedOptions].map(o=>o.value);
+ const per=(a,b)=>Number.isFinite(a)&&Number.isFinite(b)&&Math.abs(b)>1e-8?100*(a-b)/b:null;
+ const mean=(arr)=>arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:null;
+ const prevMonth=(day)=>{const d=new Date(day+'T12:00:00Z');d.setUTCDate(1);d.setUTCMonth(d.getUTCMonth()-1);return d.toISOString().slice(0,7)};
+ const avgDays=(dict,key,dates)=>mean(dates.map(d=>dict[d]?.[key]).filter(Number.isFinite));
+ function deltaText(cur,prev){if(!Number.isFinite(cur)||!Number.isFinite(prev))return '—';const delta=cur-prev,pct=per(cur,prev);return `<span class="${delta>0?'up':delta<0?'down':''}">${delta>0?'+':''}${f(delta,0)} MWmed<br><small>${pct>0?'+':''}${f(pct,1)}%</small></span>`;}
+ function updateTrend(){
+  const subs=chosen('sub'),metrics=chosen('metric'),pairs=[];
+  for(const sub of subs)for(const metric of metrics)pairs.push({sub,metric});
+  if(!pairs.length){el('trend').innerHTML='<div class="empty">Selecione uma série.</div>';el('trend-table').innerHTML='';return;}
+  const colors=['#0d7fa4','#25a191','#dd813f','#7259b3','#c15966','#506c9d','#61a1b3','#b37d36','#b75896'];
+  const traces=pairs.map((pair,i)=>{
+    const data=(op.series||[]).filter(r=>r.subsistema===pair.sub&&Number.isFinite(r[pair.metric])).sort((a,b)=>a.data.localeCompare(b.data));
+    return {type:'scatter',mode:'lines',name:pair.sub+' · '+metricNames[pair.metric],x:data.map(x=>x.data),y:data.map(x=>x[pair.metric]),
+      line:{width:2.5,color:colors[i%colors.length],shape:'spline',smoothing:.5},hovertemplate:'%{x}<br>%{y:,.0f} MWmed<extra>%{fullData.name}</extra>'};
+  }).filter(x=>x.x.length);
+  if(window.Plotly&&traces.length)Plotly.react('trend',traces,{...layout,xaxis:{type:'date',tickformat:'%d/%m',gridcolor:'#edf2f6'},yaxis:{title:'MWmed',gridcolor:'#edf2f6'},
+      legend:{orientation:'h',x:0,y:-.22},margin:{l:75,r:15,t:18,b:100}},plotCfg);
+  else el('trend').innerHTML='<div class="empty">Séries indisponíveis.</div>';
+  const tr=pairs.map(pair=>{
+    const series=(op.series||[]).filter(r=>r.subsistema===pair.sub&&Number.isFinite(r[pair.metric])).sort((a,b)=>a.data.localeCompare(b.data));
+    if(!series.length)return '';
+    const map=Object.fromEntries(series.map(r=>[r.data,r])); const last=series.at(-1),day=last.data;
+    const dd=new Date(day+'T12:00:00Z'); const dateShift=n=>new Date(dd.getTime()+n*86400000).toISOString().slice(0,10);
+    const last7=Array.from({length:7},(_,i)=>dateShift(-i)),old7=Array.from({length:7},(_,i)=>dateShift(-7-i));
+    const week=avgDays(map,pair.metric,last7),prevWeek=avgDays(map,pair.metric,old7);
+    const m=day.slice(0,7),pr=prevMonth(day),n=Number(day.slice(8));
+    const current=Array.from({length:n},(_,i)=>m+'-'+String(i+1).padStart(2,'0'));
+    const old=Array.from({length:n},(_,i)=>pr+'-'+String(i+1).padStart(2,'0'));
+    const mon=avgDays(map,pair.metric,current),priorMon=avgDays(map,pair.metric,old);
+    return `<tr><td><b>${esc(pair.sub)}</b> · ${esc(metricNames[pair.metric])}<div class="hint">${days(day)}</div></td><td>${f(last[pair.metric],0)}</td><td>${deltaText(last[pair.metric],map[dateShift(-1)]?.[pair.metric])}</td><td>${deltaText(week,prevWeek)}</td><td>${deltaText(mon,priorMon)}</td></tr>`;
+  }).filter(Boolean);
+  el('trend-table').innerHTML=`<table><thead class="thead"><tr><th>Série</th><th>Último dia<br>MWmed</th><th>Δ diário</th><th>Δ semanal</th><th>Δ mensal</th></tr></thead><tbody>${tr.join('')}</tbody></table>`;
+  el('opnote').textContent='Variação diária: último dia − dia anterior. Semanal: média de 7 dias − média dos 7 dias anteriores. Mensal: média do mês corrente até a data − mesmo número de dias do mês anterior. Unidade MWmed; % sobre o período anterior. Série Operação do SIN até '+days(op.ultima_data)+'.';
+ }
+ el('sub').onchange=updateTrend;el('metric').onchange=updateTrend;updateTrend();
  if(ip?.reservatorios?.length&&window.Plotly){Plotly.newPlot('ear',[{type:'bar',x:ip.reservatorios.map(x=>x.subsistema),y:ip.reservatorios.map(x=>x.ear),marker:{color:'#149c8f'},text:ip.reservatorios.map(x=>f(x.ear,1)+'%'),textposition:'outside'}],{...layout,yaxis:{range:[0,100],title:'EAR (%)',gridcolor:'#eff3f7'},margin:{l:57,r:10,t:30,b:40}},plotCfg)}else{el('ear').innerHTML='<div class="empty">Os valores de EAR não foram extraídos com segurança desta edição do PDF. Consulte a aba EAR para dados consolidados.</div>'}
  const highlights=(ip?.destaques||[]).map(x=>`<li>${esc(x)}</li>`).join('');
  const restrict=(ip?.restricoes||[]).filter(x=>x.maximo_mw!==null).map(x=>`<li><b>${esc(x.subsistema)}</b>: restrição máxima de ${f(x.maximo_mw)} MW. ${esc(x.motivo||'')}</li>`).join('');
@@ -441,41 +519,94 @@ function draw(){const ip=DATA.ipdo,op=DATA.operacao,bal=ip?.balanco||[],isDemo=D
  // --- Enriquecimentos do IPDO, com dados ausentes claramente sinalizados ---
  const empty=(txt)=>'<div class="empty">'+esc(txt)+'</div>';
  const crt=DATA.curtailment||{}, crows=crt.series||[];
- const since=(DATA.gerado_em||'').slice(0,10);
- const lastc=crows.filter(r=>r.data>=new Date(Date.parse(since+'T00:00:00Z')-44*86400000).toISOString().slice(0,10));
- if(lastc.length && window.Plotly){
-  const dates=[...new Set(lastc.map(x=>x.data))].sort();
-  Plotly.newPlot('curtailment',['Eólica','Solar'].map((source,i)=>({type:'bar',name:source,x:dates,
-   y:dates.map(day=>lastc.find(x=>x.data===day&&x.fonte===source)?.mwh??null),marker:{color:i?'#efaa39':'#159aa4'}})),
-   {...layout,barmode:'stack',xaxis:{type:'date',tickformat:'%d/%m'},yaxis:{title:'GNRa estimada (MWh)'},
-   margin:{l:65,r:12,t:28,b:50},legend:{orientation:'h',y:1.2}},plotCfg);
- }else el('curtailment').innerHTML=empty('Histórico de curtailment indisponível. A base pública do ONS ainda não foi coletada/validada.');
- el('curtailment-note').textContent='Fonte: ONS Dados Abertos — GNRa (geração não realizada apurada) por patamar semihorário, convertida em MWh; até '+days(crt.data_mais_recente)+'. Sujeita a revisões. Não confundir com potência máxima restringida citada no IPDO.';
- const ph=op.perfil_horario_sin||[];
- if(ph.length&&window.Plotly){Plotly.newPlot('netload-day',[
- {type:'scatter',mode:'lines',name:'Carga global (MW)',x:ph.map(r=>r.datahora.slice(11,16)),y:ph.map(r=>r.carga_mw),line:{color:'#adb8c7',width:2}},
- {type:'scatter',mode:'lines',name:'Carga líquida (MW)',x:ph.map(r=>r.datahora.slice(11,16)),y:ph.map(r=>r.carga_liquida_proxy_mw),line:{color:'#1c82b2',width:3}}],
- {...layout,title:{text:'Perfil horário — '+days(ph[0].datahora.slice(0,10)),font:{size:12}},xaxis:{title:'Hora',type:'category'},yaxis:{title:'MW'},margin:{l:67,r:10,b:42,t:37},legend:{orientation:'h',y:1.29}},plotCfg)}
- else el('netload-day').innerHTML=empty('Perfil horário do SIN indisponível no módulo Operação.');
- const opNet=(op.series||[]).filter(x=>x.subsistema==='SIN'&&Number.isFinite(x.carga_liquida_proxy)).slice(-90);
- if(opNet.length&&window.Plotly){Plotly.newPlot('netload',[
- {type:'scatter',mode:'lines',name:'Carga global',x:opNet.map(r=>r.data),y:opNet.map(r=>r.carga),line:{color:'#adb8c7',width:2}},
- {type:'scatter',mode:'lines',name:'Carga líquida (proxy)',x:opNet.map(r=>r.data),y:opNet.map(r=>r.carga_liquida_proxy),line:{color:'#1c82b2',width:3}}],
- {...layout,xaxis:{type:'date',tickformat:'%d/%m'},yaxis:{title:'MWmed'},legend:{orientation:'h',y:1.2},margin:{l:65,r:10,t:33,b:54}},plotCfg)}
- else el('netload').innerHTML=empty('Série diária de carga, solar e eólica ainda não disponível.');
+ function sumMetric(items,key){return items.every(r=>Number.isFinite(r[key]))?items.reduce((a,r)=>a+r[key],0):null;}
+ const pad=(n)=>String(n).padStart(2,'0');
+ function aggregateCuts(level){const groups=new Map();
+  for(const r of crows){if(!r||!r.data||!Number.isFinite(r.mwh))continue;
+   const k=level==='ano'?r.data.slice(0,4):level==='mes'?r.data.slice(0,7):r.data;
+   if(!groups.has(k))groups.set(k,[]);groups.get(k).push(r);
+  }
+  return [...groups.entries()].sort(([a],[b])=>a.localeCompare(b)).map(([date,rows])=>{
+   const daysUnique=new Set(rows.map(x=>x.data)).size;
+   const total=rows.reduce((a,r)=>a+r.mwh,0);
+   const pot=sumMetric(rows,'geracao_potencial_mwh');
+   const by=Object.fromEntries(['Eólica','Solar'].map(src=>[src,rows.filter(r=>r.fonte===src).reduce((a,r)=>a+r.mwh,0)]));
+   return {data:date,mwh:total,mwmed:total/(24*daysUnique),pct:pot>0?100*total/pot:null,dias:daysUnique,by};
+  });
+ }
+ function updateCuts(level){const series=aggregateCuts(level);const plotted=series.slice(level==='dia'?-60:level==='mes'?-24:-12);
+  if(plotted.length&&window.Plotly){
+   const traces=['Eólica','Solar'].map((fonte,i)=>({type:'bar',name:fonte,x:plotted.map(r=>r.data),y:plotted.map(r=>r.by[fonte]),
+     marker:{color:i?'#e8a246':'#148fa2'},hovertemplate:'%{x}<br>%{y:,.0f} MWh<extra>'+fonte+'</extra>'}));
+   Plotly.react('curtailment',traces,{...layout,barmode:'stack',xaxis:{type:'category',tickangle:level==='dia'?-45:0},
+    yaxis:{title:'Energia cortada (MWh)'},legend:{orientation:'h',x:0,y:-.28},margin:{l:75,r:20,t:18,b:95}},plotCfg);
+   const recent=plotted.at(-1);const pct=Number.isFinite(recent.pct)?f(recent.pct,2)+'%':'sem denominador';
+   el('curtailment-kpis').innerHTML=`<span><b>Último ${level}:</b> ${esc(recent.data)}</span><span><b>Corte:</b> ${f(recent.mwh)} MWh</span><span><b>Média:</b> ${f(recent.mwmed,1)} MWmed</span><span><b>Corte/potencial:</b> ${pct}</span><span><b>Dias observados:</b> ${recent.dias}</span>`;
+   el('curtailment-table').innerHTML=`<table><thead class="thead"><tr><th>Período</th><th>Restrição (MWh)</th><th>Média (MWmed)</th><th>Restrição / potencial (%)</th><th>Dias com dados</th></tr></thead><tbody>${plotted.slice(-8).reverse().map(r=>`<tr><td>${esc(r.data)}</td><td>${f(r.mwh)}</td><td>${f(r.mwmed,1)}</td><td>${f(r.pct,2)}${Number.isFinite(r.pct)?'%':''}</td><td>${r.dias}</td></tr>`).join('')}</tbody></table>`;
+  }else{el('curtailment').innerHTML='<div class="empty">Série de curtailment não disponível.</div>';el('curtailment-table').innerHTML='';el('curtailment-kpis').innerHTML='';}
+  for(const btn of el('curt-tabs').querySelectorAll('button'))btn.classList.toggle('active',btn.dataset.level===level);
+ }
+ for(const btn of el('curt-tabs').querySelectorAll('button'))btn.addEventListener('click',()=>updateCuts(btn.dataset.level));updateCuts('mes');
+ el('curtailment-note').textContent='Fonte: ONS Constrained-off Eólica/Fotovoltaica. MWh = GNRa (MWmed) × 0,5 h; MWmed = MWh / 24 h por dia observado. Percentual só aparece se geração verificada e GNRa estiverem completas para a mesma fonte/período. Períodos incompletos não representam ano/mês fechado. Data da fonte: '+days(crt.data_mais_recente)+'.';
+ // Carga líquida: todos os perfis horários arquivados, seleção de dia e indicador %.
+ const phAll=(op.perfis_horarios_sin||op.perfil_horario_sin||[]).filter(x=>x.datahora&&Number.isFinite(x.carga_liquida_proxy_mw));
+ const phMap={};for(const r of phAll){const d=r.datahora.slice(0,10);(phMap[d]??=[]).push(r);}
+ const phDates=Object.keys(phMap).filter(d=>phMap[d].length>=12).sort();
+ el('netload-date').innerHTML=phDates.slice(-60).reverse().map(d=>`<option value="${d}">${days(d)}</option>`).join('');
+ function updateNetDay(){const d=el('netload-date').value;const rows=(phMap[d]||[]).sort((a,b)=>a.datahora.localeCompare(b.data));
+  if(!rows.length||!window.Plotly){el('netload-day').innerHTML='<div class="empty">Perfil horário indisponível.</div>';return;}
+  const x=rows.map(r=>r.datahora.slice(11,16)),net=rows.map(r=>r.carga_liquida_proxy_mw),glob=rows.map(r=>r.carga_mw),pct=rows.map(r=>r.pct_carga_liquida);
+  const avg=mean(net),meanG=mean(glob),ratio=mean(pct);
+  const traces=[{type:'scatter',mode:'lines+markers',name:'Carga global (MW)',x,y:glob,line:{color:'#9fb4c4',width:2},marker:{size:3}},
+    {type:'scatter',mode:'lines+markers',name:'Carga líquida (MW)',x,y:net,line:{color:'#137da6',width:3},marker:{size:3}},
+    {type:'scatter',mode:'lines',name:'Relação líquida/global (%)',x,y:pct,yaxis:'y2',line:{color:'#9a68ba',dash:'dot',width:2}},
+    {type:'scatter',mode:'markers+text',name:'Média diária líquida',x:[x.at(-1)],y:[avg],marker:{color:'#e9a23e',size:13,symbol:'diamond'},
+      text:[f(avg,0)+' MWmed'],textposition:'top left',textfont:{size:11},showlegend:true}];
+  Plotly.react('netload-day',traces,{...layout,xaxis:{title:'Hora',type:'category'},yaxis:{title:'MW'},
+    yaxis2:{title:'%',overlaying:'y',side:'right',showgrid:false,range:[0,110]},
+    legend:{orientation:'h',x:0,y:-.32},margin:{l:70,r:70,t:30,b:110}},plotCfg);
+  el('netload-summary').innerHTML=`<span><b>Dia:</b> ${days(d)}</span><span><b>Carga global:</b> ${f(meanG)} MWmed</span><span><b>Carga líquida:</b> ${f(avg)} MWmed</span><span><b>Relação média:</b> ${f(ratio,1)}%</span><span><b>Horas:</b> ${rows.length}</span>`;
+ }
+ el('netload-date').onchange=updateNetDay;updateNetDay();
+ const opNet=(op.series||[]).filter(x=>x.subsistema==='SIN'&&Number.isFinite(x.carga_liquida_proxy)&&Number.isFinite(x.carga)).sort((a,b)=>a.data.localeCompare(b.data)).slice(-365);
+ if(opNet.length&&window.Plotly){
+  Plotly.react('netload',[
+   {type:'scatter',mode:'lines',name:'Carga global',x:opNet.map(r=>r.data),y:opNet.map(r=>r.carga),line:{color:'#a2b2c6',width:2}},
+   {type:'scatter',mode:'lines',name:'Carga líquida',x:opNet.map(r=>r.data),y:opNet.map(r=>r.carga_liquida_proxy),line:{color:'#117da7',width:3}}],
+   {...layout,title:{text:'Histórico — carga global × líquida (médias diárias)',font:{size:12}},xaxis:{type:'date',tickformat:'%d/%m'},yaxis:{title:'MWmed'},
+     legend:{orientation:'h',x:0,y:-.28},margin:{l:70,r:18,t:45,b:85}},plotCfg);
+  const ratios=opNet.map(x=>x.pct_carga_liquida??100*x.carga_liquida_proxy/x.carga);
+  const rolling=ratios.map((_,i)=>mean(ratios.slice(Math.max(0,i-29),i+1)));
+  Plotly.react('netload-ratio',[
+   {type:'scatter',mode:'lines',name:'Carga líquida / global (%)',x:opNet.map(r=>r.data),y:ratios,line:{color:'#8b65b5',width:2}},
+   {type:'scatter',mode:'lines',name:'Média móvel 30 dias',x:opNet.map(r=>r.data),y:rolling,line:{color:'#e9a33f',width:2,dash:'dash'}}],
+   {...layout,title:{text:'Relação carga líquida / carga global — histórico (%)',font:{size:12}},xaxis:{type:'date',tickformat:'%d/%m'},yaxis:{title:'%'},
+     legend:{orientation:'h',x:0,y:-.28},margin:{l:65,r:15,t:42,b:85}},plotCfg);
+ }else{el('netload').innerHTML='<div class="empty">Histórico sem dados suficientes.</div>';el('netload-ratio').innerHTML='';}
  const dm=DATA.demanda_ons?.verificada_mw!=null?DATA.demanda_ons:(ip?.demanda_7||{}),dh=DATA.demanda_historico||[];
  let demandTxt=dm.verificada_mw==null?'Não foi possível validar a linha SIN da seção 7; não há alerta automático sem números confirmados.':
   `Pico verificado: ${f(dm.verificada_mw)} MW${dm.hora?' às '+esc(dm.hora):''}. Máximo anterior: ${f(dm.recorde_mw)} MW. ${esc(dm.status||'')}`;
  el('demand-note').textContent=demandTxt+' Fonte ONS, dado preliminar/revisável; picos instantâneos são diferentes das médias diárias de carga.';
- if(dh.length&&window.Plotly){Plotly.newPlot('demand-max',[{type:'scatter',mode:'lines+markers',name:'Máxima diária SIN',x:dh.map(r=>r.data),y:dh.map(r=>r.mw),line:{color:'#5c73bf',width:3}}],
- {...layout,xaxis:{type:'date'},yaxis:{title:'MW'},margin:{l:63,r:12,b:48,t:20},shapes:dm.recorde_mw!=null?[{type:'line',x0:0,x1:1,xref:'paper',y0:dm.recorde_mw,y1:dm.recorde_mw,line:{color:'#e55d39',dash:'dash'}}]:[]},plotCfg)}
- else el('demand-max').innerHTML=empty('Histórico da máxima instantânea ainda não capturado com segurança.');
+ if(dh.length&&window.Plotly){const last=dh.slice(-45);
+   Plotly.react('demand-max',[{type:'bar',name:'Demanda máxima diária SIN',x:last.map(r=>r.data),y:last.map(r=>r.mw),
+    marker:{color:last.map(r=>dm.novo_recorde&&r.data===last.at(-1)?.data?'#e36a47':'#4d87c2')}}],
+   {...layout,xaxis:{type:'date',tickformat:'%d/%m'},yaxis:{title:'MW'},margin:{l:72,r:14,b:74,t:24},
+     shapes:dm.recorde_mw!=null?[{type:'line',x0:0,x1:1,xref:'paper',y0:dm.recorde_mw,y1:dm.recorde_mw,line:{color:'#df6345',dash:'dash'}}]:[]},plotCfg);
+ }else el('demand-max').innerHTML=empty('Histórico da demanda máxima indisponível.');
  if(dm.novo_recorde===true){el('demand-alert').style.display='block';el('demand-alert').className='notice alert-red';el('demand-alert').textContent='ALERTA DE RECORDE: demanda máxima do SIN superou a máxima anterior do período disponível no ONS. '+demandTxt;}
+ const thermalReasons=DATA.termicas_despacho||{},thermalDay=thermalReasons.ultimo_dia;
+ if(thermalDay?.submercados?.length&&window.Plotly){
+   const rows=[...thermalDay.submercados,thermalDay.sin];const cats=['SE/CO','SUL','NE','N','SIN'];
+   const fields=[['Ordem de mérito','merito','#1767a4'],['Inflexibilidade','inflexibilidade','#21a398'],['Razão elétrica','eletrica','#db8445'],
+                 ['Garantia energética','garantia','#8d64c0'],['Unit commitment','unitcommitment','#5b84d7'],['Outros motivos','outros','#8996a5']];
+   const traces=fields.map(([name,k,color])=>({type:'bar',name,x:cats,y:cats.map(c=>rows.find(r=>r.subsistema===c)?.[k]??0),marker:{color},
+     hovertemplate:'%{x}<br>%{y:,.1f} MWmed<extra>'+name+'</extra>'}));
+   Plotly.react('thermal-reasons',traces,{...layout,barmode:'stack',xaxis:{type:'category'},yaxis:{title:'Geração verificada (MWmed)'},
+     legend:{orientation:'h',x:0,y:-.3},margin:{l:75,r:10,b:110,t:20}},plotCfg);
+   el('thermal-reasons-note').textContent='Fonte: ONS Geração Térmica por Motivo de Despacho (base horária), '+days(thermalDay.data)+'. Média por hora disponível, submercados e total SIN. Cobertura mínima '+thermalDay.cobertura_horaria_minima+' horas. A quinta barra é a soma das quatro anteriores, não geração adicional.';
+ }else{el('thermal-reasons').innerHTML=empty('Dados horários por motivo de despacho não disponíveis. Não inferimos motivos a partir de texto fragmentado do IPDO.');
+   el('thermal-reasons-note').textContent='Fonte oficial: dados.ons.org.br/dataset/geracao-termica-despacho-2. É possível colocar CSV na pasta dados/ipdo/termicas.';}
  const cap=ip?.capacidade_55||{},total=cap.total,hist=DATA.capacidade_historico||[];
- if(hist.length&&window.Plotly){Plotly.newPlot('availability',[{type:'scatter',mode:'lines+markers',name:'Diferença Instalada - Disponível',x:hist.map(r=>r.data),y:hist.map(r=>r.diferenca_mw),line:{color:'#d88740',width:3}}],
- {...layout,xaxis:{type:'date'},yaxis:{title:'MW'},margin:{l:62,r:12,b:50,t:20}},plotCfg)}
- else el('availability').innerHTML=empty('Histórico de indisponibilidade 5.5 ainda não acumulado.');
- el('availability-note').textContent=total?`Total seção 5.5.4: instalada ${f(total.instalada_mw)} MW; disponível ${f(total.disponivel_mw)} MW; diferença ${f(total.diferenca_mw)} MW. Histórico baseado nos IPDOs arquivados.`:'Seção 5.5 não extraída com segurança; nenhum total foi inferido.';
  const capTop=cap.top3||[];
  el('top-capacity').innerHTML=capTop.length?capTop.map((r,i)=>`<div style="border-bottom:1px solid #e5edf6;padding:11px 0"><b>${i+1}º · ${esc(r.usina)}</b><span class="down" style="float:right">${f(r.diferenca_mw)} MW</span><div class="meta">Instalada ${f(r.instalada_mw)} MW · Disponível ${f(r.disponivel_mw)} MW · Motivo (IPDO 5.5): ${esc(r.motivo)}</div></div>`).join(''):
  empty('Ranking indisponível: a tabela por usina da seção 5.5 ainda não foi reconhecida de forma confiável.');
@@ -552,6 +683,7 @@ def main(args=None):
     demanda_ons=get_ons_demanda(RAW,reference,online=not ns.sem_rede and not ns.demo)
     hydro_official=get_ons_hydro(RAW,reference,online=not ns.sem_rede and not ns.demo)
     vazoes=load_hydro_anomalies(RAW,reference,structured_rows=hydro_official)
+    termicas_despacho=load_thermal_dispatch(RAW,reference,online=not ns.sem_rede and not ns.demo)
     cap_hist=[{'data':r['data'],'diferenca_mw':r['capacidade_55']['total']['diferenca_mw']}
               for r in history if r.get('capacidade_55',{}).get('total')]
     demand_hist=[{'data':r['data'],'mw':r['demanda_7']['verificada_mw']}
@@ -559,7 +691,7 @@ def main(args=None):
     days=(reference-dt.date.fromisoformat(latest['data'])).days if latest else None
     data={'gerado_em':dt.datetime.now(dt.timezone(dt.timedelta(hours=-3))).isoformat(timespec='seconds'),
           'modo':'demonstracao' if ns.demo else 'producao','ipdo':latest,'dias_desatualizacao':days,
-          'operacao':op,'curtailment':curtailment,'hidraulica':vazoes,
+          'operacao':op,'curtailment':curtailment,'hidraulica':vazoes,'termicas_despacho':termicas_despacho,
           'capacidade_historico':cap_hist,
           'demanda_historico':demanda_ons['historico'] or demand_hist,
           'demanda_ons':demanda_ons['dados'],
@@ -569,6 +701,7 @@ def main(args=None):
             'destaques':latest.get('destaques',[]) if latest else [],
             'variacoes_relevantes':op['variacoes_relevantes'],
             'perfil_carga_liquida':op['perfil_horario_sin'][-24:],
+            'termicas_por_motivo':termicas_despacho['ultimo_dia'],
             'carga_liquida_proxy':next((x['carga_liquida_proxy'] for x in reversed(op['series']) if x['subsistema']=='SIN' and 'carga_liquida_proxy' in x),None),
             'demanda_maxima':demanda_ons['dados'] or (latest.get('demanda_7') if latest else None),
             'disponibilidade_termica':latest.get('capacidade_55') if latest else None,

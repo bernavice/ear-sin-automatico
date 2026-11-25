@@ -2,7 +2,7 @@
 Não inferir dados das ilustrações hidráulicas sem estrutura verificável.
 """
 from __future__ import annotations
-import csv, datetime as dt, io, re, statistics, logging
+import csv, datetime as dt, io, re, statistics, logging, json, unicodedata
 from collections import defaultdict
 from pathlib import Path
 import requests
@@ -147,31 +147,44 @@ def parse_demanda_7(doc, day):
             'status':'comparação com máxima histórica informada no próprio IPDO'}
 
 
-def parse_ons_curtailment_csv(blob:bytes,fonte:str):
-    """CSV oficial ONS (30 min), somar GNRa[MWmed]*0,5h=MWh.
-    Sem `val_geracaonaorealizadaapurada` não inventar energia cortada a partir de limites.
+def parse_ons_curtailment_csv(blob:bytes,fonte:str,com_denominador:bool=False):
+    """GNRa em MWmed por intervalo de 30 min -> MWh. Denominador consistente
+    somente quando val_geracao verificada está presente em TODOS os intervalos
+    usados no numerador, na mesma granularidade e fonte.
     """
     stream=io.StringIO(blob.decode('utf-8-sig'))
-    first=stream.readline(); stream.seek(0)
-    delim=';' if first.count(';')>=first.count(',') else ','
-    reader=csv.DictReader(stream,delimiter=delim)
+    first=stream.readline();stream.seek(0)
+    reader=csv.DictReader(stream,delimiter=';' if first.count(';')>=first.count(',') else ',')
     cols={c.strip().lower():c for c in (reader.fieldnames or [])}
     if not {'din_instante','val_geracaonaorealizadaapurada'}.issubset(cols):
-        raise ValueError('Colunas oficiais obrigatórias ausentes: din_instante, val_geracaonaorealizadaapurada')
-    out=defaultdict(float);valid=0
+        raise ValueError('Colunas ONS obrigatorias para GNRa ausentes')
+    energy=defaultdict(float)
+    expected=defaultdict(lambda:{'verificada_mwh':0.,'validos':0,'total':0})
+    valid=0
     for row in reader:
-        day=str(row[cols['din_instante']])[:10]
+        day=str(row.get(cols['din_instante'],'')).strip()[:10]
         if not re.fullmatch(r'20\d\d-\d\d-\d\d',day):continue
         raw=str(row.get(cols['val_geracaonaorealizadaapurada'],'')).strip()
         if raw in ('','-','nan','NaN'):continue
         try:val=float(raw.replace(',','.'))
         except ValueError:continue
         if not 0<=val<1e7:continue
-        out[(day,fonte)]+=val*0.5
+        key=(day,fonte)
+        energy[key]+=val*.5
         valid+=1
-    if valid<1:raise ValueError('Sem registros aproveitáveis para GNRa')
-    return out,valid
-
+        expected[key]['total']+=1
+        col=cols.get('val_geracao')
+        if col:
+            gen=str(row.get(col,'')).strip()
+            try:
+                gv=float(gen.replace(',','.'))
+                if 0<=gv<1e7:
+                    expected[key]['verificada_mwh']+=gv*.5
+                    expected[key]['validos']+=1
+            except ValueError:pass
+    if valid<1:raise ValueError('Nenhum dado GNRa valido')
+    if com_denominador:return energy,valid,dict(expected)
+    return energy,valid
 
 def curtailment_urls(reference):
     base='https://ons-aws-prod-opendata.s3.amazonaws.com/dataset/'
@@ -194,6 +207,7 @@ def load_curtailment(raw:Path, reference:dt.date, online:bool):
         if not isinstance(history,list):history=[]
     except Exception:history=[]
     values={(x['data'],x['fonte']):float(x['mwh']) for x in history if all(k in x for k in ('data','fonte','mwh'))}
+    denominadores={(x['data'],x['fonte']):x.get('geracao_verificada_mwh') for x in history if x.get('geracao_verificada_mwh') is not None}
     attempted=[];updated=[]
     # Também aceita CSVs oficiais arquivados localmente, sem depender da rede.
     sources=[]
@@ -213,13 +227,26 @@ def load_curtailment(raw:Path, reference:dt.date, online:bool):
             except requests.RequestException as exc:log.warning('Curtailment indisponível %s: %s',url,exc)
     for fonte,blob,url in sources:
         try:
-            parsed,n=parse_ons_curtailment_csv(blob,fonte)
+            parsed,n,reference=parse_ons_curtailment_csv(blob,fonte,com_denominador=True)
             values.update({k:round(v,3) for k,v in parsed.items()})
+            for k,meta in reference.items():
+                if meta['validos']==meta['total'] and meta['total']>0:
+                    denominadores[k]=round(meta['verificada_mwh'],3)
+                else:denominadores.pop(k,None)
             updated.append({'fonte':fonte,'url':url,'registros':n})
         except Exception as exc:log.warning('CSV de curtailment ignorado (%s): %s',url,exc)
     # Persistir apenas dados resumidos. Ausência não vira zero.
-    recent=sorted(({'data':d,'fonte':f,'mwh':round(v,2)} for (d,f),v in values.items()
-                   if d<=reference.isoformat()),key=lambda x:(x['data'],x['fonte']))[-1800:]
+    recent=[]
+    for (d,fonte),mwh in values.items():
+        if d>reference.isoformat():continue
+        gen=denominadores.get((d,fonte))
+        pot=mwh+gen if gen is not None else None
+        pct=round(100*mwh/pot,3) if pot and pot>0 else None
+        recent.append({'data':d,'fonte':fonte,'mwh':round(mwh,3),
+                       'mwmed':round(mwh/24,3),
+                       'geracao_verificada_mwh':gen,'geracao_potencial_mwh':round(pot,3) if pot is not None else None,
+                       'percentual_corte':pct})
+    recent=sorted(recent,key=lambda r:(r['data'],r['fonte']))[-12000:]
     if updated:
         import json
         hist_file.parent.mkdir(parents=True,exist_ok=True)
@@ -228,7 +255,7 @@ def load_curtailment(raw:Path, reference:dt.date, online:bool):
             'arquivos_processados':updated,'fontes':{
              'Eólica':'https://dados.ons.org.br/dataset/restricao_coff_eolica_usi',
              'Solar':'https://dados.ons.org.br/dataset/restricao_coff_fotovoltaica'},
-            'metodo':'Geração não realizada apurada (GNRa) de patamares semihorários: MWmed × 0,5 h; apenas registros válidos disponíveis.'}
+            'metodo':'GNRa semihoraria MWmed × 0,5 h = MWh; percentual = GNRa / (GNRa + geracao verificada) nas mesmas linhas de fonte e data. MWmed do dia=MWh/24; periodos incompletos sinalizados.'}
 
 
 def load_hydro_anomalies(raw:Path, reference:dt.date, structured_rows=None):
@@ -379,3 +406,135 @@ def get_ons_hydro(raw:Path,reference:dt.date,online:bool):
     except (ValueError,KeyError,TypeError) as ex:
         log.warning('Dados hidráulicos ONS rejeitados: %s',ex)
         return None
+
+
+# Geração térmica por motivo de despacho — base tabular oficial ONS.
+# https://dados.ons.org.br/dataset/geracao-termica-despacho-2
+THERMAL_BASE=('https://ons-aws-prod-opendata.s3.amazonaws.com/dataset/'
+              'geracao_termica_despacho_2_ho/GERACAO_TERMICA_DESPACHO-2_')
+THERMAL_MOTIVES=[
+ ('Ordem de mérito','merito','#1767a4'),
+ ('Inflexibilidade','inflexibilidade','#21a398'),
+ ('Razão elétrica','eletrica','#db8445'),
+ ('Garantia energética','garantia','#8d64c0'),
+ ('Unit commitment','unitcommitment','#5b84d7'),
+ ('Outros motivos','outros','#8996a5')]
+
+def _clean_number(value):
+    if value is None:return 0.
+    s=str(value).strip()
+    if not s or s.lower() in ('nan','none','null','-'):return 0.
+    try:return max(0.,float(s.replace(',','.')))
+    except ValueError:return 0.
+
+def _sub_label(x):
+    s=''.join(c for c in unicodedata.normalize('NFKD',str(x).upper()) if not unicodedata.combining(c)).strip()
+    if 'SUDESTE' in s or 'CENTRO' in s or s in ('SE','SE/CO','SECO','SECO/S'):return 'SE/CO'
+    if 'NORDESTE' in s or s=='NE':return 'NE'
+    if 'NORTE' in s or s=='N':return 'N'
+    if 'SUL' in s or s=='S':return 'SUL'
+    return None
+
+def parse_thermal_dispatch_csv(blob:bytes):
+    """Agrupa a geracao VERIFICADA em MWmed, evitando dupla contagem de
+    inflexibilidade embutida na ordem de merito. Retorna dias por subsistema.
+    """
+    raw=blob.decode('utf-8-sig')
+    fh=io.StringIO(raw)
+    line=fh.readline();fh.seek(0)
+    rdr=csv.DictReader(fh,delimiter=';' if line.count(';')>=line.count(',') else ',')
+    cols={x.lower().strip():x for x in (rdr.fieldnames or [])}
+    required={'din_instante','nom_subsistema','nom_usina','val_verifgeracao'}
+    if not required.issubset(cols):raise ValueError('Colunas essenciais ausentes no CSV termico: '+str(required-set(cols)))
+    hourly=defaultdict(lambda:defaultdict(float))
+    plant_hourly=defaultdict(float)
+    for row in rdr:
+        date=str(row.get(cols['din_instante'],'')).strip()[:13]
+        if not re.fullmatch(r'20\d\d-\d\d-\d\d[ T]\d\d',date):continue
+        sub=_sub_label(row.get(cols['nom_subsistema'],''))
+        if not sub:continue
+        val=lambda key:_clean_number(row.get(cols[key])) if key in cols else 0.
+        actual=val('val_verifgeracao')
+        if actual>100000:continue
+        merit=val('val_verifordemdemeritoacimadainflex') if 'val_verifordemdemeritoacimadainflex' in cols else val('val_verifordemmerito')
+        inflex=(val('val_verifinflexembutmerito')+val('val_verifinflexpura')) if 'val_verifinflexpura' in cols else val('val_verifinflexibilidade')
+        if 'val_verifordemdemeritoacimadainflex' not in cols and 'val_verifinflexpura' in cols:
+            inflex=val('val_verifinflexpura')
+        elec=val('val_verifrazaoeletrica')
+        sec=val('val_verifgarantiaenergetica')
+        unit=val('val_verifunitcommitment')
+        # Demais componentes documentados; limitados ao residual, sem duplicar motivos.
+        known=merit+inflex+elec+sec+unit
+        if known>actual*1.025+2:
+            # Inconsistencia de classificacao: preservar o total, indicar sem motivo
+            # ao inves de exibir motivos com soma superior ao total.
+            merit=inflex=elec=sec=unit=0.
+        other=max(0.,actual-(merit+inflex+elec+sec+unit))
+        k=(date[:10],date[11:13],sub)
+        h=hourly[k]
+        for name,value in [('total',actual),('merito',merit),('inflexibilidade',inflex),
+                           ('eletrica',elec),('garantia',sec),('unitcommitment',unit),('outros',other)]:
+            h[name]+=value
+        plant=str(row.get(cols['nom_usina'],'')).strip()
+        if plant:plant_hourly[(date[:10],date[11:13],sub,plant)]+=actual
+    if not hourly:raise ValueError('CSV termico sem registros validos')
+    agg=defaultdict(lambda:defaultdict(float));hours=defaultdict(set)
+    for (day,hour,sub),vals in hourly.items():
+        for key,val in vals.items():agg[(day,sub)][key]+=val
+        hours[(day,sub)].add(hour)
+    byplants=defaultdict(float)
+    for (day,hour,sub,plant),val in plant_hourly.items():byplants[(day,sub,plant)]+=val
+    dates=sorted({k[0] for k in agg})
+    out=[]
+    for day in dates:
+        daily=[]
+        for sub in ['SE/CO','SUL','NE','N']:
+            if (day,sub) not in agg:continue
+            n=len(hours[(day,sub)])
+            values={k:round(v/n,3) for k,v in agg[(day,sub)].items()}
+            daily.append({'data':day,'subsistema':sub,'horas':n,**values})
+        if len(daily)!=4:continue
+        sin={key:round(sum(x.get(key,0) for x in daily),3) for key in ('total','merito','inflexibilidade','eletrica','garantia','unitcommitment','outros')}
+        top=sorted([{'usina':p,'subsistema':sub,'mwmed':round(v/max(1,len(hours[(d,sub)])),2)}
+                    for (d,sub,p),v in byplants.items() if d==day],key=lambda x:-x['mwmed'])[:3]
+        out.append({'data':day,'submercados':daily,'sin':{'subsistema':'SIN',**sin},
+                    'top3_usinas':top,'cobertura_horaria_minima':min(x['horas'] for x in daily),
+                    'metodo':'media horaria verificada das usinas por subsistema; classes exclusivas sem dupla contagem'})
+    return out
+
+def load_thermal_dispatch(raw:Path, reference:dt.date, online=True):
+    """Importa CSV local ou duas ultimas referencias mensais oficiais; grava
+    somente resumos diários (não publica o CSV bruto no site)."""
+    path=raw/'termicas_despacho_historico.json'
+    try:hist=json.loads(path.read_text(encoding='utf-8'))
+    except (OSError,ValueError):hist=[]
+    byday={r['data']:r for r in hist if isinstance(r,dict) and 'data' in r}
+    sources=[];issues=[]
+    manual=raw/'termicas'
+    if manual.exists():
+        for f in sorted(manual.glob('*.csv')):
+            sources.append((f.name,f.read_bytes()))
+    if online:
+        month=reference.replace(day=1)
+        for i in range(2):
+            ym=month.strftime('%Y_%m')
+            url=THERMAL_BASE+ym+'.csv'
+            blob=_get_official_bytes(url,True,limit=75_000_000)
+            if blob:sources.append((url,blob))
+            else:issues.append('Arquivo '+ym+' nao acessivel')
+            month=(month-dt.timedelta(days=1)).replace(day=1)
+    for url,blob in sources:
+        try:
+            entries=parse_thermal_dispatch_csv(blob)
+            for r in entries:
+                if r['data']<=reference.isoformat():byday[r['data']]=r
+            log.info('Termicas por motivo: %d dias processados de %s',len(entries),url)
+        except Exception as ex:issues.append(url+': '+str(ex)[:120]);log.warning('Termicas CSV: %s',ex)
+    hist=[byday[k] for k in sorted(byday)][-1100:]
+    if sources and hist:
+        path.parent.mkdir(parents=True,exist_ok=True)
+        path.write_text(json.dumps(hist,ensure_ascii=False,indent=2),encoding='utf-8')
+    return {'ultimo_dia':hist[-1] if hist else None,'historico':hist[-90:],
+            'data_mais_recente':hist[-1]['data'] if hist else None,'fontes':[a for a,_ in sources],
+            'status':'Base ONS geracao termica por motivo de despacho' if hist else 'Sem CSV termico validado',
+            'avisos':issues[:5]}
