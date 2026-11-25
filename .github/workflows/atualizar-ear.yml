@@ -23,6 +23,7 @@ on:
       - 'dados/ipdo/*.pdf'
       - 'dados/ipdo/*.csv'
       - 'dados/ipdo/curtailment/*.csv'
+      - 'dados/ipdo/termicas/*.csv'
       - 'dados/bd_rodada_decomp.xlsx'
       - 'dados/Produtos Novo.xlsx'
       - 'dados/Produto Novo.xlsx'
@@ -154,6 +155,7 @@ jobs:
           git add graficos/ena_longo_prazo.html graficos/ena_longo_prazo.json
           git add graficos/ipdo.html graficos/ipdo.json
           if [ -f dados/ipdo/curtailment_historico.json ]; then git add dados/ipdo/curtailment_historico.json; fi
+          if [ -f dados/ipdo/termicas_despacho_historico.json ]; then git add dados/ipdo/termicas_despacho_historico.json; fi
           if [ -f dados/ipdo/historico.json ]; then git add dados/ipdo/historico.json; fi
           if [ -f dados/newave_resumo.json ]; then git add dados/newave_resumo.json; fi
           if [ -d dados/operacao_sin ]; then git add -A dados/operacao_sin; fi
