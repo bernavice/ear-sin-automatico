@@ -40,6 +40,7 @@
 
 
 <button role="tab" id="botao-operacao" aria-selected="true" aria-controls="aba-operacao" onclick="selecionar('operacao')">Operação</button>
+<button role="tab" id="botao-ipdo" aria-selected="false" aria-controls="aba-ipdo" onclick="selecionar('ipdo')">IPDO · Curto Prazo</button>
 <button role="tab" id="botao-ena" aria-selected="false" aria-controls="aba-ena" onclick="selecionar('ena')">ENA · Afluências</button>
 <button role="tab" id="botao-ear" aria-selected="false" aria-controls="aba-ear" onclick="selecionar('ear')">EAR · Armazenamento</button>
 <button role="tab" id="botao-pld" aria-selected="false" aria-controls="aba-pld" onclick="selecionar('pld')">PLD · Preços</button>
@@ -56,6 +57,7 @@
 
 
 <section class="aba ativa" id="aba-operacao" role="tabpanel" aria-labelledby="botao-operacao"><div class="molde"><iframe id="quadro-operacao" title="Operação do SIN" src="operacao.html" loading="eager" style="height:3450px"></iframe></div></section>
+<section class="aba" id="aba-ipdo" role="tabpanel" aria-labelledby="botao-ipdo"><div class="molde"><iframe id="quadro-ipdo" title="IPDO - Operação de Curtíssimo Prazo" src="ipdo.html" loading="lazy" style="height:2000px"></iframe></div></section>
 <section class="aba" id="aba-ena" role="tabpanel" aria-labelledby="botao-ena"><div class="molde"><iframe id="quadro-ena" title="Energia natural afluente" src="ena.html" loading="eager" style="height:1900px"></iframe></div></section>
 <section class="aba" id="aba-ear" role="tabpanel" aria-labelledby="botao-ear"><div class="molde"><iframe id="quadro-ear" title="Energia armazenada" src="ear_sin.html" loading="eager" style="height:1900px"></iframe></div></section>
 <section class="aba" id="aba-pld" role="tabpanel" aria-labelledby="botao-pld"><div class="molde"><iframe id="quadro-pld" title="PLD" src="pld.html" loading="eager" style="height:3300px"></iframe></div></section>

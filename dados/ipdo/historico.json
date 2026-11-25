@@ -1,0 +1,154 @@
+[
+  {
+    "data": "2026-11-23",
+    "origem": "pdf-ons",
+    "url": "https://www.ons.org.br/AcervoDigitalDocumentosEPublicacoes/IPDO-23-11-2026.pdf",
+    "balanco": [
+      {
+        "fonte": "Hidro Nacional",
+        "programado": 45544,
+        "verificado": 48195
+      },
+      {
+        "fonte": "Itaipu Binacional",
+        "programado": 7061,
+        "verificado": 7160
+      },
+      {
+        "fonte": "Termo Nuclear",
+        "programado": 1350,
+        "verificado": 1347
+      },
+      {
+        "fonte": "Termo Convencional",
+        "programado": 10185,
+        "verificado": 10514
+      },
+      {
+        "fonte": "Eólica",
+        "programado": 11812,
+        "verificado": 11274
+      },
+      {
+        "fonte": "Solar",
+        "programado": 16124,
+        "verificado": 16675
+      },
+      {
+        "fonte": "Total SIN",
+        "programado": 92076,
+        "verificado": 95165
+      },
+      {
+        "fonte": "Carga",
+        "programado": 92076,
+        "verificado": 95165
+      }
+    ],
+    "reservatorios": [
+      {
+        "subsistema": "SIN",
+        "ear": 57.7
+      },
+      {
+        "subsistema": "SUL",
+        "ear": 81.2
+      },
+      {
+        "subsistema": "SE/CO",
+        "ear": 55.7
+      },
+      {
+        "subsistema": "N",
+        "ear": 50.0
+      },
+      {
+        "subsistema": "NE",
+        "ear": 58.8
+      }
+    ],
+    "destaques": [
+      "C AR GA E P RO DU Ç ÃO DE E NE RG IA P O R S UB ME RC AD O",
+      "A g er aç ão h id ráu li ca , be m co mo a pr od uç ão t ota l de I ta ip u par a o",
+      "Bra si l, fo i su pe rio r a o pr og ra ma do d ev id o à c ar g a ac im a do pr ev i sto no",
+      "A g er aç ão eó l ica f oi in fe ri o r a o p re vi st o e m f un çã o d e c on diç õe s",
+      "A g er aç ão hi dr ául ic a fo i s up er ior a o p ro gr am ad o d ev id o à ca rg a a ci ma",
+      "T RA NS FE RÊ NC IA DE EN ER GI A EN TR E SU BM ER CA DO S",
+      "O i nt er câ mb io do su bm er ca do S u l f oi i nf er io r ao pr og ra ma do d e vid o à",
+      "car ga s up er io r a o p re vi st o ne st e su bm er ca do ."
+    ],
+    "restricoes": [],
+    "ocorrencias": [],
+    "capacidade_55": {
+      "total": {
+        "usina": "Total",
+        "instalada_mw": 27257.0,
+        "disponivel_mw": 23845.0,
+        "diferenca_mw": 3412.0
+      },
+      "grupos": [
+        {
+          "motivo": "Por Manutenção",
+          "instalada_mw": 725.0,
+          "disponivel_mw": 68.0,
+          "diferenca_mw": 657.0
+        },
+        {
+          "motivo": "Por Restrição Operativa",
+          "instalada_mw": 5928.0,
+          "disponivel_mw": 3967.0,
+          "diferenca_mw": 1961.0
+        },
+        {
+          "motivo": "Por Restrição Operativa e Manutenção",
+          "instalada_mw": 1683.0,
+          "disponivel_mw": 1080.0,
+          "diferenca_mw": 603.0
+        },
+        {
+          "motivo": "Demais Restrições Agregadas",
+          "instalada_mw": 18921.0,
+          "disponivel_mw": 18730.0,
+          "diferenca_mw": 191.0
+        }
+      ],
+      "top3": [
+        {
+          "usina": "Angra I",
+          "instalada_mw": 640.0,
+          "disponivel_mw": 0.0,
+          "diferenca_mw": 640.0,
+          "motivo": "Manutenção"
+        },
+        {
+          "usina": "GNA II",
+          "instalada_mw": 1673.0,
+          "disponivel_mw": 1080.0,
+          "diferenca_mw": 593.0,
+          "motivo": "Restrição operativa e manutenção"
+        },
+        {
+          "usina": "Vale do Açú",
+          "instalada_mw": 323.0,
+          "disponivel_mw": 110.0,
+          "diferenca_mw": 213.0,
+          "motivo": "Restrição operativa"
+        }
+      ],
+      "status": "extraído da seção 5.5"
+    },
+    "termicas_6": {
+      "destaques": [],
+      "top3": [],
+      "status": "narrativa sem extração segura"
+    },
+    "demanda_7": {
+      "verificada_mw": 106610,
+      "hora": "15:39",
+      "recorde_mw": 106610,
+      "recorde_data": "23/11/2026",
+      "novo_recorde": true,
+      "status": "comparação com máxima histórica informada no próprio IPDO"
+    }
+  }
+]
