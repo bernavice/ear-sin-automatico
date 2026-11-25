@@ -1,5 +1,5 @@
 {
-  "gerado_em": "2026-11-25T12:10:22-03:00",
+  "gerado_em": "2026-11-25T14:24:21-03:00",
   "modo": "producao",
   "ipdo": {
     "data": "2026-11-23",
@@ -52728,7 +52728,7 @@
         "usina": "ERNESTINA",
         "bacia": "JACUI          ",
         "data": "2026-11-24",
-        "vazao_m3s": 444.333,
+        "vazao_m3s": 444.33,
         "mediana_60d_m3s": 41.9,
         "razao": 10.61,
         "tipo": "alta"
@@ -52737,43 +52737,43 @@
         "usina": "IRAPE",
         "bacia": "JEQUITINHONHA  ",
         "data": "2026-11-24",
-        "vazao_m3s": 165.843,
+        "vazao_m3s": 166.88,
         "mediana_60d_m3s": 31.6,
-        "razao": 5.25,
+        "razao": 5.29,
         "tipo": "alta"
       },
       {
         "usina": "ITAPEBI",
         "bacia": "JEQUITINHONHA  ",
         "data": "2026-11-24",
-        "vazao_m3s": 766.771,
+        "vazao_m3s": 766.77,
         "mediana_60d_m3s": 151.7,
         "razao": 5.05,
-        "tipo": "alta"
-      },
-      {
-        "usina": "BARRA GRANDE",
-        "bacia": "URUGUAI        ",
-        "data": "2026-11-24",
-        "vazao_m3s": 1569.787,
-        "mediana_60d_m3s": 380.5,
-        "razao": 4.13,
         "tipo": "alta"
       },
       {
         "usina": "TRÊS MARIAS",
         "bacia": "SAO FRANCISCO  ",
         "data": "2026-11-24",
-        "vazao_m3s": 1080.218,
+        "vazao_m3s": 1099.16,
         "mediana_60d_m3s": 264.9,
-        "razao": 4.08,
+        "razao": 4.15,
+        "tipo": "alta"
+      },
+      {
+        "usina": "BARRA GRANDE",
+        "bacia": "URUGUAI        ",
+        "data": "2026-11-24",
+        "vazao_m3s": 1569.04,
+        "mediana_60d_m3s": 380.5,
+        "razao": 4.12,
         "tipo": "alta"
       },
       {
         "usina": "CASTRO ALVES",
         "bacia": "ANTAS          ",
         "data": "2026-11-24",
-        "vazao_m3s": 710.117,
+        "vazao_m3s": 710.12,
         "mediana_60d_m3s": 176.1,
         "razao": 4.03,
         "tipo": "alta"
@@ -52782,7 +52782,7 @@
         "usina": "SANTANA",
         "bacia": "PARAIBA DO SUL ",
         "data": "2026-11-24",
-        "vazao_m3s": 509.0,
+        "vazao_m3s": 509.19,
         "mediana_60d_m3s": 128.8,
         "razao": 3.95,
         "tipo": "alta"
@@ -52791,7 +52791,7 @@
         "usina": "STA.CLARA-MG",
         "bacia": "MUCURI         ",
         "data": "2026-11-24",
-        "vazao_m3s": 146.389,
+        "vazao_m3s": 146.39,
         "mediana_60d_m3s": 40.5,
         "razao": 3.61,
         "tipo": "alta"
@@ -52806,12 +52806,12 @@
         "tipo": "alta"
       },
       {
-        "usina": "MASCARENHAS",
-        "bacia": "DOCE           ",
+        "usina": "EDGARD SOUZA",
+        "bacia": "TIETE          ",
         "data": "2026-11-24",
-        "vazao_m3s": 1296.458,
-        "mediana_60d_m3s": 413.0,
-        "razao": 3.14,
+        "vazao_m3s": 427.0,
+        "mediana_60d_m3s": 134.5,
+        "razao": 3.17,
         "tipo": "alta"
       }
     ],
@@ -58522,7 +58522,7 @@
         "usina": "ERNESTINA",
         "bacia": "JACUI          ",
         "data": "2026-11-24",
-        "vazao_m3s": 444.333,
+        "vazao_m3s": 444.33,
         "mediana_60d_m3s": 41.9,
         "razao": 10.61,
         "tipo": "alta"
@@ -58531,43 +58531,43 @@
         "usina": "IRAPE",
         "bacia": "JEQUITINHONHA  ",
         "data": "2026-11-24",
-        "vazao_m3s": 165.843,
+        "vazao_m3s": 166.88,
         "mediana_60d_m3s": 31.6,
-        "razao": 5.25,
+        "razao": 5.29,
         "tipo": "alta"
       },
       {
         "usina": "ITAPEBI",
         "bacia": "JEQUITINHONHA  ",
         "data": "2026-11-24",
-        "vazao_m3s": 766.771,
+        "vazao_m3s": 766.77,
         "mediana_60d_m3s": 151.7,
         "razao": 5.05,
-        "tipo": "alta"
-      },
-      {
-        "usina": "BARRA GRANDE",
-        "bacia": "URUGUAI        ",
-        "data": "2026-11-24",
-        "vazao_m3s": 1569.787,
-        "mediana_60d_m3s": 380.5,
-        "razao": 4.13,
         "tipo": "alta"
       },
       {
         "usina": "TRÊS MARIAS",
         "bacia": "SAO FRANCISCO  ",
         "data": "2026-11-24",
-        "vazao_m3s": 1080.218,
+        "vazao_m3s": 1099.16,
         "mediana_60d_m3s": 264.9,
-        "razao": 4.08,
+        "razao": 4.15,
+        "tipo": "alta"
+      },
+      {
+        "usina": "BARRA GRANDE",
+        "bacia": "URUGUAI        ",
+        "data": "2026-11-24",
+        "vazao_m3s": 1569.04,
+        "mediana_60d_m3s": 380.5,
+        "razao": 4.12,
         "tipo": "alta"
       },
       {
         "usina": "CASTRO ALVES",
         "bacia": "ANTAS          ",
         "data": "2026-11-24",
-        "vazao_m3s": 710.117,
+        "vazao_m3s": 710.12,
         "mediana_60d_m3s": 176.1,
         "razao": 4.03,
         "tipo": "alta"
@@ -58576,7 +58576,7 @@
         "usina": "SANTANA",
         "bacia": "PARAIBA DO SUL ",
         "data": "2026-11-24",
-        "vazao_m3s": 509.0,
+        "vazao_m3s": 509.19,
         "mediana_60d_m3s": 128.8,
         "razao": 3.95,
         "tipo": "alta"
@@ -58585,7 +58585,7 @@
         "usina": "STA.CLARA-MG",
         "bacia": "MUCURI         ",
         "data": "2026-11-24",
-        "vazao_m3s": 146.389,
+        "vazao_m3s": 146.39,
         "mediana_60d_m3s": 40.5,
         "razao": 3.61,
         "tipo": "alta"
@@ -58600,12 +58600,12 @@
         "tipo": "alta"
       },
       {
-        "usina": "MASCARENHAS",
-        "bacia": "DOCE           ",
+        "usina": "EDGARD SOUZA",
+        "bacia": "TIETE          ",
         "data": "2026-11-24",
-        "vazao_m3s": 1296.458,
-        "mediana_60d_m3s": 413.0,
-        "razao": 3.14,
+        "vazao_m3s": 427.0,
+        "mediana_60d_m3s": 134.5,
+        "razao": 3.17,
         "tipo": "alta"
       }
     ],
