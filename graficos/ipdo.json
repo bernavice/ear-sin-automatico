@@ -1,5 +1,5 @@
 {
-  "gerado_em": "2026-11-25T12:04:26-03:00",
+  "gerado_em": "2026-11-25T12:10:22-03:00",
   "modo": "producao",
   "ipdo": {
     "data": "2026-11-23",
@@ -52270,20 +52270,20 @@
       {
         "data": "2026-11-02",
         "fonte": "Eólica",
-        "mwh": 137570.681,
-        "mwmed": 5732.112,
+        "mwh": 137805.812,
+        "mwmed": 5741.909,
         "geracao_verificada_mwh": 114238.818,
-        "geracao_potencial_mwh": 251809.499,
-        "percentual_corte": 54.633
+        "geracao_potencial_mwh": 252044.63,
+        "percentual_corte": 54.675
       },
       {
         "data": "2026-11-02",
         "fonte": "Solar",
-        "mwh": 75343.427,
-        "mwmed": 3139.309,
+        "mwh": 75465.253,
+        "mwmed": 3144.386,
         "geracao_verificada_mwh": 81542.782,
-        "geracao_potencial_mwh": 156886.209,
-        "percentual_corte": 48.024
+        "geracao_potencial_mwh": 157008.035,
+        "percentual_corte": 48.065
       },
       {
         "data": "2026-11-03",
@@ -52423,11 +52423,11 @@
       {
         "data": "2026-11-10",
         "fonte": "Solar",
-        "mwh": 29463.112,
-        "mwmed": 1227.63,
+        "mwh": 30487.902,
+        "mwmed": 1270.329,
         "geracao_verificada_mwh": 80215.641,
-        "geracao_potencial_mwh": 109678.753,
-        "percentual_corte": 26.863
+        "geracao_potencial_mwh": 110703.543,
+        "percentual_corte": 27.54
       },
       {
         "data": "2026-11-11",
@@ -52513,11 +52513,11 @@
       {
         "data": "2026-11-15",
         "fonte": "Solar",
-        "mwh": 33348.225,
-        "mwmed": 1389.509,
+        "mwh": 33809.845,
+        "mwmed": 1408.744,
         "geracao_verificada_mwh": 71518.934,
-        "geracao_potencial_mwh": 104867.159,
-        "percentual_corte": 31.8
+        "geracao_potencial_mwh": 105328.779,
+        "percentual_corte": 32.099
       },
       {
         "data": "2026-11-16",
@@ -52540,141 +52540,159 @@
       {
         "data": "2026-11-17",
         "fonte": "Eólica",
-        "mwh": 24943.98,
-        "mwmed": 1039.332,
-        "geracao_verificada_mwh": 64368.118,
-        "geracao_potencial_mwh": 89312.098,
-        "percentual_corte": 27.929
+        "mwh": 27506.655,
+        "mwmed": 1146.111,
+        "geracao_verificada_mwh": 64340.13,
+        "geracao_potencial_mwh": 91846.785,
+        "percentual_corte": 29.948
       },
       {
         "data": "2026-11-17",
         "fonte": "Solar",
-        "mwh": 8651.755,
-        "mwmed": 360.49,
-        "geracao_verificada_mwh": 43579.091,
-        "geracao_potencial_mwh": 52230.846,
-        "percentual_corte": 16.564
+        "mwh": 9639.097,
+        "mwmed": 401.629,
+        "geracao_verificada_mwh": 43489.139,
+        "geracao_potencial_mwh": 53128.236,
+        "percentual_corte": 18.143
       },
       {
         "data": "2026-11-18",
         "fonte": "Eólica",
-        "mwh": 12846.69,
-        "mwmed": 535.279,
-        "geracao_verificada_mwh": 46162.142,
-        "geracao_potencial_mwh": 59008.832,
-        "percentual_corte": 21.771
+        "mwh": 13147.536,
+        "mwmed": 547.814,
+        "geracao_verificada_mwh": 46163.581,
+        "geracao_potencial_mwh": 59311.117,
+        "percentual_corte": 22.167
       },
       {
         "data": "2026-11-18",
         "fonte": "Solar",
-        "mwh": 6267.145,
-        "mwmed": 261.131,
-        "geracao_verificada_mwh": 43206.713,
-        "geracao_potencial_mwh": 49473.858,
-        "percentual_corte": 12.668
+        "mwh": 6344.638,
+        "mwmed": 264.36,
+        "geracao_verificada_mwh": 43211.73,
+        "geracao_potencial_mwh": 49556.368,
+        "percentual_corte": 12.803
       },
       {
         "data": "2026-11-19",
         "fonte": "Eólica",
-        "mwh": 26997.875,
-        "mwmed": 1124.911,
-        "geracao_verificada_mwh": 46423.682,
-        "geracao_potencial_mwh": 73421.557,
-        "percentual_corte": 36.771
+        "mwh": 27973.766,
+        "mwmed": 1165.574,
+        "geracao_verificada_mwh": 46438.253,
+        "geracao_potencial_mwh": 74412.019,
+        "percentual_corte": 37.593
       },
       {
         "data": "2026-11-19",
         "fonte": "Solar",
-        "mwh": 8735.077,
-        "mwmed": 363.962,
-        "geracao_verificada_mwh": 50080.416,
-        "geracao_potencial_mwh": 58815.493,
-        "percentual_corte": 14.852
+        "mwh": 9013.897,
+        "mwmed": 375.579,
+        "geracao_verificada_mwh": 50063.63,
+        "geracao_potencial_mwh": 59077.527,
+        "percentual_corte": 15.258
       },
       {
         "data": "2026-11-20",
         "fonte": "Eólica",
-        "mwh": 64895.841,
-        "mwmed": 2703.993,
-        "geracao_verificada_mwh": 63136.612,
-        "geracao_potencial_mwh": 128032.453,
-        "percentual_corte": 50.687
+        "mwh": 69184.565,
+        "mwmed": 2882.69,
+        "geracao_verificada_mwh": 62852.971,
+        "geracao_potencial_mwh": 132037.536,
+        "percentual_corte": 52.398
       },
       {
         "data": "2026-11-20",
         "fonte": "Solar",
-        "mwh": 46569.082,
-        "mwmed": 1940.378,
-        "geracao_verificada_mwh": 69786.029,
-        "geracao_potencial_mwh": 116355.111,
-        "percentual_corte": 40.023
+        "mwh": 53327.299,
+        "mwmed": 2221.971,
+        "geracao_verificada_mwh": 69602.742,
+        "geracao_potencial_mwh": 122930.041,
+        "percentual_corte": 43.38
       },
       {
         "data": "2026-11-21",
         "fonte": "Eólica",
-        "mwh": 50068.586,
-        "mwmed": 2086.191,
-        "geracao_verificada_mwh": 44285.489,
-        "geracao_potencial_mwh": 94354.075,
-        "percentual_corte": 53.065
+        "mwh": 51420.255,
+        "mwmed": 2142.511,
+        "geracao_verificada_mwh": 44144.073,
+        "geracao_potencial_mwh": 95564.328,
+        "percentual_corte": 53.807
       },
       {
         "data": "2026-11-21",
         "fonte": "Solar",
-        "mwh": 24740.49,
-        "mwmed": 1030.854,
-        "geracao_verificada_mwh": 76734.657,
-        "geracao_potencial_mwh": 101475.147,
-        "percentual_corte": 24.381
+        "mwh": 25528.509,
+        "mwmed": 1063.688,
+        "geracao_verificada_mwh": 76761.447,
+        "geracao_potencial_mwh": 102289.956,
+        "percentual_corte": 24.957
       },
       {
         "data": "2026-11-22",
         "fonte": "Eólica",
-        "mwh": 50414.338,
-        "mwmed": 2100.597,
-        "geracao_verificada_mwh": 37732.553,
-        "geracao_potencial_mwh": 88146.891,
-        "percentual_corte": 57.194
+        "mwh": 51857.694,
+        "mwmed": 2160.737,
+        "geracao_verificada_mwh": 37763.809,
+        "geracao_potencial_mwh": 89621.503,
+        "percentual_corte": 57.863
       },
       {
         "data": "2026-11-22",
         "fonte": "Solar",
-        "mwh": 54231.846,
-        "mwmed": 2259.66,
-        "geracao_verificada_mwh": 53662.872,
-        "geracao_potencial_mwh": 107894.718,
-        "percentual_corte": 50.264
+        "mwh": 54235.482,
+        "mwmed": 2259.812,
+        "geracao_verificada_mwh": 53663.029,
+        "geracao_potencial_mwh": 107898.511,
+        "percentual_corte": 50.265
       },
       {
         "data": "2026-11-23",
         "fonte": "Eólica",
-        "mwh": 32336.754,
-        "mwmed": 1347.365,
-        "geracao_verificada_mwh": 63161.979,
-        "geracao_potencial_mwh": 95498.733,
-        "percentual_corte": 33.861
+        "mwh": 32899.172,
+        "mwmed": 1370.799,
+        "geracao_verificada_mwh": 63225.927,
+        "geracao_potencial_mwh": 96125.099,
+        "percentual_corte": 34.225
       },
       {
         "data": "2026-11-23",
         "fonte": "Solar",
-        "mwh": 9651.863,
-        "mwmed": 402.161,
+        "mwh": 9697.215,
+        "mwmed": 404.051,
         "geracao_verificada_mwh": 82181.045,
-        "geracao_potencial_mwh": 91832.908,
-        "percentual_corte": 10.51
+        "geracao_potencial_mwh": 91878.26,
+        "percentual_corte": 10.554
+      },
+      {
+        "data": "2026-11-24",
+        "fonte": "Eólica",
+        "mwh": 45497.291,
+        "mwmed": 1895.72,
+        "geracao_verificada_mwh": 78676.078,
+        "geracao_potencial_mwh": 124173.369,
+        "percentual_corte": 36.64
+      },
+      {
+        "data": "2026-11-24",
+        "fonte": "Solar",
+        "mwh": 12430.665,
+        "mwmed": 517.944,
+        "geracao_verificada_mwh": 52119.53,
+        "geracao_potencial_mwh": 64550.195,
+        "percentual_corte": 19.257
       }
     ],
-    "data_mais_recente": "2026-11-23",
+    "data_mais_recente": "2026-11-24",
     "arquivos_processados": [
       {
         "fonte": "Eólica",
         "url": "https://ons-aws-prod-opendata.s3.amazonaws.com/dataset/restricao_coff_eolica_tm/RESTRICAO_COFF_EOLICA_2026_11.csv",
-        "registros": 65080
+        "registros": 67783
       },
       {
         "fonte": "Solar",
         "url": "https://ons-aws-prod-opendata.s3.amazonaws.com/dataset/restricao_coff_fotovoltaica_tm/RESTRICAO_COFF_FOTOVOLTAICA_2026_11.csv",
-        "registros": 29283
+        "registros": 30060
       },
       {
         "fonte": "Eólica",
@@ -52801,82 +52819,82 @@
   },
   "termicas_despacho": {
     "ultimo_dia": {
-      "data": "2026-11-23",
+      "data": "2026-11-24",
       "submercados": [
         {
-          "data": "2026-11-23",
+          "data": "2026-11-24",
           "subsistema": "SE/CO",
           "horas": 24,
-          "total": 4046.563,
-          "merito": 0.0,
-          "inflexibilidade": 3650.644,
-          "eletrica": 395.919,
+          "total": 4624.93,
+          "merito": 37.556,
+          "inflexibilidade": 4141.089,
+          "eletrica": 394.881,
           "garantia": 0.0,
-          "unitcommitment": 0.0,
+          "unitcommitment": 51.404,
           "outros": 0.0
         },
         {
-          "data": "2026-11-23",
+          "data": "2026-11-24",
           "subsistema": "SUL",
           "horas": 24,
-          "total": 1333.222,
-          "merito": 0.0,
-          "inflexibilidade": 1294.578,
-          "eletrica": 38.643,
+          "total": 1311.744,
+          "merito": 5.272,
+          "inflexibilidade": 1305.566,
+          "eletrica": 0.49,
           "garantia": 0.0,
-          "unitcommitment": 0.0,
+          "unitcommitment": 0.417,
           "outros": 0.0
         },
         {
-          "data": "2026-11-23",
+          "data": "2026-11-24",
           "subsistema": "NE",
           "horas": 24,
-          "total": 208.28,
-          "merito": 0.0,
-          "inflexibilidade": 84.418,
-          "eletrica": 123.443,
+          "total": 257.56,
+          "merito": 14.992,
+          "inflexibilidade": 85.151,
+          "eletrica": 128.319,
           "garantia": 0.0,
-          "unitcommitment": 0.418,
-          "outros": 0.001
+          "unitcommitment": 29.099,
+          "outros": 0.0
         },
         {
-          "data": "2026-11-23",
+          "data": "2026-11-24",
           "subsistema": "N",
           "horas": 24,
-          "total": 2460.65,
-          "merito": 382.056,
-          "inflexibilidade": 1825.022,
-          "eletrica": 54.892,
+          "total": 2738.837,
+          "merito": 584.666,
+          "inflexibilidade": 1832.127,
+          "eletrica": 89.757,
           "garantia": 0.0,
-          "unitcommitment": 198.681,
-          "outros": 0.0
+          "unitcommitment": 232.391,
+          "outros": 0.001
         }
       ],
       "sin": {
         "subsistema": "SIN",
-        "total": 8048.715,
-        "merito": 382.056,
-        "inflexibilidade": 6854.662,
-        "eletrica": 612.897,
+        "total": 8933.071,
+        "merito": 642.486,
+        "inflexibilidade": 7363.933,
+        "eletrica": 613.447,
         "garantia": 0.0,
-        "unitcommitment": 199.099,
+        "unitcommitment": 313.311,
         "outros": 0.001
       },
       "top3_usinas": [
         {
           "usina": "Angra II",
           "subsistema": "SE/CO",
-          "mwmed": 1347.23
+          "mwmed": 1345.64
+        },
+        {
+          "usina": "GNA II",
+          "subsistema": "SE/CO",
+          "mwmed": 1027.93
         },
         {
           "usina": "Novo Tempo Barcarena",
           "subsistema": "N",
           "mwmed": 610.42
-        },
-        {
-          "usina": "GNA II",
-          "subsistema": "SE/CO",
-          "mwmed": 516.03
         }
       ],
       "cobertura_horaria_minima": 24,
@@ -56370,9 +56388,9 @@
             "data": "2026-11-12",
             "subsistema": "N",
             "horas": 24,
-            "total": 2477.216,
+            "total": 2477.282,
             "merito": 434.13,
-            "inflexibilidade": 1793.325,
+            "inflexibilidade": 1793.391,
             "eletrica": 92.494,
             "garantia": 0.0,
             "unitcommitment": 157.267,
@@ -56381,9 +56399,9 @@
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 8013.352,
+          "total": 8013.418,
           "merito": 437.199,
-          "inflexibilidade": 7173.218,
+          "inflexibilidade": 7173.284,
           "eletrica": 105.192,
           "garantia": 0.0,
           "unitcommitment": 292.923,
@@ -56662,12 +56680,12 @@
             "data": "2026-11-16",
             "subsistema": "SE/CO",
             "horas": 24,
-            "total": 4713.185,
-            "merito": 29.66,
-            "inflexibilidade": 4321.778,
-            "eletrica": 283.839,
+            "total": 4714.949,
+            "merito": 29.783,
+            "inflexibilidade": 4323.049,
+            "eletrica": 284.131,
             "garantia": 0.0,
-            "unitcommitment": 77.907,
+            "unitcommitment": 77.987,
             "outros": 0.0
           },
           {
@@ -56698,23 +56716,23 @@
             "data": "2026-11-16",
             "subsistema": "N",
             "horas": 24,
-            "total": 2880.037,
-            "merito": 535.184,
-            "inflexibilidade": 1960.334,
+            "total": 2880.402,
+            "merito": 535.223,
+            "inflexibilidade": 1960.59,
             "eletrica": 75.04,
             "garantia": 0.0,
-            "unitcommitment": 308.128,
+            "unitcommitment": 308.199,
             "outros": 1.351
           }
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 8794.593,
-          "merito": 608.987,
-          "inflexibilidade": 7337.214,
-          "eletrica": 427.883,
+          "total": 8796.722,
+          "merito": 609.149,
+          "inflexibilidade": 7338.741,
+          "eletrica": 428.175,
           "garantia": 0.0,
-          "unitcommitment": 419.153,
+          "unitcommitment": 419.304,
           "outros": 1.355
         },
         "top3_usinas": [
@@ -56731,7 +56749,7 @@
           {
             "usina": "Termorio",
             "subsistema": "SE/CO",
-            "mwmed": 560.41
+            "mwmed": 561.38
           }
         ],
         "cobertura_horaria_minima": 24,
@@ -56744,12 +56762,12 @@
             "data": "2026-11-17",
             "subsistema": "SE/CO",
             "horas": 24,
-            "total": 5578.893,
-            "merito": 419.059,
-            "inflexibilidade": 4663.487,
-            "eletrica": 234.069,
+            "total": 5580.809,
+            "merito": 419.286,
+            "inflexibilidade": 4665.141,
+            "eletrica": 234.175,
             "garantia": 0.0,
-            "unitcommitment": 262.278,
+            "unitcommitment": 262.208,
             "outros": 0.0
           },
           {
@@ -56780,23 +56798,23 @@
             "data": "2026-11-17",
             "subsistema": "N",
             "horas": 24,
-            "total": 3280.844,
-            "merito": 652.314,
-            "inflexibilidade": 1848.736,
+            "total": 3281.28,
+            "merito": 652.382,
+            "inflexibilidade": 1849.091,
             "eletrica": 42.863,
             "garantia": 0.0,
-            "unitcommitment": 736.932,
+            "unitcommitment": 736.946,
             "outros": 0.0
           }
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 10214.016,
-          "merito": 1215.109,
-          "inflexibilidade": 7562.947,
-          "eletrica": 317.679,
+          "total": 10216.368,
+          "merito": 1215.404,
+          "inflexibilidade": 7564.956,
+          "eletrica": 317.785,
           "garantia": 0.0,
-          "unitcommitment": 1057.521,
+          "unitcommitment": 1057.465,
           "outros": 60.761
         },
         "top3_usinas": [
@@ -56826,10 +56844,10 @@
             "data": "2026-11-18",
             "subsistema": "SE/CO",
             "horas": 24,
-            "total": 5415.672,
-            "merito": 46.251,
-            "inflexibilidade": 4566.673,
-            "eletrica": 614.84,
+            "total": 5417.574,
+            "merito": 46.36,
+            "inflexibilidade": 4568.004,
+            "eletrica": 615.303,
             "garantia": 0.0,
             "unitcommitment": 187.907,
             "outros": 0.0
@@ -56873,10 +56891,10 @@
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 10197.573,
-          "merito": 744.418,
-          "inflexibilidade": 7637.187,
-          "eletrica": 885.681,
+          "total": 10199.475,
+          "merito": 744.527,
+          "inflexibilidade": 7638.518,
+          "eletrica": 886.144,
           "garantia": 0.0,
           "unitcommitment": 930.286,
           "outros": 0.001
@@ -56895,7 +56913,7 @@
           {
             "usina": "Termorio",
             "subsistema": "SE/CO",
-            "mwmed": 627.64
+            "mwmed": 628.62
           }
         ],
         "cobertura_horaria_minima": 24,
@@ -56908,12 +56926,12 @@
             "data": "2026-11-19",
             "subsistema": "SE/CO",
             "horas": 24,
-            "total": 5531.467,
+            "total": 5532.791,
             "merito": 23.905,
-            "inflexibilidade": 4686.623,
-            "eletrica": 611.102,
+            "inflexibilidade": 4687.728,
+            "eletrica": 611.369,
             "garantia": 0.0,
-            "unitcommitment": 209.838,
+            "unitcommitment": 209.789,
             "outros": 0.0
           },
           {
@@ -56944,9 +56962,9 @@
             "data": "2026-11-19",
             "subsistema": "N",
             "horas": 24,
-            "total": 3533.505,
-            "merito": 884.409,
-            "inflexibilidade": 1859.885,
+            "total": 3533.583,
+            "merito": 884.459,
+            "inflexibilidade": 1859.912,
             "eletrica": 116.003,
             "garantia": 0.0,
             "unitcommitment": 669.258,
@@ -56955,12 +56973,12 @@
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 10888.135,
-          "merito": 920.72,
-          "inflexibilidade": 7717.735,
-          "eletrica": 1185.848,
+          "total": 10889.537,
+          "merito": 920.77,
+          "inflexibilidade": 7718.867,
+          "eletrica": 1186.115,
           "garantia": 0.0,
-          "unitcommitment": 1059.883,
+          "unitcommitment": 1059.834,
           "outros": 3.952
         },
         "top3_usinas": [
@@ -56990,9 +57008,9 @@
             "data": "2026-11-20",
             "subsistema": "SE/CO",
             "horas": 24,
-            "total": 4703.096,
+            "total": 4704.73,
             "merito": 0.028,
-            "inflexibilidade": 4658.014,
+            "inflexibilidade": 4659.649,
             "eletrica": 33.634,
             "garantia": 0.0,
             "unitcommitment": 11.419,
@@ -57026,9 +57044,9 @@
             "data": "2026-11-20",
             "subsistema": "N",
             "horas": 24,
-            "total": 3155.591,
-            "merito": 524.869,
-            "inflexibilidade": 1816.083,
+            "total": 3155.613,
+            "merito": 524.865,
+            "inflexibilidade": 1816.108,
             "eletrica": 40.633,
             "garantia": 0.0,
             "unitcommitment": 774.007,
@@ -57037,9 +57055,9 @@
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 9002.947,
-          "merito": 524.897,
-          "inflexibilidade": 7608.469,
+          "total": 9004.603,
+          "merito": 524.893,
+          "inflexibilidade": 7610.129,
           "eletrica": 79.587,
           "garantia": 0.0,
           "unitcommitment": 789.994,
@@ -57072,9 +57090,9 @@
             "data": "2026-11-21",
             "subsistema": "SE/CO",
             "horas": 24,
-            "total": 4466.438,
+            "total": 4468.196,
             "merito": 0.0,
-            "inflexibilidade": 4466.438,
+            "inflexibilidade": 4468.196,
             "eletrica": 0.0,
             "garantia": 0.0,
             "unitcommitment": 0.0,
@@ -57108,9 +57126,9 @@
             "data": "2026-11-21",
             "subsistema": "N",
             "horas": 24,
-            "total": 2686.883,
-            "merito": 565.566,
-            "inflexibilidade": 1869.673,
+            "total": 2686.933,
+            "merito": 565.606,
+            "inflexibilidade": 1869.683,
             "eletrica": 2.168,
             "garantia": 0.0,
             "unitcommitment": 249.477,
@@ -57119,9 +57137,9 @@
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 8604.03,
-          "merito": 565.566,
-          "inflexibilidade": 7786.82,
+          "total": 8605.838,
+          "merito": 565.606,
+          "inflexibilidade": 7788.588,
           "eletrica": 2.168,
           "garantia": 0.0,
           "unitcommitment": 249.477,
@@ -57154,9 +57172,9 @@
             "data": "2026-11-22",
             "subsistema": "SE/CO",
             "horas": 24,
-            "total": 3927.806,
+            "total": 3929.091,
             "merito": 0.0,
-            "inflexibilidade": 3927.806,
+            "inflexibilidade": 3929.091,
             "eletrica": 0.0,
             "garantia": 0.0,
             "unitcommitment": 0.0,
@@ -57190,9 +57208,9 @@
             "data": "2026-11-22",
             "subsistema": "N",
             "horas": 24,
-            "total": 2361.161,
-            "merito": 462.209,
-            "inflexibilidade": 1822.304,
+            "total": 2361.247,
+            "merito": 462.254,
+            "inflexibilidade": 1822.345,
             "eletrica": 7.956,
             "garantia": 0.0,
             "unitcommitment": 68.692,
@@ -57201,9 +57219,9 @@
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 7658.456,
-          "merito": 462.209,
-          "inflexibilidade": 7119.599,
+          "total": 7659.827,
+          "merito": 462.254,
+          "inflexibilidade": 7120.925,
           "eletrica": 7.956,
           "garantia": 0.0,
           "unitcommitment": 68.692,
@@ -57236,10 +57254,10 @@
             "data": "2026-11-23",
             "subsistema": "SE/CO",
             "horas": 24,
-            "total": 4046.563,
+            "total": 4044.602,
             "merito": 0.0,
-            "inflexibilidade": 3650.644,
-            "eletrica": 395.919,
+            "inflexibilidade": 3586.012,
+            "eletrica": 458.59,
             "garantia": 0.0,
             "unitcommitment": 0.0,
             "outros": 0.0
@@ -57272,10 +57290,10 @@
             "data": "2026-11-23",
             "subsistema": "N",
             "horas": 24,
-            "total": 2460.65,
-            "merito": 382.056,
-            "inflexibilidade": 1825.022,
-            "eletrica": 54.892,
+            "total": 2460.799,
+            "merito": 382.153,
+            "inflexibilidade": 1825.073,
+            "eletrica": 54.893,
             "garantia": 0.0,
             "unitcommitment": 198.681,
             "outros": 0.0
@@ -57283,10 +57301,10 @@
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 8048.715,
-          "merito": 382.056,
-          "inflexibilidade": 6854.662,
-          "eletrica": 612.897,
+          "total": 8046.903,
+          "merito": 382.153,
+          "inflexibilidade": 6790.081,
+          "eletrica": 675.569,
           "garantia": 0.0,
           "unitcommitment": 199.099,
           "outros": 0.001
@@ -57310,9 +57328,91 @@
         ],
         "cobertura_horaria_minima": 24,
         "metodo": "media horaria verificada das usinas por subsistema; classes exclusivas sem dupla contagem"
+      },
+      {
+        "data": "2026-11-24",
+        "submercados": [
+          {
+            "data": "2026-11-24",
+            "subsistema": "SE/CO",
+            "horas": 24,
+            "total": 4624.93,
+            "merito": 37.556,
+            "inflexibilidade": 4141.089,
+            "eletrica": 394.881,
+            "garantia": 0.0,
+            "unitcommitment": 51.404,
+            "outros": 0.0
+          },
+          {
+            "data": "2026-11-24",
+            "subsistema": "SUL",
+            "horas": 24,
+            "total": 1311.744,
+            "merito": 5.272,
+            "inflexibilidade": 1305.566,
+            "eletrica": 0.49,
+            "garantia": 0.0,
+            "unitcommitment": 0.417,
+            "outros": 0.0
+          },
+          {
+            "data": "2026-11-24",
+            "subsistema": "NE",
+            "horas": 24,
+            "total": 257.56,
+            "merito": 14.992,
+            "inflexibilidade": 85.151,
+            "eletrica": 128.319,
+            "garantia": 0.0,
+            "unitcommitment": 29.099,
+            "outros": 0.0
+          },
+          {
+            "data": "2026-11-24",
+            "subsistema": "N",
+            "horas": 24,
+            "total": 2738.837,
+            "merito": 584.666,
+            "inflexibilidade": 1832.127,
+            "eletrica": 89.757,
+            "garantia": 0.0,
+            "unitcommitment": 232.391,
+            "outros": 0.001
+          }
+        ],
+        "sin": {
+          "subsistema": "SIN",
+          "total": 8933.071,
+          "merito": 642.486,
+          "inflexibilidade": 7363.933,
+          "eletrica": 613.447,
+          "garantia": 0.0,
+          "unitcommitment": 313.311,
+          "outros": 0.001
+        },
+        "top3_usinas": [
+          {
+            "usina": "Angra II",
+            "subsistema": "SE/CO",
+            "mwmed": 1345.64
+          },
+          {
+            "usina": "GNA II",
+            "subsistema": "SE/CO",
+            "mwmed": 1027.93
+          },
+          {
+            "usina": "Novo Tempo Barcarena",
+            "subsistema": "N",
+            "mwmed": 610.42
+          }
+        ],
+        "cobertura_horaria_minima": 24,
+        "metodo": "media horaria verificada das usinas por subsistema; classes exclusivas sem dupla contagem"
       }
     ],
-    "data_mais_recente": "2026-11-23",
+    "data_mais_recente": "2026-11-24",
     "fontes": [
       "https://ons-aws-prod-opendata.s3.amazonaws.com/dataset/geracao_termica_despacho_2_ho/GERACAO_TERMICA_DESPACHO-2_2026_11.csv",
       "https://ons-aws-prod-opendata.s3.amazonaws.com/dataset/geracao_termica_despacho_2_ho/GERACAO_TERMICA_DESPACHO-2_2026_10.csv"
@@ -57721,82 +57821,82 @@
       }
     ],
     "termicas_por_motivo": {
-      "data": "2026-11-23",
+      "data": "2026-11-24",
       "submercados": [
         {
-          "data": "2026-11-23",
+          "data": "2026-11-24",
           "subsistema": "SE/CO",
           "horas": 24,
-          "total": 4046.563,
-          "merito": 0.0,
-          "inflexibilidade": 3650.644,
-          "eletrica": 395.919,
+          "total": 4624.93,
+          "merito": 37.556,
+          "inflexibilidade": 4141.089,
+          "eletrica": 394.881,
           "garantia": 0.0,
-          "unitcommitment": 0.0,
+          "unitcommitment": 51.404,
           "outros": 0.0
         },
         {
-          "data": "2026-11-23",
+          "data": "2026-11-24",
           "subsistema": "SUL",
           "horas": 24,
-          "total": 1333.222,
-          "merito": 0.0,
-          "inflexibilidade": 1294.578,
-          "eletrica": 38.643,
+          "total": 1311.744,
+          "merito": 5.272,
+          "inflexibilidade": 1305.566,
+          "eletrica": 0.49,
           "garantia": 0.0,
-          "unitcommitment": 0.0,
+          "unitcommitment": 0.417,
           "outros": 0.0
         },
         {
-          "data": "2026-11-23",
+          "data": "2026-11-24",
           "subsistema": "NE",
           "horas": 24,
-          "total": 208.28,
-          "merito": 0.0,
-          "inflexibilidade": 84.418,
-          "eletrica": 123.443,
+          "total": 257.56,
+          "merito": 14.992,
+          "inflexibilidade": 85.151,
+          "eletrica": 128.319,
           "garantia": 0.0,
-          "unitcommitment": 0.418,
-          "outros": 0.001
+          "unitcommitment": 29.099,
+          "outros": 0.0
         },
         {
-          "data": "2026-11-23",
+          "data": "2026-11-24",
           "subsistema": "N",
           "horas": 24,
-          "total": 2460.65,
-          "merito": 382.056,
-          "inflexibilidade": 1825.022,
-          "eletrica": 54.892,
+          "total": 2738.837,
+          "merito": 584.666,
+          "inflexibilidade": 1832.127,
+          "eletrica": 89.757,
           "garantia": 0.0,
-          "unitcommitment": 198.681,
-          "outros": 0.0
+          "unitcommitment": 232.391,
+          "outros": 0.001
         }
       ],
       "sin": {
         "subsistema": "SIN",
-        "total": 8048.715,
-        "merito": 382.056,
-        "inflexibilidade": 6854.662,
-        "eletrica": 612.897,
+        "total": 8933.071,
+        "merito": 642.486,
+        "inflexibilidade": 7363.933,
+        "eletrica": 613.447,
         "garantia": 0.0,
-        "unitcommitment": 199.099,
+        "unitcommitment": 313.311,
         "outros": 0.001
       },
       "top3_usinas": [
         {
           "usina": "Angra II",
           "subsistema": "SE/CO",
-          "mwmed": 1347.23
+          "mwmed": 1345.64
+        },
+        {
+          "usina": "GNA II",
+          "subsistema": "SE/CO",
+          "mwmed": 1027.93
         },
         {
           "usina": "Novo Tempo Barcarena",
           "subsistema": "N",
           "mwmed": 610.42
-        },
-        {
-          "usina": "GNA II",
-          "subsistema": "SE/CO",
-          "mwmed": 516.03
         }
       ],
       "cobertura_horaria_minima": 24,
@@ -57874,26 +57974,8 @@
       "top3": [],
       "status": "narrativa sem extração segura"
     },
-    "curtailment_data": "2026-11-23",
+    "curtailment_data": "2026-11-24",
     "curtailment_ultimos_30_dias": [
-      {
-        "data": "2026-10-25",
-        "fonte": "Eólica",
-        "mwh": 55652.33,
-        "mwmed": 2318.847,
-        "geracao_verificada_mwh": 47093.748,
-        "geracao_potencial_mwh": 102746.078,
-        "percentual_corte": 54.165
-      },
-      {
-        "data": "2026-10-25",
-        "fonte": "Solar",
-        "mwh": 56978.393,
-        "mwmed": 2374.1,
-        "geracao_verificada_mwh": 72707.071,
-        "geracao_potencial_mwh": 129685.464,
-        "percentual_corte": 43.936
-      },
       {
         "data": "2026-10-26",
         "fonte": "Eólica",
@@ -58023,20 +58105,20 @@
       {
         "data": "2026-11-02",
         "fonte": "Eólica",
-        "mwh": 137570.681,
-        "mwmed": 5732.112,
+        "mwh": 137805.812,
+        "mwmed": 5741.909,
         "geracao_verificada_mwh": 114238.818,
-        "geracao_potencial_mwh": 251809.499,
-        "percentual_corte": 54.633
+        "geracao_potencial_mwh": 252044.63,
+        "percentual_corte": 54.675
       },
       {
         "data": "2026-11-02",
         "fonte": "Solar",
-        "mwh": 75343.427,
-        "mwmed": 3139.309,
+        "mwh": 75465.253,
+        "mwmed": 3144.386,
         "geracao_verificada_mwh": 81542.782,
-        "geracao_potencial_mwh": 156886.209,
-        "percentual_corte": 48.024
+        "geracao_potencial_mwh": 157008.035,
+        "percentual_corte": 48.065
       },
       {
         "data": "2026-11-03",
@@ -58176,11 +58258,11 @@
       {
         "data": "2026-11-10",
         "fonte": "Solar",
-        "mwh": 29463.112,
-        "mwmed": 1227.63,
+        "mwh": 30487.902,
+        "mwmed": 1270.329,
         "geracao_verificada_mwh": 80215.641,
-        "geracao_potencial_mwh": 109678.753,
-        "percentual_corte": 26.863
+        "geracao_potencial_mwh": 110703.543,
+        "percentual_corte": 27.54
       },
       {
         "data": "2026-11-11",
@@ -58266,11 +58348,11 @@
       {
         "data": "2026-11-15",
         "fonte": "Solar",
-        "mwh": 33348.225,
-        "mwmed": 1389.509,
+        "mwh": 33809.845,
+        "mwmed": 1408.744,
         "geracao_verificada_mwh": 71518.934,
-        "geracao_potencial_mwh": 104867.159,
-        "percentual_corte": 31.8
+        "geracao_potencial_mwh": 105328.779,
+        "percentual_corte": 32.099
       },
       {
         "data": "2026-11-16",
@@ -58293,128 +58375,146 @@
       {
         "data": "2026-11-17",
         "fonte": "Eólica",
-        "mwh": 24943.98,
-        "mwmed": 1039.332,
-        "geracao_verificada_mwh": 64368.118,
-        "geracao_potencial_mwh": 89312.098,
-        "percentual_corte": 27.929
+        "mwh": 27506.655,
+        "mwmed": 1146.111,
+        "geracao_verificada_mwh": 64340.13,
+        "geracao_potencial_mwh": 91846.785,
+        "percentual_corte": 29.948
       },
       {
         "data": "2026-11-17",
         "fonte": "Solar",
-        "mwh": 8651.755,
-        "mwmed": 360.49,
-        "geracao_verificada_mwh": 43579.091,
-        "geracao_potencial_mwh": 52230.846,
-        "percentual_corte": 16.564
+        "mwh": 9639.097,
+        "mwmed": 401.629,
+        "geracao_verificada_mwh": 43489.139,
+        "geracao_potencial_mwh": 53128.236,
+        "percentual_corte": 18.143
       },
       {
         "data": "2026-11-18",
         "fonte": "Eólica",
-        "mwh": 12846.69,
-        "mwmed": 535.279,
-        "geracao_verificada_mwh": 46162.142,
-        "geracao_potencial_mwh": 59008.832,
-        "percentual_corte": 21.771
+        "mwh": 13147.536,
+        "mwmed": 547.814,
+        "geracao_verificada_mwh": 46163.581,
+        "geracao_potencial_mwh": 59311.117,
+        "percentual_corte": 22.167
       },
       {
         "data": "2026-11-18",
         "fonte": "Solar",
-        "mwh": 6267.145,
-        "mwmed": 261.131,
-        "geracao_verificada_mwh": 43206.713,
-        "geracao_potencial_mwh": 49473.858,
-        "percentual_corte": 12.668
+        "mwh": 6344.638,
+        "mwmed": 264.36,
+        "geracao_verificada_mwh": 43211.73,
+        "geracao_potencial_mwh": 49556.368,
+        "percentual_corte": 12.803
       },
       {
         "data": "2026-11-19",
         "fonte": "Eólica",
-        "mwh": 26997.875,
-        "mwmed": 1124.911,
-        "geracao_verificada_mwh": 46423.682,
-        "geracao_potencial_mwh": 73421.557,
-        "percentual_corte": 36.771
+        "mwh": 27973.766,
+        "mwmed": 1165.574,
+        "geracao_verificada_mwh": 46438.253,
+        "geracao_potencial_mwh": 74412.019,
+        "percentual_corte": 37.593
       },
       {
         "data": "2026-11-19",
         "fonte": "Solar",
-        "mwh": 8735.077,
-        "mwmed": 363.962,
-        "geracao_verificada_mwh": 50080.416,
-        "geracao_potencial_mwh": 58815.493,
-        "percentual_corte": 14.852
+        "mwh": 9013.897,
+        "mwmed": 375.579,
+        "geracao_verificada_mwh": 50063.63,
+        "geracao_potencial_mwh": 59077.527,
+        "percentual_corte": 15.258
       },
       {
         "data": "2026-11-20",
         "fonte": "Eólica",
-        "mwh": 64895.841,
-        "mwmed": 2703.993,
-        "geracao_verificada_mwh": 63136.612,
-        "geracao_potencial_mwh": 128032.453,
-        "percentual_corte": 50.687
+        "mwh": 69184.565,
+        "mwmed": 2882.69,
+        "geracao_verificada_mwh": 62852.971,
+        "geracao_potencial_mwh": 132037.536,
+        "percentual_corte": 52.398
       },
       {
         "data": "2026-11-20",
         "fonte": "Solar",
-        "mwh": 46569.082,
-        "mwmed": 1940.378,
-        "geracao_verificada_mwh": 69786.029,
-        "geracao_potencial_mwh": 116355.111,
-        "percentual_corte": 40.023
+        "mwh": 53327.299,
+        "mwmed": 2221.971,
+        "geracao_verificada_mwh": 69602.742,
+        "geracao_potencial_mwh": 122930.041,
+        "percentual_corte": 43.38
       },
       {
         "data": "2026-11-21",
         "fonte": "Eólica",
-        "mwh": 50068.586,
-        "mwmed": 2086.191,
-        "geracao_verificada_mwh": 44285.489,
-        "geracao_potencial_mwh": 94354.075,
-        "percentual_corte": 53.065
+        "mwh": 51420.255,
+        "mwmed": 2142.511,
+        "geracao_verificada_mwh": 44144.073,
+        "geracao_potencial_mwh": 95564.328,
+        "percentual_corte": 53.807
       },
       {
         "data": "2026-11-21",
         "fonte": "Solar",
-        "mwh": 24740.49,
-        "mwmed": 1030.854,
-        "geracao_verificada_mwh": 76734.657,
-        "geracao_potencial_mwh": 101475.147,
-        "percentual_corte": 24.381
+        "mwh": 25528.509,
+        "mwmed": 1063.688,
+        "geracao_verificada_mwh": 76761.447,
+        "geracao_potencial_mwh": 102289.956,
+        "percentual_corte": 24.957
       },
       {
         "data": "2026-11-22",
         "fonte": "Eólica",
-        "mwh": 50414.338,
-        "mwmed": 2100.597,
-        "geracao_verificada_mwh": 37732.553,
-        "geracao_potencial_mwh": 88146.891,
-        "percentual_corte": 57.194
+        "mwh": 51857.694,
+        "mwmed": 2160.737,
+        "geracao_verificada_mwh": 37763.809,
+        "geracao_potencial_mwh": 89621.503,
+        "percentual_corte": 57.863
       },
       {
         "data": "2026-11-22",
         "fonte": "Solar",
-        "mwh": 54231.846,
-        "mwmed": 2259.66,
-        "geracao_verificada_mwh": 53662.872,
-        "geracao_potencial_mwh": 107894.718,
-        "percentual_corte": 50.264
+        "mwh": 54235.482,
+        "mwmed": 2259.812,
+        "geracao_verificada_mwh": 53663.029,
+        "geracao_potencial_mwh": 107898.511,
+        "percentual_corte": 50.265
       },
       {
         "data": "2026-11-23",
         "fonte": "Eólica",
-        "mwh": 32336.754,
-        "mwmed": 1347.365,
-        "geracao_verificada_mwh": 63161.979,
-        "geracao_potencial_mwh": 95498.733,
-        "percentual_corte": 33.861
+        "mwh": 32899.172,
+        "mwmed": 1370.799,
+        "geracao_verificada_mwh": 63225.927,
+        "geracao_potencial_mwh": 96125.099,
+        "percentual_corte": 34.225
       },
       {
         "data": "2026-11-23",
         "fonte": "Solar",
-        "mwh": 9651.863,
-        "mwmed": 402.161,
+        "mwh": 9697.215,
+        "mwmed": 404.051,
         "geracao_verificada_mwh": 82181.045,
-        "geracao_potencial_mwh": 91832.908,
-        "percentual_corte": 10.51
+        "geracao_potencial_mwh": 91878.26,
+        "percentual_corte": 10.554
+      },
+      {
+        "data": "2026-11-24",
+        "fonte": "Eólica",
+        "mwh": 45497.291,
+        "mwmed": 1895.72,
+        "geracao_verificada_mwh": 78676.078,
+        "geracao_potencial_mwh": 124173.369,
+        "percentual_corte": 36.64
+      },
+      {
+        "data": "2026-11-24",
+        "fonte": "Solar",
+        "mwh": 12430.665,
+        "mwmed": 517.944,
+        "geracao_verificada_mwh": 52119.53,
+        "geracao_potencial_mwh": 64550.195,
+        "percentual_corte": 19.257
       }
     ],
     "alertas_vazoes": [
