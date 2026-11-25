@@ -227,9 +227,11 @@ def load_curtailment(raw:Path, reference:dt.date, online:bool):
             except requests.RequestException as exc:log.warning('Curtailment indisponível %s: %s',url,exc)
     for fonte,blob,url in sources:
         try:
-            parsed,n,reference=parse_ons_curtailment_csv(blob,fonte,com_denominador=True)
+            # Nao sobrescrever `reference` (data limite da coleta) com o
+            # dicionario de cobertura de geracao verificada do CSV.
+            parsed,n,coverage_by_day=parse_ons_curtailment_csv(blob,fonte,com_denominador=True)
             values.update({k:round(v,3) for k,v in parsed.items()})
-            for k,meta in reference.items():
+            for k,meta in coverage_by_day.items():
                 if meta['validos']==meta['total'] and meta['total']>0:
                     denominadores[k]=round(meta['verificada_mwh'],3)
                 else:denominadores.pop(k,None)
