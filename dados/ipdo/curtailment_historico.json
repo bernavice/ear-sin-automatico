@@ -1118,11 +1118,11 @@
   {
     "data": "2026-11-02",
     "fonte": "Eólica",
-    "mwh": 137805.812,
-    "mwmed": 5741.909,
+    "mwh": 137814.568,
+    "mwmed": 5742.274,
     "geracao_verificada_mwh": 114238.818,
-    "geracao_potencial_mwh": 252044.63,
-    "percentual_corte": 54.675
+    "geracao_potencial_mwh": 252053.386,
+    "percentual_corte": 54.677
   },
   {
     "data": "2026-11-02",
@@ -1406,127 +1406,127 @@
   {
     "data": "2026-11-18",
     "fonte": "Eólica",
-    "mwh": 13147.536,
-    "mwmed": 547.814,
-    "geracao_verificada_mwh": 46163.581,
-    "geracao_potencial_mwh": 59311.117,
-    "percentual_corte": 22.167
+    "mwh": 13631.25,
+    "mwmed": 567.969,
+    "geracao_verificada_mwh": 46163.663,
+    "geracao_potencial_mwh": 59794.913,
+    "percentual_corte": 22.797
   },
   {
     "data": "2026-11-18",
     "fonte": "Solar",
-    "mwh": 6344.638,
-    "mwmed": 264.36,
+    "mwh": 7049.665,
+    "mwmed": 293.736,
     "geracao_verificada_mwh": 43211.73,
-    "geracao_potencial_mwh": 49556.368,
-    "percentual_corte": 12.803
+    "geracao_potencial_mwh": 50261.395,
+    "percentual_corte": 14.026
   },
   {
     "data": "2026-11-19",
     "fonte": "Eólica",
-    "mwh": 27973.766,
-    "mwmed": 1165.574,
-    "geracao_verificada_mwh": 46438.253,
-    "geracao_potencial_mwh": 74412.019,
-    "percentual_corte": 37.593
+    "mwh": 27973.659,
+    "mwmed": 1165.569,
+    "geracao_verificada_mwh": 46490.939,
+    "geracao_potencial_mwh": 74464.598,
+    "percentual_corte": 37.566
   },
   {
     "data": "2026-11-19",
     "fonte": "Solar",
-    "mwh": 9013.897,
-    "mwmed": 375.579,
-    "geracao_verificada_mwh": 50063.63,
-    "geracao_potencial_mwh": 59077.527,
-    "percentual_corte": 15.258
+    "mwh": 9058.06,
+    "mwmed": 377.419,
+    "geracao_verificada_mwh": 50059.958,
+    "geracao_potencial_mwh": 59118.018,
+    "percentual_corte": 15.322
   },
   {
     "data": "2026-11-20",
     "fonte": "Eólica",
-    "mwh": 69184.565,
-    "mwmed": 2882.69,
-    "geracao_verificada_mwh": 62852.971,
-    "geracao_potencial_mwh": 132037.536,
-    "percentual_corte": 52.398
+    "mwh": 69639.712,
+    "mwmed": 2901.655,
+    "geracao_verificada_mwh": 62906.998,
+    "geracao_potencial_mwh": 132546.71,
+    "percentual_corte": 52.54
   },
   {
     "data": "2026-11-20",
     "fonte": "Solar",
-    "mwh": 53327.299,
-    "mwmed": 2221.971,
-    "geracao_verificada_mwh": 69602.742,
-    "geracao_potencial_mwh": 122930.041,
-    "percentual_corte": 43.38
+    "mwh": 54167.106,
+    "mwmed": 2256.963,
+    "geracao_verificada_mwh": 69606.894,
+    "geracao_potencial_mwh": 123774.0,
+    "percentual_corte": 43.763
   },
   {
     "data": "2026-11-21",
     "fonte": "Eólica",
-    "mwh": 51420.255,
-    "mwmed": 2142.511,
-    "geracao_verificada_mwh": 44144.073,
-    "geracao_potencial_mwh": 95564.328,
-    "percentual_corte": 53.807
+    "mwh": 52045.385,
+    "mwmed": 2168.558,
+    "geracao_verificada_mwh": 44162.066,
+    "geracao_potencial_mwh": 96207.451,
+    "percentual_corte": 54.097
   },
   {
     "data": "2026-11-21",
     "fonte": "Solar",
-    "mwh": 25528.509,
-    "mwmed": 1063.688,
-    "geracao_verificada_mwh": 76761.447,
-    "geracao_potencial_mwh": 102289.956,
-    "percentual_corte": 24.957
+    "mwh": 26956.849,
+    "mwmed": 1123.202,
+    "geracao_verificada_mwh": 76592.053,
+    "geracao_potencial_mwh": 103548.902,
+    "percentual_corte": 26.033
   },
   {
     "data": "2026-11-22",
     "fonte": "Eólica",
-    "mwh": 51857.694,
-    "mwmed": 2160.737,
-    "geracao_verificada_mwh": 37763.809,
-    "geracao_potencial_mwh": 89621.503,
-    "percentual_corte": 57.863
+    "mwh": 52894.976,
+    "mwmed": 2203.957,
+    "geracao_verificada_mwh": 37756.877,
+    "geracao_potencial_mwh": 90651.853,
+    "percentual_corte": 58.35
   },
   {
     "data": "2026-11-22",
     "fonte": "Solar",
-    "mwh": 54235.482,
-    "mwmed": 2259.812,
-    "geracao_verificada_mwh": 53663.029,
-    "geracao_potencial_mwh": 107898.511,
-    "percentual_corte": 50.265
+    "mwh": 55292.414,
+    "mwmed": 2303.851,
+    "geracao_verificada_mwh": 53685.486,
+    "geracao_potencial_mwh": 108977.9,
+    "percentual_corte": 50.737
   },
   {
     "data": "2026-11-23",
     "fonte": "Eólica",
-    "mwh": 32899.172,
-    "mwmed": 1370.799,
-    "geracao_verificada_mwh": 63225.927,
-    "geracao_potencial_mwh": 96125.099,
-    "percentual_corte": 34.225
+    "mwh": 33224.165,
+    "mwmed": 1384.34,
+    "geracao_verificada_mwh": 63233.159,
+    "geracao_potencial_mwh": 96457.324,
+    "percentual_corte": 34.444
   },
   {
     "data": "2026-11-23",
     "fonte": "Solar",
-    "mwh": 9697.215,
-    "mwmed": 404.051,
-    "geracao_verificada_mwh": 82181.045,
-    "geracao_potencial_mwh": 91878.26,
-    "percentual_corte": 10.554
+    "mwh": 10206.197,
+    "mwmed": 425.258,
+    "geracao_verificada_mwh": 82146.788,
+    "geracao_potencial_mwh": 92352.985,
+    "percentual_corte": 11.051
   },
   {
     "data": "2026-11-24",
     "fonte": "Eólica",
-    "mwh": 45497.291,
-    "mwmed": 1895.72,
+    "mwh": 45569.839,
+    "mwmed": 1898.743,
     "geracao_verificada_mwh": 78676.078,
-    "geracao_potencial_mwh": 124173.369,
-    "percentual_corte": 36.64
+    "geracao_potencial_mwh": 124245.917,
+    "percentual_corte": 36.677
   },
   {
     "data": "2026-11-24",
     "fonte": "Solar",
-    "mwh": 12430.665,
-    "mwmed": 517.944,
-    "geracao_verificada_mwh": 52119.53,
-    "geracao_potencial_mwh": 64550.195,
-    "percentual_corte": 19.257
+    "mwh": 12429.816,
+    "mwmed": 517.909,
+    "geracao_verificada_mwh": 52119.537,
+    "geracao_potencial_mwh": 64549.353,
+    "percentual_corte": 19.256
   }
 ]

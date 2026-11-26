@@ -141,5 +141,148 @@
       "novo_recorde": true,
       "status": "comparação com máxima histórica informada no próprio IPDO"
     }
+  },
+  {
+    "data": "2026-11-24",
+    "origem": "pdf-ons",
+    "url": "https://www.ons.org.br/AcervoDigitalDocumentosEPublicacoes/IPDO-24-11-2026.pdf",
+    "balanco": [
+      {
+        "fonte": "Hidro Nacional",
+        "programado": 45396,
+        "verificado": 47065
+      },
+      {
+        "fonte": "Itaipu Binacional",
+        "programado": 7143,
+        "verificado": 6981
+      },
+      {
+        "fonte": "Termo Nuclear",
+        "programado": 1350,
+        "verificado": 1346
+      },
+      {
+        "fonte": "Termo Convencional",
+        "programado": 11091,
+        "verificado": 11325
+      },
+      {
+        "fonte": "Eólica",
+        "programado": 13112,
+        "verificado": 14822
+      },
+      {
+        "fonte": "Solar",
+        "programado": 15808,
+        "verificado": 16342
+      },
+      {
+        "fonte": "Total SIN",
+        "programado": 93900,
+        "verificado": 97881
+      },
+      {
+        "fonte": "Carga",
+        "programado": 93924,
+        "verificado": 97904
+      }
+    ],
+    "reservatorios": [
+      {
+        "subsistema": "SIN",
+        "ear": 57.8
+      },
+      {
+        "subsistema": "SUL",
+        "ear": 82.3
+      },
+      {
+        "subsistema": "SE/CO",
+        "ear": 55.6
+      },
+      {
+        "subsistema": "N",
+        "ear": 49.7
+      },
+      {
+        "subsistema": "NE",
+        "ear": 59.7
+      }
+    ],
+    "destaques": [],
+    "restricoes": [],
+    "ocorrencias": [],
+    "capacidade_55": {
+      "total": {
+        "usina": "Total",
+        "instalada_mw": 27257.0,
+        "disponivel_mw": 23840.0,
+        "diferenca_mw": 3417.0
+      },
+      "grupos": [
+        {
+          "motivo": "Por Manutenção",
+          "instalada_mw": 725.0,
+          "disponivel_mw": 68.0,
+          "diferenca_mw": 657.0
+        },
+        {
+          "motivo": "Por Restrição Operativa",
+          "instalada_mw": 5853.0,
+          "disponivel_mw": 3887.0,
+          "diferenca_mw": 1966.0
+        },
+        {
+          "motivo": "Por Restrição Operativa e Manutenção",
+          "instalada_mw": 1683.0,
+          "disponivel_mw": 1080.0,
+          "diferenca_mw": 603.0
+        },
+        {
+          "motivo": "Demais Restrições Agregadas",
+          "instalada_mw": 18996.0,
+          "disponivel_mw": 18805.0,
+          "diferenca_mw": 191.0
+        }
+      ],
+      "top3": [
+        {
+          "usina": "Angra I",
+          "instalada_mw": 640.0,
+          "disponivel_mw": 0.0,
+          "diferenca_mw": 640.0,
+          "motivo": "Manutenção"
+        },
+        {
+          "usina": "GNA II",
+          "instalada_mw": 1673.0,
+          "disponivel_mw": 1080.0,
+          "diferenca_mw": 593.0,
+          "motivo": "Restrição operativa e manutenção"
+        },
+        {
+          "usina": "Vale do Açú",
+          "instalada_mw": 323.0,
+          "disponivel_mw": 110.0,
+          "diferenca_mw": 213.0,
+          "motivo": "Restrição operativa"
+        }
+      ],
+      "status": "extraído da seção 5.5"
+    },
+    "termicas_6": {
+      "destaques": [],
+      "top3": [],
+      "status": "narrativa sem extração segura"
+    },
+    "demanda_7": {
+      "verificada_mw": 108031,
+      "hora": "10:57",
+      "recorde_mw": 108031,
+      "recorde_data": "24/11/2026",
+      "novo_recorde": true,
+      "status": "comparação com máxima histórica informada no próprio IPDO"
+    }
   }
 ]

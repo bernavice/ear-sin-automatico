@@ -1,72 +1,72 @@
 {
-  "gerado_em": "2026-11-25T14:24:21-03:00",
+  "gerado_em": "2026-11-26T02:08:21-03:00",
   "modo": "producao",
   "ipdo": {
-    "data": "2026-11-23",
+    "data": "2026-11-24",
     "origem": "pdf-ons",
-    "url": "https://www.ons.org.br/AcervoDigitalDocumentosEPublicacoes/IPDO-23-11-2026.pdf",
+    "url": "https://www.ons.org.br/AcervoDigitalDocumentosEPublicacoes/IPDO-24-11-2026.pdf",
     "balanco": [
       {
         "fonte": "Hidro Nacional",
-        "programado": 45544,
-        "verificado": 48195
+        "programado": 45396,
+        "verificado": 47065
       },
       {
         "fonte": "Itaipu Binacional",
-        "programado": 7061,
-        "verificado": 7160
+        "programado": 7143,
+        "verificado": 6981
       },
       {
         "fonte": "Termo Nuclear",
         "programado": 1350,
-        "verificado": 1347
+        "verificado": 1346
       },
       {
         "fonte": "Termo Convencional",
-        "programado": 10185,
-        "verificado": 10514
+        "programado": 11091,
+        "verificado": 11325
       },
       {
         "fonte": "Eólica",
-        "programado": 11812,
-        "verificado": 11274
+        "programado": 13112,
+        "verificado": 14822
       },
       {
         "fonte": "Solar",
-        "programado": 16124,
-        "verificado": 16675
+        "programado": 15808,
+        "verificado": 16342
       },
       {
         "fonte": "Total SIN",
-        "programado": 92076,
-        "verificado": 95165
+        "programado": 93900,
+        "verificado": 97881
       },
       {
         "fonte": "Carga",
-        "programado": 92076,
-        "verificado": 95165
+        "programado": 93924,
+        "verificado": 97904
       }
     ],
     "reservatorios": [
       {
         "subsistema": "SIN",
-        "ear": 57.7
+        "ear": 57.8
       },
       {
         "subsistema": "SUL",
-        "ear": 81.2
+        "ear": 82.3
       },
       {
         "subsistema": "SE/CO",
-        "ear": 55.7
+        "ear": 55.6
       },
       {
         "subsistema": "N",
-        "ear": 50.0
+        "ear": 49.7
       },
       {
         "subsistema": "NE",
-        "ear": 58.8
+        "ear": 59.7
       }
     ],
     "destaques": [],
@@ -76,8 +76,8 @@
       "total": {
         "usina": "Total",
         "instalada_mw": 27257.0,
-        "disponivel_mw": 23845.0,
-        "diferenca_mw": 3412.0
+        "disponivel_mw": 23840.0,
+        "diferenca_mw": 3417.0
       },
       "grupos": [
         {
@@ -88,9 +88,9 @@
         },
         {
           "motivo": "Por Restrição Operativa",
-          "instalada_mw": 5928.0,
-          "disponivel_mw": 3967.0,
-          "diferenca_mw": 1961.0
+          "instalada_mw": 5853.0,
+          "disponivel_mw": 3887.0,
+          "diferenca_mw": 1966.0
         },
         {
           "motivo": "Por Restrição Operativa e Manutenção",
@@ -100,8 +100,8 @@
         },
         {
           "motivo": "Demais Restrições Agregadas",
-          "instalada_mw": 18921.0,
-          "disponivel_mw": 18730.0,
+          "instalada_mw": 18996.0,
+          "disponivel_mw": 18805.0,
           "diferenca_mw": 191.0
         }
       ],
@@ -136,30 +136,18 @@
       "status": "narrativa sem extração segura"
     },
     "demanda_7": {
-      "verificada_mw": 106610,
-      "hora": "15:39",
-      "recorde_mw": 106610,
-      "recorde_data": "23/11/2026",
+      "verificada_mw": 108031,
+      "hora": "10:57",
+      "recorde_mw": 108031,
+      "recorde_data": "24/11/2026",
       "novo_recorde": true,
       "status": "comparação com máxima histórica informada no próprio IPDO"
     }
   },
   "dias_desatualizacao": 2,
   "operacao": {
-    "ultima_data": "2026-11-23",
+    "ultima_data": "2026-11-24",
     "series": [
-      {
-        "data": "2024-11-14",
-        "subsistema": "SIN",
-        "termica": 10666.5,
-        "eolica": 15140.77,
-        "solar": 9679.53,
-        "hidraulica": 45148.29,
-        "intercambio": 973.85,
-        "carga": 79661.24,
-        "carga_liquida_proxy": 54840.94,
-        "pct_carga_liquida": 68.843
-      },
       {
         "data": "2024-11-15",
         "subsistema": "SIN",
@@ -9027,6 +9015,18 @@
         "carga": 94126.15,
         "carga_liquida_proxy": 66434.59,
         "pct_carga_liquida": 70.58
+      },
+      {
+        "data": "2026-11-24",
+        "subsistema": "SIN",
+        "termica": 11897.09,
+        "eolica": 14725.95,
+        "solar": 16184.84,
+        "hidraulica": 54031.88,
+        "intercambio": -23.15,
+        "carga": 96862.91,
+        "carga_liquida_proxy": 65952.12,
+        "pct_carga_liquida": 68.088
       },
       {
         "data": "2025-01-01",
@@ -39475,395 +39475,247 @@
         "solar": 2047.15,
         "carga_liquida_proxy": 13632.11,
         "pct_carga_liquida": 85.381
+      },
+      {
+        "data": "2026-11-24",
+        "subsistema": "N",
+        "carga": 10099.21,
+        "hidraulica": 4897.31,
+        "termica": 2922.19,
+        "eolica": 378.63,
+        "solar": 1044.08,
+        "carga_liquida_proxy": 8676.5,
+        "pct_carga_liquida": 85.913
+      },
+      {
+        "data": "2026-11-24",
+        "subsistema": "NE",
+        "carga": 16620.49,
+        "hidraulica": 5619.28,
+        "termica": 669.11,
+        "eolica": 13974.24,
+        "solar": 5522.63,
+        "carga_liquida_proxy": -2876.38,
+        "pct_carga_liquida": -17.306
+      },
+      {
+        "data": "2026-11-24",
+        "subsistema": "SE/CO",
+        "carga": 53606.65,
+        "hidraulica": 29841.53,
+        "termica": 6797.14,
+        "eolica": 41.33,
+        "solar": 8341.17,
+        "carga_liquida_proxy": 45224.15,
+        "pct_carga_liquida": 84.363
+      },
+      {
+        "data": "2026-11-24",
+        "subsistema": "SUL",
+        "carga": 16536.56,
+        "hidraulica": 13673.76,
+        "termica": 1508.65,
+        "eolica": 331.76,
+        "solar": 1276.96,
+        "carga_liquida_proxy": 14927.84,
+        "pct_carga_liquida": 90.272
       }
     ],
     "perfil_horario_sin": [
       {
-        "datahora": "2026-11-23T00:00:00",
-        "carga_mw": 83229.03,
-        "eolica_mw": 10399.07,
+        "datahora": "2026-11-24T00:00:00",
+        "carga_mw": 88665.12,
+        "eolica_mw": 15904.86,
         "solar_mw": 0.0,
-        "carga_liquida_proxy_mw": 72829.96,
-        "pct_carga_liquida": 87.505
+        "carga_liquida_proxy_mw": 72760.26,
+        "pct_carga_liquida": 82.062
       },
       {
-        "datahora": "2026-11-23T01:00:00",
-        "carga_mw": 80132.63,
-        "eolica_mw": 9884.84,
+        "datahora": "2026-11-24T01:00:00",
+        "carga_mw": 84549.82,
+        "eolica_mw": 16334.7,
         "solar_mw": 0.0,
-        "carga_liquida_proxy_mw": 70247.79,
-        "pct_carga_liquida": 87.664
+        "carga_liquida_proxy_mw": 68215.12,
+        "pct_carga_liquida": 80.68
       },
       {
-        "datahora": "2026-11-23T02:00:00",
-        "carga_mw": 78094.47,
-        "eolica_mw": 10236.58,
+        "datahora": "2026-11-24T02:00:00",
+        "carga_mw": 81769.69,
+        "eolica_mw": 16902.18,
         "solar_mw": 0.0,
-        "carga_liquida_proxy_mw": 67857.89,
-        "pct_carga_liquida": 86.892
+        "carga_liquida_proxy_mw": 64867.51,
+        "pct_carga_liquida": 79.33
       },
       {
-        "datahora": "2026-11-23T03:00:00",
-        "carga_mw": 76976.13,
-        "eolica_mw": 10213.93,
+        "datahora": "2026-11-24T03:00:00",
+        "carga_mw": 80013.11,
+        "eolica_mw": 16812.26,
         "solar_mw": 0.0,
-        "carga_liquida_proxy_mw": 66762.2,
-        "pct_carga_liquida": 86.731
+        "carga_liquida_proxy_mw": 63200.85,
+        "pct_carga_liquida": 78.988
       },
       {
-        "datahora": "2026-11-23T04:00:00",
-        "carga_mw": 76640.71,
-        "eolica_mw": 10420.05,
-        "solar_mw": 12.9,
-        "carga_liquida_proxy_mw": 66207.76,
-        "pct_carga_liquida": 86.387
+        "datahora": "2026-11-24T04:00:00",
+        "carga_mw": 79434.58,
+        "eolica_mw": 16696.63,
+        "solar_mw": 13.04,
+        "carga_liquida_proxy_mw": 62724.91,
+        "pct_carga_liquida": 78.964
       },
       {
-        "datahora": "2026-11-23T05:00:00",
-        "carga_mw": 77754.24,
-        "eolica_mw": 10264.76,
-        "solar_mw": 2335.63,
-        "carga_liquida_proxy_mw": 65153.85,
-        "pct_carga_liquida": 83.795
+        "datahora": "2026-11-24T05:00:00",
+        "carga_mw": 80555.96,
+        "eolica_mw": 16448.31,
+        "solar_mw": 2422.98,
+        "carga_liquida_proxy_mw": 61684.67,
+        "pct_carga_liquida": 76.574
       },
       {
-        "datahora": "2026-11-23T06:00:00",
-        "carga_mw": 82116.34,
-        "eolica_mw": 9576.99,
-        "solar_mw": 13203.88,
-        "carga_liquida_proxy_mw": 59335.47,
-        "pct_carga_liquida": 72.258
+        "datahora": "2026-11-24T06:00:00",
+        "carga_mw": 84926.37,
+        "eolica_mw": 14961.18,
+        "solar_mw": 13328.02,
+        "carga_liquida_proxy_mw": 56637.17,
+        "pct_carga_liquida": 66.69
       },
       {
-        "datahora": "2026-11-23T07:00:00",
-        "carga_mw": 89028.16,
-        "eolica_mw": 9470.27,
-        "solar_mw": 25878.11,
-        "carga_liquida_proxy_mw": 53679.78,
-        "pct_carga_liquida": 60.295
+        "datahora": "2026-11-24T07:00:00",
+        "carga_mw": 91774.92,
+        "eolica_mw": 13670.75,
+        "solar_mw": 24826.33,
+        "carga_liquida_proxy_mw": 53277.84,
+        "pct_carga_liquida": 58.053
       },
       {
-        "datahora": "2026-11-23T08:00:00",
-        "carga_mw": 95497.36,
-        "eolica_mw": 9215.06,
-        "solar_mw": 37340.58,
-        "carga_liquida_proxy_mw": 48941.72,
-        "pct_carga_liquida": 51.249
+        "datahora": "2026-11-24T08:00:00",
+        "carga_mw": 98489.91,
+        "eolica_mw": 12853.31,
+        "solar_mw": 33710.97,
+        "carga_liquida_proxy_mw": 51925.63,
+        "pct_carga_liquida": 52.722
       },
       {
-        "datahora": "2026-11-23T09:00:00",
-        "carga_mw": 98643.9,
-        "eolica_mw": 8357.63,
-        "solar_mw": 44019.28,
-        "carga_liquida_proxy_mw": 46266.99,
-        "pct_carga_liquida": 46.903
+        "datahora": "2026-11-24T09:00:00",
+        "carga_mw": 102296.11,
+        "eolica_mw": 12163.32,
+        "solar_mw": 42084.9,
+        "carga_liquida_proxy_mw": 48047.89,
+        "pct_carga_liquida": 46.969
       },
       {
-        "datahora": "2026-11-23T10:00:00",
-        "carga_mw": 101380.23,
-        "eolica_mw": 7716.94,
-        "solar_mw": 47386.51,
-        "carga_liquida_proxy_mw": 46276.78,
-        "pct_carga_liquida": 45.647
+        "datahora": "2026-11-24T10:00:00",
+        "carga_mw": 105654.81,
+        "eolica_mw": 11173.49,
+        "solar_mw": 47409.64,
+        "carga_liquida_proxy_mw": 47071.68,
+        "pct_carga_liquida": 44.552
       },
       {
-        "datahora": "2026-11-23T11:00:00",
-        "carga_mw": 102368.63,
-        "eolica_mw": 7351.19,
-        "solar_mw": 48141.61,
-        "carga_liquida_proxy_mw": 46875.83,
-        "pct_carga_liquida": 45.791
+        "datahora": "2026-11-24T11:00:00",
+        "carga_mw": 105876.09,
+        "eolica_mw": 9996.62,
+        "solar_mw": 48813.23,
+        "carga_liquida_proxy_mw": 47066.24,
+        "pct_carga_liquida": 44.454
       },
       {
-        "datahora": "2026-11-23T12:00:00",
-        "carga_mw": 100803.3,
-        "eolica_mw": 7120.34,
-        "solar_mw": 47095.35,
-        "carga_liquida_proxy_mw": 46587.61,
-        "pct_carga_liquida": 46.216
+        "datahora": "2026-11-24T12:00:00",
+        "carga_mw": 102416.18,
+        "eolica_mw": 8995.26,
+        "solar_mw": 45253.94,
+        "carga_liquida_proxy_mw": 48166.98,
+        "pct_carga_liquida": 47.031
       },
       {
-        "datahora": "2026-11-23T13:00:00",
-        "carga_mw": 103033.99,
-        "eolica_mw": 8671.13,
-        "solar_mw": 43921.71,
-        "carga_liquida_proxy_mw": 50441.15,
-        "pct_carga_liquida": 48.956
+        "datahora": "2026-11-24T13:00:00",
+        "carga_mw": 104764.2,
+        "eolica_mw": 9910.85,
+        "solar_mw": 41264.9,
+        "carga_liquida_proxy_mw": 53588.45,
+        "pct_carga_liquida": 51.151
       },
       {
-        "datahora": "2026-11-23T14:00:00",
-        "carga_mw": 104411.77,
-        "eolica_mw": 9502.8,
-        "solar_mw": 37102.5,
-        "carga_liquida_proxy_mw": 57806.47,
-        "pct_carga_liquida": 55.364
+        "datahora": "2026-11-24T14:00:00",
+        "carga_mw": 106202.43,
+        "eolica_mw": 10634.63,
+        "solar_mw": 36177.53,
+        "carga_liquida_proxy_mw": 59390.27,
+        "pct_carga_liquida": 55.922
       },
       {
-        "datahora": "2026-11-23T15:00:00",
-        "carga_mw": 104572.19,
-        "eolica_mw": 10720.54,
-        "solar_mw": 27870.1,
-        "carga_liquida_proxy_mw": 65981.55,
-        "pct_carga_liquida": 63.097
+        "datahora": "2026-11-24T15:00:00",
+        "carga_mw": 106449.8,
+        "eolica_mw": 11118.97,
+        "solar_mw": 29314.89,
+        "carga_liquida_proxy_mw": 66015.94,
+        "pct_carga_liquida": 62.016
       },
       {
-        "datahora": "2026-11-23T16:00:00",
-        "carga_mw": 103676.08,
-        "eolica_mw": 11791.01,
-        "solar_mw": 16232.47,
-        "carga_liquida_proxy_mw": 75652.6,
-        "pct_carga_liquida": 72.97
+        "datahora": "2026-11-24T16:00:00",
+        "carga_mw": 105052.27,
+        "eolica_mw": 12708.73,
+        "solar_mw": 17436.87,
+        "carga_liquida_proxy_mw": 74906.67,
+        "pct_carga_liquida": 71.304
       },
       {
-        "datahora": "2026-11-23T17:00:00",
-        "carga_mw": 99786.2,
-        "eolica_mw": 13703.47,
-        "solar_mw": 4976.51,
-        "carga_liquida_proxy_mw": 81106.22,
-        "pct_carga_liquida": 81.28
+        "datahora": "2026-11-24T17:00:00",
+        "carga_mw": 101714.12,
+        "eolica_mw": 14624.73,
+        "solar_mw": 5489.91,
+        "carga_liquida_proxy_mw": 81599.48,
+        "pct_carga_liquida": 80.224
       },
       {
-        "datahora": "2026-11-23T18:00:00",
-        "carga_mw": 99941.3,
-        "eolica_mw": 14979.04,
-        "solar_mw": 421.92,
-        "carga_liquida_proxy_mw": 84540.34,
-        "pct_carga_liquida": 84.59
+        "datahora": "2026-11-24T18:00:00",
+        "carga_mw": 102410.68,
+        "eolica_mw": 15792.38,
+        "solar_mw": 663.18,
+        "carga_liquida_proxy_mw": 85955.12,
+        "pct_carga_liquida": 83.932
       },
       {
-        "datahora": "2026-11-23T19:00:00",
-        "carga_mw": 102868.97,
-        "eolica_mw": 15868.26,
-        "solar_mw": 76.33,
-        "carga_liquida_proxy_mw": 86924.38,
-        "pct_carga_liquida": 84.5
+        "datahora": "2026-11-24T19:00:00",
+        "carga_mw": 105421.18,
+        "eolica_mw": 17238.2,
+        "solar_mw": 225.76,
+        "carga_liquida_proxy_mw": 87957.22,
+        "pct_carga_liquida": 83.434
       },
       {
-        "datahora": "2026-11-23T20:00:00",
-        "carga_mw": 103052.1,
-        "eolica_mw": 15486.21,
+        "datahora": "2026-11-24T20:00:00",
+        "carga_mw": 105174.5,
+        "eolica_mw": 18401.5,
         "solar_mw": 0.0,
-        "carga_liquida_proxy_mw": 87565.89,
-        "pct_carga_liquida": 84.972
+        "carga_liquida_proxy_mw": 86773.0,
+        "pct_carga_liquida": 82.504
       },
       {
-        "datahora": "2026-11-23T21:00:00",
-        "carga_mw": 102210.94,
-        "eolica_mw": 15521.27,
+        "datahora": "2026-11-24T21:00:00",
+        "carga_mw": 104521.44,
+        "eolica_mw": 19438.98,
         "solar_mw": 0.0,
-        "carga_liquida_proxy_mw": 86689.67,
-        "pct_carga_liquida": 84.814
+        "carga_liquida_proxy_mw": 85082.46,
+        "pct_carga_liquida": 81.402
       },
       {
-        "datahora": "2026-11-23T22:00:00",
-        "carga_mw": 98971.16,
-        "eolica_mw": 16102.83,
+        "datahora": "2026-11-24T22:00:00",
+        "carga_mw": 100942.1,
+        "eolica_mw": 20181.71,
         "solar_mw": 0.0,
-        "carga_liquida_proxy_mw": 82868.33,
-        "pct_carga_liquida": 83.73
+        "carga_liquida_proxy_mw": 80760.39,
+        "pct_carga_liquida": 80.007
       },
       {
-        "datahora": "2026-11-23T23:00:00",
-        "carga_mw": 93837.68,
-        "eolica_mw": 16007.8,
+        "datahora": "2026-11-24T23:00:00",
+        "carga_mw": 95634.39,
+        "eolica_mw": 20459.35,
         "solar_mw": 0.0,
-        "carga_liquida_proxy_mw": 77829.88,
-        "pct_carga_liquida": 82.941
+        "carga_liquida_proxy_mw": 75175.04,
+        "pct_carga_liquida": 78.607
       }
     ],
     "perfis_horarios_sin": [
-      {
-        "datahora": "2026-09-26T00:00:00",
-        "carga_mw": 80035.82,
-        "eolica_mw": 20103.36,
-        "solar_mw": 1.0,
-        "carga_liquida_proxy_mw": 59931.46,
-        "pct_carga_liquida": 74.881
-      },
-      {
-        "datahora": "2026-09-26T01:00:00",
-        "carga_mw": 75947.93,
-        "eolica_mw": 19891.98,
-        "solar_mw": 1.0,
-        "carga_liquida_proxy_mw": 56054.95,
-        "pct_carga_liquida": 73.807
-      },
-      {
-        "datahora": "2026-09-26T02:00:00",
-        "carga_mw": 73374.86,
-        "eolica_mw": 19109.5,
-        "solar_mw": 1.0,
-        "carga_liquida_proxy_mw": 54264.36,
-        "pct_carga_liquida": 73.955
-      },
-      {
-        "datahora": "2026-09-26T03:00:00",
-        "carga_mw": 71680.5,
-        "eolica_mw": 19275.04,
-        "solar_mw": 1.0,
-        "carga_liquida_proxy_mw": 52404.46,
-        "pct_carga_liquida": 73.108
-      },
-      {
-        "datahora": "2026-09-26T04:00:00",
-        "carga_mw": 70891.78,
-        "eolica_mw": 19130.66,
-        "solar_mw": 9.91,
-        "carga_liquida_proxy_mw": 51751.21,
-        "pct_carga_liquida": 73.0
-      },
-      {
-        "datahora": "2026-09-26T05:00:00",
-        "carga_mw": 70893.1,
-        "eolica_mw": 18556.08,
-        "solar_mw": 870.27,
-        "carga_liquida_proxy_mw": 51466.75,
-        "pct_carga_liquida": 72.598
-      },
-      {
-        "datahora": "2026-09-26T06:00:00",
-        "carga_mw": 71262.14,
-        "eolica_mw": 17046.46,
-        "solar_mw": 8739.81,
-        "carga_liquida_proxy_mw": 45475.87,
-        "pct_carga_liquida": 63.815
-      },
-      {
-        "datahora": "2026-09-26T07:00:00",
-        "carga_mw": 74029.98,
-        "eolica_mw": 15707.02,
-        "solar_mw": 19783.64,
-        "carga_liquida_proxy_mw": 38539.32,
-        "pct_carga_liquida": 52.059
-      },
-      {
-        "datahora": "2026-09-26T08:00:00",
-        "carga_mw": 76133.0,
-        "eolica_mw": 9770.71,
-        "solar_mw": 29517.39,
-        "carga_liquida_proxy_mw": 36844.9,
-        "pct_carga_liquida": 48.395
-      },
-      {
-        "datahora": "2026-09-26T09:00:00",
-        "carga_mw": 77452.04,
-        "eolica_mw": 4507.96,
-        "solar_mw": 36534.05,
-        "carga_liquida_proxy_mw": 36410.03,
-        "pct_carga_liquida": 47.01
-      },
-      {
-        "datahora": "2026-09-26T10:00:00",
-        "carga_mw": 79478.48,
-        "eolica_mw": 3691.54,
-        "solar_mw": 39972.38,
-        "carga_liquida_proxy_mw": 35814.56,
-        "pct_carga_liquida": 45.062
-      },
-      {
-        "datahora": "2026-09-26T11:00:00",
-        "carga_mw": 81131.37,
-        "eolica_mw": 3557.03,
-        "solar_mw": 41517.07,
-        "carga_liquida_proxy_mw": 36057.27,
-        "pct_carga_liquida": 44.443
-      },
-      {
-        "datahora": "2026-09-26T12:00:00",
-        "carga_mw": 80900.18,
-        "eolica_mw": 3443.79,
-        "solar_mw": 41059.76,
-        "carga_liquida_proxy_mw": 36396.63,
-        "pct_carga_liquida": 44.99
-      },
-      {
-        "datahora": "2026-09-26T13:00:00",
-        "carga_mw": 80473.88,
-        "eolica_mw": 4176.11,
-        "solar_mw": 39786.47,
-        "carga_liquida_proxy_mw": 36511.3,
-        "pct_carga_liquida": 45.37
-      },
-      {
-        "datahora": "2026-09-26T14:00:00",
-        "carga_mw": 79719.43,
-        "eolica_mw": 7006.72,
-        "solar_mw": 35646.82,
-        "carga_liquida_proxy_mw": 37065.89,
-        "pct_carga_liquida": 46.495
-      },
-      {
-        "datahora": "2026-09-26T15:00:00",
-        "carga_mw": 79874.74,
-        "eolica_mw": 10557.67,
-        "solar_mw": 29435.87,
-        "carga_liquida_proxy_mw": 39881.2,
-        "pct_carga_liquida": 49.93
-      },
-      {
-        "datahora": "2026-09-26T16:00:00",
-        "carga_mw": 82013.4,
-        "eolica_mw": 13461.3,
-        "solar_mw": 18254.26,
-        "carga_liquida_proxy_mw": 50297.84,
-        "pct_carga_liquida": 61.329
-      },
-      {
-        "datahora": "2026-09-26T17:00:00",
-        "carga_mw": 86050.99,
-        "eolica_mw": 15309.13,
-        "solar_mw": 3920.32,
-        "carga_liquida_proxy_mw": 66821.54,
-        "pct_carga_liquida": 77.653
-      },
-      {
-        "datahora": "2026-09-26T18:00:00",
-        "carga_mw": 92408.95,
-        "eolica_mw": 16678.28,
-        "solar_mw": 99.0,
-        "carga_liquida_proxy_mw": 75631.67,
-        "pct_carga_liquida": 81.845
-      },
-      {
-        "datahora": "2026-09-26T19:00:00",
-        "carga_mw": 93126.01,
-        "eolica_mw": 18664.89,
-        "solar_mw": 8.28,
-        "carga_liquida_proxy_mw": 74452.84,
-        "pct_carga_liquida": 79.948
-      },
-      {
-        "datahora": "2026-09-26T20:00:00",
-        "carga_mw": 90493.98,
-        "eolica_mw": 19311.48,
-        "solar_mw": 1.0,
-        "carga_liquida_proxy_mw": 71181.5,
-        "pct_carga_liquida": 78.659
-      },
-      {
-        "datahora": "2026-09-26T21:00:00",
-        "carga_mw": 88360.18,
-        "eolica_mw": 19776.07,
-        "solar_mw": 1.0,
-        "carga_liquida_proxy_mw": 68583.11,
-        "pct_carga_liquida": 77.618
-      },
-      {
-        "datahora": "2026-09-26T22:00:00",
-        "carga_mw": 85433.84,
-        "eolica_mw": 20650.84,
-        "solar_mw": 1.0,
-        "carga_liquida_proxy_mw": 64782.0,
-        "pct_carga_liquida": 75.827
-      },
-      {
-        "datahora": "2026-09-26T23:00:00",
-        "carga_mw": 82203.89,
-        "eolica_mw": 20691.14,
-        "solar_mw": 1.0,
-        "carga_liquida_proxy_mw": 61511.75,
-        "pct_carga_liquida": 74.828
-      },
       {
         "datahora": "2026-09-27T00:00:00",
         "carga_mw": 78872.71,
@@ -50999,152 +50851,263 @@
         "solar_mw": 0.0,
         "carga_liquida_proxy_mw": 77829.88,
         "pct_carga_liquida": 82.941
+      },
+      {
+        "datahora": "2026-11-24T00:00:00",
+        "carga_mw": 88665.12,
+        "eolica_mw": 15904.86,
+        "solar_mw": 0.0,
+        "carga_liquida_proxy_mw": 72760.26,
+        "pct_carga_liquida": 82.062
+      },
+      {
+        "datahora": "2026-11-24T01:00:00",
+        "carga_mw": 84549.82,
+        "eolica_mw": 16334.7,
+        "solar_mw": 0.0,
+        "carga_liquida_proxy_mw": 68215.12,
+        "pct_carga_liquida": 80.68
+      },
+      {
+        "datahora": "2026-11-24T02:00:00",
+        "carga_mw": 81769.69,
+        "eolica_mw": 16902.18,
+        "solar_mw": 0.0,
+        "carga_liquida_proxy_mw": 64867.51,
+        "pct_carga_liquida": 79.33
+      },
+      {
+        "datahora": "2026-11-24T03:00:00",
+        "carga_mw": 80013.11,
+        "eolica_mw": 16812.26,
+        "solar_mw": 0.0,
+        "carga_liquida_proxy_mw": 63200.85,
+        "pct_carga_liquida": 78.988
+      },
+      {
+        "datahora": "2026-11-24T04:00:00",
+        "carga_mw": 79434.58,
+        "eolica_mw": 16696.63,
+        "solar_mw": 13.04,
+        "carga_liquida_proxy_mw": 62724.91,
+        "pct_carga_liquida": 78.964
+      },
+      {
+        "datahora": "2026-11-24T05:00:00",
+        "carga_mw": 80555.96,
+        "eolica_mw": 16448.31,
+        "solar_mw": 2422.98,
+        "carga_liquida_proxy_mw": 61684.67,
+        "pct_carga_liquida": 76.574
+      },
+      {
+        "datahora": "2026-11-24T06:00:00",
+        "carga_mw": 84926.37,
+        "eolica_mw": 14961.18,
+        "solar_mw": 13328.02,
+        "carga_liquida_proxy_mw": 56637.17,
+        "pct_carga_liquida": 66.69
+      },
+      {
+        "datahora": "2026-11-24T07:00:00",
+        "carga_mw": 91774.92,
+        "eolica_mw": 13670.75,
+        "solar_mw": 24826.33,
+        "carga_liquida_proxy_mw": 53277.84,
+        "pct_carga_liquida": 58.053
+      },
+      {
+        "datahora": "2026-11-24T08:00:00",
+        "carga_mw": 98489.91,
+        "eolica_mw": 12853.31,
+        "solar_mw": 33710.97,
+        "carga_liquida_proxy_mw": 51925.63,
+        "pct_carga_liquida": 52.722
+      },
+      {
+        "datahora": "2026-11-24T09:00:00",
+        "carga_mw": 102296.11,
+        "eolica_mw": 12163.32,
+        "solar_mw": 42084.9,
+        "carga_liquida_proxy_mw": 48047.89,
+        "pct_carga_liquida": 46.969
+      },
+      {
+        "datahora": "2026-11-24T10:00:00",
+        "carga_mw": 105654.81,
+        "eolica_mw": 11173.49,
+        "solar_mw": 47409.64,
+        "carga_liquida_proxy_mw": 47071.68,
+        "pct_carga_liquida": 44.552
+      },
+      {
+        "datahora": "2026-11-24T11:00:00",
+        "carga_mw": 105876.09,
+        "eolica_mw": 9996.62,
+        "solar_mw": 48813.23,
+        "carga_liquida_proxy_mw": 47066.24,
+        "pct_carga_liquida": 44.454
+      },
+      {
+        "datahora": "2026-11-24T12:00:00",
+        "carga_mw": 102416.18,
+        "eolica_mw": 8995.26,
+        "solar_mw": 45253.94,
+        "carga_liquida_proxy_mw": 48166.98,
+        "pct_carga_liquida": 47.031
+      },
+      {
+        "datahora": "2026-11-24T13:00:00",
+        "carga_mw": 104764.2,
+        "eolica_mw": 9910.85,
+        "solar_mw": 41264.9,
+        "carga_liquida_proxy_mw": 53588.45,
+        "pct_carga_liquida": 51.151
+      },
+      {
+        "datahora": "2026-11-24T14:00:00",
+        "carga_mw": 106202.43,
+        "eolica_mw": 10634.63,
+        "solar_mw": 36177.53,
+        "carga_liquida_proxy_mw": 59390.27,
+        "pct_carga_liquida": 55.922
+      },
+      {
+        "datahora": "2026-11-24T15:00:00",
+        "carga_mw": 106449.8,
+        "eolica_mw": 11118.97,
+        "solar_mw": 29314.89,
+        "carga_liquida_proxy_mw": 66015.94,
+        "pct_carga_liquida": 62.016
+      },
+      {
+        "datahora": "2026-11-24T16:00:00",
+        "carga_mw": 105052.27,
+        "eolica_mw": 12708.73,
+        "solar_mw": 17436.87,
+        "carga_liquida_proxy_mw": 74906.67,
+        "pct_carga_liquida": 71.304
+      },
+      {
+        "datahora": "2026-11-24T17:00:00",
+        "carga_mw": 101714.12,
+        "eolica_mw": 14624.73,
+        "solar_mw": 5489.91,
+        "carga_liquida_proxy_mw": 81599.48,
+        "pct_carga_liquida": 80.224
+      },
+      {
+        "datahora": "2026-11-24T18:00:00",
+        "carga_mw": 102410.68,
+        "eolica_mw": 15792.38,
+        "solar_mw": 663.18,
+        "carga_liquida_proxy_mw": 85955.12,
+        "pct_carga_liquida": 83.932
+      },
+      {
+        "datahora": "2026-11-24T19:00:00",
+        "carga_mw": 105421.18,
+        "eolica_mw": 17238.2,
+        "solar_mw": 225.76,
+        "carga_liquida_proxy_mw": 87957.22,
+        "pct_carga_liquida": 83.434
+      },
+      {
+        "datahora": "2026-11-24T20:00:00",
+        "carga_mw": 105174.5,
+        "eolica_mw": 18401.5,
+        "solar_mw": 0.0,
+        "carga_liquida_proxy_mw": 86773.0,
+        "pct_carga_liquida": 82.504
+      },
+      {
+        "datahora": "2026-11-24T21:00:00",
+        "carga_mw": 104521.44,
+        "eolica_mw": 19438.98,
+        "solar_mw": 0.0,
+        "carga_liquida_proxy_mw": 85082.46,
+        "pct_carga_liquida": 81.402
+      },
+      {
+        "datahora": "2026-11-24T22:00:00",
+        "carga_mw": 100942.1,
+        "eolica_mw": 20181.71,
+        "solar_mw": 0.0,
+        "carga_liquida_proxy_mw": 80760.39,
+        "pct_carga_liquida": 80.007
+      },
+      {
+        "datahora": "2026-11-24T23:00:00",
+        "carga_mw": 95634.39,
+        "eolica_mw": 20459.35,
+        "solar_mw": 0.0,
+        "carga_liquida_proxy_mw": 75175.04,
+        "pct_carga_liquida": 78.607
       }
     ],
     "variacoes_relevantes": [
       {
         "subsistema": "SIN",
-        "variavel": "carga",
-        "atual": 94126.15,
-        "anterior": 81080.73,
-        "variacao_mwm": 13045.4,
-        "variacao_pct": 16.1,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "SIN",
-        "variavel": "hidraulica",
-        "atual": 55345.98,
-        "anterior": 48116.4,
-        "variacao_mwm": 7229.6,
-        "variacao_pct": 15.0,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "SE/CO",
-        "variavel": "carga",
-        "atual": 52092.48,
-        "anterior": 45269.55,
-        "variacao_mwm": 6822.9,
-        "variacao_pct": 15.1,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "SUL",
-        "variavel": "carga",
-        "atual": 15966.19,
-        "anterior": 12513.54,
-        "variacao_mwm": 3452.6,
-        "variacao_pct": 27.6,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "SUL",
-        "variavel": "hidraulica",
-        "atual": 14102.87,
-        "anterior": 11263.97,
-        "variacao_mwm": 2838.9,
-        "variacao_pct": 25.2,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "SIN",
-        "variavel": "solar",
-        "atual": 16500.64,
-        "anterior": 13679.36,
-        "variacao_mwm": 2821.3,
-        "variacao_pct": 20.6,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "SIN",
         "variavel": "eolica",
-        "atual": 11190.92,
-        "anterior": 8629.69,
-        "variacao_mwm": 2561.2,
-        "variacao_pct": 29.7,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "SE/CO",
-        "variavel": "hidraulica",
-        "atual": 30596.01,
-        "anterior": 28090.22,
-        "variacao_mwm": 2505.8,
-        "variacao_pct": 8.9,
-        "data": "2026-11-23"
+        "atual": 14725.95,
+        "anterior": 11190.92,
+        "variacao_mwm": 3535.0,
+        "variacao_pct": 31.6,
+        "data": "2026-11-24"
       },
       {
         "subsistema": "NE",
         "variavel": "eolica",
-        "atual": 10529.26,
-        "anterior": 8060.53,
-        "variacao_mwm": 2468.7,
-        "variacao_pct": 30.6,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "NE",
-        "variavel": "carga",
-        "atual": 16347.94,
-        "anterior": 14388.99,
-        "variacao_mwm": 1959.0,
-        "variacao_pct": 13.6,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "NE",
-        "variavel": "hidraulica",
-        "atual": 5557.77,
-        "anterior": 4189.53,
-        "variacao_mwm": 1368.2,
+        "atual": 13974.24,
+        "anterior": 10529.26,
+        "variacao_mwm": 3445.0,
         "variacao_pct": 32.7,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "NE",
-        "variavel": "solar",
-        "atual": 5714.6,
-        "anterior": 4378.0,
-        "variacao_mwm": 1336.6,
-        "variacao_pct": 30.5,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "SE/CO",
-        "variavel": "solar",
-        "atual": 7748.41,
-        "anterior": 6935.79,
-        "variacao_mwm": 812.6,
-        "variacao_pct": 11.7,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "N",
-        "variavel": "carga",
-        "atual": 9719.54,
-        "anterior": 8908.64,
-        "variacao_mwm": 810.9,
-        "variacao_pct": 9.1,
-        "data": "2026-11-23"
+        "data": "2026-11-24"
       },
       {
         "subsistema": "SUL",
         "variavel": "solar",
-        "atual": 2047.15,
-        "anterior": 1419.22,
-        "variacao_mwm": 627.9,
-        "variacao_pct": 44.2,
-        "data": "2026-11-23"
+        "atual": 1276.96,
+        "anterior": 2047.15,
+        "variacao_mwm": -770.2,
+        "variacao_pct": -37.6,
+        "data": "2026-11-24"
+      },
+      {
+        "subsistema": "SE/CO",
+        "variavel": "solar",
+        "atual": 8341.17,
+        "anterior": 7748.41,
+        "variacao_mwm": 592.8,
+        "variacao_pct": 7.7,
+        "data": "2026-11-24"
+      },
+      {
+        "subsistema": "SUL",
+        "variavel": "carga",
+        "atual": 16536.56,
+        "anterior": 15966.19,
+        "variacao_mwm": 570.4,
+        "variacao_pct": 3.6,
+        "data": "2026-11-24"
+      },
+      {
+        "subsistema": "SE/CO",
+        "variavel": "termica",
+        "atual": 6797.14,
+        "anterior": 6293.84,
+        "variacao_mwm": 503.3,
+        "variacao_pct": 8.0,
+        "data": "2026-11-24"
       },
       {
         "subsistema": "N",
-        "variavel": "hidraulica",
-        "atual": 5089.33,
-        "anterior": 4572.69,
-        "variacao_mwm": 516.6,
-        "variacao_pct": 11.3,
-        "data": "2026-11-23"
+        "variavel": "carga",
+        "atual": 10099.21,
+        "anterior": 9719.54,
+        "variacao_mwm": 379.7,
+        "variacao_pct": 3.9,
+        "data": "2026-11-24"
       }
     ],
     "metodo": "Média dos valores horários disponíveis por dia; comparação com dia anterior para cada submercado."
@@ -52270,11 +52233,11 @@
       {
         "data": "2026-11-02",
         "fonte": "Eólica",
-        "mwh": 137805.812,
-        "mwmed": 5741.909,
+        "mwh": 137814.568,
+        "mwmed": 5742.274,
         "geracao_verificada_mwh": 114238.818,
-        "geracao_potencial_mwh": 252044.63,
-        "percentual_corte": 54.675
+        "geracao_potencial_mwh": 252053.386,
+        "percentual_corte": 54.677
       },
       {
         "data": "2026-11-02",
@@ -52558,128 +52521,128 @@
       {
         "data": "2026-11-18",
         "fonte": "Eólica",
-        "mwh": 13147.536,
-        "mwmed": 547.814,
-        "geracao_verificada_mwh": 46163.581,
-        "geracao_potencial_mwh": 59311.117,
-        "percentual_corte": 22.167
+        "mwh": 13631.25,
+        "mwmed": 567.969,
+        "geracao_verificada_mwh": 46163.663,
+        "geracao_potencial_mwh": 59794.913,
+        "percentual_corte": 22.797
       },
       {
         "data": "2026-11-18",
         "fonte": "Solar",
-        "mwh": 6344.638,
-        "mwmed": 264.36,
+        "mwh": 7049.665,
+        "mwmed": 293.736,
         "geracao_verificada_mwh": 43211.73,
-        "geracao_potencial_mwh": 49556.368,
-        "percentual_corte": 12.803
+        "geracao_potencial_mwh": 50261.395,
+        "percentual_corte": 14.026
       },
       {
         "data": "2026-11-19",
         "fonte": "Eólica",
-        "mwh": 27973.766,
-        "mwmed": 1165.574,
-        "geracao_verificada_mwh": 46438.253,
-        "geracao_potencial_mwh": 74412.019,
-        "percentual_corte": 37.593
+        "mwh": 27973.659,
+        "mwmed": 1165.569,
+        "geracao_verificada_mwh": 46490.939,
+        "geracao_potencial_mwh": 74464.598,
+        "percentual_corte": 37.566
       },
       {
         "data": "2026-11-19",
         "fonte": "Solar",
-        "mwh": 9013.897,
-        "mwmed": 375.579,
-        "geracao_verificada_mwh": 50063.63,
-        "geracao_potencial_mwh": 59077.527,
-        "percentual_corte": 15.258
+        "mwh": 9058.06,
+        "mwmed": 377.419,
+        "geracao_verificada_mwh": 50059.958,
+        "geracao_potencial_mwh": 59118.018,
+        "percentual_corte": 15.322
       },
       {
         "data": "2026-11-20",
         "fonte": "Eólica",
-        "mwh": 69184.565,
-        "mwmed": 2882.69,
-        "geracao_verificada_mwh": 62852.971,
-        "geracao_potencial_mwh": 132037.536,
-        "percentual_corte": 52.398
+        "mwh": 69639.712,
+        "mwmed": 2901.655,
+        "geracao_verificada_mwh": 62906.998,
+        "geracao_potencial_mwh": 132546.71,
+        "percentual_corte": 52.54
       },
       {
         "data": "2026-11-20",
         "fonte": "Solar",
-        "mwh": 53327.299,
-        "mwmed": 2221.971,
-        "geracao_verificada_mwh": 69602.742,
-        "geracao_potencial_mwh": 122930.041,
-        "percentual_corte": 43.38
+        "mwh": 54167.106,
+        "mwmed": 2256.963,
+        "geracao_verificada_mwh": 69606.894,
+        "geracao_potencial_mwh": 123774.0,
+        "percentual_corte": 43.763
       },
       {
         "data": "2026-11-21",
         "fonte": "Eólica",
-        "mwh": 51420.255,
-        "mwmed": 2142.511,
-        "geracao_verificada_mwh": 44144.073,
-        "geracao_potencial_mwh": 95564.328,
-        "percentual_corte": 53.807
+        "mwh": 52045.385,
+        "mwmed": 2168.558,
+        "geracao_verificada_mwh": 44162.066,
+        "geracao_potencial_mwh": 96207.451,
+        "percentual_corte": 54.097
       },
       {
         "data": "2026-11-21",
         "fonte": "Solar",
-        "mwh": 25528.509,
-        "mwmed": 1063.688,
-        "geracao_verificada_mwh": 76761.447,
-        "geracao_potencial_mwh": 102289.956,
-        "percentual_corte": 24.957
+        "mwh": 26956.849,
+        "mwmed": 1123.202,
+        "geracao_verificada_mwh": 76592.053,
+        "geracao_potencial_mwh": 103548.902,
+        "percentual_corte": 26.033
       },
       {
         "data": "2026-11-22",
         "fonte": "Eólica",
-        "mwh": 51857.694,
-        "mwmed": 2160.737,
-        "geracao_verificada_mwh": 37763.809,
-        "geracao_potencial_mwh": 89621.503,
-        "percentual_corte": 57.863
+        "mwh": 52894.976,
+        "mwmed": 2203.957,
+        "geracao_verificada_mwh": 37756.877,
+        "geracao_potencial_mwh": 90651.853,
+        "percentual_corte": 58.35
       },
       {
         "data": "2026-11-22",
         "fonte": "Solar",
-        "mwh": 54235.482,
-        "mwmed": 2259.812,
-        "geracao_verificada_mwh": 53663.029,
-        "geracao_potencial_mwh": 107898.511,
-        "percentual_corte": 50.265
+        "mwh": 55292.414,
+        "mwmed": 2303.851,
+        "geracao_verificada_mwh": 53685.486,
+        "geracao_potencial_mwh": 108977.9,
+        "percentual_corte": 50.737
       },
       {
         "data": "2026-11-23",
         "fonte": "Eólica",
-        "mwh": 32899.172,
-        "mwmed": 1370.799,
-        "geracao_verificada_mwh": 63225.927,
-        "geracao_potencial_mwh": 96125.099,
-        "percentual_corte": 34.225
+        "mwh": 33224.165,
+        "mwmed": 1384.34,
+        "geracao_verificada_mwh": 63233.159,
+        "geracao_potencial_mwh": 96457.324,
+        "percentual_corte": 34.444
       },
       {
         "data": "2026-11-23",
         "fonte": "Solar",
-        "mwh": 9697.215,
-        "mwmed": 404.051,
-        "geracao_verificada_mwh": 82181.045,
-        "geracao_potencial_mwh": 91878.26,
-        "percentual_corte": 10.554
+        "mwh": 10206.197,
+        "mwmed": 425.258,
+        "geracao_verificada_mwh": 82146.788,
+        "geracao_potencial_mwh": 92352.985,
+        "percentual_corte": 11.051
       },
       {
         "data": "2026-11-24",
         "fonte": "Eólica",
-        "mwh": 45497.291,
-        "mwmed": 1895.72,
+        "mwh": 45569.839,
+        "mwmed": 1898.743,
         "geracao_verificada_mwh": 78676.078,
-        "geracao_potencial_mwh": 124173.369,
-        "percentual_corte": 36.64
+        "geracao_potencial_mwh": 124245.917,
+        "percentual_corte": 36.677
       },
       {
         "data": "2026-11-24",
         "fonte": "Solar",
-        "mwh": 12430.665,
-        "mwmed": 517.944,
-        "geracao_verificada_mwh": 52119.53,
-        "geracao_potencial_mwh": 64550.195,
-        "percentual_corte": 19.257
+        "mwh": 12429.816,
+        "mwmed": 517.909,
+        "geracao_verificada_mwh": 52119.537,
+        "geracao_potencial_mwh": 64549.353,
+        "percentual_corte": 19.256
       }
     ],
     "data_mais_recente": "2026-11-24",
@@ -52827,8 +52790,8 @@
           "horas": 24,
           "total": 4624.93,
           "merito": 37.556,
-          "inflexibilidade": 4141.089,
-          "eletrica": 394.881,
+          "inflexibilidade": 4135.801,
+          "eletrica": 400.169,
           "garantia": 0.0,
           "unitcommitment": 51.404,
           "outros": 0.0
@@ -52861,23 +52824,23 @@
           "data": "2026-11-24",
           "subsistema": "N",
           "horas": 24,
-          "total": 2738.837,
-          "merito": 584.666,
-          "inflexibilidade": 1832.127,
-          "eletrica": 89.757,
+          "total": 2738.882,
+          "merito": 584.764,
+          "inflexibilidade": 1831.341,
+          "eletrica": 89.761,
           "garantia": 0.0,
-          "unitcommitment": 232.391,
+          "unitcommitment": 233.016,
           "outros": 0.001
         }
       ],
       "sin": {
         "subsistema": "SIN",
-        "total": 8933.071,
-        "merito": 642.486,
-        "inflexibilidade": 7363.933,
-        "eletrica": 613.447,
+        "total": 8933.116,
+        "merito": 642.584,
+        "inflexibilidade": 7357.859,
+        "eletrica": 618.739,
         "garantia": 0.0,
-        "unitcommitment": 313.311,
+        "unitcommitment": 313.936,
         "outros": 0.001
       },
       "top3_usinas": [
@@ -55942,9 +55905,9 @@
             "data": "2026-11-07",
             "subsistema": "SE/CO",
             "horas": 24,
-            "total": 3235.81,
+            "total": 3235.808,
             "merito": 1.082,
-            "inflexibilidade": 3085.012,
+            "inflexibilidade": 3085.01,
             "eletrica": 13.544,
             "garantia": 0.0,
             "unitcommitment": 136.172,
@@ -55989,9 +55952,9 @@
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 6980.54,
+          "total": 6980.538,
           "merito": 510.039,
-          "inflexibilidade": 6253.57,
+          "inflexibilidade": 6253.568,
           "eletrica": 26.597,
           "garantia": 0.0,
           "unitcommitment": 190.334,
@@ -56458,22 +56421,22 @@
             "data": "2026-11-13",
             "subsistema": "NE",
             "horas": 24,
-            "total": 210.682,
+            "total": 227.928,
             "merito": 0.416,
-            "inflexibilidade": 122.872,
-            "eletrica": 57.361,
+            "inflexibilidade": 123.002,
+            "eletrica": 72.862,
             "garantia": 0.0,
-            "unitcommitment": 30.033,
+            "unitcommitment": 31.648,
             "outros": 0.0
           },
           {
             "data": "2026-11-13",
             "subsistema": "N",
             "horas": 24,
-            "total": 2511.668,
+            "total": 2511.843,
             "merito": 642.898,
-            "inflexibilidade": 1809.853,
-            "eletrica": 58.665,
+            "inflexibilidade": 1809.828,
+            "eletrica": 58.866,
             "garantia": 0.0,
             "unitcommitment": 0.253,
             "outros": 0.001
@@ -56481,12 +56444,12 @@
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 8360.699,
+          "total": 8378.12,
           "merito": 648.643,
-          "inflexibilidade": 7537.71,
-          "eletrica": 138.009,
+          "inflexibilidade": 7537.815,
+          "eletrica": 153.711,
           "garantia": 0.0,
-          "unitcommitment": 36.338,
+          "unitcommitment": 37.953,
           "outros": 0.001
         },
         "top3_usinas": [
@@ -56552,10 +56515,10 @@
             "data": "2026-11-14",
             "subsistema": "N",
             "horas": 24,
-            "total": 2386.182,
+            "total": 2386.202,
             "merito": 441.499,
             "inflexibilidade": 1792.614,
-            "eletrica": 13.479,
+            "eletrica": 13.499,
             "garantia": 0.0,
             "unitcommitment": 138.591,
             "outros": 0.001
@@ -56563,10 +56526,10 @@
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 8363.289,
+          "total": 8363.309,
           "merito": 444.233,
           "inflexibilidade": 7762.826,
-          "eletrica": 17.113,
+          "eletrica": 17.133,
           "garantia": 0.0,
           "unitcommitment": 139.118,
           "outros": 0.001
@@ -56634,23 +56597,23 @@
             "data": "2026-11-15",
             "subsistema": "N",
             "horas": 24,
-            "total": 2443.276,
-            "merito": 451.883,
-            "inflexibilidade": 1863.826,
+            "total": 2443.28,
+            "merito": 451.882,
+            "inflexibilidade": 1863.837,
             "eletrica": 1.282,
             "garantia": 0.0,
-            "unitcommitment": 126.286,
+            "unitcommitment": 126.28,
             "outros": 0.001
           }
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 8022.102,
-          "merito": 452.955,
-          "inflexibilidade": 7441.58,
+          "total": 8022.106,
+          "merito": 452.954,
+          "inflexibilidade": 7441.591,
           "eletrica": 1.282,
           "garantia": 0.0,
-          "unitcommitment": 126.286,
+          "unitcommitment": 126.28,
           "outros": 0.001
         },
         "top3_usinas": [
@@ -56716,23 +56679,23 @@
             "data": "2026-11-16",
             "subsistema": "N",
             "horas": 24,
-            "total": 2880.402,
-            "merito": 535.223,
-            "inflexibilidade": 1960.59,
-            "eletrica": 75.04,
+            "total": 2886.846,
+            "merito": 537.871,
+            "inflexibilidade": 1964.145,
+            "eletrica": 75.319,
             "garantia": 0.0,
-            "unitcommitment": 308.199,
+            "unitcommitment": 308.161,
             "outros": 1.351
           }
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 8796.722,
-          "merito": 609.149,
-          "inflexibilidade": 7338.741,
-          "eletrica": 428.175,
+          "total": 8803.166,
+          "merito": 611.797,
+          "inflexibilidade": 7342.296,
+          "eletrica": 428.454,
           "garantia": 0.0,
-          "unitcommitment": 419.304,
+          "unitcommitment": 419.266,
           "outros": 1.355
         },
         "top3_usinas": [
@@ -56798,23 +56761,23 @@
             "data": "2026-11-17",
             "subsistema": "N",
             "horas": 24,
-            "total": 3281.28,
-            "merito": 652.382,
-            "inflexibilidade": 1849.091,
-            "eletrica": 42.863,
+            "total": 3285.948,
+            "merito": 653.923,
+            "inflexibilidade": 1851.686,
+            "eletrica": 43.391,
             "garantia": 0.0,
-            "unitcommitment": 736.946,
+            "unitcommitment": 736.949,
             "outros": 0.0
           }
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 10216.368,
-          "merito": 1215.404,
-          "inflexibilidade": 7564.956,
-          "eletrica": 317.785,
+          "total": 10221.036,
+          "merito": 1216.945,
+          "inflexibilidade": 7567.551,
+          "eletrica": 318.313,
           "garantia": 0.0,
-          "unitcommitment": 1057.465,
+          "unitcommitment": 1057.468,
           "outros": 60.761
         },
         "top3_usinas": [
@@ -56880,23 +56843,23 @@
             "data": "2026-11-18",
             "subsistema": "N",
             "horas": 24,
-            "total": 3319.419,
+            "total": 3319.425,
             "merito": 675.159,
-            "inflexibilidade": 1857.738,
-            "eletrica": 71.597,
+            "inflexibilidade": 1857.739,
+            "eletrica": 71.6,
             "garantia": 0.0,
-            "unitcommitment": 714.926,
+            "unitcommitment": 714.927,
             "outros": 0.0
           }
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 10199.475,
+          "total": 10199.481,
           "merito": 744.527,
-          "inflexibilidade": 7638.518,
-          "eletrica": 886.144,
+          "inflexibilidade": 7638.519,
+          "eletrica": 886.147,
           "garantia": 0.0,
-          "unitcommitment": 930.286,
+          "unitcommitment": 930.287,
           "outros": 0.001
         },
         "top3_usinas": [
@@ -56962,10 +56925,10 @@
             "data": "2026-11-19",
             "subsistema": "N",
             "horas": 24,
-            "total": 3533.583,
-            "merito": 884.459,
-            "inflexibilidade": 1859.912,
-            "eletrica": 116.003,
+            "total": 3533.619,
+            "merito": 884.476,
+            "inflexibilidade": 1859.929,
+            "eletrica": 116.006,
             "garantia": 0.0,
             "unitcommitment": 669.258,
             "outros": 3.952
@@ -56973,10 +56936,10 @@
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 10889.537,
-          "merito": 920.77,
-          "inflexibilidade": 7718.867,
-          "eletrica": 1186.115,
+          "total": 10889.573,
+          "merito": 920.787,
+          "inflexibilidade": 7718.884,
+          "eletrica": 1186.118,
           "garantia": 0.0,
           "unitcommitment": 1059.834,
           "outros": 3.952
@@ -57044,10 +57007,10 @@
             "data": "2026-11-20",
             "subsistema": "N",
             "horas": 24,
-            "total": 3155.613,
-            "merito": 524.865,
-            "inflexibilidade": 1816.108,
-            "eletrica": 40.633,
+            "total": 3155.673,
+            "merito": 524.873,
+            "inflexibilidade": 1816.121,
+            "eletrica": 40.673,
             "garantia": 0.0,
             "unitcommitment": 774.007,
             "outros": 0.001
@@ -57055,10 +57018,10 @@
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 9004.603,
-          "merito": 524.893,
-          "inflexibilidade": 7610.129,
-          "eletrica": 79.587,
+          "total": 9004.663,
+          "merito": 524.901,
+          "inflexibilidade": 7610.142,
+          "eletrica": 79.627,
           "garantia": 0.0,
           "unitcommitment": 789.994,
           "outros": 0.001
@@ -57126,10 +57089,10 @@
             "data": "2026-11-21",
             "subsistema": "N",
             "horas": 24,
-            "total": 2686.933,
-            "merito": 565.606,
-            "inflexibilidade": 1869.683,
-            "eletrica": 2.168,
+            "total": 2687.136,
+            "merito": 565.635,
+            "inflexibilidade": 1869.735,
+            "eletrica": 2.291,
             "garantia": 0.0,
             "unitcommitment": 249.477,
             "outros": 0.0
@@ -57137,10 +57100,10 @@
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 8605.838,
-          "merito": 565.606,
-          "inflexibilidade": 7788.588,
-          "eletrica": 2.168,
+          "total": 8606.041,
+          "merito": 565.635,
+          "inflexibilidade": 7788.64,
+          "eletrica": 2.291,
           "garantia": 0.0,
           "unitcommitment": 249.477,
           "outros": 0.0
@@ -57196,9 +57159,9 @@
             "data": "2026-11-22",
             "subsistema": "NE",
             "horas": 24,
-            "total": 83.649,
+            "total": 83.589,
             "merito": 0.0,
-            "inflexibilidade": 83.649,
+            "inflexibilidade": 83.589,
             "eletrica": 0.0,
             "garantia": 0.0,
             "unitcommitment": 0.0,
@@ -57208,10 +57171,10 @@
             "data": "2026-11-22",
             "subsistema": "N",
             "horas": 24,
-            "total": 2361.247,
-            "merito": 462.254,
-            "inflexibilidade": 1822.345,
-            "eletrica": 7.956,
+            "total": 2361.457,
+            "merito": 462.258,
+            "inflexibilidade": 1822.543,
+            "eletrica": 7.964,
             "garantia": 0.0,
             "unitcommitment": 68.692,
             "outros": 0.0
@@ -57219,10 +57182,10 @@
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 7659.827,
-          "merito": 462.254,
-          "inflexibilidade": 7120.925,
-          "eletrica": 7.956,
+          "total": 7659.977,
+          "merito": 462.258,
+          "inflexibilidade": 7121.063,
+          "eletrica": 7.964,
           "garantia": 0.0,
           "unitcommitment": 68.692,
           "outros": 0.0
@@ -57338,8 +57301,8 @@
             "horas": 24,
             "total": 4624.93,
             "merito": 37.556,
-            "inflexibilidade": 4141.089,
-            "eletrica": 394.881,
+            "inflexibilidade": 4135.801,
+            "eletrica": 400.169,
             "garantia": 0.0,
             "unitcommitment": 51.404,
             "outros": 0.0
@@ -57372,23 +57335,23 @@
             "data": "2026-11-24",
             "subsistema": "N",
             "horas": 24,
-            "total": 2738.837,
-            "merito": 584.666,
-            "inflexibilidade": 1832.127,
-            "eletrica": 89.757,
+            "total": 2738.882,
+            "merito": 584.764,
+            "inflexibilidade": 1831.341,
+            "eletrica": 89.761,
             "garantia": 0.0,
-            "unitcommitment": 232.391,
+            "unitcommitment": 233.016,
             "outros": 0.001
           }
         ],
         "sin": {
           "subsistema": "SIN",
-          "total": 8933.071,
-          "merito": 642.486,
-          "inflexibilidade": 7363.933,
-          "eletrica": 613.447,
+          "total": 8933.116,
+          "merito": 642.584,
+          "inflexibilidade": 7357.859,
+          "eletrica": 618.739,
           "garantia": 0.0,
-          "unitcommitment": 313.311,
+          "unitcommitment": 313.936,
           "outros": 0.001
         },
         "top3_usinas": [
@@ -57424,58 +57387,66 @@
     {
       "data": "2026-11-23",
       "diferenca_mw": 3412.0
+    },
+    {
+      "data": "2026-11-24",
+      "diferenca_mw": 3417.0
     }
   ],
   "demanda_historico": [
     {
       "data": "2026-11-23",
       "mw": 106610
+    },
+    {
+      "data": "2026-11-24",
+      "mw": 108031
     }
   ],
   "demanda_ons": null,
   "panorama_insumos": {
-    "ipdo_data": "2026-11-23",
-    "operacao_data": "2026-11-23",
+    "ipdo_data": "2026-11-24",
+    "operacao_data": "2026-11-24",
     "balanco": [
       {
         "fonte": "Hidro Nacional",
-        "programado": 45544,
-        "verificado": 48195
+        "programado": 45396,
+        "verificado": 47065
       },
       {
         "fonte": "Itaipu Binacional",
-        "programado": 7061,
-        "verificado": 7160
+        "programado": 7143,
+        "verificado": 6981
       },
       {
         "fonte": "Termo Nuclear",
         "programado": 1350,
-        "verificado": 1347
+        "verificado": 1346
       },
       {
         "fonte": "Termo Convencional",
-        "programado": 10185,
-        "verificado": 10514
+        "programado": 11091,
+        "verificado": 11325
       },
       {
         "fonte": "Eólica",
-        "programado": 11812,
-        "verificado": 11274
+        "programado": 13112,
+        "verificado": 14822
       },
       {
         "fonte": "Solar",
-        "programado": 16124,
-        "verificado": 16675
+        "programado": 15808,
+        "verificado": 16342
       },
       {
         "fonte": "Total SIN",
-        "programado": 92076,
-        "verificado": 95165
+        "programado": 93900,
+        "verificado": 97881
       },
       {
         "fonte": "Carga",
-        "programado": 92076,
-        "verificado": 95165
+        "programado": 93924,
+        "verificado": 97904
       }
     ],
     "restricoes": [],
@@ -57483,341 +57454,260 @@
     "variacoes_relevantes": [
       {
         "subsistema": "SIN",
-        "variavel": "carga",
-        "atual": 94126.15,
-        "anterior": 81080.73,
-        "variacao_mwm": 13045.4,
-        "variacao_pct": 16.1,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "SIN",
-        "variavel": "hidraulica",
-        "atual": 55345.98,
-        "anterior": 48116.4,
-        "variacao_mwm": 7229.6,
-        "variacao_pct": 15.0,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "SE/CO",
-        "variavel": "carga",
-        "atual": 52092.48,
-        "anterior": 45269.55,
-        "variacao_mwm": 6822.9,
-        "variacao_pct": 15.1,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "SUL",
-        "variavel": "carga",
-        "atual": 15966.19,
-        "anterior": 12513.54,
-        "variacao_mwm": 3452.6,
-        "variacao_pct": 27.6,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "SUL",
-        "variavel": "hidraulica",
-        "atual": 14102.87,
-        "anterior": 11263.97,
-        "variacao_mwm": 2838.9,
-        "variacao_pct": 25.2,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "SIN",
-        "variavel": "solar",
-        "atual": 16500.64,
-        "anterior": 13679.36,
-        "variacao_mwm": 2821.3,
-        "variacao_pct": 20.6,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "SIN",
         "variavel": "eolica",
-        "atual": 11190.92,
-        "anterior": 8629.69,
-        "variacao_mwm": 2561.2,
-        "variacao_pct": 29.7,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "SE/CO",
-        "variavel": "hidraulica",
-        "atual": 30596.01,
-        "anterior": 28090.22,
-        "variacao_mwm": 2505.8,
-        "variacao_pct": 8.9,
-        "data": "2026-11-23"
+        "atual": 14725.95,
+        "anterior": 11190.92,
+        "variacao_mwm": 3535.0,
+        "variacao_pct": 31.6,
+        "data": "2026-11-24"
       },
       {
         "subsistema": "NE",
         "variavel": "eolica",
-        "atual": 10529.26,
-        "anterior": 8060.53,
-        "variacao_mwm": 2468.7,
-        "variacao_pct": 30.6,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "NE",
-        "variavel": "carga",
-        "atual": 16347.94,
-        "anterior": 14388.99,
-        "variacao_mwm": 1959.0,
-        "variacao_pct": 13.6,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "NE",
-        "variavel": "hidraulica",
-        "atual": 5557.77,
-        "anterior": 4189.53,
-        "variacao_mwm": 1368.2,
+        "atual": 13974.24,
+        "anterior": 10529.26,
+        "variacao_mwm": 3445.0,
         "variacao_pct": 32.7,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "NE",
-        "variavel": "solar",
-        "atual": 5714.6,
-        "anterior": 4378.0,
-        "variacao_mwm": 1336.6,
-        "variacao_pct": 30.5,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "SE/CO",
-        "variavel": "solar",
-        "atual": 7748.41,
-        "anterior": 6935.79,
-        "variacao_mwm": 812.6,
-        "variacao_pct": 11.7,
-        "data": "2026-11-23"
-      },
-      {
-        "subsistema": "N",
-        "variavel": "carga",
-        "atual": 9719.54,
-        "anterior": 8908.64,
-        "variacao_mwm": 810.9,
-        "variacao_pct": 9.1,
-        "data": "2026-11-23"
+        "data": "2026-11-24"
       },
       {
         "subsistema": "SUL",
         "variavel": "solar",
-        "atual": 2047.15,
-        "anterior": 1419.22,
-        "variacao_mwm": 627.9,
-        "variacao_pct": 44.2,
-        "data": "2026-11-23"
+        "atual": 1276.96,
+        "anterior": 2047.15,
+        "variacao_mwm": -770.2,
+        "variacao_pct": -37.6,
+        "data": "2026-11-24"
+      },
+      {
+        "subsistema": "SE/CO",
+        "variavel": "solar",
+        "atual": 8341.17,
+        "anterior": 7748.41,
+        "variacao_mwm": 592.8,
+        "variacao_pct": 7.7,
+        "data": "2026-11-24"
+      },
+      {
+        "subsistema": "SUL",
+        "variavel": "carga",
+        "atual": 16536.56,
+        "anterior": 15966.19,
+        "variacao_mwm": 570.4,
+        "variacao_pct": 3.6,
+        "data": "2026-11-24"
+      },
+      {
+        "subsistema": "SE/CO",
+        "variavel": "termica",
+        "atual": 6797.14,
+        "anterior": 6293.84,
+        "variacao_mwm": 503.3,
+        "variacao_pct": 8.0,
+        "data": "2026-11-24"
       },
       {
         "subsistema": "N",
-        "variavel": "hidraulica",
-        "atual": 5089.33,
-        "anterior": 4572.69,
-        "variacao_mwm": 516.6,
-        "variacao_pct": 11.3,
-        "data": "2026-11-23"
+        "variavel": "carga",
+        "atual": 10099.21,
+        "anterior": 9719.54,
+        "variacao_mwm": 379.7,
+        "variacao_pct": 3.9,
+        "data": "2026-11-24"
       }
     ],
     "perfil_carga_liquida": [
       {
-        "datahora": "2026-11-23T00:00:00",
-        "carga_mw": 83229.03,
-        "eolica_mw": 10399.07,
+        "datahora": "2026-11-24T00:00:00",
+        "carga_mw": 88665.12,
+        "eolica_mw": 15904.86,
         "solar_mw": 0.0,
-        "carga_liquida_proxy_mw": 72829.96,
-        "pct_carga_liquida": 87.505
+        "carga_liquida_proxy_mw": 72760.26,
+        "pct_carga_liquida": 82.062
       },
       {
-        "datahora": "2026-11-23T01:00:00",
-        "carga_mw": 80132.63,
-        "eolica_mw": 9884.84,
+        "datahora": "2026-11-24T01:00:00",
+        "carga_mw": 84549.82,
+        "eolica_mw": 16334.7,
         "solar_mw": 0.0,
-        "carga_liquida_proxy_mw": 70247.79,
-        "pct_carga_liquida": 87.664
+        "carga_liquida_proxy_mw": 68215.12,
+        "pct_carga_liquida": 80.68
       },
       {
-        "datahora": "2026-11-23T02:00:00",
-        "carga_mw": 78094.47,
-        "eolica_mw": 10236.58,
+        "datahora": "2026-11-24T02:00:00",
+        "carga_mw": 81769.69,
+        "eolica_mw": 16902.18,
         "solar_mw": 0.0,
-        "carga_liquida_proxy_mw": 67857.89,
-        "pct_carga_liquida": 86.892
+        "carga_liquida_proxy_mw": 64867.51,
+        "pct_carga_liquida": 79.33
       },
       {
-        "datahora": "2026-11-23T03:00:00",
-        "carga_mw": 76976.13,
-        "eolica_mw": 10213.93,
+        "datahora": "2026-11-24T03:00:00",
+        "carga_mw": 80013.11,
+        "eolica_mw": 16812.26,
         "solar_mw": 0.0,
-        "carga_liquida_proxy_mw": 66762.2,
-        "pct_carga_liquida": 86.731
+        "carga_liquida_proxy_mw": 63200.85,
+        "pct_carga_liquida": 78.988
       },
       {
-        "datahora": "2026-11-23T04:00:00",
-        "carga_mw": 76640.71,
-        "eolica_mw": 10420.05,
-        "solar_mw": 12.9,
-        "carga_liquida_proxy_mw": 66207.76,
-        "pct_carga_liquida": 86.387
+        "datahora": "2026-11-24T04:00:00",
+        "carga_mw": 79434.58,
+        "eolica_mw": 16696.63,
+        "solar_mw": 13.04,
+        "carga_liquida_proxy_mw": 62724.91,
+        "pct_carga_liquida": 78.964
       },
       {
-        "datahora": "2026-11-23T05:00:00",
-        "carga_mw": 77754.24,
-        "eolica_mw": 10264.76,
-        "solar_mw": 2335.63,
-        "carga_liquida_proxy_mw": 65153.85,
-        "pct_carga_liquida": 83.795
+        "datahora": "2026-11-24T05:00:00",
+        "carga_mw": 80555.96,
+        "eolica_mw": 16448.31,
+        "solar_mw": 2422.98,
+        "carga_liquida_proxy_mw": 61684.67,
+        "pct_carga_liquida": 76.574
       },
       {
-        "datahora": "2026-11-23T06:00:00",
-        "carga_mw": 82116.34,
-        "eolica_mw": 9576.99,
-        "solar_mw": 13203.88,
-        "carga_liquida_proxy_mw": 59335.47,
-        "pct_carga_liquida": 72.258
+        "datahora": "2026-11-24T06:00:00",
+        "carga_mw": 84926.37,
+        "eolica_mw": 14961.18,
+        "solar_mw": 13328.02,
+        "carga_liquida_proxy_mw": 56637.17,
+        "pct_carga_liquida": 66.69
       },
       {
-        "datahora": "2026-11-23T07:00:00",
-        "carga_mw": 89028.16,
-        "eolica_mw": 9470.27,
-        "solar_mw": 25878.11,
-        "carga_liquida_proxy_mw": 53679.78,
-        "pct_carga_liquida": 60.295
+        "datahora": "2026-11-24T07:00:00",
+        "carga_mw": 91774.92,
+        "eolica_mw": 13670.75,
+        "solar_mw": 24826.33,
+        "carga_liquida_proxy_mw": 53277.84,
+        "pct_carga_liquida": 58.053
       },
       {
-        "datahora": "2026-11-23T08:00:00",
-        "carga_mw": 95497.36,
-        "eolica_mw": 9215.06,
-        "solar_mw": 37340.58,
-        "carga_liquida_proxy_mw": 48941.72,
-        "pct_carga_liquida": 51.249
+        "datahora": "2026-11-24T08:00:00",
+        "carga_mw": 98489.91,
+        "eolica_mw": 12853.31,
+        "solar_mw": 33710.97,
+        "carga_liquida_proxy_mw": 51925.63,
+        "pct_carga_liquida": 52.722
       },
       {
-        "datahora": "2026-11-23T09:00:00",
-        "carga_mw": 98643.9,
-        "eolica_mw": 8357.63,
-        "solar_mw": 44019.28,
-        "carga_liquida_proxy_mw": 46266.99,
-        "pct_carga_liquida": 46.903
+        "datahora": "2026-11-24T09:00:00",
+        "carga_mw": 102296.11,
+        "eolica_mw": 12163.32,
+        "solar_mw": 42084.9,
+        "carga_liquida_proxy_mw": 48047.89,
+        "pct_carga_liquida": 46.969
       },
       {
-        "datahora": "2026-11-23T10:00:00",
-        "carga_mw": 101380.23,
-        "eolica_mw": 7716.94,
-        "solar_mw": 47386.51,
-        "carga_liquida_proxy_mw": 46276.78,
-        "pct_carga_liquida": 45.647
+        "datahora": "2026-11-24T10:00:00",
+        "carga_mw": 105654.81,
+        "eolica_mw": 11173.49,
+        "solar_mw": 47409.64,
+        "carga_liquida_proxy_mw": 47071.68,
+        "pct_carga_liquida": 44.552
       },
       {
-        "datahora": "2026-11-23T11:00:00",
-        "carga_mw": 102368.63,
-        "eolica_mw": 7351.19,
-        "solar_mw": 48141.61,
-        "carga_liquida_proxy_mw": 46875.83,
-        "pct_carga_liquida": 45.791
+        "datahora": "2026-11-24T11:00:00",
+        "carga_mw": 105876.09,
+        "eolica_mw": 9996.62,
+        "solar_mw": 48813.23,
+        "carga_liquida_proxy_mw": 47066.24,
+        "pct_carga_liquida": 44.454
       },
       {
-        "datahora": "2026-11-23T12:00:00",
-        "carga_mw": 100803.3,
-        "eolica_mw": 7120.34,
-        "solar_mw": 47095.35,
-        "carga_liquida_proxy_mw": 46587.61,
-        "pct_carga_liquida": 46.216
+        "datahora": "2026-11-24T12:00:00",
+        "carga_mw": 102416.18,
+        "eolica_mw": 8995.26,
+        "solar_mw": 45253.94,
+        "carga_liquida_proxy_mw": 48166.98,
+        "pct_carga_liquida": 47.031
       },
       {
-        "datahora": "2026-11-23T13:00:00",
-        "carga_mw": 103033.99,
-        "eolica_mw": 8671.13,
-        "solar_mw": 43921.71,
-        "carga_liquida_proxy_mw": 50441.15,
-        "pct_carga_liquida": 48.956
+        "datahora": "2026-11-24T13:00:00",
+        "carga_mw": 104764.2,
+        "eolica_mw": 9910.85,
+        "solar_mw": 41264.9,
+        "carga_liquida_proxy_mw": 53588.45,
+        "pct_carga_liquida": 51.151
       },
       {
-        "datahora": "2026-11-23T14:00:00",
-        "carga_mw": 104411.77,
-        "eolica_mw": 9502.8,
-        "solar_mw": 37102.5,
-        "carga_liquida_proxy_mw": 57806.47,
-        "pct_carga_liquida": 55.364
+        "datahora": "2026-11-24T14:00:00",
+        "carga_mw": 106202.43,
+        "eolica_mw": 10634.63,
+        "solar_mw": 36177.53,
+        "carga_liquida_proxy_mw": 59390.27,
+        "pct_carga_liquida": 55.922
       },
       {
-        "datahora": "2026-11-23T15:00:00",
-        "carga_mw": 104572.19,
-        "eolica_mw": 10720.54,
-        "solar_mw": 27870.1,
-        "carga_liquida_proxy_mw": 65981.55,
-        "pct_carga_liquida": 63.097
+        "datahora": "2026-11-24T15:00:00",
+        "carga_mw": 106449.8,
+        "eolica_mw": 11118.97,
+        "solar_mw": 29314.89,
+        "carga_liquida_proxy_mw": 66015.94,
+        "pct_carga_liquida": 62.016
       },
       {
-        "datahora": "2026-11-23T16:00:00",
-        "carga_mw": 103676.08,
-        "eolica_mw": 11791.01,
-        "solar_mw": 16232.47,
-        "carga_liquida_proxy_mw": 75652.6,
-        "pct_carga_liquida": 72.97
+        "datahora": "2026-11-24T16:00:00",
+        "carga_mw": 105052.27,
+        "eolica_mw": 12708.73,
+        "solar_mw": 17436.87,
+        "carga_liquida_proxy_mw": 74906.67,
+        "pct_carga_liquida": 71.304
       },
       {
-        "datahora": "2026-11-23T17:00:00",
-        "carga_mw": 99786.2,
-        "eolica_mw": 13703.47,
-        "solar_mw": 4976.51,
-        "carga_liquida_proxy_mw": 81106.22,
-        "pct_carga_liquida": 81.28
+        "datahora": "2026-11-24T17:00:00",
+        "carga_mw": 101714.12,
+        "eolica_mw": 14624.73,
+        "solar_mw": 5489.91,
+        "carga_liquida_proxy_mw": 81599.48,
+        "pct_carga_liquida": 80.224
       },
       {
-        "datahora": "2026-11-23T18:00:00",
-        "carga_mw": 99941.3,
-        "eolica_mw": 14979.04,
-        "solar_mw": 421.92,
-        "carga_liquida_proxy_mw": 84540.34,
-        "pct_carga_liquida": 84.59
+        "datahora": "2026-11-24T18:00:00",
+        "carga_mw": 102410.68,
+        "eolica_mw": 15792.38,
+        "solar_mw": 663.18,
+        "carga_liquida_proxy_mw": 85955.12,
+        "pct_carga_liquida": 83.932
       },
       {
-        "datahora": "2026-11-23T19:00:00",
-        "carga_mw": 102868.97,
-        "eolica_mw": 15868.26,
-        "solar_mw": 76.33,
-        "carga_liquida_proxy_mw": 86924.38,
-        "pct_carga_liquida": 84.5
+        "datahora": "2026-11-24T19:00:00",
+        "carga_mw": 105421.18,
+        "eolica_mw": 17238.2,
+        "solar_mw": 225.76,
+        "carga_liquida_proxy_mw": 87957.22,
+        "pct_carga_liquida": 83.434
       },
       {
-        "datahora": "2026-11-23T20:00:00",
-        "carga_mw": 103052.1,
-        "eolica_mw": 15486.21,
+        "datahora": "2026-11-24T20:00:00",
+        "carga_mw": 105174.5,
+        "eolica_mw": 18401.5,
         "solar_mw": 0.0,
-        "carga_liquida_proxy_mw": 87565.89,
-        "pct_carga_liquida": 84.972
+        "carga_liquida_proxy_mw": 86773.0,
+        "pct_carga_liquida": 82.504
       },
       {
-        "datahora": "2026-11-23T21:00:00",
-        "carga_mw": 102210.94,
-        "eolica_mw": 15521.27,
+        "datahora": "2026-11-24T21:00:00",
+        "carga_mw": 104521.44,
+        "eolica_mw": 19438.98,
         "solar_mw": 0.0,
-        "carga_liquida_proxy_mw": 86689.67,
-        "pct_carga_liquida": 84.814
+        "carga_liquida_proxy_mw": 85082.46,
+        "pct_carga_liquida": 81.402
       },
       {
-        "datahora": "2026-11-23T22:00:00",
-        "carga_mw": 98971.16,
-        "eolica_mw": 16102.83,
+        "datahora": "2026-11-24T22:00:00",
+        "carga_mw": 100942.1,
+        "eolica_mw": 20181.71,
         "solar_mw": 0.0,
-        "carga_liquida_proxy_mw": 82868.33,
-        "pct_carga_liquida": 83.73
+        "carga_liquida_proxy_mw": 80760.39,
+        "pct_carga_liquida": 80.007
       },
       {
-        "datahora": "2026-11-23T23:00:00",
-        "carga_mw": 93837.68,
-        "eolica_mw": 16007.8,
+        "datahora": "2026-11-24T23:00:00",
+        "carga_mw": 95634.39,
+        "eolica_mw": 20459.35,
         "solar_mw": 0.0,
-        "carga_liquida_proxy_mw": 77829.88,
-        "pct_carga_liquida": 82.941
+        "carga_liquida_proxy_mw": 75175.04,
+        "pct_carga_liquida": 78.607
       }
     ],
     "termicas_por_motivo": {
@@ -57829,8 +57719,8 @@
           "horas": 24,
           "total": 4624.93,
           "merito": 37.556,
-          "inflexibilidade": 4141.089,
-          "eletrica": 394.881,
+          "inflexibilidade": 4135.801,
+          "eletrica": 400.169,
           "garantia": 0.0,
           "unitcommitment": 51.404,
           "outros": 0.0
@@ -57863,23 +57753,23 @@
           "data": "2026-11-24",
           "subsistema": "N",
           "horas": 24,
-          "total": 2738.837,
-          "merito": 584.666,
-          "inflexibilidade": 1832.127,
-          "eletrica": 89.757,
+          "total": 2738.882,
+          "merito": 584.764,
+          "inflexibilidade": 1831.341,
+          "eletrica": 89.761,
           "garantia": 0.0,
-          "unitcommitment": 232.391,
+          "unitcommitment": 233.016,
           "outros": 0.001
         }
       ],
       "sin": {
         "subsistema": "SIN",
-        "total": 8933.071,
-        "merito": 642.486,
-        "inflexibilidade": 7363.933,
-        "eletrica": 613.447,
+        "total": 8933.116,
+        "merito": 642.584,
+        "inflexibilidade": 7357.859,
+        "eletrica": 618.739,
         "garantia": 0.0,
-        "unitcommitment": 313.311,
+        "unitcommitment": 313.936,
         "outros": 0.001
       },
       "top3_usinas": [
@@ -57902,12 +57792,12 @@
       "cobertura_horaria_minima": 24,
       "metodo": "media horaria verificada das usinas por subsistema; classes exclusivas sem dupla contagem"
     },
-    "carga_liquida_proxy": 66434.59,
+    "carga_liquida_proxy": 65952.12,
     "demanda_maxima": {
-      "verificada_mw": 106610,
-      "hora": "15:39",
-      "recorde_mw": 106610,
-      "recorde_data": "23/11/2026",
+      "verificada_mw": 108031,
+      "hora": "10:57",
+      "recorde_mw": 108031,
+      "recorde_data": "24/11/2026",
       "novo_recorde": true,
       "status": "comparação com máxima histórica informada no próprio IPDO"
     },
@@ -57915,8 +57805,8 @@
       "total": {
         "usina": "Total",
         "instalada_mw": 27257.0,
-        "disponivel_mw": 23845.0,
-        "diferenca_mw": 3412.0
+        "disponivel_mw": 23840.0,
+        "diferenca_mw": 3417.0
       },
       "grupos": [
         {
@@ -57927,9 +57817,9 @@
         },
         {
           "motivo": "Por Restrição Operativa",
-          "instalada_mw": 5928.0,
-          "disponivel_mw": 3967.0,
-          "diferenca_mw": 1961.0
+          "instalada_mw": 5853.0,
+          "disponivel_mw": 3887.0,
+          "diferenca_mw": 1966.0
         },
         {
           "motivo": "Por Restrição Operativa e Manutenção",
@@ -57939,8 +57829,8 @@
         },
         {
           "motivo": "Demais Restrições Agregadas",
-          "instalada_mw": 18921.0,
-          "disponivel_mw": 18730.0,
+          "instalada_mw": 18996.0,
+          "disponivel_mw": 18805.0,
           "diferenca_mw": 191.0
         }
       ],
@@ -58105,11 +57995,11 @@
       {
         "data": "2026-11-02",
         "fonte": "Eólica",
-        "mwh": 137805.812,
-        "mwmed": 5741.909,
+        "mwh": 137814.568,
+        "mwmed": 5742.274,
         "geracao_verificada_mwh": 114238.818,
-        "geracao_potencial_mwh": 252044.63,
-        "percentual_corte": 54.675
+        "geracao_potencial_mwh": 252053.386,
+        "percentual_corte": 54.677
       },
       {
         "data": "2026-11-02",
@@ -58393,128 +58283,128 @@
       {
         "data": "2026-11-18",
         "fonte": "Eólica",
-        "mwh": 13147.536,
-        "mwmed": 547.814,
-        "geracao_verificada_mwh": 46163.581,
-        "geracao_potencial_mwh": 59311.117,
-        "percentual_corte": 22.167
+        "mwh": 13631.25,
+        "mwmed": 567.969,
+        "geracao_verificada_mwh": 46163.663,
+        "geracao_potencial_mwh": 59794.913,
+        "percentual_corte": 22.797
       },
       {
         "data": "2026-11-18",
         "fonte": "Solar",
-        "mwh": 6344.638,
-        "mwmed": 264.36,
+        "mwh": 7049.665,
+        "mwmed": 293.736,
         "geracao_verificada_mwh": 43211.73,
-        "geracao_potencial_mwh": 49556.368,
-        "percentual_corte": 12.803
+        "geracao_potencial_mwh": 50261.395,
+        "percentual_corte": 14.026
       },
       {
         "data": "2026-11-19",
         "fonte": "Eólica",
-        "mwh": 27973.766,
-        "mwmed": 1165.574,
-        "geracao_verificada_mwh": 46438.253,
-        "geracao_potencial_mwh": 74412.019,
-        "percentual_corte": 37.593
+        "mwh": 27973.659,
+        "mwmed": 1165.569,
+        "geracao_verificada_mwh": 46490.939,
+        "geracao_potencial_mwh": 74464.598,
+        "percentual_corte": 37.566
       },
       {
         "data": "2026-11-19",
         "fonte": "Solar",
-        "mwh": 9013.897,
-        "mwmed": 375.579,
-        "geracao_verificada_mwh": 50063.63,
-        "geracao_potencial_mwh": 59077.527,
-        "percentual_corte": 15.258
+        "mwh": 9058.06,
+        "mwmed": 377.419,
+        "geracao_verificada_mwh": 50059.958,
+        "geracao_potencial_mwh": 59118.018,
+        "percentual_corte": 15.322
       },
       {
         "data": "2026-11-20",
         "fonte": "Eólica",
-        "mwh": 69184.565,
-        "mwmed": 2882.69,
-        "geracao_verificada_mwh": 62852.971,
-        "geracao_potencial_mwh": 132037.536,
-        "percentual_corte": 52.398
+        "mwh": 69639.712,
+        "mwmed": 2901.655,
+        "geracao_verificada_mwh": 62906.998,
+        "geracao_potencial_mwh": 132546.71,
+        "percentual_corte": 52.54
       },
       {
         "data": "2026-11-20",
         "fonte": "Solar",
-        "mwh": 53327.299,
-        "mwmed": 2221.971,
-        "geracao_verificada_mwh": 69602.742,
-        "geracao_potencial_mwh": 122930.041,
-        "percentual_corte": 43.38
+        "mwh": 54167.106,
+        "mwmed": 2256.963,
+        "geracao_verificada_mwh": 69606.894,
+        "geracao_potencial_mwh": 123774.0,
+        "percentual_corte": 43.763
       },
       {
         "data": "2026-11-21",
         "fonte": "Eólica",
-        "mwh": 51420.255,
-        "mwmed": 2142.511,
-        "geracao_verificada_mwh": 44144.073,
-        "geracao_potencial_mwh": 95564.328,
-        "percentual_corte": 53.807
+        "mwh": 52045.385,
+        "mwmed": 2168.558,
+        "geracao_verificada_mwh": 44162.066,
+        "geracao_potencial_mwh": 96207.451,
+        "percentual_corte": 54.097
       },
       {
         "data": "2026-11-21",
         "fonte": "Solar",
-        "mwh": 25528.509,
-        "mwmed": 1063.688,
-        "geracao_verificada_mwh": 76761.447,
-        "geracao_potencial_mwh": 102289.956,
-        "percentual_corte": 24.957
+        "mwh": 26956.849,
+        "mwmed": 1123.202,
+        "geracao_verificada_mwh": 76592.053,
+        "geracao_potencial_mwh": 103548.902,
+        "percentual_corte": 26.033
       },
       {
         "data": "2026-11-22",
         "fonte": "Eólica",
-        "mwh": 51857.694,
-        "mwmed": 2160.737,
-        "geracao_verificada_mwh": 37763.809,
-        "geracao_potencial_mwh": 89621.503,
-        "percentual_corte": 57.863
+        "mwh": 52894.976,
+        "mwmed": 2203.957,
+        "geracao_verificada_mwh": 37756.877,
+        "geracao_potencial_mwh": 90651.853,
+        "percentual_corte": 58.35
       },
       {
         "data": "2026-11-22",
         "fonte": "Solar",
-        "mwh": 54235.482,
-        "mwmed": 2259.812,
-        "geracao_verificada_mwh": 53663.029,
-        "geracao_potencial_mwh": 107898.511,
-        "percentual_corte": 50.265
+        "mwh": 55292.414,
+        "mwmed": 2303.851,
+        "geracao_verificada_mwh": 53685.486,
+        "geracao_potencial_mwh": 108977.9,
+        "percentual_corte": 50.737
       },
       {
         "data": "2026-11-23",
         "fonte": "Eólica",
-        "mwh": 32899.172,
-        "mwmed": 1370.799,
-        "geracao_verificada_mwh": 63225.927,
-        "geracao_potencial_mwh": 96125.099,
-        "percentual_corte": 34.225
+        "mwh": 33224.165,
+        "mwmed": 1384.34,
+        "geracao_verificada_mwh": 63233.159,
+        "geracao_potencial_mwh": 96457.324,
+        "percentual_corte": 34.444
       },
       {
         "data": "2026-11-23",
         "fonte": "Solar",
-        "mwh": 9697.215,
-        "mwmed": 404.051,
-        "geracao_verificada_mwh": 82181.045,
-        "geracao_potencial_mwh": 91878.26,
-        "percentual_corte": 10.554
+        "mwh": 10206.197,
+        "mwmed": 425.258,
+        "geracao_verificada_mwh": 82146.788,
+        "geracao_potencial_mwh": 92352.985,
+        "percentual_corte": 11.051
       },
       {
         "data": "2026-11-24",
         "fonte": "Eólica",
-        "mwh": 45497.291,
-        "mwmed": 1895.72,
+        "mwh": 45569.839,
+        "mwmed": 1898.743,
         "geracao_verificada_mwh": 78676.078,
-        "geracao_potencial_mwh": 124173.369,
-        "percentual_corte": 36.64
+        "geracao_potencial_mwh": 124245.917,
+        "percentual_corte": 36.677
       },
       {
         "data": "2026-11-24",
         "fonte": "Solar",
-        "mwh": 12430.665,
-        "mwmed": 517.944,
-        "geracao_verificada_mwh": 52119.53,
-        "geracao_potencial_mwh": 64550.195,
-        "percentual_corte": 19.257
+        "mwh": 12429.816,
+        "mwmed": 517.909,
+        "geracao_verificada_mwh": 52119.537,
+        "geracao_potencial_mwh": 64549.353,
+        "percentual_corte": 19.256
       }
     ],
     "alertas_vazoes": [
