@@ -24,7 +24,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 import requests
-from ipdo_enrichment import (parse_capacidade_55, parse_termicas_6, parse_demanda_7,
+from ipdo_enrichment import (parse_ipdo_narratives, parse_capacidade_55, parse_termicas_6, parse_demanda_7,
                             load_curtailment, load_hydro_anomalies, get_ons_demanda, get_ons_hydro, load_thermal_dispatch)
 try:
     import fitz
@@ -213,62 +213,15 @@ def parse_storages(doc):
                 break
     return found
 
-def _narrative_clean(text):
-    """Não apresenta pedaços de frases/colunas embaralhadas como destaques.
-    Conserva somente parágrafos com pontuação e proporção lexical plausível.
-    """
-    value=re.sub(r'\s+',' ',text).strip('•*- \t')
-    if not (75<=len(value)<=700):return None
-    if not re.search(r'[.!?]\s*$',value):return None
-    terms=re.findall(r'\b[A-Za-zÀ-ÿ]+\b',value)
-    if len(terms)<12:return None
-    if sum(len(t)<=2 for t in terms)/len(terms)>.42:return None
-    if sum(ch.isalpha() for ch in value)<len(value)*.56:return None
-    # Evita reproduzir cabeçalhos de tabelas e descrições sem contexto.
-    if len(value.split())>6 and sum(ch.isupper() for ch in value if ch.isalpha())/max(1,sum(ch.isalpha() for ch in value))>.78:
-        return None
-    return value
-
 def parse_highlights(doc):
-    # Extrair somente narrativa legível; jamais publicar títulos quebrados
-    # pelas quebras de posição do PDF como se fossem frases operativas.
-    content='\n'.join(get_lines(doc,2)+get_lines(doc,3))
-    sect=extract_section(content,'4 - Destaques da Operação','5 - Gerações Térmicas',10000)
-    if not sect:
-        sect=extract_section(content,'CARGA E PRODUÇÃO DE ENERGIA POR SUBMERCADO','5 - Gerações',8000)
-    lines=[x.strip() for x in sect.splitlines() if x.strip()]
-    paragraphs=[];buf=''
-    for line in lines:
-        line=re.sub(r'\s+',' ',line).strip('•*- ')
-        if not line:continue
-        if re.match(r'^\s*(?:\d+(?:\.\d+)*[.:-]?|[-–•])\s+',line) or (line.isupper() and len(line)>12):
-            if buf:paragraphs.append(buf)
-            buf=''
-            if line.isupper():continue
-        if line.isupper() and len(line)>12:continue
-        buf=(buf+' '+line).strip()
-        if re.search(r'[.!?]\s*$',buf):paragraphs.append(buf);buf=''
-        if len(buf)>750:buf=''
-    if buf:paragraphs.append(buf)
-    unique=[]
-    for para in paragraphs:
-        out=_narrative_clean(para)
-        if out and out not in unique:unique.append(out)
-    return unique[:7]
+    """Interface compatível com versões anteriores (extração pela seção 4 inteira)."""
+    return parse_ipdo_narratives(doc)['destaques']
+
 
 def parse_restrictions(doc):
-    body='\n'.join(get_lines(doc,3))
-    section=extract_section(body, 'RESTRIÇÃO DE GERAÇÃO RENOVÁVEL', 'INTERCÂMBIO INTERNACIONAL', 4000)
-    pieces=re.split(r'(?i)Submercado\s+(Sul|Sudeste/Centro-Oeste|Nordeste|Norte)\s*:', section)
-    out=[]
-    aliases={'Sul':'SUL','Sudeste/Centro-Oeste':'SE/CO','Nordeste':'NE','Norte':'N'}
-    for i in range(1,len(pieces)-1,2):
-        name,block=pieces[i],pieces[i+1]
-        m=re.search(r'(?i)valor m[áa]ximo\s*:\s*([\d.]+)\s*MW',block)
-        motive=re.search(r'(?i)motivos?\s*:\s*([^\n.]+)',block)
-        out.append({'subsistema':aliases[name], 'maximo_mw':int(m.group(1).replace('.','')) if m else None,
-                    'motivo':motive.group(1).strip() if motive else None})
-    return out
+    """Inclui limitações registradas sem pico numérico em MW."""
+    return parse_ipdo_narratives(doc)['restricoes']
+
 
 def parse_date(doc, fallback):
     t=' '.join(get_lines(doc,0)[:25]);m=re.search(r'\b(\d{1,2})\s+(?:de\s+)?(janeiro|fevereiro|mar[çc]o|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro)\s+(?:de\s+)?(20\d{2})',simple(t),re.I)
@@ -284,9 +237,17 @@ def parse_pdf(blob, hint_date, url, origin='pdf-ons'):
     if doc_date != hint_date:
         raise ValueError(f'Data interna do PDF {doc_date} difere da URL {hint_date}')
     bal=parse_balance(doc)
+    narrativa=parse_ipdo_narratives(doc)
+    LOG.info('IPDO %s: seção 4 %s; destaques=%d, restrições=%d, páginas=%s',
+             hint_date, narrativa['diagnostico_texto']['secao4_encontrada'],
+             len(narrativa['destaques']),len(narrativa['restricoes']),
+             narrativa['diagnostico_texto'].get('paginas',[]))
     return {'data':hint_date.isoformat(), 'origem':origin, 'url':url, 'balanco':bal,
-            'reservatorios':parse_storages(doc), 'destaques':parse_highlights(doc),
-            'restricoes':parse_restrictions(doc), 'ocorrencias':[],
+            'reservatorios':parse_storages(doc), 'destaques':narrativa['destaques'],
+            'restricoes':narrativa['restricoes'], 'ocorrencias':narrativa['ocorrencias'],
+            'status_destaques':narrativa['status_destaques'],
+            'status_restricoes':narrativa['status_restricoes'],
+            'diagnostico_texto':narrativa['diagnostico_texto'],
             'capacidade_55':parse_capacidade_55(doc),
             'termicas_6':parse_termicas_6(doc),
             'demanda_7':parse_demanda_7(doc,hint_date)}
@@ -433,11 +394,11 @@ a{color:#087da6}a:visited{color:#3e6985}
 <div id="netload-summary" class="info-strip"></div><div id="netload-day" class="plot" style="height:345px"></div>
 <div id="netload" class="plot" style="height:315px"></div>
 <div id="netload-ratio" class="plot" style="height:285px"></div>
-<p class="meta">Indicador aproximado: carga líquida = carga global − geração eólica − geração solar. Razão (%) = carga líquida / carga global. Perfil horário em MW; médias históricas em MWmed. O marcador no fim do perfil indica a média do dia, não o valor da última hora.</p></section>
+<p class="meta">Indicador aproximado: carga líquida = carga global − geração eólica − geração solar. Razão (%) = carga líquida / carga global. Perfil horário em MW; médias históricas em MWmed. Os losangos em “Média” representam os consolidados de todas as séries uma hora após 23h; não são dados horários.</p></section>
 <div class="grid"><section class="panel"><h2>Demanda máxima instantânea do SIN — seção 7</h2>
 <div id="demand-max" class="plot"></div><p class="meta" id="demand-note"></p></section>
 <section class="panel"><h2>Geração térmica — motivo do despacho (ONS)</h2>
-<div id="thermal-reasons" class="plot"></div><p class="meta" id="thermal-reasons-note"></p></section></div>
+<div id="thermal-reasons" class="plot" style="height:480px"></div><p class="meta" id="thermal-reasons-note"></p></section></div>
 <div class="grid"><section class="panel"><h2>Top 3 — diferenças entre capacidade instalada e disponível</h2>
 <div id="top-capacity"></div></section>
 <section class="panel"><h2>Geração térmica — destaques e justificativas (seção 6)</h2><div id="thermal"></div></section></div>
@@ -461,10 +422,12 @@ function draw(){const ip=DATA.ipdo,op=DATA.operacao,bal=ip?.balanco||[],isDemo=D
     'IPDO com dados preliminares de '+days(ip.data)+'. Operação do SIN atualizada até '+days(op.ultima_data)+'. Datas e definições podem diferir.':
     'IPDO indisponível nesta execução. Os dados da aba Operação do SIN permanecem disponíveis. Não foram inventados dados do boletim.';
  const by=Object.fromEntries(bal.map(x=>[x.fonte,x]));const get=(s)=>by[s]?.verificado??null;
+ const opLast=(op.series||[]).filter(x=>x.subsistema==='SIN'&&Number.isFinite(x.carga)&&Number.isFinite(x.carga_liquida_proxy)&&x.carga>0).sort((a,b)=>a.data.localeCompare(b.data)).at(-1);
  const counts=[['Carga verificada — IPDO',get('Carga'),'MWmed'],['Geração hídrica + Itaipu',get('Hidro Nacional')===null?null:get('Hidro Nacional')+(get('Itaipu Binacional')||0),'MWmed'],['Térmica convencional',get('Termo Convencional'),'MWmed'],['Eólica + solar',(get('Eólica')===null||get('Solar')===null)?null:get('Eólica')+get('Solar'),'MWmed'],
- ['Carga líquida (proxy)',(op.series||[]).filter(x=>x.subsistema==='SIN'&&Number.isFinite(x.carga_liquida_proxy)).at(-1)?.carga_liquida_proxy??null,'MWmed · Operação '+days(op.ultima_data)],
+ ['Carga líquida (proxy)',opLast?.carga_liquida_proxy??null, 'MWmed'],
+ ['Líquida / carga global',opLast?100*opLast.carga_liquida_proxy/opLast.carga:null, '%' ],
  ['Diferença instalada - disponível',ip?.capacidade_55?.total?.diferenca_mw??null,'MW · IPDO 5.5']];
- el('kpis').innerHTML=counts.map(([n,v,u],idx)=>`<div class="kpi"><div class="caption">${esc(n)}</div><strong>${f(v)}</strong><small>${esc(u)} · ${idx===4?days(op.ultima_data):ip?days(ip.data):'sem IPDO'}</small></div>`).join('');
+ el('kpis').innerHTML=counts.map(([n,v,u],idx)=>`<div class="kpi"><div class="caption">${esc(n)}</div><strong>${idx===5?(Number.isFinite(v)?f(v,1)+'%':'—'):f(v)}</strong><small>${esc(u)} · ${[4,5].includes(idx)?days(opLast?.data):ip?days(ip.data):'sem IPDO'}</small></div>`).join('');
  const sources=bal.filter(x=>!['Total SIN','Carga','Intercâmbio Internacional'].includes(x.fonte));
  if(sources.length&&window.Plotly){
   Plotly.newPlot('balance',[{type:'bar',name:'Programado',x:sources.map(x=>x.fonte),y:sources.map(x=>x.programado),marker:{color:'#a6c4d9'}},{type:'bar',name:'Verificado',x:sources.map(x=>x.fonte),y:sources.map(x=>x.verificado),marker:{color:'#168eae'}}],{...layout,barmode:'group',xaxis:{tickangle:-28},yaxis:{title:'MWmed',gridcolor:'#ecf1f6'},legend:{orientation:'h',y:1.14},margin:{l:57,r:10,t:30,b:112}},plotCfg);
@@ -514,8 +477,13 @@ function draw(){const ip=DATA.ipdo,op=DATA.operacao,bal=ip?.balanco||[],isDemo=D
  el('sub').onchange=updateTrend;el('metric').onchange=updateTrend;updateTrend();
  if(ip?.reservatorios?.length&&window.Plotly){Plotly.newPlot('ear',[{type:'bar',x:ip.reservatorios.map(x=>x.subsistema),y:ip.reservatorios.map(x=>x.ear),marker:{color:'#149c8f'},text:ip.reservatorios.map(x=>f(x.ear,1)+'%'),textposition:'outside'}],{...layout,yaxis:{range:[0,100],title:'EAR (%)',gridcolor:'#eff3f7'},margin:{l:57,r:10,t:30,b:40}},plotCfg)}else{el('ear').innerHTML='<div class="empty">Os valores de EAR não foram extraídos com segurança desta edição do PDF. Consulte a aba EAR para dados consolidados.</div>'}
  const highlights=(ip?.destaques||[]).map(x=>`<li>${esc(x)}</li>`).join('');
- const restrict=(ip?.restricoes||[]).filter(x=>x.maximo_mw!==null).map(x=>`<li><b>${esc(x.subsistema)}</b>: restrição máxima de ${f(x.maximo_mw)} MW. ${esc(x.motivo||'')}</li>`).join('');
- el('highlights').innerHTML='<div class="highlights-flex"><div class="part"><h3 style="font-size:13px">Destaques da operação</h3>'+(highlights?'<ul class="list">'+highlights+'</ul>':'<div class="empty">Nenhum destaque extraído com segurança</div>')+'</div><div class="part"><h3 style="font-size:13px">Restrições de renováveis</h3>'+(restrict?'<ul class="list">'+restrict+'</ul>':'<div class="empty">Sem restrições estruturadas disponíveis</div>')+'</div></div>';
+ const restrict=(ip?.restricoes||[]).map(x=>{
+   const peak=Number.isFinite(x.maximo_mw)?`Pico de restrição: <b>${f(x.maximo_mw)} MW</b>`:'Limitação relatada sem valor máximo numérico em MW';
+   return `<li><b>${esc(x.subsistema||'?')}</b>: ${peak}${x.periodo?' · '+esc(x.periodo):''}${x.motivo?' · Motivo: '+esc(x.motivo):''}</li>`;
+ }).join('');
+ const hStatus=esc(ip?.status_destaques||'Não foi possível confirmar a leitura dos destaques; consulte o IPDO original.');
+ const rStatus=esc(ip?.status_restricoes||'Não foi possível confirmar a leitura das restrições; consulte o IPDO original.');
+ el('highlights').innerHTML='<div class="highlights-flex"><div class="part"><h3 style="font-size:13px">Destaques da operação</h3>'+(highlights?'<ul class="list">'+highlights+'</ul>':'<div class="empty">'+hStatus+'</div>')+'</div><div class="part"><h3 style="font-size:13px">Restrições de renováveis</h3>'+(restrict?'<ul class="list">'+restrict+'</ul>':'<div class="empty">'+rStatus+'</div>')+'</div></div>'+(ip?.diagnostico_texto?.secao4_encontrada?`<p class="meta">Leitura de texto do IPDO — páginas ${esc((ip.diagnostico_texto.paginas||[]).join(', '))}. O painel distingue informação não identificada de “Nada a relatar”.</p>`:'');
  // --- Enriquecimentos do IPDO, com dados ausentes claramente sinalizados ---
  const empty=(txt)=>'<div class="empty">'+esc(txt)+'</div>';
  const crt=DATA.curtailment||{}, crows=crt.series||[];
@@ -530,24 +498,24 @@ function draw(){const ip=DATA.ipdo,op=DATA.operacao,bal=ip?.balanco||[],isDemo=D
    const daysUnique=new Set(rows.map(x=>x.data)).size;
    const total=rows.reduce((a,r)=>a+r.mwh,0);
    const pot=sumMetric(rows,'geracao_potencial_mwh');
-   const by=Object.fromEntries(['Eólica','Solar'].map(src=>[src,rows.filter(r=>r.fonte===src).reduce((a,r)=>a+r.mwh,0)]));
-   return {data:date,mwh:total,mwmed:total/(24*daysUnique),pct:pot>0?100*total/pot:null,dias:daysUnique,by};
+   const by=Object.fromEntries(['Eólica','Solar'].map(src=>{const rs=rows.filter(r=>r.fonte===src);return [src,rs.length?rs.reduce((a,r)=>a+r.mwh,0):null]}));
+   return {data:date,mwh:by['Eólica']!==null&&by['Solar']!==null?total:null,mwmed:by['Eólica']!==null&&by['Solar']!==null?total/(24*daysUnique):null,pct:pot>0&&by['Eólica']!==null&&by['Solar']!==null?100*total/pot:null,dias:daysUnique,by};
   });
  }
- function updateCuts(level){const series=aggregateCuts(level);const plotted=series.slice(level==='dia'?-60:level==='mes'?-24:-12);
+ function updateCuts(level){const series=aggregateCuts(level);const plotted=series.slice(level==='dia'?-90:level==='mes'?-27:-5);
   if(plotted.length&&window.Plotly){
    const traces=['Eólica','Solar'].map((fonte,i)=>({type:'bar',name:fonte,x:plotted.map(r=>r.data),y:plotted.map(r=>r.by[fonte]),
      marker:{color:i?'#e8a246':'#148fa2'},hovertemplate:'%{x}<br>%{y:,.0f} MWh<extra>'+fonte+'</extra>'}));
-   Plotly.react('curtailment',traces,{...layout,barmode:'stack',xaxis:{type:'category',tickangle:level==='dia'?-45:0},
+   Plotly.react('curtailment',traces,{...layout,barmode:'group',xaxis:{type:'category',tickangle:level==='dia'?-45:0},
     yaxis:{title:'Energia cortada (MWh)'},legend:{orientation:'h',x:0,y:-.28},margin:{l:75,r:20,t:18,b:95}},plotCfg);
    const recent=plotted.at(-1);const pct=Number.isFinite(recent.pct)?f(recent.pct,2)+'%':'sem denominador';
    el('curtailment-kpis').innerHTML=`<span><b>Último ${level}:</b> ${esc(recent.data)}</span><span><b>Corte:</b> ${f(recent.mwh)} MWh</span><span><b>Média:</b> ${f(recent.mwmed,1)} MWmed</span><span><b>Corte/potencial:</b> ${pct}</span><span><b>Dias observados:</b> ${recent.dias}</span>`;
-   el('curtailment-table').innerHTML=`<table><thead class="thead"><tr><th>Período</th><th>Restrição (MWh)</th><th>Média (MWmed)</th><th>Restrição / potencial (%)</th><th>Dias com dados</th></tr></thead><tbody>${plotted.slice(-8).reverse().map(r=>`<tr><td>${esc(r.data)}</td><td>${f(r.mwh)}</td><td>${f(r.mwmed,1)}</td><td>${f(r.pct,2)}${Number.isFinite(r.pct)?'%':''}</td><td>${r.dias}</td></tr>`).join('')}</tbody></table>`;
+   el('curtailment-table').innerHTML=`<table><thead class="thead"><tr><th>Período</th><th>Eólica (MWh)</th><th>Solar (MWh)</th><th>Restrição (MWh)</th><th>Média (MWmed)</th><th>Restrição / potencial (%)</th><th>Dias com dados</th></tr></thead><tbody>${plotted.slice(-8).reverse().map(r=>`<tr><td>${esc(r.data)}</td><td>${f(r.by['Eólica'])}</td><td>${f(r.by['Solar'])}</td><td>${f(r.mwh)}</td><td>${f(r.mwmed,1)}</td><td>${f(r.pct,2)}${Number.isFinite(r.pct)?'%':''}</td><td>${r.dias}</td></tr>`).join('')}</tbody></table>`;
   }else{el('curtailment').innerHTML='<div class="empty">Série de curtailment não disponível.</div>';el('curtailment-table').innerHTML='';el('curtailment-kpis').innerHTML='';}
   for(const btn of el('curt-tabs').querySelectorAll('button'))btn.classList.toggle('active',btn.dataset.level===level);
  }
  for(const btn of el('curt-tabs').querySelectorAll('button'))btn.addEventListener('click',()=>updateCuts(btn.dataset.level));updateCuts('mes');
- el('curtailment-note').textContent='Fonte: ONS Constrained-off Eólica/Fotovoltaica. MWh = GNRa (MWmed) × 0,5 h; MWmed = MWh / 24 h por dia observado. Percentual só aparece se geração verificada e GNRa estiverem completas para a mesma fonte/período. Períodos incompletos não representam ano/mês fechado. Data da fonte: '+days(crt.data_mais_recente)+'.';
+ el('curtailment-note').textContent='Visões separadas por fonte (barras lado a lado). A visão mensal apresenta pelo menos 24 meses quando estiverem disponíveis na base histórica; cobertura atual: '+(crt.cobertura_inicio||'n/d')+' a '+(crt.data_mais_recente||'n/d')+'; '+(crt.status_cobertura||'')+'. Fonte: ONS Constrained-off Eólica/Fotovoltaica. MWh = GNRa (MWmed) × 0,5 h; MWmed = MWh / 24 h por dia observado. Percentual só aparece se geração verificada e GNRa estiverem completas para a mesma fonte/período. Períodos incompletos não representam ano/mês fechado. Data da fonte: '+days(crt.data_mais_recente)+'.';
  // Carga líquida: todos os perfis horários arquivados, seleção de dia e indicador %.
  const phAll=(op.perfis_horarios_sin||op.perfil_horario_sin||[]).filter(x=>x.datahora&&Number.isFinite(x.carga_liquida_proxy_mw));
  const phMap={};for(const r of phAll){const d=r.datahora.slice(0,10);(phMap[d]??=[]).push(r);}
@@ -555,17 +523,35 @@ function draw(){const ip=DATA.ipdo,op=DATA.operacao,bal=ip?.balanco||[],isDemo=D
  el('netload-date').innerHTML=phDates.slice(-60).reverse().map(d=>`<option value="${d}">${days(d)}</option>`).join('');
  function updateNetDay(){const d=el('netload-date').value;const rows=(phMap[d]||[]).sort((a,b)=>a.datahora.localeCompare(b.data));
   if(!rows.length||!window.Plotly){el('netload-day').innerHTML='<div class="empty">Perfil horário indisponível.</div>';return;}
-  const x=rows.map(r=>r.datahora.slice(11,16)),net=rows.map(r=>r.carga_liquida_proxy_mw),glob=rows.map(r=>r.carga_mw),pct=rows.map(r=>r.pct_carga_liquida);
-  const avg=mean(net),meanG=mean(glob),ratio=mean(pct);
-  const traces=[{type:'scatter',mode:'lines+markers',name:'Carga global (MW)',x,y:glob,line:{color:'#9fb4c4',width:2},marker:{size:3}},
-    {type:'scatter',mode:'lines+markers',name:'Carga líquida (MW)',x,y:net,line:{color:'#137da6',width:3},marker:{size:3}},
-    {type:'scatter',mode:'lines',name:'Relação líquida/global (%)',x,y:pct,yaxis:'y2',line:{color:'#9a68ba',dash:'dot',width:2}},
-    {type:'scatter',mode:'markers+text',name:'Média diária líquida',x:[x.at(-1)],y:[avg],marker:{color:'#e9a23e',size:13,symbol:'diamond'},
-      text:[f(avg,0)+' MWmed'],textposition:'top left',textfont:{size:11},showlegend:true}];
-  Plotly.react('netload-day',traces,{...layout,xaxis:{title:'Hora',type:'category'},yaxis:{title:'MW'},
+  // Posiciona sempre 00h–23h no eixo, mesmo se faltar uma hora na fonte.
+  const byHour=Object.fromEntries(rows.map(r=>[Number(r.datahora.slice(11,13)),r]));
+  const x=Array.from({length:24},(_,i)=>i);
+  const net=x.map(h=>byHour[h]?.carga_liquida_proxy_mw??null);
+  const glob=x.map(h=>byHour[h]?.carga_mw??null);
+  const pct=x.map(h=>byHour[h]?.pct_carga_liquida??null);
+  const valid=arr=>arr.filter(Number.isFinite);
+  const avg=mean(valid(net)),meanG=mean(valid(glob)),ratio=meanG>0?100*avg/meanG:null;
+  const consolidadoX=24; // uma hora após o fim da grade 00h–23h; sem sobreposição
+  const series=[
+    {name:'Carga global (MW)',v:glob,media:meanG,axis:'y',color:'#9fb4c4'},
+    {name:'Carga líquida (MW)',v:net,media:avg,axis:'y',color:'#137da6'},
+    {name:'Líquida / global (%)',v:pct,media:ratio,axis:'y2',color:'#9a68ba'}
+  ];
+  const traces=[];
+  for(const ser of series){
+    traces.push({type:'scatter',mode:'lines+markers',name:ser.name,x,y:ser.v,yaxis:ser.axis,
+      line:{color:ser.color,width:ser.axis==='y2'?2:3,dash:ser.axis==='y2'?'dot':'solid'},marker:{size:3},connectgaps:false});
+    traces.push({type:'scatter',mode:'markers+text',name:'Média diária · '+ser.name,x:[consolidadoX],y:[ser.media],yaxis:ser.axis,
+      marker:{color:ser.color,size:12,symbol:'diamond',line:{width:1,color:'#ffffff'}},
+      text:[f(ser.media,ser.axis==='y2'?1:0)+(ser.axis==='y2'?'%':' MWmed')],textposition:ser.axis==='y2'?'bottom center':'top center',
+      textfont:{size:10},showlegend:true});
+  }
+  const ticks=[0,4,8,12,16,20,23,consolidadoX];
+  Plotly.react('netload-day',traces,{...layout,xaxis:{title:'Horas do dia + consolidação',type:'linear',range:[-.5,Math.max(25.5,consolidadoX+1)],
+    tickvals:ticks,ticktext:ticks.map(h=>h===consolidadoX?'Média':String(h).padStart(2,'0')+':00')},yaxis:{title:'MW'},
     yaxis2:{title:'%',overlaying:'y',side:'right',showgrid:false,range:[0,110]},
-    legend:{orientation:'h',x:0,y:-.32},margin:{l:70,r:70,t:30,b:110}},plotCfg);
-  el('netload-summary').innerHTML=`<span><b>Dia:</b> ${days(d)}</span><span><b>Carga global:</b> ${f(meanG)} MWmed</span><span><b>Carga líquida:</b> ${f(avg)} MWmed</span><span><b>Relação média:</b> ${f(ratio,1)}%</span><span><b>Horas:</b> ${rows.length}</span>`;
+    legend:{orientation:'h',x:0,y:-.37},margin:{l:70,r:70,t:38,b:128}},plotCfg);
+  el('netload-summary').innerHTML=`<span><b>Dia:</b> ${days(d)}</span><span><b>Carga global:</b> ${f(meanG)} MWmed</span><span><b>Carga líquida:</b> ${f(avg)} MWmed</span><span><b>Líquida / global:</b> ${f(ratio,1)}%</span><span><b>Horas válidas:</b> ${valid(net).length}/24</span>`;
  }
  el('netload-date').onchange=updateNetDay;updateNetDay();
  const opNet=(op.series||[]).filter(x=>x.subsistema==='SIN'&&Number.isFinite(x.carga_liquida_proxy)&&Number.isFinite(x.carga)).sort((a,b)=>a.data.localeCompare(b.data)).slice(-365);
@@ -584,26 +570,27 @@ function draw(){const ip=DATA.ipdo,op=DATA.operacao,bal=ip?.balanco||[],isDemo=D
      legend:{orientation:'h',x:0,y:-.28},margin:{l:65,r:15,t:42,b:85}},plotCfg);
  }else{el('netload').innerHTML='<div class="empty">Histórico sem dados suficientes.</div>';el('netload-ratio').innerHTML='';}
  const dm=DATA.demanda_ons?.verificada_mw!=null?DATA.demanda_ons:(ip?.demanda_7||{}),dh=DATA.demanda_historico||[];
+ if(dm.novo_recorde===true && !Number.isFinite(dm.recorde_mw))dm.novo_recorde=null;
  let demandTxt=dm.verificada_mw==null?'Não foi possível validar a linha SIN da seção 7; não há alerta automático sem números confirmados.':
-  `Pico verificado: ${f(dm.verificada_mw)} MW${dm.hora?' às '+esc(dm.hora):''}. Máximo anterior: ${f(dm.recorde_mw)} MW. ${esc(dm.status||'')}`;
+  `Pico verificado: ${f(dm.verificada_mw)} MW${dm.hora?' às '+esc(dm.hora):''}. Máximo anterior confirmado: ${f(dm.recorde_mw)} MW${dm.recorde_anterior_data?' ('+days(dm.recorde_anterior_data)+')':''}. Recorde vigente: ${f(dm.recorde_vigente_mw??Math.max(dm.verificada_mw,dm.recorde_mw??0))} MW. ${esc(dm.status||'')}`;
  el('demand-note').textContent=demandTxt+' Fonte ONS, dado preliminar/revisável; picos instantâneos são diferentes das médias diárias de carga.';
  if(dh.length&&window.Plotly){const last=dh.slice(-45);
    Plotly.react('demand-max',[{type:'bar',name:'Demanda máxima diária SIN',x:last.map(r=>r.data),y:last.map(r=>r.mw),
-    marker:{color:last.map(r=>dm.novo_recorde&&r.data===last.at(-1)?.data?'#e36a47':'#4d87c2')}}],
+    marker:{color:last.map(r=>r.novo_recorde===true?'#e36a47':'#4d87c2')}}],
    {...layout,xaxis:{type:'date',tickformat:'%d/%m'},yaxis:{title:'MW'},margin:{l:72,r:14,b:74,t:24},
      shapes:dm.recorde_mw!=null?[{type:'line',x0:0,x1:1,xref:'paper',y0:dm.recorde_mw,y1:dm.recorde_mw,line:{color:'#df6345',dash:'dash'}}]:[]},plotCfg);
  }else el('demand-max').innerHTML=empty('Histórico da demanda máxima indisponível.');
- if(dm.novo_recorde===true){el('demand-alert').style.display='block';el('demand-alert').className='notice alert-red';el('demand-alert').textContent='ALERTA DE RECORDE: demanda máxima do SIN superou a máxima anterior do período disponível no ONS. '+demandTxt;}
+ if(dm.novo_recorde===true){el('demand-alert').style.display='block';el('demand-alert').className='notice alert-red';el('demand-alert').textContent='RECORDE EM '+days(dm.data||ip?.data)+': demanda máxima do SIN superou a máxima anterior comprovada no período disponível. '+demandTxt;}
  const thermalReasons=DATA.termicas_despacho||{},thermalDay=thermalReasons.ultimo_dia;
  if(thermalDay?.submercados?.length&&window.Plotly){
    const rows=[...thermalDay.submercados,thermalDay.sin];const cats=['SE/CO','SUL','NE','N','SIN'];
-   const fields=[['Ordem de mérito','merito','#1767a4'],['Inflexibilidade','inflexibilidade','#21a398'],['Razão elétrica','eletrica','#db8445'],
-                 ['Garantia energética','garantia','#8d64c0'],['Unit commitment','unitcommitment','#5b84d7'],['Outros motivos','outros','#8996a5']];
+   const fields=(thermalDay.motivos||[]).map(x=>[x.nome,x.campo,x.cor]);
+   if(!fields.length)fields.push(['Motivos não classificados','outros','#8996a5']);
    const traces=fields.map(([name,k,color])=>({type:'bar',name,x:cats,y:cats.map(c=>rows.find(r=>r.subsistema===c)?.[k]??0),marker:{color},
      hovertemplate:'%{x}<br>%{y:,.1f} MWmed<extra>'+name+'</extra>'}));
    Plotly.react('thermal-reasons',traces,{...layout,barmode:'stack',xaxis:{type:'category'},yaxis:{title:'Geração verificada (MWmed)'},
-     legend:{orientation:'h',x:0,y:-.3},margin:{l:75,r:10,b:110,t:20}},plotCfg);
-   el('thermal-reasons-note').textContent='Fonte: ONS Geração Térmica por Motivo de Despacho (base horária), '+days(thermalDay.data)+'. Média por hora disponível, submercados e total SIN. Cobertura mínima '+thermalDay.cobertura_horaria_minima+' horas. A quinta barra é a soma das quatro anteriores, não geração adicional.';
+     legend:{orientation:'h',x:0,y:-.24,font:{size:10}},margin:{l:75,r:10,b:150,t:20}},plotCfg);
+   el('thermal-reasons-note').textContent='Fonte: ONS Geração Térmica por Motivo de Despacho (base horária, colunas val_verif*), '+days(thermalDay.data)+'. Média diária verificada das horas disponíveis, submercados e SIN. Todas as categorias verificadas presentes no CSV, com resíduos não classificados identificados; cobertura mínima '+thermalDay.cobertura_horaria_minima+' horas. A quinta barra é a soma das quatro anteriores, não geração adicional.';
  }else{el('thermal-reasons').innerHTML=empty('Dados horários por motivo de despacho não disponíveis. Não inferimos motivos a partir de texto fragmentado do IPDO.');
    el('thermal-reasons-note').textContent='Fonte oficial: dados.ons.org.br/dataset/geracao-termica-despacho-2. É possível colocar CSV na pasta dados/ipdo/termicas.';}
  const cap=ip?.capacidade_55||{},total=cap.total,hist=DATA.capacidade_historico||[];
@@ -611,7 +598,7 @@ function draw(){const ip=DATA.ipdo,op=DATA.operacao,bal=ip?.balanco||[],isDemo=D
  el('top-capacity').innerHTML=capTop.length?capTop.map((r,i)=>`<div style="border-bottom:1px solid #e5edf6;padding:11px 0"><b>${i+1}º · ${esc(r.usina)}</b><span class="down" style="float:right">${f(r.diferenca_mw)} MW</span><div class="meta">Instalada ${f(r.instalada_mw)} MW · Disponível ${f(r.disponivel_mw)} MW · Motivo (IPDO 5.5): ${esc(r.motivo)}</div></div>`).join(''):
  empty('Ranking indisponível: a tabela por usina da seção 5.5 ainda não foi reconhecida de forma confiável.');
  const thermal=ip?.termicas_6||{};
- el('thermal').innerHTML=(thermal.top3||[]).length?(thermal.top3||[]).map((x,i)=>`<div style="border-bottom:1px solid #e5edf6;padding:10px 0"><b>${i+1}. ${esc(x.usina)}</b><p style="font-size:12px;line-height:1.55">${esc(x.justificativa)}</p></div>`).join('')+'<p class="meta">Três primeiras justificativas identificadas, sem ranking quantitativo de diferenças de geração.</p>':
+ el('thermal').innerHTML=(thermal.top3||[]).length?(thermal.top3||[]).map((x,i)=>`<div style="border-bottom:1px solid #e5edf6;padding:10px 0"><b>${i+1}. ${esc(x.usina)}</b><p style="font-size:12px;line-height:1.55">${esc(x.justificativa)}</p></div>`).join('')+'<p class="meta">'+esc(thermal.status||'Ranking conforme extração validada da seção 6.')+'</p>':
  empty('A seção 6 contém justificativas textuais, mas não foi possível atribuir usinas e motivos com segurança nesta edição.');
  const hy=DATA.hidraulica||{};
  el('hydro-alerts').innerHTML=(hy.alertas||[]).length?(hy.alertas||[]).map(x=>`<div style="border-bottom:1px solid #e5edf6;padding:10px 0"><b>${esc(x.usina)}${x.bacia?' · '+esc(x.bacia):''}</b><span class="down" style="float:right">${x.razao>1?'+':''}${f((x.razao-1)*100,0)}%</span><div class="meta">${f(x.vazao_m3s,1)} m³/s (${days(x.data)}); mediana anterior ${f(x.mediana_60d_m3s,1)} m³/s. Variação a conferir, não diagnóstico de anormalidade.</div></div>`).join(''):
@@ -712,7 +699,7 @@ def main(args=None):
             'alertas':(['IPDO desatualizado há '+str(days)+' dias'] if days is not None and days>2 else [])
                        +(['Demanda máxima SIN igualou ou superou referência histórica do IPDO']
                          if (demanda_ons['dados'] and demanda_ons['dados'].get('novo_recorde') is True) or
-                            (latest and latest.get('demanda_7',{}).get('novo_recorde') is True) else [])
+                            (not demanda_ons['dados'] and latest and latest.get('demanda_7',{}).get('novo_recorde') is True) else [])
                        +(['Vazões com variações expressivas a verificar'] if vazoes['alertas'] else [])}}
     write_json(DATA_JSON,data)
     render(data)
