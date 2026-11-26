@@ -7550,9 +7550,9 @@
         "data": "2026-11-16",
         "subsistema": "SE/CO",
         "horas": 24,
-        "total": 4714.949,
-        "merito": 29.783,
-        "inflexibilidade": 4323.049,
+        "total": 4716.656,
+        "merito": 29.923,
+        "inflexibilidade": 4325.073,
         "eletrica": 284.131,
         "gsub": 0.0,
         "gfom": 0.0,
@@ -7560,7 +7560,7 @@
         "garantia": 0.0,
         "exportacao": 0.0,
         "reservapotencia": 0.0,
-        "unitcommitment": 77.987,
+        "unitcommitment": 77.529,
         "outros": 0.0
       },
       {
@@ -7584,27 +7584,27 @@
         "data": "2026-11-16",
         "subsistema": "NE",
         "horas": 24,
-        "total": 188.211,
-        "merito": 38.777,
-        "inflexibilidade": 47.536,
-        "eletrica": 69.004,
+        "total": 180.444,
+        "merito": 31.759,
+        "inflexibilidade": 47.481,
+        "eletrica": 66.286,
         "gsub": 0.0,
         "gfom": 0.0,
         "reposicao": 0.0,
         "garantia": 0.0,
         "exportacao": 0.0,
         "reservapotencia": 0.0,
-        "unitcommitment": 32.889,
+        "unitcommitment": 34.914,
         "outros": 0.004
       },
       {
         "data": "2026-11-16",
         "subsistema": "N",
         "horas": 24,
-        "total": 2886.846,
+        "total": 2886.869,
         "merito": 537.871,
-        "inflexibilidade": 1964.145,
-        "eletrica": 75.319,
+        "inflexibilidade": 1964.057,
+        "eletrica": 75.431,
         "gsub": 0.0,
         "gfom": 0.0,
         "reposicao": 0.0,
@@ -7617,17 +7617,17 @@
     ],
     "sin": {
       "subsistema": "SIN",
-      "total": 8803.166,
-      "merito": 611.797,
-      "inflexibilidade": 7342.296,
-      "eletrica": 428.454,
+      "total": 8797.129,
+      "merito": 604.919,
+      "inflexibilidade": 7344.177,
+      "eletrica": 425.848,
       "gsub": 0.0,
       "gfom": 0.0,
       "reposicao": 0.0,
       "garantia": 0.0,
       "exportacao": 0.0,
       "reservapotencia": 0.0,
-      "unitcommitment": 419.266,
+      "unitcommitment": 420.833,
       "outros": 1.355
     },
     "motivos": [
@@ -7714,17 +7714,17 @@
         "data": "2026-11-17",
         "subsistema": "SE/CO",
         "horas": 24,
-        "total": 5580.809,
-        "merito": 419.286,
-        "inflexibilidade": 4665.141,
-        "eletrica": 234.175,
+        "total": 5581.223,
+        "merito": 419.526,
+        "inflexibilidade": 4665.302,
+        "eletrica": 234.177,
         "gsub": 0.0,
         "gfom": 0.0,
         "reposicao": 0.0,
         "garantia": 0.0,
         "exportacao": 0.0,
         "reservapotencia": 0.0,
-        "unitcommitment": 262.208,
+        "unitcommitment": 262.218,
         "outros": 0.0
       },
       {
@@ -7748,9 +7748,9 @@
         "data": "2026-11-17",
         "subsistema": "NE",
         "horas": 24,
-        "total": 358.279,
-        "merito": 116.538,
-        "inflexibilidade": 93.157,
+        "total": 362.463,
+        "merito": 118.026,
+        "inflexibilidade": 93.457,
         "eletrica": 32.45,
         "gsub": 0.0,
         "gfom": 0.0,
@@ -7758,7 +7758,7 @@
         "garantia": 0.0,
         "exportacao": 0.0,
         "reservapotencia": 60.761,
-        "unitcommitment": 55.373,
+        "unitcommitment": 57.769,
         "outros": 0.0
       },
       {
@@ -7781,17 +7781,17 @@
     ],
     "sin": {
       "subsistema": "SIN",
-      "total": 10221.036,
-      "merito": 1216.945,
-      "inflexibilidade": 7567.551,
-      "eletrica": 318.313,
+      "total": 10225.634,
+      "merito": 1218.673,
+      "inflexibilidade": 7568.012,
+      "eletrica": 318.315,
       "gsub": 0.0,
       "gfom": 0.0,
       "reposicao": 0.0,
       "garantia": 0.0,
       "exportacao": 0.0,
       "reservapotencia": 60.761,
-      "unitcommitment": 1057.468,
+      "unitcommitment": 1059.874,
       "outros": 0.001
     },
     "motivos": [
@@ -7878,17 +7878,17 @@
         "data": "2026-11-18",
         "subsistema": "SE/CO",
         "horas": 24,
-        "total": 5417.574,
+        "total": 5417.985,
         "merito": 46.36,
-        "inflexibilidade": 4568.004,
-        "eletrica": 615.303,
+        "inflexibilidade": 4568.098,
+        "eletrica": 615.582,
         "gsub": 0.0,
         "gfom": 0.0,
         "reposicao": 0.0,
         "garantia": 0.0,
         "exportacao": 0.0,
         "reservapotencia": 0.0,
-        "unitcommitment": 187.907,
+        "unitcommitment": 187.946,
         "outros": 0.0
       },
       {
@@ -7929,9 +7929,9 @@
         "data": "2026-11-18",
         "subsistema": "N",
         "horas": 24,
-        "total": 3319.425,
-        "merito": 675.159,
-        "inflexibilidade": 1857.739,
+        "total": 3319.88,
+        "merito": 675.213,
+        "inflexibilidade": 1858.134,
         "eletrica": 71.6,
         "gsub": 0.0,
         "gfom": 0.0,
@@ -7939,24 +7939,24 @@
         "garantia": 0.0,
         "exportacao": 0.0,
         "reservapotencia": 0.0,
-        "unitcommitment": 714.927,
-        "outros": 0.001
+        "unitcommitment": 714.934,
+        "outros": 0.0
       }
     ],
     "sin": {
       "subsistema": "SIN",
-      "total": 10199.481,
-      "merito": 744.527,
-      "inflexibilidade": 7638.519,
-      "eletrica": 886.147,
+      "total": 10200.347,
+      "merito": 744.581,
+      "inflexibilidade": 7639.008,
+      "eletrica": 886.426,
       "gsub": 0.0,
       "gfom": 0.0,
       "reposicao": 0.0,
       "garantia": 0.0,
       "exportacao": 0.0,
       "reservapotencia": 0.0,
-      "unitcommitment": 930.287,
-      "outros": 0.002
+      "unitcommitment": 930.333,
+      "outros": 0.001
     },
     "motivos": [
       {
@@ -9014,6 +9014,170 @@
         "usina": "Novo Tempo Barcarena",
         "subsistema": "N",
         "mwmed": 610.42
+      }
+    ],
+    "cobertura_horaria_minima": 24,
+    "metodo": "media horaria verificada das usinas por subsistema; classes exclusivas sem dupla contagem"
+  },
+  {
+    "data": "2026-11-25",
+    "submercados": [
+      {
+        "data": "2026-11-25",
+        "subsistema": "SE/CO",
+        "horas": 24,
+        "total": 4430.863,
+        "merito": 80.546,
+        "inflexibilidade": 3620.381,
+        "eletrica": 281.633,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
+        "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
+        "unitcommitment": 448.303,
+        "outros": 0.0
+      },
+      {
+        "data": "2026-11-25",
+        "subsistema": "SUL",
+        "horas": 24,
+        "total": 1300.446,
+        "merito": 5.88,
+        "inflexibilidade": 1291.614,
+        "eletrica": 2.493,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
+        "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
+        "unitcommitment": 0.458,
+        "outros": 0.0
+      },
+      {
+        "data": "2026-11-25",
+        "subsistema": "NE",
+        "horas": 24,
+        "total": 130.086,
+        "merito": 3.38,
+        "inflexibilidade": 83.426,
+        "eletrica": 36.945,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
+        "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
+        "unitcommitment": 6.334,
+        "outros": 0.0
+      },
+      {
+        "data": "2026-11-25",
+        "subsistema": "N",
+        "horas": 24,
+        "total": 3209.926,
+        "merito": 731.472,
+        "inflexibilidade": 1837.882,
+        "eletrica": 117.684,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
+        "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
+        "unitcommitment": 522.888,
+        "outros": 0.001
+      }
+    ],
+    "sin": {
+      "subsistema": "SIN",
+      "total": 9071.321,
+      "merito": 821.278,
+      "inflexibilidade": 6833.303,
+      "eletrica": 438.755,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
+      "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
+      "unitcommitment": 977.983,
+      "outros": 0.001
+    },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
+    "top3_usinas": [
+      {
+        "usina": "Angra II",
+        "subsistema": "SE/CO",
+        "mwmed": 1345.25
+      },
+      {
+        "usina": "GNA II",
+        "subsistema": "SE/CO",
+        "mwmed": 1026.28
+      },
+      {
+        "usina": "Novo Tempo Barcarena",
+        "subsistema": "N",
+        "mwmed": 610.25
       }
     ],
     "cobertura_horaria_minima": 24,

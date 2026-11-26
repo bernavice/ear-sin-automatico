@@ -441,5 +441,290 @@
       "novo_recorde": null,
       "status": "A própria linha do IPDO pode conter recorde atualizado; igualdade exige série anterior para comprovar superação"
     }
+  },
+  {
+    "data": "2026-11-25",
+    "origem": "pdf-ons",
+    "url": "https://www.ons.org.br/AcervoDigitalDocumentosEPublicacoes/IPDO-25-11-2026.pdf",
+    "balanco": [
+      {
+        "fonte": "Hidro Nacional",
+        "programado": 46127,
+        "verificado": 45370
+      },
+      {
+        "fonte": "Itaipu Binacional",
+        "programado": 7166,
+        "verificado": 7164
+      },
+      {
+        "fonte": "Termo Nuclear",
+        "programado": 1350,
+        "verificado": 1345
+      },
+      {
+        "fonte": "Termo Convencional",
+        "programado": 11665,
+        "verificado": 11044
+      },
+      {
+        "fonte": "Eólica",
+        "programado": 15650,
+        "verificado": 16761
+      },
+      {
+        "fonte": "Solar",
+        "programado": 15831,
+        "verificado": 15844
+      },
+      {
+        "fonte": "Total SIN",
+        "programado": 97789,
+        "verificado": 97528
+      },
+      {
+        "fonte": "Carga",
+        "programado": 97832,
+        "verificado": 97569
+      }
+    ],
+    "reservatorios": [
+      {
+        "subsistema": "SIN",
+        "ear": 58.2
+      },
+      {
+        "subsistema": "SUL",
+        "ear": 82.9
+      },
+      {
+        "subsistema": "SE/CO",
+        "ear": 56.3
+      },
+      {
+        "subsistema": "N",
+        "ear": 49.6
+      },
+      {
+        "subsistema": "NE",
+        "ear": 58.7
+      }
+    ],
+    "destaques": [],
+    "restricoes": [],
+    "ocorrencias": [],
+    "status_destaques": "Não foi possível recuperar destaques completos; consulte a seção 4 do PDF.",
+    "status_restricoes": "Restrições não recuperadas de forma verificável; não representa zero.",
+    "diagnostico_texto": {
+      "secao4_encontrada": true,
+      "paginas": [
+        3,
+        4,
+        5
+      ],
+      "subsecoes_detectadas": [],
+      "destaques_extraidos": 0,
+      "restricoes_extraidas": 0,
+      "outras_ocorrencias_extraidas": 0
+    },
+    "capacidade_55": {
+      "total": {
+        "usina": "Total",
+        "instalada_mw": 27257.0,
+        "disponivel_mw": 23816.0,
+        "diferenca_mw": 3441.0
+      },
+      "grupos": [
+        {
+          "motivo": "Por Manutenção",
+          "instalada_mw": 725.0,
+          "disponivel_mw": 69.0,
+          "diferenca_mw": 656.0
+        },
+        {
+          "motivo": "Por Restrição Operativa",
+          "instalada_mw": 5853.0,
+          "disponivel_mw": 3882.0,
+          "diferenca_mw": 1971.0
+        },
+        {
+          "motivo": "Por Restrição Operativa e Manutenção",
+          "instalada_mw": 1683.0,
+          "disponivel_mw": 1080.0,
+          "diferenca_mw": 603.0
+        },
+        {
+          "motivo": "Demais Restrições Agregadas",
+          "instalada_mw": 18996.0,
+          "disponivel_mw": 18785.0,
+          "diferenca_mw": 211.0
+        }
+      ],
+      "top3": [
+        {
+          "usina": "Angra I",
+          "instalada_mw": 640.0,
+          "disponivel_mw": 0.0,
+          "diferenca_mw": 640.0,
+          "motivo": "Manutenção"
+        },
+        {
+          "usina": "GNA II",
+          "instalada_mw": 1673.0,
+          "disponivel_mw": 1080.0,
+          "diferenca_mw": 593.0,
+          "motivo": "Restrição operativa e manutenção"
+        },
+        {
+          "usina": "Vale do Açú",
+          "instalada_mw": 323.0,
+          "disponivel_mw": 110.0,
+          "diferenca_mw": 213.0,
+          "motivo": "Restrição operativa"
+        }
+      ],
+      "status": "extraído da seção 5.5"
+    },
+    "termicas_6": {
+      "destaques": [],
+      "top3": [
+        {
+          "usina": "Marlim Azul",
+          "programado_mwmed": 559.0,
+          "verificado_mwmed": 442.0,
+          "diferenca_mwmed": -117.0,
+          "motivo": "Rendimento",
+          "justificativa": "Variação diária (verificado − programado): -117 MWmed. Motivo informado pelo ONS: Rendimento."
+        },
+        {
+          "usina": "Santa Cruz Nova",
+          "programado_mwmed": 0.0,
+          "verificado_mwmed": 68.0,
+          "diferenca_mwmed": 68.0,
+          "motivo": "Rendimento",
+          "justificativa": "Variação diária (verificado − programado): +68 MWmed. Motivo informado pelo ONS: Rendimento."
+        },
+        {
+          "usina": "Maranhão IV",
+          "programado_mwmed": 226.0,
+          "verificado_mwmed": 197.0,
+          "diferenca_mwmed": -29.0,
+          "motivo": "geradora",
+          "justificativa": "Variação diária (verificado − programado): -29 MWmed. Motivo informado pelo ONS: geradora."
+        }
+      ],
+      "tabela_diferencas": [
+        {
+          "usina": "Aparecida",
+          "programado_mwmed": 145.0,
+          "verificado_mwmed": 135.0,
+          "diferenca_mwmed": -10.0,
+          "motivo": "geradora",
+          "justificativa": "Variação diária (verificado − programado): -10 MWmed. Motivo informado pelo ONS: geradora."
+        },
+        {
+          "usina": "ERB Candeias",
+          "programado_mwmed": 5.0,
+          "verificado_mwmed": 0.0,
+          "diferenca_mwmed": -5.0,
+          "motivo": "geradora",
+          "justificativa": "Variação diária (verificado − programado): -5 MWmed. Motivo informado pelo ONS: geradora."
+        },
+        {
+          "usina": "Maranhão IV",
+          "programado_mwmed": 226.0,
+          "verificado_mwmed": 197.0,
+          "diferenca_mwmed": -29.0,
+          "motivo": "geradora",
+          "justificativa": "Variação diária (verificado − programado): -29 MWmed. Motivo informado pelo ONS: geradora."
+        },
+        {
+          "usina": "Marlim Azul",
+          "programado_mwmed": 559.0,
+          "verificado_mwmed": 442.0,
+          "diferenca_mwmed": -117.0,
+          "motivo": "Rendimento",
+          "justificativa": "Variação diária (verificado − programado): -117 MWmed. Motivo informado pelo ONS: Rendimento."
+        },
+        {
+          "usina": "Mauá 3",
+          "programado_mwmed": 510.0,
+          "verificado_mwmed": 524.0,
+          "diferenca_mwmed": 14.0,
+          "motivo": "Controle de fluxos",
+          "justificativa": "Variação diária (verificado − programado): +14 MWmed. Motivo informado pelo ONS: Controle de fluxos."
+        },
+        {
+          "usina": "Poraquê",
+          "programado_mwmed": 56.0,
+          "verificado_mwmed": 50.0,
+          "diferenca_mwmed": -6.0,
+          "motivo": "geradora",
+          "justificativa": "Variação diária (verificado − programado): -6 MWmed. Motivo informado pelo ONS: geradora."
+        },
+        {
+          "usina": "Prosperidade II",
+          "programado_mwmed": 7.0,
+          "verificado_mwmed": 1.0,
+          "diferenca_mwmed": -6.0,
+          "motivo": "geradora",
+          "justificativa": "Variação diária (verificado − programado): -6 MWmed. Motivo informado pelo ONS: geradora."
+        },
+        {
+          "usina": "Prosperidade III",
+          "programado_mwmed": 10.0,
+          "verificado_mwmed": 4.0,
+          "diferenca_mwmed": -6.0,
+          "motivo": "geradora",
+          "justificativa": "Variação diária (verificado − programado): -6 MWmed. Motivo informado pelo ONS: geradora."
+        },
+        {
+          "usina": "Santa Cruz Nova",
+          "programado_mwmed": 0.0,
+          "verificado_mwmed": 68.0,
+          "diferenca_mwmed": 68.0,
+          "motivo": "Rendimento",
+          "justificativa": "Variação diária (verificado − programado): +68 MWmed. Motivo informado pelo ONS: Rendimento."
+        },
+        {
+          "usina": "Seropédica",
+          "programado_mwmed": 52.0,
+          "verificado_mwmed": 46.0,
+          "diferenca_mwmed": -6.0,
+          "motivo": "Rampa de geração",
+          "justificativa": "Variação diária (verificado − programado): -6 MWmed. Motivo informado pelo ONS: Rampa de geração."
+        },
+        {
+          "usina": "Termomacaé",
+          "programado_mwmed": 144.0,
+          "verificado_mwmed": 139.0,
+          "diferenca_mwmed": -5.0,
+          "motivo": "Rendimento",
+          "justificativa": "Variação diária (verificado − programado): -5 MWmed. Motivo informado pelo ONS: Rendimento."
+        },
+        {
+          "usina": "Três Lagoas",
+          "programado_mwmed": 40.0,
+          "verificado_mwmed": 31.0,
+          "diferenca_mwmed": -9.0,
+          "motivo": "Carga do SIN abaixo do previsto",
+          "justificativa": "Variação diária (verificado − programado): -9 MWmed. Motivo informado pelo ONS: Carga do SIN abaixo do previsto."
+        }
+      ],
+      "status": "12 diferenças da tabela 6.1 validadas; top3 por desvio absoluto em MWmed.",
+      "paginas": [
+        14,
+        15,
+        16
+      ]
+    },
+    "demanda_7": {
+      "verificada_mw": 108189,
+      "hora": "11:29",
+      "recorde_mw": 108189,
+      "recorde_data": "25/11/2026",
+      "novo_recorde": null,
+      "status": "A própria linha do IPDO pode conter recorde atualizado; igualdade exige série anterior para comprovar superação"
+    }
   }
 ]
