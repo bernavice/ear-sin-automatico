@@ -10,7 +10,12 @@
         "merito": 61.081,
         "inflexibilidade": 2620.871,
         "eletrica": 219.893,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 412.279,
         "outros": 0.0
       },
@@ -22,7 +27,12 @@
         "merito": 1.004,
         "inflexibilidade": 1182.839,
         "eletrica": 4.29,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.042,
         "outros": 0.0
       },
@@ -34,7 +44,12 @@
         "merito": 2.42,
         "inflexibilidade": 118.218,
         "eletrica": 96.089,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 4.085,
         "outros": 0.001
       },
@@ -46,7 +61,12 @@
         "merito": 816.892,
         "inflexibilidade": 1168.144,
         "eletrica": 85.292,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 566.525,
         "outros": 0.0
       }
@@ -57,10 +77,72 @@
       "merito": 881.397,
       "inflexibilidade": 5090.072,
       "eletrica": 405.564,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 982.931,
       "outros": 0.001
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -92,7 +174,12 @@
         "merito": 27.927,
         "inflexibilidade": 2599.444,
         "eletrica": 164.268,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 261.289,
         "outros": 0.0
       },
@@ -104,7 +191,12 @@
         "merito": 1.512,
         "inflexibilidade": 946.653,
         "eletrica": 1.164,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.042,
         "outros": 0.0
       },
@@ -116,7 +208,12 @@
         "merito": 9.051,
         "inflexibilidade": 86.216,
         "eletrica": 56.921,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 20.226,
         "outros": 0.001
       },
@@ -126,9 +223,14 @@
         "horas": 24,
         "total": 3188.834,
         "merito": 741.961,
-        "inflexibilidade": 1742.371,
+        "inflexibilidade": 1742.37,
         "eletrica": 14.287,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 690.217,
         "outros": 0.001
       }
@@ -137,12 +239,74 @@
       "subsistema": "SIN",
       "total": 7363.548,
       "merito": 780.451,
-      "inflexibilidade": 5374.684,
+      "inflexibilidade": 5374.683,
       "eletrica": 236.64,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 971.774,
       "outros": 0.002
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -174,7 +338,12 @@
         "merito": 4.822,
         "inflexibilidade": 2766.509,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 31.815,
         "outros": 0.0
       },
@@ -186,7 +355,12 @@
         "merito": 0.0,
         "inflexibilidade": 942.23,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -198,7 +372,12 @@
         "merito": 0.0,
         "inflexibilidade": 83.401,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.017,
         "outros": 0.0
       },
@@ -210,7 +389,12 @@
         "merito": 598.706,
         "inflexibilidade": 1842.606,
         "eletrica": 12.767,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 260.317,
         "outros": 0.001
       }
@@ -221,10 +405,72 @@
       "merito": 603.528,
       "inflexibilidade": 5634.746,
       "eletrica": 12.767,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 292.149,
       "outros": 0.001
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -256,7 +502,12 @@
         "merito": 501.497,
         "inflexibilidade": 2795.226,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -268,7 +519,12 @@
         "merito": 0.0,
         "inflexibilidade": 958.022,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -280,7 +536,12 @@
         "merito": 0.0,
         "inflexibilidade": 83.227,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -292,7 +553,12 @@
         "merito": 486.939,
         "inflexibilidade": 1770.372,
         "eletrica": 337.506,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 183.573,
         "outros": 0.001
       }
@@ -303,10 +569,72 @@
       "merito": 988.436,
       "inflexibilidade": 5606.847,
       "eletrica": 337.506,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 183.573,
       "outros": 0.001
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -338,7 +666,12 @@
         "merito": 2.283,
         "inflexibilidade": 2869.393,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -350,7 +683,12 @@
         "merito": 0.0,
         "inflexibilidade": 955.624,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -362,7 +700,12 @@
         "merito": 0.0,
         "inflexibilidade": 116.189,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.003
       },
@@ -374,7 +717,12 @@
         "merito": 610.749,
         "inflexibilidade": 1832.796,
         "eletrica": 7.614,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 9.803,
         "outros": 0.0
       }
@@ -385,10 +733,72 @@
       "merito": 613.032,
       "inflexibilidade": 5774.002,
       "eletrica": 7.614,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 9.803,
       "outros": 0.003
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -420,7 +830,12 @@
         "merito": 3.306,
         "inflexibilidade": 2826.584,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -432,7 +847,12 @@
         "merito": 0.0,
         "inflexibilidade": 955.421,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -444,7 +864,12 @@
         "merito": 0.0,
         "inflexibilidade": 116.562,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -456,7 +881,12 @@
         "merito": 594.581,
         "inflexibilidade": 1838.344,
         "eletrica": 60.229,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.827,
         "outros": 0.0
       }
@@ -467,10 +897,72 @@
       "merito": 597.887,
       "inflexibilidade": 5736.911,
       "eletrica": 60.229,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 0.827,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -502,7 +994,12 @@
         "merito": 3.368,
         "inflexibilidade": 3756.177,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -514,7 +1011,12 @@
         "merito": 0.0,
         "inflexibilidade": 955.478,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -526,7 +1028,12 @@
         "merito": 0.0,
         "inflexibilidade": 184.526,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.002
       },
@@ -538,7 +1045,12 @@
         "merito": 590.784,
         "inflexibilidade": 1836.998,
         "eletrica": 84.582,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 25.664,
         "outros": 0.0
       }
@@ -549,10 +1061,72 @@
       "merito": 594.152,
       "inflexibilidade": 6733.179,
       "eletrica": 84.582,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 25.664,
       "outros": 0.002
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -584,7 +1158,12 @@
         "merito": 4.765,
         "inflexibilidade": 4685.799,
         "eletrica": 152.426,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 37.859,
         "outros": 0.0
       },
@@ -596,7 +1175,12 @@
         "merito": 0.0,
         "inflexibilidade": 951.693,
         "eletrica": 21.527,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 5.076,
         "outros": 0.0
       },
@@ -608,7 +1192,12 @@
         "merito": 0.0,
         "inflexibilidade": 194.312,
         "eletrica": 53.72,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 25.12,
         "outros": 0.0
       },
@@ -620,7 +1209,12 @@
         "merito": 660.507,
         "inflexibilidade": 1777.224,
         "eletrica": 62.458,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 19.459,
         "outros": 0.001
       }
@@ -631,10 +1225,72 @@
       "merito": 665.272,
       "inflexibilidade": 7609.028,
       "eletrica": 290.131,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 87.514,
       "outros": 0.001
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -666,7 +1322,12 @@
         "merito": 4.473,
         "inflexibilidade": 4339.695,
         "eletrica": 20.532,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -678,7 +1339,12 @@
         "merito": 0.0,
         "inflexibilidade": 1139.743,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -690,7 +1356,12 @@
         "merito": 0.0,
         "inflexibilidade": 193.765,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.002
       },
@@ -702,7 +1373,12 @@
         "merito": 534.511,
         "inflexibilidade": 1840.36,
         "eletrica": 161.428,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 69.464,
         "outros": 0.001
       }
@@ -713,10 +1389,72 @@
       "merito": 538.984,
       "inflexibilidade": 7513.563,
       "eletrica": 181.96,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 69.464,
       "outros": 0.003
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -748,7 +1486,12 @@
         "merito": 3.07,
         "inflexibilidade": 4600.705,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 147.57,
         "outros": 0.0
       },
@@ -760,7 +1503,12 @@
         "merito": 0.0,
         "inflexibilidade": 958.742,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -772,7 +1520,12 @@
         "merito": 0.0,
         "inflexibilidade": 116.183,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -782,9 +1535,14 @@
         "horas": 24,
         "total": 2266.93,
         "merito": 536.931,
-        "inflexibilidade": 1599.906,
+        "inflexibilidade": 1599.905,
         "eletrica": 53.136,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 76.959,
         "outros": 0.0
       }
@@ -793,12 +1551,74 @@
       "subsistema": "SIN",
       "total": 8093.2,
       "merito": 540.001,
-      "inflexibilidade": 7275.536,
+      "inflexibilidade": 7275.535,
       "eletrica": 53.136,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 224.529,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -830,7 +1650,12 @@
         "merito": 2.154,
         "inflexibilidade": 4069.774,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 147.183,
         "outros": 0.0
       },
@@ -842,7 +1667,12 @@
         "merito": 0.0,
         "inflexibilidade": 954.861,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -854,7 +1684,12 @@
         "merito": 0.0,
         "inflexibilidade": 115.419,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -866,7 +1701,12 @@
         "merito": 388.106,
         "inflexibilidade": 1813.12,
         "eletrica": 59.321,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 198.035,
         "outros": 0.001
       }
@@ -877,10 +1717,72 @@
       "merito": 390.26,
       "inflexibilidade": 6953.174,
       "eletrica": 59.321,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 345.218,
       "outros": 0.001
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -912,7 +1814,12 @@
         "merito": 2.205,
         "inflexibilidade": 3910.435,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 108.657,
         "outros": 0.0
       },
@@ -924,7 +1831,12 @@
         "merito": 0.0,
         "inflexibilidade": 952.783,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -936,7 +1848,12 @@
         "merito": 0.0,
         "inflexibilidade": 115.353,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -946,9 +1863,14 @@
         "horas": 24,
         "total": 2373.869,
         "merito": 357.729,
-        "inflexibilidade": 1831.419,
+        "inflexibilidade": 1831.418,
         "eletrica": 51.782,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 132.941,
         "outros": 0.0
       }
@@ -957,12 +1879,74 @@
       "subsistema": "SIN",
       "total": 7463.302,
       "merito": 359.934,
-      "inflexibilidade": 6809.99,
+      "inflexibilidade": 6809.989,
       "eletrica": 51.782,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 241.598,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -994,7 +1978,12 @@
         "merito": 6.949,
         "inflexibilidade": 3735.603,
         "eletrica": 372.444,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 59.386,
         "outros": 0.0
       },
@@ -1006,7 +1995,12 @@
         "merito": 0.106,
         "inflexibilidade": 952.619,
         "eletrica": 36.609,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.042,
         "outros": 0.0
       },
@@ -1018,7 +2012,12 @@
         "merito": 0.772,
         "inflexibilidade": 116.42,
         "eletrica": 69.915,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 16.26,
         "outros": 0.002
       },
@@ -1028,9 +2027,14 @@
         "horas": 24,
         "total": 2965.861,
         "merito": 705.587,
-        "inflexibilidade": 1880.566,
+        "inflexibilidade": 1880.565,
         "eletrica": 156.227,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 223.482,
         "outros": 0.001
       }
@@ -1039,12 +2043,74 @@
       "subsistema": "SIN",
       "total": 8332.988,
       "merito": 713.414,
-      "inflexibilidade": 6685.208,
+      "inflexibilidade": 6685.207,
       "eletrica": 635.195,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 299.17,
       "outros": 0.003
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -1076,7 +2142,12 @@
         "merito": 97.434,
         "inflexibilidade": 3188.843,
         "eletrica": 584.936,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 230.576,
         "outros": 0.0
       },
@@ -1088,7 +2159,12 @@
         "merito": 1.501,
         "inflexibilidade": 951.568,
         "eletrica": 35.608,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.042,
         "outros": 0.0
       },
@@ -1100,7 +2176,12 @@
         "merito": 4.795,
         "inflexibilidade": 8.146,
         "eletrica": 205.304,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 23.391,
         "outros": 0.0
       },
@@ -1112,7 +2193,12 @@
         "merito": 718.96,
         "inflexibilidade": 1863.659,
         "eletrica": 109.217,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 619.404,
         "outros": 0.0
       }
@@ -1123,10 +2209,72 @@
       "merito": 822.69,
       "inflexibilidade": 6012.216,
       "eletrica": 935.065,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 873.413,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -1158,7 +2306,12 @@
         "merito": 152.163,
         "inflexibilidade": 3282.563,
         "eletrica": 956.685,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 687.153,
         "outros": 0.0
       },
@@ -1170,7 +2323,12 @@
         "merito": 31.198,
         "inflexibilidade": 965.206,
         "eletrica": 173.175,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 60.631,
         "outros": 0.0
       },
@@ -1182,7 +2340,12 @@
         "merito": 116.449,
         "inflexibilidade": 9.201,
         "eletrica": 241.758,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 87.489,
         "outros": 0.004
       },
@@ -1194,9 +2357,14 @@
         "merito": 975.365,
         "inflexibilidade": 1832.693,
         "eletrica": 151.314,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 520.506,
-        "outros": 0.0
+        "outros": 0.001
       }
     ],
     "sin": {
@@ -1205,10 +2373,72 @@
       "merito": 1275.175,
       "inflexibilidade": 6089.663,
       "eletrica": 1522.932,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 1355.779,
-      "outros": 0.004
+      "outros": 0.005
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -1240,7 +2470,12 @@
         "merito": 236.549,
         "inflexibilidade": 2567.419,
         "eletrica": 322.145,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 959.59,
         "outros": 0.0
       },
@@ -1252,7 +2487,12 @@
         "merito": 5.58,
         "inflexibilidade": 950.525,
         "eletrica": 14.132,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 9.037,
         "outros": 0.0
       },
@@ -1264,7 +2504,12 @@
         "merito": 69.202,
         "inflexibilidade": 9.804,
         "eletrica": 56.85,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 90.478,
         "outros": 0.0
       },
@@ -1276,9 +2521,14 @@
         "merito": 684.396,
         "inflexibilidade": 1426.879,
         "eletrica": 80.075,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 592.553,
-        "outros": 0.0
+        "outros": 0.001
       }
     ],
     "sin": {
@@ -1287,10 +2537,72 @@
       "merito": 995.727,
       "inflexibilidade": 4954.627,
       "eletrica": 473.202,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 1651.658,
-      "outros": 0.0
+      "outros": 0.001
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -1322,7 +2634,12 @@
         "merito": 0.449,
         "inflexibilidade": 2563.683,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 440.58,
         "outros": 0.0
       },
@@ -1334,7 +2651,12 @@
         "merito": 0.0,
         "inflexibilidade": 839.307,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -1346,7 +2668,12 @@
         "merito": 0.0,
         "inflexibilidade": 3.359,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.004,
         "outros": 0.0
       },
@@ -1358,7 +2685,12 @@
         "merito": 494.606,
         "inflexibilidade": 1669.167,
         "eletrica": 49.894,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 740.491,
         "outros": 0.001
       }
@@ -1369,10 +2701,72 @@
       "merito": 495.055,
       "inflexibilidade": 5075.516,
       "eletrica": 49.894,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 1181.075,
       "outros": 0.001
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -1404,7 +2798,12 @@
         "merito": 0.0,
         "inflexibilidade": 2407.595,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 440.623,
         "outros": 0.0
       },
@@ -1416,7 +2815,12 @@
         "merito": 0.0,
         "inflexibilidade": 596.463,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -1428,7 +2832,12 @@
         "merito": 0.0,
         "inflexibilidade": 3.818,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -1440,7 +2849,12 @@
         "merito": 535.546,
         "inflexibilidade": 2008.806,
         "eletrica": 80.173,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 225.775,
         "outros": 0.0
       }
@@ -1451,10 +2865,72 @@
       "merito": 535.546,
       "inflexibilidade": 5016.682,
       "eletrica": 80.173,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 666.398,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -1486,7 +2962,12 @@
         "merito": 48.813,
         "inflexibilidade": 2594.294,
         "eletrica": 598.296,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 523.997,
         "outros": 0.0
       },
@@ -1498,7 +2979,12 @@
         "merito": 0.953,
         "inflexibilidade": 597.006,
         "eletrica": 142.414,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 3.622,
         "outros": 0.0
       },
@@ -1510,7 +2996,12 @@
         "merito": 2.534,
         "inflexibilidade": 16.867,
         "eletrica": 326.762,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 34.419,
         "outros": 0.002
       },
@@ -1522,7 +3013,12 @@
         "merito": 579.331,
         "inflexibilidade": 1802.792,
         "eletrica": 155.907,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 24.81,
         "outros": 0.001
       }
@@ -1533,10 +3029,72 @@
       "merito": 631.631,
       "inflexibilidade": 5010.959,
       "eletrica": 1223.379,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 586.848,
       "outros": 0.003
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -1568,7 +3126,12 @@
         "merito": 0.591,
         "inflexibilidade": 2491.757,
         "eletrica": 5.136,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 638.043,
         "outros": 0.0
       },
@@ -1580,7 +3143,12 @@
         "merito": 0.0,
         "inflexibilidade": 593.476,
         "eletrica": 1.271,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 15.201,
         "outros": 0.0
       },
@@ -1592,7 +3160,12 @@
         "merito": 0.0,
         "inflexibilidade": 4.269,
         "eletrica": 9.505,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 84.935,
         "outros": 0.0
       },
@@ -1604,7 +3177,12 @@
         "merito": 574.58,
         "inflexibilidade": 1812.464,
         "eletrica": 194.116,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 11.572,
         "outros": 0.001
       }
@@ -1615,10 +3193,72 @@
       "merito": 575.171,
       "inflexibilidade": 4901.966,
       "eletrica": 210.028,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 749.751,
       "outros": 0.001
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -1650,7 +3290,12 @@
         "merito": 0.303,
         "inflexibilidade": 2697.922,
         "eletrica": 5.173,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 589.379,
         "outros": 0.0
       },
@@ -1662,7 +3307,12 @@
         "merito": 0.0,
         "inflexibilidade": 591.985,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -1674,7 +3324,12 @@
         "merito": 0.0,
         "inflexibilidade": 35.772,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.001
       },
@@ -1686,7 +3341,12 @@
         "merito": 498.727,
         "inflexibilidade": 1796.961,
         "eletrica": 115.432,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 94.444,
         "outros": 0.0
       }
@@ -1697,10 +3357,72 @@
       "merito": 499.03,
       "inflexibilidade": 5122.64,
       "eletrica": 120.605,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 683.823,
       "outros": 0.001
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -1732,7 +3454,12 @@
         "merito": 0.821,
         "inflexibilidade": 3365.702,
         "eletrica": 8.185,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 589.415,
         "outros": 0.0
       },
@@ -1744,7 +3471,12 @@
         "merito": 0.0,
         "inflexibilidade": 592.484,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -1756,7 +3488,12 @@
         "merito": 0.0,
         "inflexibilidade": 113.51,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -1768,7 +3505,12 @@
         "merito": 484.391,
         "inflexibilidade": 2189.844,
         "eletrica": 60.033,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 64.134,
         "outros": 0.0
       }
@@ -1779,10 +3521,72 @@
       "merito": 485.212,
       "inflexibilidade": 6261.54,
       "eletrica": 68.218,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 653.549,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -1814,7 +3618,12 @@
         "merito": 0.665,
         "inflexibilidade": 3860.093,
         "eletrica": 151.78,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 445.253,
         "outros": 0.0
       },
@@ -1826,7 +3635,12 @@
         "merito": 0.0,
         "inflexibilidade": 819.054,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -1838,7 +3652,12 @@
         "merito": 0.0,
         "inflexibilidade": 114.293,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -1850,7 +3669,12 @@
         "merito": 443.824,
         "inflexibilidade": 1787.825,
         "eletrica": 27.614,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 201.79,
         "outros": 0.0
       }
@@ -1861,10 +3685,72 @@
       "merito": 444.489,
       "inflexibilidade": 6581.265,
       "eletrica": 179.394,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 647.043,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -1896,7 +3782,12 @@
         "merito": 0.125,
         "inflexibilidade": 3396.711,
         "eletrica": 23.82,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 219.408,
         "outros": 0.0
       },
@@ -1908,7 +3799,12 @@
         "merito": 0.0,
         "inflexibilidade": 930.92,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -1920,7 +3816,12 @@
         "merito": 0.0,
         "inflexibilidade": 113.42,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -1930,9 +3831,14 @@
         "horas": 24,
         "total": 2167.423,
         "merito": 435.333,
-        "inflexibilidade": 1548.425,
+        "inflexibilidade": 1548.424,
         "eletrica": 14.214,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 169.452,
         "outros": 0.0
       }
@@ -1941,12 +3847,74 @@
       "subsistema": "SIN",
       "total": 6851.827,
       "merito": 435.458,
-      "inflexibilidade": 5989.476,
+      "inflexibilidade": 5989.475,
       "eletrica": 38.034,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 388.86,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -1978,7 +3946,12 @@
         "merito": 502.25,
         "inflexibilidade": 2910.232,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -1990,7 +3963,12 @@
         "merito": 0.0,
         "inflexibilidade": 933.659,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -2002,7 +3980,12 @@
         "merito": 0.0,
         "inflexibilidade": 72.853,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -2014,7 +3997,12 @@
         "merito": 490.453,
         "inflexibilidade": 1636.344,
         "eletrica": 392.833,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 102.371,
         "outros": 0.0
       }
@@ -2025,10 +4013,72 @@
       "merito": 992.703,
       "inflexibilidade": 5553.088,
       "eletrica": 392.833,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 102.371,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -2060,7 +4110,12 @@
         "merito": 3.391,
         "inflexibilidade": 3594.222,
         "eletrica": 764.726,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 330.416,
         "outros": 0.0
       },
@@ -2072,7 +4127,12 @@
         "merito": 6.707,
         "inflexibilidade": 873.725,
         "eletrica": 193.993,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 9.324,
         "outros": 0.0
       },
@@ -2084,7 +4144,12 @@
         "merito": 0.152,
         "inflexibilidade": 46.771,
         "eletrica": 396.747,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 28.743,
         "outros": 0.004
       },
@@ -2096,7 +4161,12 @@
         "merito": 675.102,
         "inflexibilidade": 1739.15,
         "eletrica": 173.482,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 36.388,
         "outros": 0.001
       }
@@ -2107,10 +4177,72 @@
       "merito": 685.352,
       "inflexibilidade": 6253.868,
       "eletrica": 1528.948,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 404.871,
       "outros": 0.005
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -2142,7 +4274,12 @@
         "merito": 12.469,
         "inflexibilidade": 3419.561,
         "eletrica": 457.433,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 459.542,
         "outros": 0.0
       },
@@ -2154,7 +4291,12 @@
         "merito": 8.065,
         "inflexibilidade": 1104.891,
         "eletrica": 217.771,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 10.997,
         "outros": 0.0
       },
@@ -2166,7 +4308,12 @@
         "merito": 0.658,
         "inflexibilidade": 46.537,
         "eletrica": 275.577,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 54.062,
         "outros": 0.0
       },
@@ -2178,7 +4325,12 @@
         "merito": 692.009,
         "inflexibilidade": 1731.119,
         "eletrica": 164.724,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 100.685,
         "outros": 0.0
       }
@@ -2189,10 +4341,72 @@
       "merito": 713.201,
       "inflexibilidade": 6302.108,
       "eletrica": 1115.505,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 625.286,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -2224,7 +4438,12 @@
         "merito": 0.0,
         "inflexibilidade": 3207.789,
         "eletrica": 33.168,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 172.794,
         "outros": 0.0
       },
@@ -2236,7 +4455,12 @@
         "merito": 0.0,
         "inflexibilidade": 1129.559,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -2248,7 +4472,12 @@
         "merito": 0.0,
         "inflexibilidade": 5.303,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 13.357,
         "outros": 0.004
       },
@@ -2260,7 +4489,12 @@
         "merito": 550.819,
         "inflexibilidade": 1770.2,
         "eletrica": 128.335,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 153.386,
         "outros": 0.0
       }
@@ -2271,10 +4505,72 @@
       "merito": 550.819,
       "inflexibilidade": 6112.851,
       "eletrica": 161.503,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 339.537,
       "outros": 0.004
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -2306,7 +4602,12 @@
         "merito": 0.0,
         "inflexibilidade": 3384.953,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 4.44,
         "outros": 0.0
       },
@@ -2318,7 +4619,12 @@
         "merito": 0.0,
         "inflexibilidade": 1128.906,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -2330,7 +4636,12 @@
         "merito": 0.0,
         "inflexibilidade": 3.648,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -2342,7 +4653,12 @@
         "merito": 561.847,
         "inflexibilidade": 1777.838,
         "eletrica": 125.712,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 63.087,
         "outros": 0.001
       }
@@ -2353,10 +4669,72 @@
       "merito": 561.847,
       "inflexibilidade": 6295.345,
       "eletrica": 125.712,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 67.527,
       "outros": 0.001
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -2388,7 +4766,12 @@
         "merito": 0.0,
         "inflexibilidade": 3534.469,
         "eletrica": 255.942,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 2.22,
         "outros": 0.0
       },
@@ -2400,7 +4783,12 @@
         "merito": 0.0,
         "inflexibilidade": 1003.678,
         "eletrica": 14.417,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -2412,7 +4800,12 @@
         "merito": 0.0,
         "inflexibilidade": 20.474,
         "eletrica": 84.88,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -2424,7 +4817,12 @@
         "merito": 593.316,
         "inflexibilidade": 1782.865,
         "eletrica": 55.712,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 103.49,
         "outros": 0.0
       }
@@ -2435,10 +4833,72 @@
       "merito": 593.316,
       "inflexibilidade": 6341.486,
       "eletrica": 410.951,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 105.71,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -2470,7 +4930,12 @@
         "merito": 3.611,
         "inflexibilidade": 4258.618,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -2482,7 +4947,12 @@
         "merito": 0.289,
         "inflexibilidade": 929.931,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -2494,7 +4964,12 @@
         "merito": 0.0,
         "inflexibilidade": 113.022,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -2506,7 +4981,12 @@
         "merito": 495.365,
         "inflexibilidade": 1746.326,
         "eletrica": 60.752,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 4.441,
         "outros": 0.0
       }
@@ -2517,10 +4997,72 @@
       "merito": 499.265,
       "inflexibilidade": 7047.897,
       "eletrica": 60.752,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 4.441,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -2552,7 +5094,12 @@
         "merito": 2.552,
         "inflexibilidade": 4566.024,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -2564,7 +5111,12 @@
         "merito": 0.0,
         "inflexibilidade": 970.207,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -2576,7 +5128,12 @@
         "merito": 0.0,
         "inflexibilidade": 62.777,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -2588,7 +5145,12 @@
         "merito": 215.245,
         "inflexibilidade": 1448.839,
         "eletrica": 30.394,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 188.843,
         "outros": 0.0
       }
@@ -2599,10 +5161,72 @@
       "merito": 217.797,
       "inflexibilidade": 7047.847,
       "eletrica": 30.394,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 188.843,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -2634,7 +5258,12 @@
         "merito": 1.811,
         "inflexibilidade": 4545.871,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -2646,7 +5275,12 @@
         "merito": 0.0,
         "inflexibilidade": 1189.689,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -2658,7 +5292,12 @@
         "merito": 0.0,
         "inflexibilidade": 61.849,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -2668,9 +5307,14 @@
         "horas": 24,
         "total": 2288.013,
         "merito": 262.758,
-        "inflexibilidade": 1790.2,
+        "inflexibilidade": 1790.199,
         "eletrica": 152.204,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 82.851,
         "outros": 0.0
       }
@@ -2679,12 +5323,74 @@
       "subsistema": "SIN",
       "total": 8087.233,
       "merito": 264.569,
-      "inflexibilidade": 7587.609,
+      "inflexibilidade": 7587.608,
       "eletrica": 152.204,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 82.851,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -2716,7 +5422,12 @@
         "merito": 10.257,
         "inflexibilidade": 4122.913,
         "eletrica": 275.3,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 39.092,
         "outros": 0.0
       },
@@ -2728,7 +5439,12 @@
         "merito": 3.73,
         "inflexibilidade": 1172.583,
         "eletrica": 29.905,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 4.453,
         "outros": 0.0
       },
@@ -2740,7 +5456,12 @@
         "merito": 0.0,
         "inflexibilidade": 112.072,
         "eletrica": 54.254,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 23.033,
         "outros": 0.0
       },
@@ -2752,7 +5473,12 @@
         "merito": 369.864,
         "inflexibilidade": 1835.317,
         "eletrica": 62.83,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 204.689,
         "outros": 0.0
       }
@@ -2763,10 +5489,72 @@
       "merito": 383.851,
       "inflexibilidade": 7242.885,
       "eletrica": 422.289,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 271.267,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -2798,7 +5586,12 @@
         "merito": 52.4,
         "inflexibilidade": 3639.168,
         "eletrica": 734.675,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 199.29,
         "outros": 0.0
       },
@@ -2810,7 +5603,12 @@
         "merito": 5.86,
         "inflexibilidade": 1177.558,
         "eletrica": 100.601,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.667,
         "outros": 0.0
       },
@@ -2822,7 +5620,12 @@
         "merito": 0.481,
         "inflexibilidade": 132.464,
         "eletrica": 248.368,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 19.559,
         "outros": 0.0
       },
@@ -2834,7 +5637,12 @@
         "merito": 355.24,
         "inflexibilidade": 1822.696,
         "eletrica": 124.359,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 212.456,
         "outros": 0.0
       }
@@ -2845,10 +5653,72 @@
       "merito": 413.981,
       "inflexibilidade": 6771.886,
       "eletrica": 1208.003,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 431.972,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -2880,7 +5750,12 @@
         "merito": 167.608,
         "inflexibilidade": 3116.205,
         "eletrica": 646.225,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 631.901,
         "outros": 0.0
       },
@@ -2892,7 +5767,12 @@
         "merito": 11.086,
         "inflexibilidade": 1118.535,
         "eletrica": 205.726,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 68.67,
         "outros": 0.0
       },
@@ -2904,7 +5784,12 @@
         "merito": 11.473,
         "inflexibilidade": 6.306,
         "eletrica": 248.305,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 142.013,
         "outros": 0.0
       },
@@ -2916,7 +5801,12 @@
         "merito": 636.017,
         "inflexibilidade": 1819.0,
         "eletrica": 54.328,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 1.912,
         "outros": 0.001
       }
@@ -2927,10 +5817,72 @@
       "merito": 826.184,
       "inflexibilidade": 6060.046,
       "eletrica": 1154.584,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 844.496,
       "outros": 0.001
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -2962,7 +5914,12 @@
         "merito": 51.089,
         "inflexibilidade": 2681.029,
         "eletrica": 51.415,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 743.816,
         "outros": 0.0
       },
@@ -2974,7 +5931,12 @@
         "merito": 3.351,
         "inflexibilidade": 1168.705,
         "eletrica": 5.764,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.683,
         "outros": 0.0
       },
@@ -2986,7 +5948,12 @@
         "merito": 0.0,
         "inflexibilidade": 11.297,
         "eletrica": 93.168,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 18.704,
         "outros": 0.001
       },
@@ -2998,7 +5965,12 @@
         "merito": 387.756,
         "inflexibilidade": 1832.219,
         "eletrica": 27.881,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 191.739,
         "outros": 0.001
       }
@@ -3009,10 +5981,72 @@
       "merito": 442.196,
       "inflexibilidade": 5693.25,
       "eletrica": 178.228,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 954.942,
       "outros": 0.002
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -3044,7 +6078,12 @@
         "merito": 1.082,
         "inflexibilidade": 3085.01,
         "eletrica": 13.544,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 136.172,
         "outros": 0.0
       },
@@ -3056,7 +6095,12 @@
         "merito": 0.0,
         "inflexibilidade": 1258.197,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -3068,7 +6112,12 @@
         "merito": 0.0,
         "inflexibilidade": 113.08,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -3080,9 +6129,14 @@
         "merito": 508.957,
         "inflexibilidade": 1797.281,
         "eletrica": 13.053,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 54.162,
-        "outros": 0.0
+        "outros": 0.001
       }
     ],
     "sin": {
@@ -3091,10 +6145,72 @@
       "merito": 510.039,
       "inflexibilidade": 6253.568,
       "eletrica": 26.597,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 190.334,
-      "outros": 0.0
+      "outros": 0.001
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -3126,7 +6242,12 @@
         "merito": 1.256,
         "inflexibilidade": 3052.1,
         "eletrica": 13.496,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 1.146,
         "outros": 0.0
       },
@@ -3138,7 +6259,12 @@
         "merito": 0.0,
         "inflexibilidade": 1284.127,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -3150,7 +6276,12 @@
         "merito": 0.0,
         "inflexibilidade": 112.903,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -3162,7 +6293,12 @@
         "merito": 489.387,
         "inflexibilidade": 1717.165,
         "eletrica": 18.524,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 50.536,
         "outros": 0.0
       }
@@ -3173,10 +6309,72 @@
       "merito": 490.643,
       "inflexibilidade": 6166.295,
       "eletrica": 32.02,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 51.682,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -3208,7 +6406,12 @@
         "merito": 2.906,
         "inflexibilidade": 2865.08,
         "eletrica": 15.382,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 22.501,
         "outros": 0.0
       },
@@ -3220,7 +6423,12 @@
         "merito": 0.0,
         "inflexibilidade": 1287.87,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -3232,7 +6440,12 @@
         "merito": 0.0,
         "inflexibilidade": 113.011,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.001
       },
@@ -3244,7 +6457,12 @@
         "merito": 403.268,
         "inflexibilidade": 1216.565,
         "eletrica": 91.482,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 182.828,
         "outros": 0.001
       }
@@ -3255,10 +6473,72 @@
       "merito": 406.174,
       "inflexibilidade": 5482.526,
       "eletrica": 106.864,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 205.329,
       "outros": 0.002
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -3290,7 +6570,12 @@
         "merito": 3.222,
         "inflexibilidade": 3212.851,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 148.39,
         "outros": 0.0
       },
@@ -3302,7 +6587,12 @@
         "merito": 0.0,
         "inflexibilidade": 1237.077,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -3314,7 +6604,12 @@
         "merito": 0.0,
         "inflexibilidade": 112.964,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -3326,7 +6621,12 @@
         "merito": 330.615,
         "inflexibilidade": 1732.658,
         "eletrica": 93.345,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 196.088,
         "outros": 0.0
       }
@@ -3337,10 +6637,72 @@
       "merito": 333.837,
       "inflexibilidade": 6295.55,
       "eletrica": 93.345,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 344.478,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -3372,7 +6734,12 @@
         "merito": 2.184,
         "inflexibilidade": 3913.042,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 147.921,
         "outros": 4.146
       },
@@ -3384,7 +6751,12 @@
         "merito": 0.0,
         "inflexibilidade": 1181.427,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -3396,7 +6768,12 @@
         "merito": 0.0,
         "inflexibilidade": 113.025,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -3408,7 +6785,12 @@
         "merito": 403.9,
         "inflexibilidade": 1785.203,
         "eletrica": 103.239,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 159.646,
         "outros": 0.001
       }
@@ -3419,10 +6801,72 @@
       "merito": 406.084,
       "inflexibilidade": 6992.697,
       "eletrica": 103.239,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 307.567,
       "outros": 4.147
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -3454,7 +6898,12 @@
         "merito": 1.838,
         "inflexibilidade": 4055.279,
         "eletrica": 9.421,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 133.685,
         "outros": 4.822
       },
@@ -3466,7 +6915,12 @@
         "merito": 1.019,
         "inflexibilidade": 1211.65,
         "eletrica": 3.048,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.417,
         "outros": 0.0
       },
@@ -3478,7 +6932,12 @@
         "merito": 0.212,
         "inflexibilidade": 112.964,
         "eletrica": 0.229,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 1.554,
         "outros": 0.0
       },
@@ -3490,7 +6949,12 @@
         "merito": 434.13,
         "inflexibilidade": 1793.391,
         "eletrica": 92.494,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 157.267,
         "outros": 0.001
       }
@@ -3501,10 +6965,72 @@
       "merito": 437.199,
       "inflexibilidade": 7173.284,
       "eletrica": 105.192,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 292.923,
       "outros": 4.823
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -3536,7 +7062,12 @@
         "merito": 2.307,
         "inflexibilidade": 4316.244,
         "eletrica": 17.958,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 5.635,
         "outros": 0.0
       },
@@ -3548,7 +7079,12 @@
         "merito": 3.022,
         "inflexibilidade": 1288.741,
         "eletrica": 4.025,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.417,
         "outros": 0.0
       },
@@ -3560,7 +7096,12 @@
         "merito": 0.416,
         "inflexibilidade": 123.002,
         "eletrica": 72.862,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 31.648,
         "outros": 0.0
       },
@@ -3570,9 +7111,14 @@
         "horas": 24,
         "total": 2511.843,
         "merito": 642.898,
-        "inflexibilidade": 1809.828,
+        "inflexibilidade": 1809.827,
         "eletrica": 58.866,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.253,
         "outros": 0.001
       }
@@ -3581,12 +7127,74 @@
       "subsistema": "SIN",
       "total": 8378.12,
       "merito": 648.643,
-      "inflexibilidade": 7537.815,
+      "inflexibilidade": 7537.814,
       "eletrica": 153.711,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 37.953,
       "outros": 0.001
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -3618,7 +7226,12 @@
         "merito": 2.422,
         "inflexibilidade": 4564.583,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -3630,7 +7243,12 @@
         "merito": 0.312,
         "inflexibilidade": 1286.004,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -3642,7 +7260,12 @@
         "merito": 0.0,
         "inflexibilidade": 119.625,
         "eletrica": 3.634,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.527,
         "outros": 0.0
       },
@@ -3652,9 +7275,14 @@
         "horas": 24,
         "total": 2386.202,
         "merito": 441.499,
-        "inflexibilidade": 1792.614,
+        "inflexibilidade": 1792.613,
         "eletrica": 13.499,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 138.591,
         "outros": 0.001
       }
@@ -3663,12 +7291,74 @@
       "subsistema": "SIN",
       "total": 8363.309,
       "merito": 444.233,
-      "inflexibilidade": 7762.826,
+      "inflexibilidade": 7762.825,
       "eletrica": 17.133,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 139.118,
       "outros": 0.001
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -3700,7 +7390,12 @@
         "merito": 1.072,
         "inflexibilidade": 4222.825,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -3712,7 +7407,12 @@
         "merito": 0.0,
         "inflexibilidade": 1287.0,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -3724,7 +7424,12 @@
         "merito": 0.0,
         "inflexibilidade": 67.929,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -3736,7 +7441,12 @@
         "merito": 451.882,
         "inflexibilidade": 1863.837,
         "eletrica": 1.282,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 126.28,
         "outros": 0.001
       }
@@ -3747,10 +7457,72 @@
       "merito": 452.954,
       "inflexibilidade": 7441.591,
       "eletrica": 1.282,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 126.28,
       "outros": 0.001
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -3782,7 +7554,12 @@
         "merito": 29.783,
         "inflexibilidade": 4323.049,
         "eletrica": 284.131,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 77.987,
         "outros": 0.0
       },
@@ -3794,7 +7571,12 @@
         "merito": 5.366,
         "inflexibilidade": 1007.566,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.229,
         "outros": 0.0
       },
@@ -3806,7 +7588,12 @@
         "merito": 38.777,
         "inflexibilidade": 47.536,
         "eletrica": 69.004,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 32.889,
         "outros": 0.004
       },
@@ -3818,7 +7605,12 @@
         "merito": 537.871,
         "inflexibilidade": 1964.145,
         "eletrica": 75.319,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 308.161,
         "outros": 1.351
       }
@@ -3829,10 +7621,72 @@
       "merito": 611.797,
       "inflexibilidade": 7342.296,
       "eletrica": 428.454,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 419.266,
       "outros": 1.355
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -3864,7 +7718,12 @@
         "merito": 419.286,
         "inflexibilidade": 4665.141,
         "eletrica": 234.175,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 262.208,
         "outros": 0.0
       },
@@ -3876,7 +7735,12 @@
         "merito": 27.198,
         "inflexibilidade": 957.567,
         "eletrica": 8.297,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 2.938,
         "outros": 0.0
       },
@@ -3888,9 +7752,14 @@
         "merito": 116.538,
         "inflexibilidade": 93.157,
         "eletrica": 32.45,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 60.761,
         "unitcommitment": 55.373,
-        "outros": 60.761
+        "outros": 0.0
       },
       {
         "data": "2026-11-17",
@@ -3900,9 +7769,14 @@
         "merito": 653.923,
         "inflexibilidade": 1851.686,
         "eletrica": 43.391,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 736.949,
-        "outros": 0.0
+        "outros": 0.001
       }
     ],
     "sin": {
@@ -3911,10 +7785,72 @@
       "merito": 1216.945,
       "inflexibilidade": 7567.551,
       "eletrica": 318.313,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 60.761,
       "unitcommitment": 1057.468,
-      "outros": 60.761
+      "outros": 0.001
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -3946,7 +7882,12 @@
         "merito": 46.36,
         "inflexibilidade": 4568.004,
         "eletrica": 615.303,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 187.907,
         "outros": 0.0
       },
@@ -3958,7 +7899,12 @@
         "merito": 4.672,
         "inflexibilidade": 1167.977,
         "eletrica": 31.206,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.263,
         "outros": 0.0
       },
@@ -3970,7 +7916,12 @@
         "merito": 18.336,
         "inflexibilidade": 44.799,
         "eletrica": 168.038,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 27.19,
         "outros": 0.001
       },
@@ -3982,9 +7933,14 @@
         "merito": 675.159,
         "inflexibilidade": 1857.739,
         "eletrica": 71.6,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 714.927,
-        "outros": 0.0
+        "outros": 0.001
       }
     ],
     "sin": {
@@ -3993,10 +7949,72 @@
       "merito": 744.527,
       "inflexibilidade": 7638.519,
       "eletrica": 886.147,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 930.287,
-      "outros": 0.001
+      "outros": 0.002
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -4028,7 +8046,12 @@
         "merito": 23.905,
         "inflexibilidade": 4687.728,
         "eletrica": 611.369,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 209.789,
         "outros": 0.0
       },
@@ -4040,7 +8063,12 @@
         "merito": 7.075,
         "inflexibilidade": 1048.394,
         "eletrica": 147.003,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 63.319,
         "outros": 0.0
       },
@@ -4052,7 +8080,12 @@
         "merito": 5.331,
         "inflexibilidade": 122.833,
         "eletrica": 311.74,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 117.468,
         "outros": 0.0
       },
@@ -4064,7 +8097,12 @@
         "merito": 884.476,
         "inflexibilidade": 1859.929,
         "eletrica": 116.006,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 669.258,
         "outros": 3.952
       }
@@ -4075,10 +8113,72 @@
       "merito": 920.787,
       "inflexibilidade": 7718.884,
       "eletrica": 1186.118,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 1059.834,
       "outros": 3.952
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -4110,7 +8210,12 @@
         "merito": 0.028,
         "inflexibilidade": 4659.649,
         "eletrica": 33.634,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 11.419,
         "outros": 0.0
       },
@@ -4122,7 +8227,12 @@
         "merito": 0.0,
         "inflexibilidade": 1020.384,
         "eletrica": 2.715,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.442,
         "outros": 0.0
       },
@@ -4134,7 +8244,12 @@
         "merito": 0.0,
         "inflexibilidade": 113.988,
         "eletrica": 2.605,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 4.126,
         "outros": 0.0
       },
@@ -4146,7 +8261,12 @@
         "merito": 524.873,
         "inflexibilidade": 1816.121,
         "eletrica": 40.673,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 774.007,
         "outros": 0.001
       }
@@ -4157,10 +8277,72 @@
       "merito": 524.901,
       "inflexibilidade": 7610.142,
       "eletrica": 79.627,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 789.994,
       "outros": 0.001
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -4192,7 +8374,12 @@
         "merito": 0.0,
         "inflexibilidade": 4468.196,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -4204,7 +8391,12 @@
         "merito": 0.0,
         "inflexibilidade": 1288.463,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -4216,7 +8408,12 @@
         "merito": 0.0,
         "inflexibilidade": 162.246,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -4228,7 +8425,12 @@
         "merito": 565.635,
         "inflexibilidade": 1869.735,
         "eletrica": 2.291,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 249.477,
         "outros": 0.0
       }
@@ -4239,10 +8441,72 @@
       "merito": 565.635,
       "inflexibilidade": 7788.64,
       "eletrica": 2.291,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 249.477,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -4274,7 +8538,12 @@
         "merito": 0.0,
         "inflexibilidade": 3929.091,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -4286,7 +8555,12 @@
         "merito": 0.0,
         "inflexibilidade": 1285.84,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -4298,7 +8572,12 @@
         "merito": 0.0,
         "inflexibilidade": 83.589,
         "eletrica": 0.0,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -4310,7 +8589,12 @@
         "merito": 462.258,
         "inflexibilidade": 1822.543,
         "eletrica": 7.964,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 68.692,
         "outros": 0.0
       }
@@ -4321,10 +8605,72 @@
       "merito": 462.258,
       "inflexibilidade": 7121.063,
       "eletrica": 7.964,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 68.692,
       "outros": 0.0
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -4356,7 +8702,12 @@
         "merito": 0.0,
         "inflexibilidade": 3586.012,
         "eletrica": 458.59,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -4368,7 +8719,12 @@
         "merito": 0.0,
         "inflexibilidade": 1294.578,
         "eletrica": 38.643,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.0,
         "outros": 0.0
       },
@@ -4380,7 +8736,12 @@
         "merito": 0.0,
         "inflexibilidade": 84.418,
         "eletrica": 123.443,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.418,
         "outros": 0.001
       },
@@ -4392,7 +8753,12 @@
         "merito": 382.153,
         "inflexibilidade": 1825.073,
         "eletrica": 54.893,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 198.681,
         "outros": 0.0
       }
@@ -4403,10 +8769,72 @@
       "merito": 382.153,
       "inflexibilidade": 6790.081,
       "eletrica": 675.569,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 199.099,
       "outros": 0.001
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",
@@ -4438,7 +8866,12 @@
         "merito": 37.556,
         "inflexibilidade": 4135.801,
         "eletrica": 400.169,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 51.404,
         "outros": 0.0
       },
@@ -4450,7 +8883,12 @@
         "merito": 5.272,
         "inflexibilidade": 1305.566,
         "eletrica": 0.49,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 0.417,
         "outros": 0.0
       },
@@ -4462,7 +8900,12 @@
         "merito": 14.992,
         "inflexibilidade": 85.151,
         "eletrica": 128.319,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 29.099,
         "outros": 0.0
       },
@@ -4474,7 +8917,12 @@
         "merito": 584.764,
         "inflexibilidade": 1831.341,
         "eletrica": 89.761,
+        "gsub": 0.0,
+        "gfom": 0.0,
+        "reposicao": 0.0,
         "garantia": 0.0,
+        "exportacao": 0.0,
+        "reservapotencia": 0.0,
         "unitcommitment": 233.016,
         "outros": 0.001
       }
@@ -4485,10 +8933,72 @@
       "merito": 642.584,
       "inflexibilidade": 7357.859,
       "eletrica": 618.739,
+      "gsub": 0.0,
+      "gfom": 0.0,
+      "reposicao": 0.0,
       "garantia": 0.0,
+      "exportacao": 0.0,
+      "reservapotencia": 0.0,
       "unitcommitment": 313.936,
       "outros": 0.001
     },
+    "motivos": [
+      {
+        "nome": "Ordem de mérito",
+        "campo": "merito",
+        "cor": "#1767a4"
+      },
+      {
+        "nome": "Inflexibilidade",
+        "campo": "inflexibilidade",
+        "cor": "#21a398"
+      },
+      {
+        "nome": "Restrição elétrica",
+        "campo": "eletrica",
+        "cor": "#db8445"
+      },
+      {
+        "nome": "Substituição de mérito",
+        "campo": "gsub",
+        "cor": "#6a79c9"
+      },
+      {
+        "nome": "Geração fora de mérito",
+        "campo": "gfom",
+        "cor": "#c15c81"
+      },
+      {
+        "nome": "Energia de reposição",
+        "campo": "reposicao",
+        "cor": "#a7b84e"
+      },
+      {
+        "nome": "Garantia energética",
+        "campo": "garantia",
+        "cor": "#8d64c0"
+      },
+      {
+        "nome": "Exportação",
+        "campo": "exportacao",
+        "cor": "#b7833f"
+      },
+      {
+        "nome": "Reserva de potência",
+        "campo": "reservapotencia",
+        "cor": "#56adc0"
+      },
+      {
+        "nome": "Unit commitment",
+        "campo": "unitcommitment",
+        "cor": "#5b84d7"
+      },
+      {
+        "nome": "Não classificada",
+        "campo": "outros",
+        "cor": "#8996a5"
+      }
+    ],
     "top3_usinas": [
       {
         "usina": "Angra II",

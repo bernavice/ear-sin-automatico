@@ -213,6 +213,19 @@
     "destaques": [],
     "restricoes": [],
     "ocorrencias": [],
+    "status_destaques": "Não foi possível recuperar destaques completos; consulte a seção 4 do PDF.",
+    "status_restricoes": "Restrições não recuperadas de forma verificável; não representa zero.",
+    "diagnostico_texto": {
+      "secao4_encontrada": true,
+      "paginas": [
+        3,
+        4
+      ],
+      "subsecoes_detectadas": [],
+      "destaques_extraidos": 0,
+      "restricoes_extraidas": 0,
+      "outras_ocorrencias_extraidas": 0
+    },
     "capacidade_55": {
       "total": {
         "usina": "Total",
@@ -273,16 +286,160 @@
     },
     "termicas_6": {
       "destaques": [],
-      "top3": [],
-      "status": "narrativa sem extração segura"
+      "top3": [
+        {
+          "usina": "Cubatão",
+          "programado_mwmed": 41.0,
+          "verificado_mwmed": 162.0,
+          "diferenca_mwmed": 121.0,
+          "motivo": "geradora",
+          "justificativa": "Variação diária (verificado − programado): +121 MWmed. Motivo informado pelo ONS: geradora."
+        },
+        {
+          "usina": "Azulao",
+          "programado_mwmed": 0.0,
+          "verificado_mwmed": 68.0,
+          "diferenca_mwmed": 68.0,
+          "motivo": "Controle de Inequações",
+          "justificativa": "Variação diária (verificado − programado): +68 MWmed. Motivo informado pelo ONS: Controle de Inequações."
+        },
+        {
+          "usina": "Cuiabá",
+          "programado_mwmed": 0.0,
+          "verificado_mwmed": 59.0,
+          "diferenca_mwmed": 59.0,
+          "motivo": "Atendimento à ponta de carga",
+          "justificativa": "Variação diária (verificado − programado): +59 MWmed. Motivo informado pelo ONS: Atendimento à ponta de carga."
+        }
+      ],
+      "tabela_diferencas": [
+        {
+          "usina": "Azulao",
+          "programado_mwmed": 0.0,
+          "verificado_mwmed": 68.0,
+          "diferenca_mwmed": 68.0,
+          "motivo": "Controle de Inequações",
+          "justificativa": "Variação diária (verificado − programado): +68 MWmed. Motivo informado pelo ONS: Controle de Inequações."
+        },
+        {
+          "usina": "Baixada Fluminense",
+          "programado_mwmed": 346.0,
+          "verificado_mwmed": 352.0,
+          "diferenca_mwmed": 6.0,
+          "motivo": "Rendimento",
+          "justificativa": "Variação diária (verificado − programado): +6 MWmed. Motivo informado pelo ONS: Rendimento."
+        },
+        {
+          "usina": "Bonfim",
+          "programado_mwmed": 8.0,
+          "verificado_mwmed": 0.0,
+          "diferenca_mwmed": -8.0,
+          "motivo": "Rampa de geração",
+          "justificativa": "Variação diária (verificado − programado): -8 MWmed. Motivo informado pelo ONS: Rampa de geração."
+        },
+        {
+          "usina": "Cubatão",
+          "programado_mwmed": 41.0,
+          "verificado_mwmed": 162.0,
+          "diferenca_mwmed": 121.0,
+          "motivo": "geradora",
+          "justificativa": "Variação diária (verificado − programado): +121 MWmed. Motivo informado pelo ONS: geradora."
+        },
+        {
+          "usina": "Cuiabá",
+          "programado_mwmed": 0.0,
+          "verificado_mwmed": 59.0,
+          "diferenca_mwmed": 59.0,
+          "motivo": "Atendimento à ponta de carga",
+          "justificativa": "Variação diária (verificado − programado): +59 MWmed. Motivo informado pelo ONS: Atendimento à ponta de carga."
+        },
+        {
+          "usina": "Manaus I",
+          "programado_mwmed": 100.0,
+          "verificado_mwmed": 91.0,
+          "diferenca_mwmed": -9.0,
+          "motivo": "Teste",
+          "justificativa": "Variação diária (verificado − programado): -9 MWmed. Motivo informado pelo ONS: Teste."
+        },
+        {
+          "usina": "Mauá 3",
+          "programado_mwmed": 508.0,
+          "verificado_mwmed": 517.0,
+          "diferenca_mwmed": 9.0,
+          "motivo": "Controle de Inequações",
+          "justificativa": "Variação diária (verificado − programado): +9 MWmed. Motivo informado pelo ONS: Controle de Inequações."
+        },
+        {
+          "usina": "Parnaíba V",
+          "programado_mwmed": 91.0,
+          "verificado_mwmed": 83.0,
+          "diferenca_mwmed": -8.0,
+          "motivo": "Rampa de geração",
+          "justificativa": "Variação diária (verificado − programado): -8 MWmed. Motivo informado pelo ONS: Rampa de geração."
+        },
+        {
+          "usina": "Pernambuco III",
+          "programado_mwmed": 39.0,
+          "verificado_mwmed": 27.0,
+          "diferenca_mwmed": -12.0,
+          "motivo": "Rampa de geração",
+          "justificativa": "Variação diária (verificado − programado): -12 MWmed. Motivo informado pelo ONS: Rampa de geração."
+        },
+        {
+          "usina": "Prosperidade II",
+          "programado_mwmed": 7.0,
+          "verificado_mwmed": 1.0,
+          "diferenca_mwmed": -6.0,
+          "motivo": "Rendimento",
+          "justificativa": "Variação diária (verificado − programado): -6 MWmed. Motivo informado pelo ONS: Rendimento."
+        },
+        {
+          "usina": "Prosperidade III",
+          "programado_mwmed": 10.0,
+          "verificado_mwmed": 4.0,
+          "diferenca_mwmed": -6.0,
+          "motivo": "Rampa de geração",
+          "justificativa": "Variação diária (verificado − programado): -6 MWmed. Motivo informado pelo ONS: Rampa de geração."
+        },
+        {
+          "usina": "Santa Cruz Nova",
+          "programado_mwmed": 68.0,
+          "verificado_mwmed": 74.0,
+          "diferenca_mwmed": 6.0,
+          "motivo": "Rendimento",
+          "justificativa": "Variação diária (verificado − programado): +6 MWmed. Motivo informado pelo ONS: Rendimento."
+        },
+        {
+          "usina": "Tambaqui",
+          "programado_mwmed": 36.0,
+          "verificado_mwmed": 41.0,
+          "diferenca_mwmed": 5.0,
+          "motivo": "Rampa de geração",
+          "justificativa": "Variação diária (verificado − programado): +5 MWmed. Motivo informado pelo ONS: Rampa de geração."
+        },
+        {
+          "usina": "Três Lagoas",
+          "programado_mwmed": 47.0,
+          "verificado_mwmed": 36.0,
+          "diferenca_mwmed": -11.0,
+          "motivo": "geradora",
+          "justificativa": "Variação diária (verificado − programado): -11 MWmed. Motivo informado pelo ONS: geradora."
+        }
+      ],
+      "status": "14 diferenças da tabela 6.1 validadas; top3 por desvio absoluto em MWmed.",
+      "paginas": [
+        12,
+        13,
+        14
+      ]
     },
     "demanda_7": {
       "verificada_mw": 108031,
       "hora": "10:57",
       "recorde_mw": 108031,
       "recorde_data": "24/11/2026",
-      "novo_recorde": true,
-      "status": "comparação com máxima histórica informada no próprio IPDO"
+      "novo_recorde": null,
+      "status": "A própria linha do IPDO pode conter recorde atualizado; igualdade exige série anterior para comprovar superação"
     }
   }
 ]
