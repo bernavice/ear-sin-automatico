@@ -1733,7 +1733,7 @@
   "anterior": "Rev3_Nov26",
   "unidade": "% MLT",
   "metodo": "Atual - Anterior (pontos percentuais)",
-  "gerado_em": "2026-11-27T05:06:00+00:00",
+  "gerado_em": "2026-11-27T14:00:06+00:00",
   "thresholds_alerta_pp": {
     "atencao": 3,
     "critico": 10
